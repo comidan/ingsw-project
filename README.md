@@ -1,23 +1,24 @@
 # Sagrada - Software Engineering Project
 
-[![N|Sagrada](https://images-na.ssl-images-amazon.com/images/I/91WIiaMI96L._SL1500_.jpg)](https://images-na.ssl-images-amazon.com/images/I/91WIiaMI96L._SL1500_.jpg)
+[![N|Sagrada](https://images-na.ssl-images-amazon.com/images/I/91WIiaMI96L._SY550_.jpg)](https://images-na.ssl-images-amazon.com/images/I/91WIiaMI96L._SL1500_.jpg)
+
+&nbsp;
 
 # Authors :  
- - Daniele Comi (10528029)
+ - [Daniele Comi](https://www.linkedin.com/in/daniele-comi-05886981) (10528029)
  - Valerio Colombo (10499221)
  - Valentina Deda (10488563)
+
 
 # Project status :
  - in development
 
+
+
 # Powered by :
- - Java 8
- - the previous separated library JavaFX
- - [Maven 3](http://maven.apache.org/download.cgi)
-
-# Testing powered by : [![N|Sonarqube](https://www.sonarqube.org/assets/logo-31ad3115b1b4b120f3d1efd63e6b13ac9f1f89437f0cf6881cc4d8b5603a52b4.svg)](https://www.sonarqube.org)
-
-[![N|Travis CI](https://travis-ci.com/images/logos/TravisCI-Full-Color.png)](https://travis-ci.com)
+  [![N|Java 8](http://www.winpenpack.com/en/e107_files/downloadthumbs/java_logo.png)](http://www.oracle.com/technetwork/java/index.html) [![N|Java FX](https://mk0echouaawhk9ls0i7l.kinstacdn.com/wp-content/themes/inceptio/images/icon-boxes/128x128/javafx.png)](http://www.oracle.com/technetwork/java/javase/overview/javafx-overview-2158620.html) [![N|IntelliJ IDEA](https://wakatime.com/static/img/editor-icons/intellij-idea-128.png)](https://www.jetbrains.com/idea/)
+# Testing tools : 
+[![N|Sonarqube](http://oomusou.io/images/feature/sonar.png)](https://www.sonarqube.org)[![N|Travis CI](https://cdn.iconscout.com/public/images/icon/free/png-128/travis-ci-company-brand-logo-3ea4b6108b6d19db-128x128.png)](https://travis-ci.com) [![N|Maven](https://www.myget.org/Content/images/packageDefaultIcon_maven.png)](http://maven.apache.org/download.cgi) [![N|JUnit](https://res.cloudinary.com/codetrace/raw/upload/v1518632546/java:junit:junit.png)](https://junit.org/junit5/)
 
 # Features list :
  - coming soon
