@@ -1,8 +1,8 @@
 # Sagrada - Software Engineering Project
 
-[![N|Sagrada](https://images-na.ssl-images-amazon.com/images/I/91WIiaMI96L._SY550_.jpg)](https://images-na.ssl-images-amazon.com/images/I/91WIiaMI96L._SL1500_.jpg)
-
-&nbsp;
+<p align="center">
+  <img src="https://images-na.ssl-images-amazon.com/images/I/91WIiaMI96L._SY550_.jpg">
+</p>
 
 # Authors :  
  - [Daniele Comi](https://www.linkedin.com/in/daniele-comi-05886981) (10528029)
