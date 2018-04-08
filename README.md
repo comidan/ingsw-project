@@ -4,7 +4,7 @@
   <img src="https://images-na.ssl-images-amazon.com/images/I/91WIiaMI96L._SY550_.jpg">
 </p>
 
-# Authors
+# Project team
  - [Daniele Comi](https://www.linkedin.com/in/daniele-comi-05886981) (10528029)
  - Valerio Colombo (10499221)
  - Valentina Deda (10488563)
@@ -20,7 +20,7 @@
 # Testing tools 
 [![N|Sonarqube](http://oomusou.io/images/feature/sonar.png)](https://www.sonarqube.org)[![N|Travis CI](https://cdn.iconscout.com/public/images/icon/free/png-128/travis-ci-company-brand-logo-3ea4b6108b6d19db-128x128.png)](https://travis-ci.com) [![N|Maven](https://www.myget.org/Content/images/packageDefaultIcon_maven.png)](http://maven.apache.org/download.cgi) [![N|JUnit](https://res.cloudinary.com/codetrace/raw/upload/v1518632546/java:junit:junit.png)](https://junit.org/junit5/)
 
-# Features list 
+# Features
  - coming soon
 
 # Game description 
