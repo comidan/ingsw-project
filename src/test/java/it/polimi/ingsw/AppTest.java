@@ -4,6 +4,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.awt.*;
+
 /**
  * Unit test for simple App.
  */
@@ -33,6 +35,21 @@ public class AppTest
      */
     public void testApp()
     {
-        assertTrue( true );
+        Dice dice;
+        for(int diceValue = 1; diceValue < 7; diceValue++) {
+            try {
+                dice = new Dice(diceValue, Color.RED);
+                assertEquals(diceValue, dice.getValue());
+            } catch (Exception exc) {
+                assertTrue(false);
+            }
+        }
+        try {
+            dice = new Dice(7, Color.RED);
+            assertTrue(false);
+        }
+        catch (Exception exc) {
+            assertTrue(true);
+        }
     }
 }
