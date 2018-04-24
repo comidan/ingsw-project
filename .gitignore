@@ -56,3 +56,7 @@ buildNumber.properties
 
 
 # End of https://www.gitignore.io/api/java,maven,batch
+
+\.idea/sonarlint/issuestore/2/5/
+
+\.idea/sonarlint/issuestore/
