@@ -1,6 +1,0 @@
-projectKey=lm:34
-serverUrl=http://localhost:9000
-serverVersion=7.0.0.36138
-dashboardUrl=http://localhost:9000/dashboard/index/lm:34
-ceTaskId=AWKU1jeVQOYQ6hJCza8w
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AWKU1jeVQOYQ6hJCza8w
