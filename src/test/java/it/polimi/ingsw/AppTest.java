@@ -9,10 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.awt.*;
 
 class AppTest {
-    @Test
-    void myFirstTest() {
-        assertEquals(2, 1 + 2);
-    }
 
     @Test
     public void testApp()
