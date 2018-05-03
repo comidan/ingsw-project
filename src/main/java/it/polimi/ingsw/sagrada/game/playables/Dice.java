@@ -18,21 +18,18 @@ public class Dice {
         this.color = color;
     }
 
-
 	/**
 	 * @return dice color
 	 */
 	public Color getColor() {
-		// TODO implement here
-		return color;
+		return this.color;
 	}
 
 	/**
 	 * @return dice number value
 	 */
 	public int getValue() {
-		// TODO implement here
-		return value;
+		return this.value;
 	}
 
 }
