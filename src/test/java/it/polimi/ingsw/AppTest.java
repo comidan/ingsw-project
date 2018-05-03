@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import it.polimi.ingsw.sagrada.game.playables.Dice;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.awt.*;
 
-class AppTest {
+public class AppTest {
 
     @Test
     public void testApp()
