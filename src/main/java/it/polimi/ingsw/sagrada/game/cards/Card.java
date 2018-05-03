@@ -11,12 +11,20 @@ public abstract class Card {
 	private int id;
 	private Rule rule;
 
+	public Card(int id, Rule rule) {
+		this.id=id;
+		this.rule=rule;
+	}
+
 	/**
 	 * @return get card's rule
 	 */
 	public Rule getRule() {
-		// TODO implement here
-		return null;
+		return rule;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

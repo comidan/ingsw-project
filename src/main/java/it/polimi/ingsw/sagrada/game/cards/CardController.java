@@ -7,13 +7,17 @@ import java.util.*;
  */
 public class CardController {
 
-	private List<Card> cards;
+	private List<Card> privateObjective;
+	private List<Card> publicObjective;
 
 
 	/**
 	 * Default constructor
 	 */
 	public CardController() {
+		privateObjective = new ArrayList<>();
+		publicObjective = new ArrayList<>();
+
 	}
 
 	/**
