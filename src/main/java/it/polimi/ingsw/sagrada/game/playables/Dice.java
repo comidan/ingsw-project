@@ -11,9 +11,9 @@ public class Dice {
 	private Color color;
 
 
-	public Dice(int value, Color color) throws Exception {
+	public Dice(int value, Color color) throws DiceExcpetion {
         if(value < 1 || value > 6)
-            throw new Exception("Dice value not allowed");
+            throw new DiceExcpetion("Dice value not allowed");
         this.value = value;
         this.color = color;
     }
