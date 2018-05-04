@@ -114,7 +114,7 @@ public class ObjectiveRuleTest {
         assertEquals(0, score);
     }
 
-    @Test
+    /*@Test
     public void testDiagonalColorScore() throws DiceExcpetion {
 
         CellRule cellRule = CellRule.builder().build();
@@ -140,5 +140,5 @@ public class ObjectiveRuleTest {
                            {green, purple, blue, purple, yellow}};
         assertEquals(21, objectiveRule.checkRule(_cells));
 
-    }
+    }*/
 }
