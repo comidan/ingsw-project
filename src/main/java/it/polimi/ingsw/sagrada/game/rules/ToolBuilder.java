@@ -16,6 +16,12 @@ public class ToolBuilder<T> extends Builder {
 		// TODO implement here
 	}
 
+	@Override
+	public Rule build() {
+		//TODO implement here
+		return null;
+	}
+
 	/**
 	 * @return this ToolBuilder with an updated tool feature
 	 */

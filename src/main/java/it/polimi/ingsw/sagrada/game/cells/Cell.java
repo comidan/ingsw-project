@@ -13,31 +13,35 @@ public class Cell {
 	private Dice dice;
 
 
-	/**
-	 * Default constructor
-	 */
-	Cell() {
+	public Cell(CellRule cellRule) {
+		this.cellRule = cellRule;
 	}
-
-	/**
-	 * 
-	 */
-
 
 	/**
 	 * @return this cell's rule
 	 */
 	public CellRule getCellRule() {
-		// TODO implement here
-		return null;
+		return cellRule;
 	}
 
 	/**
 	 * @return true if occupied
 	 */
 	public boolean isOccupied() {
-		// TODO implement here
-		return false;
+		return occupied;
 	}
 
+	public Dice getCurrentDice() {
+		return dice;
+	}
+
+	public void setDice(Dice dice) {
+		this.dice = dice;   //no check to allow user errors
+		occupied = true;
+	}
+
+	public void removeCurrentDice() {
+		dice = null;
+		occupied = false;
+	}
 }

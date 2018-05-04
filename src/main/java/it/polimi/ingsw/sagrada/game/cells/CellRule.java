@@ -12,25 +12,43 @@ import java.util.function.Function;
  */
 public class CellRule extends Rule {
 
-
 	private int valueConstraint;
 	private Color colorConstraint;
-	private State active;
-
+	private State state;
+	private Function<Dice, Boolean> function;
 
 	/**
-	 * @param function
+	 * @param function - rule checker function
+	 * @param colorConstraint - color constraint
 	 */
-	private CellRule(final Function function) {
-		// TODO implement here
+	CellRule(final Function function, Color colorConstraint) {
+		this.function = function;
+		this.colorConstraint = colorConstraint;
+		valueConstraint = 0;
 	}
 
+	/**
+	 * @param function - rule checker function
+	 * @param valueConstraint - value constraint
+	 */
+	CellRule(final Function function, int valueConstraint) {
+		this.function = function;
+		this.valueConstraint = valueConstraint;
+		colorConstraint = null;
+	}
+
+	/**
+	 * @return builder object
+	 */
+	public static CellBuilder<CellRule> builder() {
+		return new CellBuilder<CellRule>();
+	}
 
 	/**
 	 * @param state - active or inactive
 	 */
 	public void setState(State state) {
-		// TODO implement here
+		this.state = state;
 	}
 
 	/**
@@ -38,8 +56,20 @@ public class CellRule extends Rule {
 	 * @return true if dice can be positioned in this current cell
 	 */
 	public boolean checkRule(Dice dice) {
-		// TODO implement here
-		return false;
+		return function.apply(dice);
 	}
 
+	/**
+	 * @return value cnstraint
+	 */
+	public int getValueConstraint() {
+		return valueConstraint;
+	}
+
+	/**
+	 * @return color constraint
+	 */
+	public Color getColorConstraint() {
+		return colorConstraint;
+	}
 }
