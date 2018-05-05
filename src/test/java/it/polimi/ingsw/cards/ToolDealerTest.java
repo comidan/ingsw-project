@@ -1,4 +1,4 @@
-package it.polimi.ingsw.cards.test;
+package it.polimi.ingsw.cards;
 
 import it.polimi.ingsw.sagrada.game.cards.CardController;
 import org.json.simple.parser.ParseException;
