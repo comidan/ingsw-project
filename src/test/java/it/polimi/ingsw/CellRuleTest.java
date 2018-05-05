@@ -1,5 +1,6 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.cells.Cell;
 import it.polimi.ingsw.sagrada.game.cells.CellBuilder;
 import it.polimi.ingsw.sagrada.game.cells.CellRule;
@@ -16,9 +17,9 @@ public class CellRuleTest {
 
     @Test
     public void testCellColorRuleBuilding() {
-        CellRule cellRuleColor = CellRule.builder().setColorConstraint(Color.RED).build();
+        CellRule cellRuleColor = CellRule.builder().setColorConstraint(Colors.RED).build();
         try {
-            Dice dice = new Dice(5, Color.RED);
+            Dice dice = new Dice(5, Colors.RED);
             assertTrue(cellRuleColor.checkRule(dice));
         }
         catch (Exception exc) {
@@ -36,7 +37,7 @@ public class CellRuleTest {
             fail();
         }
         try {
-            Dice dice = new Dice(5, Color.RED);
+            Dice dice = new Dice(5, Colors.RED);
             if(cellRuleValue == null)
                 fail();
             assertTrue(cellRuleValue.checkRule(dice));

@@ -1,5 +1,6 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class ObjectiveBuilderTest {
     public void testObjectiveBuilder() {
         ObjectiveRule objectiveRule = ObjectiveRule.builder().build();
         assertNull(objectiveRule);
-        objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Color.BLUE).build();
+        objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.LIGHT_BLUE).build();
         assertEquals(CardType.PRIVATE, objectiveRule.getType());
         objectiveRule = ObjectiveRule.builder().setDifferentDiceValueByRowsObjective(5).build();
         assertEquals(5, objectiveRule.getScore());
