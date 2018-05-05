@@ -2,6 +2,6 @@ language: java
 notifications:
   email:
     recipients:
-      - superdani96@gmail.com
+      - daniele1.comi@mail.polimi.it
     on_success: always
     on_failure: always
