@@ -4,9 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.cells.Cell;
 import it.polimi.ingsw.sagrada.game.cells.CellRule;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
-import it.polimi.ingsw.sagrada.game.playables.DiceExcpetion;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
-import it.polimi.ingsw.sagrada.game.rules.RuleConstraintException;
 import org.junit.Test;
 
 import java.awt.Color;
@@ -17,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 public class ObjectiveRuleTest {
 
     @Test
-    public void testColorShadeObjective() throws DiceExcpetion, RuleConstraintException{
+    public void testColorShadeObjective() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
         int diceValue = 1;
         List<Color> colorList = Colors.getColorList();
@@ -31,7 +29,7 @@ public class ObjectiveRuleTest {
     }
 
     @Test
-    public void testDifferentColorByRows() throws DiceExcpetion, RuleConstraintException{
+    public void testDifferentColorByRows() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
         List<Color> colorList = Colors.getColorList();
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setDifferentDiceColorByRowsObjective(5).build();
@@ -52,7 +50,7 @@ public class ObjectiveRuleTest {
     }
 
     @Test
-    public void testDifferentColorByCols() throws DiceExcpetion, RuleConstraintException{
+    public void testDifferentColorByCols() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
         List<Color> colorList = Colors.getColorList();
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setDifferentDiceColorByColsObjective(5).build();
@@ -73,7 +71,7 @@ public class ObjectiveRuleTest {
     }
 
     @Test
-    public void testDifferentValueByRow() throws DiceExcpetion, RuleConstraintException{
+    public void testDifferentValueByRow() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
         int valueObjective = 3;
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setDifferentDiceValueByRowsObjective(valueObjective).build();
@@ -94,7 +92,7 @@ public class ObjectiveRuleTest {
     }
 
     @Test
-    public void testDifferentValueByCol() throws DiceExcpetion, RuleConstraintException {
+    public void testDifferentValueByCol() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
         int valueObjective = 3;
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setDifferentDiceValueByColsObjective(valueObjective).build();
@@ -114,8 +112,8 @@ public class ObjectiveRuleTest {
         assertEquals(0, score);
     }
 
-    /*@Test
-    public void testDiagonalColorScore() throws DiceExcpetion {
+    @Test
+    public void testDiagonalColorScore() throws RuntimeException {
 
         CellRule cellRule = CellRule.builder().build();
         Cell red = new Cell(cellRule);
@@ -139,6 +137,16 @@ public class ObjectiveRuleTest {
                            {purple, blue, purple, yellow, green},
                            {green, purple, blue, purple, yellow}};
         assertEquals(21, objectiveRule.checkRule(_cells));
+        Cell[][] __cells = {{red, yellow, green, purple, blue},
+                            {blue, purple, yellow, green, purple},
+                            {purple, blue, yellow, blue, green},
+                            {green, purple, blue, purple, yellow}};
+        assertEquals(16, objectiveRule.checkRule(__cells));
+        Cell[][] ___cells = {{red, red, red, red, red},
+                             {blue, blue, blue, blue, blue},
+                             {yellow, yellow, yellow, yellow, yellow},
+                             {green, green, green, green, green}};
+        assertEquals(0, objectiveRule.checkRule(___cells));
 
-    }*/
+    }
 }

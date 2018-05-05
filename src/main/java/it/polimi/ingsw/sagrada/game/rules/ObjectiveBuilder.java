@@ -5,7 +5,9 @@ import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.cells.Cell;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -26,7 +28,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 	}
 
 	/**
-	 * @return this ObjectiveBuilder with an updated objective rule
+	 * @param color color constraint
+     * @return this ObjectiveBuilder with an updated objective rule
 	 */
 	public ObjectiveBuilder<T> setColorShadeColorObjective(Color color) {
 		function = cells -> {
@@ -42,11 +45,16 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 		return this;
 	}
 
+    /**
+     * @param objectiveScore rule score
+     * @return this cell's rule
+     */
 	public ObjectiveBuilder<T> setDifferentDiceColorByRowsObjective(int objectiveScore) {
 		function = cells -> {
-				int score = 0, differentDiceByColor = 0;
+				int score = 0;
+				int differentDiceByColor = 0;
 				Color diceColor;
-				HashSet<Color> set = new HashSet<Color>();
+				HashSet<Color> set = new HashSet<>();
 				for (int row = 0; row < cells.length; row++) {
 					for (int col = 0; col < cells[0].length; col++) {
 						if (!cells[row][col].isOccupied())
@@ -69,12 +77,17 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 		return this;
 	}
 
+    /**
+     * @param objectiveScore rule score
+     * @return this cell's rule
+     */
 	public ObjectiveBuilder<T> setDifferentDiceColorByColsObjective(int objectiveScore) {
 		function = cells -> {
 
-				int score = 0, differentDiceByColor = 0;
+				int score = 0;
+				int differentDiceByColor = 0;
 				Color diceColor;
-				HashSet<Color> set = new HashSet<Color>();
+				HashSet<Color> set = new HashSet<>();
 				for (int col = 0; col < cells[0].length; col++) {
 					for (int row = 0; row < cells.length; row++) {
 						if (!cells[row][col].isOccupied())
@@ -97,12 +110,17 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 		return this;
 	}
 
+    /**
+     * @param objectiveScore rule score
+     * @return this cell's rule
+     */
 	public ObjectiveBuilder<T> setDifferentDiceValueByColsObjective(int objectiveScore) {
 		function = cells -> {
 
-				int score = 0, differentDiceByValue = 0;
+				int score = 0;
+				int differentDiceByValue = 0;
 				int diceValue;
-				HashSet<Integer> set = new HashSet<Integer>();
+				HashSet<Integer> set = new HashSet<>();
 				for (int col = 0; col < cells[0].length; col++) {
 					for (int row = 0; row < cells.length; row++) {
 						if (!cells[row][col].isOccupied())
@@ -125,12 +143,17 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 		return this;
 	}
 
+    /**
+     * @param objectiveScore rule score
+     * @return this cell's rule
+     */
 	public ObjectiveBuilder<T> setDifferentDiceValueByRowsObjective(int objectiveScore) {
 		function = cells -> {
 
-				int score = 0, differentDiceByValue = 0;
+				int score = 0;
+				int differentDiceByValue = 0;
 				int diceValue;
-				HashSet<Integer> set = new HashSet<Integer>();
+				HashSet<Integer> set = new HashSet<>();
 				for (int row = 0; row < cells.length; row++) {
 					for (int col = 0; col < cells[0].length; col++) {
 						if (!cells[row][col].isOccupied())
@@ -150,6 +173,119 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 		};
 		cardType = CardType.PUBLIC;
 		value = objectiveScore;
+		return this;
+	}
+
+    /**
+     * @param diagonalColorList diagonal to compute
+     * @return computed score
+     */
+	private int computeDiagonalPartialScore(List<Color> diagonalColorList) {
+        int counter = 0;
+        Color diceColor = null;
+        int tmpScore = 0;
+        int partialScore = 0;
+        for(Color color : diagonalColorList) {
+            if(diceColor == null) {
+                diceColor = color;
+                tmpScore = 1;
+            }
+            else if(color.equals(diceColor)) {
+                tmpScore++;
+            }
+            if(tmpScore > 1 && (!color.equals(diceColor) || (color.equals(diceColor) && counter == diagonalColorList.size() - 1))) {
+                diceColor = color;
+                partialScore += tmpScore;
+                tmpScore = 1;
+            }
+            else if(!color.equals(diceColor)) {
+                tmpScore = 1;
+                diceColor = color;
+            }
+            counter++;
+        }
+
+        return partialScore;
+    }
+
+    /**
+     * @param cells window matrix
+     * @return total diagonals score
+     */
+	private int getDiagonalColorScore(Cell[][] cells) {
+		int rowStart = cells.length;
+		int colStart = 0;
+		int score = 0;
+		int diagonalCounter = 0;
+		Color diceColor;
+		List<List<Color>> diagonalTrace = new ArrayList<>();
+        int numberOfDiagonals = cells.length + cells[0].length + 1;
+		for(int i = 0; i < numberOfDiagonals; i++)
+			diagonalTrace.add(new ArrayList<>());
+		while(diagonalCounter < numberOfDiagonals) {
+			for(int row = rowStart, col = colStart; row < cells.length && col < cells[0].length; row++, col++)
+				if (!(row == cells.length - 1 && col == 0) && !(row == 0 && col == cells[0].length - 1)) {
+			        if(cells[row][col].isOccupied())
+					    diceColor = cells[row][col].getCurrentDice().getColor();
+			        else
+			            diceColor = Color.BLACK;
+					diagonalTrace.get(diagonalCounter).add(diceColor);
+				}
+
+			score += computeDiagonalPartialScore(diagonalTrace.get(diagonalCounter));
+			diagonalTrace.get(diagonalCounter).clear();
+			if(rowStart > 0)
+				rowStart--;
+			else
+				colStart++;
+			diagonalCounter++;
+		}
+		return score;
+	}
+
+    /**
+     * @param cells window matrix
+     * @return total anti diagonals score
+     */
+	private int getAntiDiagonalColorScore(Cell[][] cells) {
+		int rowStart = cells.length - 1;
+		int colStart = cells.length - 1;
+		int score = 0;
+		int diagonalCounter = 0;
+		Color diceColor;
+		List<List<Color>> diagonalTrace = new ArrayList<>();
+		int numberOfDiagonals = cells.length + cells[0].length + 1;
+		for(int i = 0; i < numberOfDiagonals; i++)
+			diagonalTrace.add(new ArrayList<>());
+		while(diagonalCounter < numberOfDiagonals) {
+			for(int row = rowStart, col = colStart; row >= 0 && row < cells.length && col < cells[0].length; row--, col++) {
+                if (!(row == 0 && col == 0) && !(row == cells.length - 1 && col == cells[0].length - 1)) {
+                    if(cells[row][col].isOccupied())
+                        diceColor = cells[row][col].getCurrentDice().getColor();
+                    else
+                        diceColor = Color.BLACK;
+                    diagonalTrace.get(diagonalCounter).add(diceColor);
+                }
+            }
+            score += computeDiagonalPartialScore(diagonalTrace.get(diagonalCounter));
+			diagonalTrace.get(diagonalCounter).clear();
+			if(colStart > 0)
+				colStart--;
+			else
+				rowStart--;
+			diagonalCounter++;
+		}
+		return score;
+	}
+
+    /**
+     * @return this cell's rule
+     */
+	public ObjectiveBuilder<T> setSameDiagonalColorObjective() {
+
+		function = cells -> getDiagonalColorScore(cells) + getAntiDiagonalColorScore(cells);
+		cardType = CardType.PUBLIC;
+		value = 1;
 		return this;
 	}
 

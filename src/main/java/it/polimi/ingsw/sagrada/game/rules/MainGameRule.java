@@ -8,6 +8,10 @@ import it.polimi.ingsw.sagrada.game.cells.Cell;
  */
 public class MainGameRule extends Rule {
 
+	/**
+	 * @param cells window matrix
+	 * @return type of error
+	 */
 	public ErrorType validateWindow(Cell[][] cells) {
 		for (int row = 0; row < cells.length; row++)
 			for (int col = 0; col < cells[0].length; col++)

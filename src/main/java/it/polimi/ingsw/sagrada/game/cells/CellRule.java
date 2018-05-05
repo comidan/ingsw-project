@@ -41,7 +41,7 @@ public class CellRule extends Rule {
 	 * @return builder object
 	 */
 	public static CellBuilder<CellRule> builder() {
-		return new CellBuilder<CellRule>();
+		return new CellBuilder<>();
 	}
 
 	/**

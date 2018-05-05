@@ -31,9 +31,16 @@ public class Cell {
 		return occupied;
 	}
 
+	/**
+	 * @return current positioned dice
+	 */
 	public Dice getCurrentDice() {
 		return dice;
 	}
+
+	/**
+	 * @param dice new positioned dice
+	 */
 
 	public void setDice(Dice dice) {
 		this.dice = dice;   //no check to allow user errors

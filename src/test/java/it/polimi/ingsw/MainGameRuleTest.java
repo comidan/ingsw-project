@@ -6,18 +6,14 @@ import it.polimi.ingsw.sagrada.game.cells.CellRule;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.rules.ErrorType;
 import it.polimi.ingsw.sagrada.game.rules.MainGameRule;
-import it.polimi.ingsw.sagrada.game.rules.RuleController;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 public class MainGameRuleTest {
 
     @Test
-    public void testValidateWindowMainRule() throws Exception{
+    public void testValidateWindowMainRule() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
         MainGameRule mainGameRule = new MainGameRule();
         for(int i = 0; i < cells.length; i++)
@@ -30,7 +26,7 @@ public class MainGameRuleTest {
     }
 
     @Test
-    public void testValidateWindowCellRule() throws Exception{
+    public void testValidateWindowCellRule() throws RuntimeException{
         Cell[][] cells = new Cell[4][5];
         MainGameRule mainGameRule = new MainGameRule();
         for(int i = 0; i < cells.length; i++)

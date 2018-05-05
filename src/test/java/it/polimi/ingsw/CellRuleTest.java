@@ -1,14 +1,9 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.sagrada.game.base.Colors;
-import it.polimi.ingsw.sagrada.game.cells.Cell;
-import it.polimi.ingsw.sagrada.game.cells.CellBuilder;
 import it.polimi.ingsw.sagrada.game.cells.CellRule;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
-import it.polimi.ingsw.sagrada.game.rules.RuleController;
 import org.junit.Test;
-
-import java.awt.*;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -38,8 +33,10 @@ public class CellRuleTest {
         }
         try {
             Dice dice = new Dice(5, Colors.RED);
-            if(cellRuleValue == null)
+            if(cellRuleValue == null) {
                 fail();
+                return;
+            }
             assertTrue(cellRuleValue.checkRule(dice));
         }
         catch (Exception exc) {

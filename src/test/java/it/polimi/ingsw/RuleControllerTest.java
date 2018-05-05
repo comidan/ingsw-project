@@ -8,15 +8,12 @@ import it.polimi.ingsw.sagrada.game.rules.ErrorType;
 import it.polimi.ingsw.sagrada.game.rules.RuleController;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 public class RuleControllerTest {
 
     @Test
-    public void testValidateWindowMainRule() throws Exception{
+    public void testValidateWindowMainRule() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
         RuleController ruleController = new RuleController();
         for(int i = 0; i < cells.length; i++)
@@ -29,7 +26,7 @@ public class RuleControllerTest {
     }
 
     @Test
-    public void testValidateWindowCellRule() throws Exception{
+    public void testValidateWindowCellRule() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
         RuleController ruleController = new RuleController();
         for(int i = 0; i < cells.length; i++)

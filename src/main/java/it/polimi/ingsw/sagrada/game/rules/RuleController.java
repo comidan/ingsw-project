@@ -33,6 +33,11 @@ public class RuleController {
 		return false;
 	}
 
+	/**
+	 * @param cellRule - rule to be validated
+	 * @param dice - dice to be evaluated on cellRule
+	 * @return true if rule is correctly validated
+	 */
 	public boolean validateCellRule(CellRule cellRule, Dice dice) {
 		return cellRule.checkRule(dice);
 	}
