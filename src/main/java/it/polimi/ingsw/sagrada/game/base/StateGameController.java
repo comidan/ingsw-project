@@ -12,7 +12,7 @@ public enum StateGameController {
     SCORE;
 
     private int roundNum=0;
-    private StateGameController currentState;
+    private StateGameController currentState=null;
 
     public static StateGameController getFirstState() {
         return DEAL_PRIVATE_OBJECTIVE;
@@ -50,7 +50,7 @@ public enum StateGameController {
                     case DEAL_WINDOWS: currentState=DEAL_TOOL; break;
                     case DEAL_TOOL: currentState=DEAL_PUBLIC_OBJECTIVE; break;
                     case DEAL_PUBLIC_OBJECTIVE: currentState=TURN; break;
-                    case TURN: if(roundNum>10) currentState=SCORE;else roundNum++; break;
+                    case TURN: if(roundNum<9) roundNum++;else currentState=SCORE; break;
                     default: throw new NoSuchElementException();
                 }
             }
