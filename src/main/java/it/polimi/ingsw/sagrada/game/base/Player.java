@@ -15,8 +15,8 @@ import java.util.*;
  */
 public class Player {
 
-
-	private ObjectiveCard objectiveCard;
+	private ObjectiveCard publicObjectiveCard;
+	private ObjectiveCard privateObjectiveCard;
 	private Window window;
 	private ToolManager toolManager;
 	private GameController gameController;
@@ -25,7 +25,10 @@ public class Player {
 	/**
 	 * Default constructor
 	 */
-	public Player() {
+	public Player(GameController gameController, ToolManager toolManager, DiceController diceController) {
+		this.gameController=gameController;
+		this.toolManager=toolManager;
+		this.diceController=diceController;
 	}
 
 	/**

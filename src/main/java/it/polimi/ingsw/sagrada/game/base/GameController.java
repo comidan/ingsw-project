@@ -16,6 +16,7 @@ public class GameController {
 	private RoundTrack roundTrack;
 	private ScoreTrack scoreTrack;
 	private CardController cardController;
+	private StateGameController state = StateGameController.getFirstState();
 
 
 	/**

@@ -8,7 +8,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.awt.*;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -61,13 +60,13 @@ public class CardController {
 	public Map<Color, ObjectiveCard> dealPrivateObjective(int numPlayer) {
 		Map<Color, ObjectiveCard> cards = new HashMap<>();
 		List<Color> colors = Colors.getColorList();
-		Iterator picker = new Picker<>(colors).pickerIterator();
+		Iterator<Color> picker = new Picker<>(colors).pickerIterator();
 
 		if(numPlayer>NUM_MAX_PLAYER) return cards;
 
 		for(int i=0; i<numPlayer; i++) {
 			if(picker.hasNext()) {
-				Color color = (Color)picker.next();
+				Color color = picker.next();
 				objectiveBuilder.setColorShadeColorObjective(color);
 				cards.put(color, new ObjectiveCard(i, objectiveBuilder.build()));
 			}

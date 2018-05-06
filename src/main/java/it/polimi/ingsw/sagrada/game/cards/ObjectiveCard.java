@@ -6,7 +6,7 @@ import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
  * 
  */
 public class ObjectiveCard extends Card {
-	CardType type;
+	private CardType type;
 
 	/**
 	 * Default constructor
