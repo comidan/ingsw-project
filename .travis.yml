@@ -1,1 +1,7 @@
 language: java
+notifications:
+  email:
+    recipients:
+      - daniele1.comi@mail.polimi.it
+    on_success: always
+    on_failure: always
