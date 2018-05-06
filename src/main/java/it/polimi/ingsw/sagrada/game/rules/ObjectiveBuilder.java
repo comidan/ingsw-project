@@ -1,6 +1,8 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
 import it.polimi.ingsw.sagrada.game.base.Builder;
+import it.polimi.ingsw.sagrada.game.base.Colors;
+import it.polimi.ingsw.sagrada.game.cards.Card;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.cells.Cell;
 
@@ -16,15 +18,16 @@ import java.util.function.Function;
 public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 
 
-	private CardType cardType;
+	private CardType cardType, objectiveType;
 	private Integer value;
 	private Function<Cell[][], Integer> function;
+	private List constraints;
 
 	@Override
 	public ObjectiveRule build() {
 		if(function == null)
 			return null;
-		return new ObjectiveRule(function, value, cardType);
+		return new ObjectiveRule(function, value, cardType, constraints, objectiveType);
 	}
 
 	/**
@@ -40,6 +43,9 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 							score += cells[row][col].getCurrentDice().getValue();
 				return score;
 		};
+		constraints = new ArrayList<Color>();
+		constraints.add(color);
+		objectiveType = CardType.OBJECTIVE_COLOR;
 		cardType = CardType.PRIVATE;
 		value = 1;
 		return this;
@@ -72,6 +78,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 				}
 				return score;
 		};
+		objectiveType = CardType.OBJECTIVE_COLOR;
 		cardType = CardType.PUBLIC;
 		value = objectiveScore;
 		return this;
@@ -105,6 +112,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 				}
 				return score;
 		};
+		objectiveType = CardType.OBJECTIVE_COLOR;
 		cardType = CardType.PUBLIC;
 		value = objectiveScore;
 		return this;
@@ -138,6 +146,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 				}
 				return score;
 		};
+		objectiveType = CardType.OBJECTIVE_VALUE;
 		cardType = CardType.PUBLIC;
 		value = objectiveScore;
 		return this;
@@ -171,6 +180,114 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 				}
 				return score;
 		};
+		objectiveType = CardType.OBJECTIVE_VALUE;
+		cardType = CardType.PUBLIC;
+		value = objectiveScore;
+		return this;
+	}
+
+	/**
+	 * @param objectiveScore rule score
+	 * @param firstValue first pair value constraint
+	 * @param secondValue second pair value constraint
+	 * @return this cell's rule
+	 */
+	public ObjectiveBuilder<T> setValueCoupleObjective(int objectiveScore, int firstValue, int secondValue) {
+		function = cells -> {
+
+			int firstValueMatch = 0;
+			int secondValueMatch = 0;
+			for (int row = 0; row < cells.length; row++) {
+				for (int col = 0; col < cells[0].length; col++) {
+					if (cells[row][col].isOccupied()) {
+						if (cells[row][col].getCurrentDice().getValue() == firstValue)
+							firstValueMatch++;
+						else if (cells[row][col].getCurrentDice().getValue() == secondValue)
+							secondValueMatch++;
+					}
+				}
+			}
+			return firstValueMatch <= secondValueMatch ? firstValueMatch * objectiveScore : secondValueMatch * objectiveScore;
+		};
+		constraints = new ArrayList<Integer>();
+		constraints.add(firstValue);
+		constraints.add(secondValue);
+		objectiveType = CardType.OBJECTIVE_VALUE;
+		cardType = CardType.PUBLIC;
+		value = objectiveScore;
+		return this;
+	}
+
+	/**
+	 * @param objectiveScore rule score
+	 * @return this cell's rule
+	 */
+	public ObjectiveBuilder<T> setEveryColorRepeatingObjective(int objectiveScore) {
+		function = cells -> {
+
+			int match = 0;
+			HashSet<Color> colorsMatch = new HashSet<>();
+			List<Color> reusable = new ArrayList<>();
+			List<Color> colorList = Colors.getColorList();
+			for (int row = 0; row < cells.length; row++) {
+				for (int col = 0; col < cells[0].length; col++) {
+					if (cells[row][col].isOccupied() && !colorsMatch.contains(cells[row][col].getCurrentDice().getColor()))
+						colorsMatch.add(cells[row][col].getCurrentDice().getColor());
+					else if(colorsMatch.contains(cells[row][col].getCurrentDice().getColor()))
+						reusable.add(cells[row][col].getCurrentDice().getColor());
+					if(colorsMatch.size() == colorList.size()) {
+						match++;
+						colorsMatch.clear();
+						for(Color color : colorList)
+							if(reusable.contains(color) && !colorsMatch.contains(color)) {
+								colorsMatch.add(color);
+								reusable.remove(color);
+							}
+					}
+				}
+			}
+			return match * objectiveScore;
+		};
+		constraints = Colors.getColorList();
+		objectiveType = CardType.OBJECTIVE_COLOR;
+		cardType = CardType.PUBLIC;
+		value = objectiveScore;
+		return this;
+	}
+
+	/**
+	 * @param objectiveScore rule score
+	 * @return this cell's rule
+	 */
+	public ObjectiveBuilder<T> setEveryDiceValueRepeatingObjective(int objectiveScore) {
+		function = cells -> {
+
+			int match = 0;
+			HashSet<Integer> valuesMatch = new HashSet<>();
+			List<Integer> reusable = new ArrayList<>();
+			for (int row = 0; row < cells.length; row++) {
+				for (int col = 0; col < cells[0].length; col++) {
+					if (cells[row][col].isOccupied() && !valuesMatch.contains(cells[row][col].getCurrentDice().getValue()))
+						valuesMatch.add(cells[row][col].getCurrentDice().getValue());
+					else if(valuesMatch.contains(cells[row][col].getCurrentDice().getValue()))
+						reusable.add(cells[row][col].getCurrentDice().getValue());
+					if(valuesMatch.size() == 6) {
+						match++;
+						valuesMatch.clear();
+						for(int i = 1; i < 7; i++)
+							if(reusable.contains(i) && !valuesMatch.contains(i)) {
+								valuesMatch.add(i);
+								reusable.remove((Integer) i);
+							}
+					}
+				}
+			}
+			return match * objectiveScore;
+		};
+		constraints = new ArrayList<Integer>();
+		for(int i = 1; i < 7; i++)
+			constraints.add(i);
+		objectiveType = CardType.OBJECTIVE_VALUE;
 		cardType = CardType.PUBLIC;
 		value = objectiveScore;
 		return this;

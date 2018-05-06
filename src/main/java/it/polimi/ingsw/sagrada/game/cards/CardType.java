@@ -3,5 +3,7 @@ package it.polimi.ingsw.sagrada.game.cards;
 public enum CardType {
 
     PRIVATE,
-    PUBLIC
+    PUBLIC,
+    OBJECTIVE_COLOR,
+    OBJECTIVE_VALUE
 }

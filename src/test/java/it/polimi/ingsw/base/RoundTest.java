@@ -2,7 +2,7 @@ package it.polimi.ingsw.base;
 
 import it.polimi.ingsw.sagrada.game.base.StateGameController;
 import it.polimi.ingsw.sagrada.game.base.StateIterator;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,10 +10,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class RoundTest {
+public class RoundTest {
 
     @Test
-    void testRound() {
+    public void testRound() {
         StateGameController state;
         Iterator<StateGameController> itr = StateIterator.getInstance();
         int index=0;
