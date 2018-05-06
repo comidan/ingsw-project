@@ -1,6 +1,7 @@
 package it.polimi.ingsw.base;
 
 import it.polimi.ingsw.sagrada.game.base.StateGameController;
+import it.polimi.ingsw.sagrada.game.base.StateIterator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -9,12 +10,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RoundTest {
+class RoundTest {
 
     @Test
-    public void testRound() {
-        StateGameController state = StateGameController.getFirstState();
-        Iterator<StateGameController> itr = state.stateIterator();
+    void testRound() {
+        StateGameController state;
+        Iterator<StateGameController> itr = StateIterator.getInstance();
         int index=0;
 
         List<StateGameController> stateSequence = new ArrayList<>();
@@ -28,10 +29,10 @@ public class RoundTest {
         stateSequence.add(StateGameController.SCORE);
 
         while(itr.hasNext()) {
-            StateGameController s = itr.next();
-            assertEquals(stateSequence.get(index), s);
+            state = itr.next();
+            assertEquals(stateSequence.get(index), state);
             index++;
-            System.out.println(s);
+            System.out.println(state);
         }
     }
 }
