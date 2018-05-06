@@ -25,4 +25,15 @@ public class Colors {
     public static boolean isColorAllowed(Color color) {
         return getColorList().contains(color);
     }
+
+    public static Color StringToColor(String color) {
+        switch(color) {
+            case "RED": return RED;
+            case "YELLOW": return YELLOW;
+            case "GREEN": return GREEN;
+            case "LIGHT_BLUE": return LIGHT_BLUE;
+            case "PURPLE": return PURPLE;
+            default: throw new ColorNotFoundException("Color not found");
+        }
+    }
 }

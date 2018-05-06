@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ *Utility class that allows you to pick an element without repetitions from a list of elements
+ */
+
 public class Picker<T> {
     private List<T> elements;
 

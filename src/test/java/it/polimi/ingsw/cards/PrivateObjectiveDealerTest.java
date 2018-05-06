@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ObjectiveDealerTest {
+public class PrivateObjectiveDealerTest {
 
     @Test
     public void testPrivateDealer() {
