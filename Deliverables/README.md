@@ -43,55 +43,61 @@
 - # ScoreTrack
     - correct score calculation ✓
 
-    
-    
-
-    
-    
-
-
-
 # Maven example testing output - same results on Travis CI
     -------------------------------------------------------
      T E S T S
     -------------------------------------------------------
-
     Running it.polimi.ingsw.base.PickerTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.538 sec
     Running it.polimi.ingsw.base.RoundTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     Running it.polimi.ingsw.cards.PrivateObjectiveDealerTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.cards.PublicObjectiveDealerTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.017 sec
     Running it.polimi.ingsw.CellBuilderTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.CellRuleTest
-    Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Running it.polimi.ingsw.CellTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.DiceControllerTest
+    Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Running it.polimi.ingsw.DiceTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Running it.polimi.ingsw.GameControllerTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.MainGameRuleTest
-    Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     Running it.polimi.ingsw.ObjectiveBuilderTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     Running it.polimi.ingsw.ObjectiveRuleTest
-    Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec
+    Running it.polimi.ingsw.RoundTrackTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.RuleControllerTest
     Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.ScoreTrackTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.WindowTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     
     Results :
     
-    Tests run: 25, Failures: 0, Errors: 0, Skipped: 0
+    Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
     
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
     [INFO] ------------------------------------------------------------------------
-    [INFO] Total time: 7.900 s
-    [INFO] Finished at: 2018-05-07T17:11:10+02:00
-    [INFO] Final Memory: 17M/211M
+    [INFO] Total time: 12.369 s
+    [INFO] Finished at: 2018-05-07T20:46:13+02:00
+    [INFO] Final Memory: 18M/211M
     [INFO] ------------------------------------------------------------------------
 
 # Travis CI OS detils :
     - Distributor ID:	Ubuntu
     - Description:	Ubuntu 14.04.5 LTS
     - Release:	14.04
+    
 # SonarQube last run screen : 
 [![N|Sagrada](https://preview.ibb.co/jgXRdn/sonar_Qube_Test_Intro.png)](https://preview.ibb.co/jgXRdn/sonar_Qube_Test_Intro.png)
