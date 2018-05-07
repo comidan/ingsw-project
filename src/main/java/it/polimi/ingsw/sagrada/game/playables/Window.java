@@ -1,8 +1,14 @@
+
+
+
 package it.polimi.ingsw.sagrada.game.playables;
 
+import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.base.Cell;
+import it.polimi.ingsw.sagrada.game.rules.CellRule;
 
-import java.util.*;
+import java.awt.*;
+import java.util.List;
 
 /**
  *
@@ -13,19 +19,23 @@ public class Window {
     private List<Token> tokens;
 
 
-    /**
-     * Default constructor
-     */
     public Window() {
+
+        List<Color> colorList = Colors.getColorList();
+        this.cellMatrix = new Cell[4][5];
+        for (int i = 0; i < cellMatrix.length - 2; i++) {
+            for (int j = 0; j < cellMatrix[0].length; j++) {
+                cellMatrix[i][j] = new Cell(CellRule.builder().setColorConstraint(colorList.get(j)).build());
+            } //temporary colors for testing
+        }
+
     }
 
     /**
      * @return
      */
     public Cell[][] getCellMatrix() {
-
         return this.cellMatrix;
-
     }
 
     /**
@@ -35,8 +45,14 @@ public class Window {
      * @return
      */
     public boolean setCell(Dice dice, int x, int y) {
-        // TODO implement here
-        return false;
+        if (cellMatrix[x][y].isOccupied()) return false;
+        cellMatrix[x][y].setDice(dice);
+        return true;
     }
+
+    public int getTokenNumber() {
+        return tokens.size();
+    }
+
 
 }
