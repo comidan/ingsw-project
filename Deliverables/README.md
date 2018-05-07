@@ -100,4 +100,11 @@
     - Release:	14.04
     
 # SonarQube last run screen : 
-[![N|Sagrada](https://preview.ibb.co/jgXRdn/sonar_Qube_Test_Intro.png)](https://preview.ibb.co/jgXRdn/sonar_Qube_Test_Intro.png)
+[![N|SonarQube](https://preview.ibb.co/jgXRdn/sonar_Qube_Test_Intro.png)](https://preview.ibb.co/jgXRdn/sonar_Qube_Test_Intro.png)
+
+# Testing coverage :
+[![N|Coverage](https://preview.ibb.co/dJqJPS/coverage1.png)](https://preview.ibb.co/dJqJPS/coverage1.png)
+[![N|Coverage](https://preview.ibb.co/mWudPS/coverage2.png)](https://preview.ibb.co/mWudPS/coverage2.png)
+[![N|Coverage](https://preview.ibb.co/kjUOr7/coverage3.png)](https://preview.ibb.co/kjUOr7/coverage3.png)
+[![N|Coverage](https://preview.ibb.co/gXNbB7/coverage4.png)](https://preview.ibb.co/gXNbB7/coverage4.png)
+[![N|Coverage](https://preview.ibb.co/cBn9W7/coverage5.png)](https://preview.ibb.co/cBn9W7/coverage5.png)
