@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
-import it.polimi.ingsw.sagrada.game.cells.Cell;
+import it.polimi.ingsw.sagrada.game.base.Cell;
 
 import java.util.*;
 

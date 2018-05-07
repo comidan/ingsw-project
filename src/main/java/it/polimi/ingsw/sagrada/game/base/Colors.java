@@ -26,7 +26,7 @@ public class Colors {
         return getColorList().contains(color);
     }
 
-    public static Color StringToColor(String color) {
+    public static Color stringToColor(String color) {
         switch(color) {
             case "RED": return RED;
             case "YELLOW": return YELLOW;

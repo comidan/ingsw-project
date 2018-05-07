@@ -1,16 +1,15 @@
-package it.polimi.ingsw.sagrada.game.cells;
+package it.polimi.ingsw.sagrada.game.rules;
 
 import it.polimi.ingsw.sagrada.game.base.State;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
-import it.polimi.ingsw.sagrada.game.rules.Rule;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.function.Function;
 
 /**
  * 
  */
-public class CellRule extends Rule {
+public class CellRule extends Rule<Dice, Boolean> {
 
 	private int valueConstraint;
 	private Color colorConstraint;
@@ -55,7 +54,8 @@ public class CellRule extends Rule {
 	 * @param dice - check if dice can be positioned in this current cell
 	 * @return true if dice can be positioned in this current cell
 	 */
-	public boolean checkRule(Dice dice) {
+	@Override
+	Boolean checkRule(Dice dice) {
 		return function.apply(dice);
 	}
 

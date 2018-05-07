@@ -2,23 +2,25 @@ package it.polimi.ingsw.sagrada.game.rules;
 
 import it.polimi.ingsw.sagrada.game.base.Builder;
 import it.polimi.ingsw.sagrada.game.base.Colors;
-import it.polimi.ingsw.sagrada.game.cards.Card;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
-import it.polimi.ingsw.sagrada.game.cells.Cell;
+import it.polimi.ingsw.sagrada.game.base.Cell;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 
  */
-public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
+public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 
 
-	private CardType cardType, objectiveType;
+	private CardType cardType;
+	private CardType objectiveType;
 	private Integer value;
 	private Function<Cell[][], Integer> function;
 	private List constraints;
@@ -55,23 +57,23 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
      * @param objectiveScore rule score
      * @return this cell's rule
      */
-	public ObjectiveBuilder<T> setDifferentDiceColorByRowsObjective(int objectiveScore) {
-		function = cells -> {
+	public<S> ObjectiveBuilder<T> setDifferentDiceColorByRowsObjective(int objectiveScore) {
+		function = S -> {
 				int score = 0;
 				int differentDiceByColor = 0;
 				Color diceColor;
 				HashSet<Color> set = new HashSet<>();
-				for (int row = 0; row < cells.length; row++) {
-					for (int col = 0; col < cells[0].length; col++) {
-						if (!cells[row][col].isOccupied())
+				for (int row = 0; row < S.length; row++) {
+					for (int col = 0; col < S[0].length; col++) {
+						if (!S[row][col].isOccupied())
 							continue;
-						diceColor = cells[row][col].getCurrentDice().getColor();
+						diceColor = S[row][col].getCurrentDice().getColor();
 						if (!set.contains(diceColor)) {
 							set.add(diceColor);
 							differentDiceByColor++;
 						}
 					}
-					if (differentDiceByColor == cells[0].length)
+					if (differentDiceByColor == S[0].length)
 						score += objectiveScore;
 					differentDiceByColor = 0;
 					set.clear();
@@ -199,19 +201,17 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 			int secondValueMatch = 0;
 			for (int row = 0; row < cells.length; row++) {
 				for (int col = 0; col < cells[0].length; col++) {
-					if (cells[row][col].isOccupied()) {
-						if (cells[row][col].getCurrentDice().getValue() == firstValue)
+					if (!cells[row][col].isOccupied())
+						continue;
+					if (cells[row][col].getCurrentDice().getValue() == firstValue)
 							firstValueMatch++;
-						else if (cells[row][col].getCurrentDice().getValue() == secondValue)
+					else if (cells[row][col].getCurrentDice().getValue() == secondValue)
 							secondValueMatch++;
 					}
 				}
-			}
 			return firstValueMatch <= secondValueMatch ? firstValueMatch * objectiveScore : secondValueMatch * objectiveScore;
 		};
-		constraints = new ArrayList<Integer>();
-		constraints.add(firstValue);
-		constraints.add(secondValue);
+		constraints = Arrays.asList(new Integer[]{firstValue, secondValue});
 		objectiveType = CardType.OBJECTIVE_VALUE;
 		cardType = CardType.PUBLIC;
 		value = objectiveScore;
@@ -238,11 +238,10 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 					if(colorsMatch.size() == colorList.size()) {
 						match++;
 						colorsMatch.clear();
-						for(Color color : colorList)
-							if(reusable.contains(color) && !colorsMatch.contains(color)) {
-								colorsMatch.add(color);
-								reusable.remove(color);
-							}
+						reusable.stream().filter(reusable::contains)
+								.filter(color -> !colorsMatch.contains(color))
+								.map(colorsMatch::add)
+								.map(reusable::remove);
 					}
 				}
 			}
@@ -274,19 +273,16 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 					if(valuesMatch.size() == 6) {
 						match++;
 						valuesMatch.clear();
-						for(int i = 1; i < 7; i++)
-							if(reusable.contains(i) && !valuesMatch.contains(i)) {
-								valuesMatch.add(i);
-								reusable.remove((Integer) i);
-							}
+						reusable.stream().filter(reusable::contains)
+										 .filter(i -> !valuesMatch.contains(i))
+									     .map(valuesMatch::add)
+										 .map(reusable::remove);
 					}
 				}
 			}
 			return match * objectiveScore;
 		};
-		constraints = new ArrayList<Integer>();
-		for(int i = 1; i < 7; i++)
-			constraints.add(i);
+		constraints = Arrays.stream(new int[]{1, 2, 3, 4, 5, 6}).boxed().collect(Collectors.toList());
 		objectiveType = CardType.OBJECTIVE_VALUE;
 		cardType = CardType.PUBLIC;
 		value = objectiveScore;
@@ -310,7 +306,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
             else if(color.equals(diceColor)) {
                 tmpScore++;
             }
-            if(tmpScore > 1 && (!color.equals(diceColor) || (color.equals(diceColor) && counter == diagonalColorList.size() - 1))) {
+            if(tmpScore > 1 && (!color.equals(diceColor) || counter == diagonalColorList.size() - 1)) {
                 diceColor = color;
                 partialScore += tmpScore;
                 tmpScore = 1;
@@ -335,10 +331,9 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 		int score = 0;
 		int diagonalCounter = 0;
 		Color diceColor;
-		List<List<Color>> diagonalTrace = new ArrayList<>();
         int numberOfDiagonals = cells.length + cells[0].length + 1;
-		for(int i = 0; i < numberOfDiagonals; i++)
-			diagonalTrace.add(new ArrayList<>());
+		Function<Integer, List> constructor = ArrayList::new;
+		List<List<Color>> diagonalTrace = initializeEmptyNestedList(numberOfDiagonals, constructor);
 		while(diagonalCounter < numberOfDiagonals) {
 			for(int row = rowStart, col = colStart; row < cells.length && col < cells[0].length; row++, col++)
 				if (!(row == cells.length - 1 && col == 0) && !(row == 0 && col == cells[0].length - 1)) {
@@ -360,6 +355,18 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 		return score;
 	}
 
+	/**
+	 * @param inserts list dimension
+	 * @param function nested type constructor
+	 * @return initialized nested list
+	 */
+	private List initializeEmptyNestedList(int inserts, Function function) {
+		List list = new ArrayList<>();
+		for(int i = 0; i < inserts; i++)
+			list.add(function.apply(0));
+		return list;
+	}
+
     /**
      * @param cells window matrix
      * @return total anti diagonals score
@@ -370,10 +377,9 @@ public class ObjectiveBuilder<T extends ObjectiveRule> extends Builder {
 		int score = 0;
 		int diagonalCounter = 0;
 		Color diceColor;
-		List<List<Color>> diagonalTrace = new ArrayList<>();
 		int numberOfDiagonals = cells.length + cells[0].length + 1;
-		for(int i = 0; i < numberOfDiagonals; i++)
-			diagonalTrace.add(new ArrayList<>());
+		Function<Integer, List> constructor = ArrayList::new;
+		List<List<Color>> diagonalTrace = initializeEmptyNestedList(numberOfDiagonals, constructor);
 		while(diagonalCounter < numberOfDiagonals) {
 			for(int row = rowStart, col = colStart; row >= 0 && row < cells.length && col < cells[0].length; row--, col++) {
                 if (!(row == 0 && col == 0) && !(row == cells.length - 1 && col == cells[0].length - 1)) {

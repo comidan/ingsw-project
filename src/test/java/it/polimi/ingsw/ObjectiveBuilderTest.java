@@ -30,5 +30,7 @@ public class ObjectiveBuilderTest {
         assertEquals(2, objectiveRule.getValueConstraints().get(1).intValue());
         objectiveRule = ObjectiveRule.builder().setDifferentDiceValueByRowsObjective(5).build();
         assertEquals(5, objectiveRule.getScore());
+        objectiveRule = ObjectiveRule.builder().setEveryDiceValueRepeatingObjective(2).build();
+        assertEquals(6, objectiveRule.getValueConstraints().size());
     }
 }

@@ -1,10 +1,8 @@
-package it.polimi.ingsw.sagrada.game.cells;
+package it.polimi.ingsw.sagrada.game.rules;
 
 import it.polimi.ingsw.sagrada.game.base.Builder;
 import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
-import it.polimi.ingsw.sagrada.game.playables.DiceExcpetion;
-import it.polimi.ingsw.sagrada.game.rules.RuleConstraintException;
 
 import java.awt.*;
 import java.util.function.Function;
@@ -12,7 +10,7 @@ import java.util.function.Function;
 /**
  * 
  */
-public class CellBuilder<T extends CellRule> extends Builder {
+public class CellBuilder<T extends CellRule> implements Builder {
 
 	private Color colorConstraint;
 	private Integer valueConstraint;

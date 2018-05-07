@@ -1,8 +1,7 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
-import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
-import it.polimi.ingsw.sagrada.game.cells.Cell;
+import it.polimi.ingsw.sagrada.game.base.Cell;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -12,10 +11,11 @@ import java.util.function.Function;
 /**
  * 
  */
-public class ObjectiveRule extends Rule {
+public class ObjectiveRule extends Rule<Cell[][], Integer> {
 
 	private int value;
-	private CardType cardType, objectiveType;
+	private CardType cardType;
+	private CardType objectiveType;
 	private Function<Cell[][], Integer> function;
 	private List<Color> colorConstraints = null;
 	private List<Integer> valueConstraints = null;
@@ -42,14 +42,16 @@ public class ObjectiveRule extends Rule {
 	 * @return builder object
 	 */
 	public static ObjectiveBuilder<ObjectiveRule> builder() {
-		return new ObjectiveBuilder<ObjectiveRule>();
+		return new ObjectiveBuilder<>();
 	}
 
 	/**
 	 * @param cells - window to be rule-checked
 	 * @return total score
 	 */
-	public int checkRule(Cell[][] cells) {
+
+	@Override
+	Integer checkRule(Cell[][] cells) {
 		return function.apply(cells);
 	}
 

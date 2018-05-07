@@ -1,6 +1,7 @@
-package it.polimi.ingsw.sagrada.game.cells;
+package it.polimi.ingsw.sagrada.game.base;
 
 import it.polimi.ingsw.sagrada.game.playables.Dice;
+import it.polimi.ingsw.sagrada.game.rules.CellRule;
 
 
 /**

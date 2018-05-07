@@ -3,7 +3,7 @@ package it.polimi.ingsw.sagrada.game.rules;
 /**
  * 
  */
-public abstract class Rule {
+public abstract class Rule<P, R> {
 
 	private int id;
 
@@ -15,4 +15,6 @@ public abstract class Rule {
 	public int getRuleId() {
 		return id;
 	}
+
+	abstract R checkRule(P t);
 }

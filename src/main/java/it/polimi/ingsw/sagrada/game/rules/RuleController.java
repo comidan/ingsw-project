@@ -1,50 +1,30 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
-import it.polimi.ingsw.sagrada.game.cells.Cell;
-import it.polimi.ingsw.sagrada.game.cells.CellBuilder;
-import it.polimi.ingsw.sagrada.game.cells.CellRule;
-import it.polimi.ingsw.sagrada.game.playables.Dice;
+import it.polimi.ingsw.sagrada.game.base.Cell;
 
 /**
  * 
  */
 public class RuleController {
 
-	private final ObjectiveBuilder objectiveBuilder = new ObjectiveBuilder();
-	private final CellBuilder cellBuilder = new CellBuilder();
 	private final MainGameRule mainGameRule = new MainGameRule();
 
 	public ObjectiveBuilder getObjectiveBuilder() {
-		return objectiveBuilder;
+		return new ObjectiveBuilder();
 	}
 
 	public CellBuilder getCellBuilder() {
-		return cellBuilder;
+		return new CellBuilder();
 	}
-
-
 
 	/**
 	 * @param rule - rule to be validated
-	 * @return boolean
+	 * @return true if rule is validated
 	 */
-	public boolean validateRule(Rule rule) {
-		// TODO implement here
-		return false;
+	public <P, R> R validateRule(Rule<P, R> rule, P data) {
+		return rule.checkRule(data);
 	}
 
-	/**
-	 * @param cellRule - rule to be validated
-	 * @param dice - dice to be evaluated on cellRule
-	 * @return true if rule is correctly validated
-	 */
-	public boolean validateCellRule(CellRule cellRule, Dice dice) {
-		return cellRule.checkRule(dice);
-	}
-
-	public int validateObjectiveRule(ObjectiveRule objectiveRule, Cell[][] cells) {
-		return objectiveRule.checkRule(cells);
-	}
 
 	/**
 	 * @param cells - game window
@@ -52,6 +32,6 @@ public class RuleController {
 	 */
 
 	public ErrorType validateWindow(Cell[][] cells) {
-		return mainGameRule.validateWindow(cells);
+		return mainGameRule.checkRule(cells);
 	}
 }

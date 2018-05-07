@@ -7,7 +7,7 @@ import java.util.function.Function;
 /**
  * 
  */
-public class ToolBuilder<T> extends Builder {
+public class ToolBuilder<T> implements Builder {
 
 	/**
 	 * @param builder - Reference to constructor of the object being built

@@ -1,18 +1,19 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
 
-import it.polimi.ingsw.sagrada.game.cells.Cell;
+import it.polimi.ingsw.sagrada.game.base.Cell;
 
 /**
  * 
  */
-public class MainGameRule extends Rule {
+public class MainGameRule extends Rule<Cell[][], ErrorType> {
 
 	/**
 	 * @param cells window matrix
 	 * @return type of error
 	 */
-	public ErrorType validateWindow(Cell[][] cells) {
+	@Override
+	ErrorType checkRule(Cell[][] cells) {
 		for (int row = 0; row < cells.length; row++)
 			for (int col = 0; col < cells[0].length; col++)
 				if (cells[row][col].isOccupied()) {
