@@ -66,3 +66,5 @@
     - Distributor ID:	Ubuntu
     - Description:	Ubuntu 14.04.5 LTS
     - Release:	14.04
+# SonarQube last run screen : 
+[![N|Sagrada](https://preview.ibb.co/jgXRdn/sonar_Qube_Test_Intro.png)](https://preview.ibb.co/jgXRdn/sonar_Qube_Test_Intro.png)
