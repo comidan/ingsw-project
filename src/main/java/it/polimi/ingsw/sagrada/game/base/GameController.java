@@ -22,7 +22,6 @@ public class GameController {
     private RoundTrack roundTrack;
     private ScoreTrack scoreTrack;
     private CardController cardController;
-    private StateGameController state;
     private StateIterator stateIterator = StateIterator.getInstance();
     private int currentRound;
     private static GameController gameController;
@@ -35,9 +34,10 @@ public class GameController {
     }
 
     public void setupGame() {
-        while (stateIterator.hasNext() && state != DEAL_PUBLIC_OBJECTIVE) {
-            state = stateIterator.next();
-            switch (state) {
+        while (stateIterator.hasNext() && stateIterator.getCurrentState()!=DEAL_PUBLIC_OBJECTIVE) {
+            stateIterator.next();
+
+            switch (stateIterator.getCurrentState()) {
                 case DEAL_PRIVATE_OBJECTIVE:
                     dealPrivateObjectiveState();
                     break;
@@ -73,11 +73,21 @@ public class GameController {
     }
 
     private void dealPublicObjectiveState() {
-        // TODO implement here
+        List<ObjectiveCard> publicObjective;
+        publicObjective=cardController.dealPublicObjective();
+        scoreTrack = ScoreTrack.getScoreTrack(publicObjective);
     }
 
     public void playRound() {
         // TODO implement here
+    }
+
+    private void scoreState() {
+        // TODO implement here
+    }
+
+    public StateGameController getCurrentState() {
+        return stateIterator.getCurrentState();
     }
 
 
@@ -86,6 +96,7 @@ public class GameController {
      */
     private GameController(Player[] players) {
         this.players = players;
+        cardController = new CardController();
         for (Player player : players) {
             //create new window for each player
         }

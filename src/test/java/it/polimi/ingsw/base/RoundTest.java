@@ -15,7 +15,7 @@ public class RoundTest {
     @Test
     public void testRound() {
         StateGameController state;
-        Iterator<StateGameController> itr = StateIterator.getInstance();
+        StateIterator itr = StateIterator.getInstance();
         int index=0;
 
         List<StateGameController> stateSequence = new ArrayList<>();
@@ -33,5 +33,10 @@ public class RoundTest {
             assertEquals(stateSequence.get(index), state);
             index++;
         }
+
+        /**
+         * Method used only for testing. Please read StateIterator method to get full image of what's going on
+         */
+        itr.forceState(StateGameController.DEAL_PRIVATE_OBJECTIVE);
     }
 }

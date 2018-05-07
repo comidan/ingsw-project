@@ -19,6 +19,16 @@ public class StateIterator implements Iterator<StateGameController> {
         currentState=null;
     }
 
+    /**
+     * This method only purpose is for testing. It will be removed
+     * DON'T USE IT!
+     * Because this class is a Singleton in theory there should not be more than one existing test
+     * using this class because the first test will modify permanently StateIterator
+     */
+    public void forceState(StateGameController s) {
+        currentState=s;
+    }
+
     public static StateIterator getInstance() {
         if(instance==null) instance = new StateIterator();
         return instance;

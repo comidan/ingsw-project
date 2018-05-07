@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.game.playables;
 
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
+import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 
 
@@ -11,20 +12,20 @@ import java.util.*;
  *
  */
 public class ScoreTrack {
-
     private static ScoreTrack scoreTrack;
     private int score;
+    private List<ObjectiveCard> objectiveCards;
 
-    private ScoreTrack() {
+    private ScoreTrack(List<ObjectiveCard> objectiveCards) {
         score = 0;
+        this.objectiveCards=objectiveCards;
     }
 
-    public static ScoreTrack getScoreTrack() {
+    public static ScoreTrack getScoreTrack(List<ObjectiveCard> objectiveCards) {
 
         if (scoreTrack == null) {
-            scoreTrack = new ScoreTrack();
+            scoreTrack = new ScoreTrack(objectiveCards);
         }
-
         return scoreTrack;
     }
 

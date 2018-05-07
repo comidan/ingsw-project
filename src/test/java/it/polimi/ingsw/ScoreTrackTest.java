@@ -4,6 +4,7 @@
 package it.polimi.ingsw;
 
 
+import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.playables.ScoreTrack;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
@@ -23,9 +24,8 @@ public class ScoreTrackTest {
 
     @Test
     public void TestScoreTrack() {
-
-
-        ScoreTrack scoreTrack = ScoreTrack.getScoreTrack();
+        List<ObjectiveCard> objectiveCards = new ArrayList<>();
+        ScoreTrack scoreTrack = ScoreTrack.getScoreTrack(objectiveCards);
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.RED).build();
         List<ObjectiveRule> objectiveRuleList = new ArrayList<>();
         objectiveRuleList.add(objectiveRule);
