@@ -56,12 +56,12 @@ public class DiceControllerTest {
     public void TestWrongPickNumbers() {
         DiceController diceController = DiceController.getDiceController();
         int supLimit = 90;
-        int moreThanPlayerNumber = diceController.numberOfPlayers + 1;
+
         assertThrows(InvalidDiceNumberException.class, () -> {
             diceController.getDice(supLimit, null);
         });
         assertThrows(InvalidDiceNumberException.class, () -> {
-            diceController.getDice((moreThanPlayerNumber * 2 + 1), null);
+            diceController.getDice((5 * 2 + 1), null);
         });
 
 

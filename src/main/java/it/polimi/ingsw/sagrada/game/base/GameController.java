@@ -24,7 +24,7 @@ public class GameController {
     private CardController cardController;
     private StateGameController state;
     private StateIterator stateIterator = StateIterator.getInstance();
-    int currentRound;
+    private int currentRound;
     private static GameController gameController;
 
     /**

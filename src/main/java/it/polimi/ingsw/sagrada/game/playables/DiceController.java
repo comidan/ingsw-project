@@ -14,7 +14,7 @@ public class DiceController {
     private static DiceController diceController;
     private List<Dice> draftPool;
     private List<Dice> bagPool;
-    public int numberOfPlayers = 4; // missing method to fetch this value, temporary value for testing
+    private int numberOfPlayers = 4; // missing method to fetch this value, temporary value for testing
 
     /**
      * initialize pools
