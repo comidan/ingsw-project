@@ -1,4 +1,4 @@
-# Test cases :
+﻿# Test cases :
  - # ObjectiveRule
     - colorCountRule ✓
     - consecutiveDiagonalColorRule ✓
@@ -23,13 +23,14 @@
     - diceValueGeneratedErrorTesting ✓
 - # DiceController
     - dice pick from draft and bag ✓
-    - dice pick from empty draft✓
+    - dice pick from empty draft ✓
     - pick of wrong number of dice ✓
 - # Window    
     - dice on empty cell ✓
     - dice on occupied cell ✓
 - # GameController    
    - correct player number ✓
+   - correct rounds sequence ✓
 - # Cell
     - cellRule creation ✓
     - setting of occupied status ✓
@@ -42,6 +43,11 @@
     - get wrong dice fail ✓
 - # ScoreTrack
     - correct score calculation ✓
+- # CardController
+    - deal private objective without repetitions and with correct type ✓
+    - deal public objective without repetitions and with correct type ✓
+- # Picker
+    - picks from a list of generic object an element without repetitions ✓
 
 # Maven example testing output - same results on Travis CI
     -------------------------------------------------------
