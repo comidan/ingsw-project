@@ -24,7 +24,7 @@ public class PublicObjectiveDealerTest {
             assertFalse(cardCheck.contains(card));
             assertEquals(card.getType(), CardType.PUBLIC);
             cardCheck.add(card);
-            System.out.println(card.getId());
+            System.out.println(card.toString());
         }
     }
 }

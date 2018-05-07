@@ -32,7 +32,6 @@ public class RoundTest {
             state = itr.next();
             assertEquals(stateSequence.get(index), state);
             index++;
-            System.out.println(state);
         }
     }
 }

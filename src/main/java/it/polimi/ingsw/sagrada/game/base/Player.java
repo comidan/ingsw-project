@@ -59,4 +59,7 @@ public class Player {
 		return null;
 	}
 
+	public void setPrivateObjectiveCard(ObjectiveCard privateObjectiveCard) {
+		this.privateObjectiveCard = privateObjectiveCard;
+	}
 }

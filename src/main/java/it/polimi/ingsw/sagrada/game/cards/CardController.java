@@ -54,7 +54,8 @@ public class CardController {
 					JSONObject card = picker.next();
 					int id = ((Long)card.get("id")).intValue();
 					int value = ((Long)card.get("value")).intValue();
-					cards.add(new ObjectiveCard(id, findRule(id, value)));
+					String name = (String)card.get("name");
+					cards.add(new ObjectiveCard(id, name, findRule(id, value)));
 				}
 			}
 		} catch (IOException e) {
@@ -96,7 +97,7 @@ public class CardController {
 			if(picker.hasNext()) {
 				Color color = picker.next();
 				objectiveBuilder.setColorShadeColorObjective(color);
-				cards.add(new ObjectiveCard(i, objectiveBuilder.build()));
+				cards.add(new ObjectiveCard(i, "Obiettivo "+color.toString(), objectiveBuilder.build()));
 			}
 		}
 		return cards;
