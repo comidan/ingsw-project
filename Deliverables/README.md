@@ -21,14 +21,41 @@
     - mainGameRuleTesting on various matrix enviroments ✓
     - colorGeneratedErrorTesting ✓
     - diceValueGeneratedErrorTesting ✓
+- # DiceController
+    - dice pick from draft and bag ✓
+    - dice pick from empty draft✓
+    - pick of wrong number of dice ✓
+- # Window    
+    - dice on empty cell ✓
+    - dice on occupied cell ✓
+- # GameController    
+   - correct player number ✓
+- # Cell
+    - cellRule creation ✓
+    - setting of occupied status ✓
+    - setting of dice ✓
+- # Dice
+    - value and color initialization ✓
+- # RoundTrack
+    - get dice from round track ✓
+    - get list of color of dice on round track ✓
+    - get wrong dice fail ✓
+- # ScoreTrack
+    - correct score calculation ✓
+
+    
+    
+
+    
+    
+
 
 
 # Maven example testing output - same results on Travis CI
     -------------------------------------------------------
      T E S T S
     -------------------------------------------------------
-    Running it.polimi.ingsw.AppTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.167 sec
+
     Running it.polimi.ingsw.base.PickerTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.base.RoundTest
