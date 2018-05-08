@@ -6,6 +6,7 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.playables.ScoreTrack;
+import it.polimi.ingsw.sagrada.game.playables.Token;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class ScoreTrackTest {
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.RED).build();
         List<ObjectiveRule> objectiveRuleList = new ArrayList<>();
         objectiveRuleList.add(objectiveRule);
-        Window window = new Window();
+        Window window = new Window("Test", new Cell[4][5], new ArrayList<Token>());
         Cell[][] cellMatrix = window.getCellMatrix();
 
         int tokenNumber = 3; //TEMPORARY FOR TESTING

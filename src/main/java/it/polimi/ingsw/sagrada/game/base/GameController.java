@@ -59,7 +59,10 @@ public class GameController implements Observer<Integer> {
     }
 
     private void dealWindowsState() {
-        // TODO implement here
+
+        for(Player p:players){
+            //p.setWindow();
+        }
     }
 
     private void dealToolState() {
