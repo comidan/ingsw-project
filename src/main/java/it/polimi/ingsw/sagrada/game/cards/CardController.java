@@ -47,7 +47,7 @@ public class CardController {
 
 		JSONParser parser = new JSONParser();
 		try{
-			JSONArray publicObjective = (JSONArray)parser.parse(new FileReader(BASE_PATH_OBJECTIVE+"publicobjective.json"));
+			JSONArray publicObjective = (JSONArray)parser.parse(new FileReader(BASE_PATH_OBJECTIVE+"PublicObjective.json"));
 			Iterator<JSONObject> picker = new Picker<JSONObject>(publicObjective).pickerIterator();
 			for(int i=0; i<NUM_PUBLIC_OBJECTIVE; i++) {
 				if(picker.hasNext()) {

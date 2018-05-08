@@ -31,7 +31,7 @@ public class WindowParser {
         parser = new JSONParser();
         JSONArray windowsArray;
         try {
-            windowsArray = (JSONArray)parser.parse(new FileReader(BASE_PATH+"windows.json"));
+            windowsArray = (JSONArray)parser.parse(new FileReader(BASE_PATH+"Windows.json"));
             picker = new Picker<JSONObject>(windowsArray).pickerIterator();
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Something breaks in reading JSON file");
