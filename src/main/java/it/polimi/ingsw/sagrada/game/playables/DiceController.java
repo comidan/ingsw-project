@@ -2,10 +2,12 @@ package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.base.GameController;
+import it.polimi.ingsw.sagrada.game.base.Picker;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -15,7 +17,6 @@ public class DiceController {
     private List<Dice> draftPool;
     private List<Dice> bagPool;
     private int numberOfPlayers = 4; // missing method to fetch this value, temporary value for testing
-
 
     /**
      * initialize pools
@@ -66,8 +67,10 @@ public class DiceController {
     private List<Dice> getDiceBag(int num) throws InvalidDiceNumberException {
         if (num != numberOfPlayers * 2 + 1 || num > bagPool.size()) throw new InvalidDiceNumberException();
         List<Dice> picked_dice = new ArrayList<>();
+        Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
+
         for (int i = 0; i < num; i++) {
-            Dice dice = bagPool.remove(generateRandomInt(bagPool.size() - 1));
+            Dice dice = bagPicker.next();;
             picked_dice.add(dice);
             draftPool.add(dice);
         }
