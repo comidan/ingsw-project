@@ -9,6 +9,9 @@ import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.playables.DiceController;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 
@@ -19,14 +22,14 @@ public class GameControllerTest {
     private DiceController diceController;
     private Player playerOne = new Player(gameController, toolManager, diceController);
     private Player playerTwo = new Player(gameController, toolManager, diceController);
-    private Player[] players = new Player[2];
+    private List<Player> players = new ArrayList<>();
 
 
     @Test
     public void TestGameController() {
 
-        players[0] = playerOne;
-        players[1] = playerTwo;
+        players.add(playerOne);
+        players.add(playerTwo);
         GameController gameController = GameController.getGameController(players);
         assertTrue(gameController.getPlayerNumber() > 0);
 
