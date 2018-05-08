@@ -78,7 +78,7 @@ public class CardController {
 			case 7: objectiveBuilder.setEveryDiceValueRepeatingObjective(value); break;
 			case 8: objectiveBuilder.setSameDiagonalColorObjective(); break;
 			case 9: objectiveBuilder.setEveryColorRepeatingObjective(value); break;
-			default: throw new JSONErrorException("JSON is not correct. Check publicobjective.json id");
+			default: throw new JSONErrorException("JSON is not correct. Check PublicObjective.json id");
 		}
 		return objectiveBuilder.build();
 	}
