@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada.game.base;
 
-public enum StateGameController {
+public enum StateGameEnum {
     DEAL_PRIVATE_OBJECTIVE,
     DEAL_WINDOWS,
     DEAL_TOOL,
@@ -8,7 +8,7 @@ public enum StateGameController {
     TURN,
     SCORE;
 
-    public static StateGameController getFirstState() {
+    public static StateGameEnum getFirstState() {
         return DEAL_PRIVATE_OBJECTIVE;
     }
 }

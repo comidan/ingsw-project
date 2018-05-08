@@ -123,5 +123,46 @@
 				{"x":2, "y":2, "constraint":"PURPLE"}
 				]
 		}]
+	},
+	{
+	"card_id":2,
+	"windows":[
+		{
+		"name":"Gravitas",
+		"token":5,
+		"cells":[
+				{"x":0, "y":0, "constraint":1},
+				{"x":2, "y":0, "constraint":3},
+				{"x":3, "y":0, "constraint":"LIGHT_BLUE"},
+				{"x":1, "y":1, "constraint":2},
+				{"x":2, "y":1, "constraint":"LIGHT_BLUE"},
+				{"x":0, "y":2, "constraint":6},
+				{"x":1, "y":2, "constraint":"LIGHT_BLUE"},
+				{"x":3, "y":2, "constraint":4},
+				{"x":0, "y":3, "constraint":"LIGHT_BLUE"},
+				{"x":1, "y":3, "constraint":5},
+				{"x":2, "y":3, "constraint":2},
+				{"x":4, "y":3, "constraint":1}
+				]
+		},
+		{
+		"name":"Water of Life",
+		"token":6,
+		"cells":[
+				{"x":0, "y":0, "constraint":6},
+				{"x":1, "y":0, "constraint":"LIGHT_BLUE"},
+				{"x":1, "y":0, "constraint":5},
+				{"x":2, "y":0, "constraint":"LIGHT_BLUE"},
+				{"x":0, "y":1, "constraint":4},
+				{"x":1, "y":1, "constraint":"RED"},
+				{"x":2, "y":1, "constraint":2},
+				{"x":3, "y":1, "constraint":"LIGHT_BLUE"},
+				{"x":0, "y":1, "constraint":"GREEN"},
+				{"x":1, "y":2, "constraint":6},
+				{"x":2, "y":2, "constraint":"YELLOW"},
+				{"x":3, "y":2, "constraint":3},
+				{"x":4, "y":2, "constraint":"PURPLE"}
+				]
+		}]
 	}
 ]

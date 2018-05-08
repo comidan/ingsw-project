@@ -4,7 +4,7 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.sagrada.game.base.GameController;
 import it.polimi.ingsw.sagrada.game.base.Player;
-import it.polimi.ingsw.sagrada.game.base.StateGameController;
+import it.polimi.ingsw.sagrada.game.base.StateGameEnum;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.playables.DiceController;
 import org.junit.Test;
@@ -34,6 +34,6 @@ public class GameControllerTest {
         assertTrue(gameController.getPlayerNumber() > 0);
 
         gameController.setupGame();
-        assertEquals(StateGameController.DEAL_PUBLIC_OBJECTIVE, gameController.getCurrentState());
+        assertEquals(StateGameEnum.DEAL_PUBLIC_OBJECTIVE, gameController.getCurrentState());
     }
 }

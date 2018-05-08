@@ -3,15 +3,15 @@ package it.polimi.ingsw.sagrada.game.base;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static it.polimi.ingsw.sagrada.game.base.StateGameController.*;
+import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
 
 /**
  * This Iterator manages various phase of the game. It's a Singleton
  */
 
-public class StateIterator implements Iterator<StateGameController> {
+public class StateIterator implements Iterator<StateGameEnum> {
     private static StateIterator instance;
-    private StateGameController currentState;
+    private StateGameEnum currentState;
     private int roundNumber;
 
     private StateIterator() {
@@ -25,7 +25,7 @@ public class StateIterator implements Iterator<StateGameController> {
      * Because this class is a Singleton in theory there should not be more than one existing test
      * using this class because the first test will modify permanently StateIterator
      */
-    public void forceState(StateGameController s) {
+    public void forceState(StateGameEnum s) {
         currentState=s;
     }
 
@@ -34,7 +34,7 @@ public class StateIterator implements Iterator<StateGameController> {
         return instance;
     }
 
-    public StateGameController getCurrentState() {
+    public StateGameEnum getCurrentState() {
         return currentState;
     }
 
@@ -48,9 +48,9 @@ public class StateIterator implements Iterator<StateGameController> {
     }
 
     @Override
-    public StateGameController next() {
+    public StateGameEnum next() {
         if(currentState==null){
-            currentState=StateGameController.getFirstState();
+            currentState= StateGameEnum.getFirstState();
         } else {
             switch (currentState) {
                 case DEAL_PRIVATE_OBJECTIVE: currentState=DEAL_WINDOWS; break;
