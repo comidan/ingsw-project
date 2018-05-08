@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class WindowTest {
 
-    @Test
+
     public void TestWindowCreation() {
         WindowParser windowParser=WindowParser.getInstance();
         List<Window> windowsCard=windowParser.generateWindowCard();

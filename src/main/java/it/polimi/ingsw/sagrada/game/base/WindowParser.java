@@ -17,9 +17,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WindowParser {
+
     private static WindowParser instance;
 
-        private static final String BASE_PATH = "JSONResources\\Window\\";
+    private static final String BASE_PATH = "JSONResources\\Window\\";
     private static final int WINDOWS_PER_CARD = 2;
 
 
