@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class WindowParser {
     private static WindowParser instance;
 
-    private static final String BASE_PATH = "res\\json\\window\\";
+    private static final String BASE_PATH = "res\\json\\Window\\";
     private static final int WINDOWS_PER_CARD = 2;
 
 
@@ -31,7 +31,7 @@ public class WindowParser {
         parser = new JSONParser();
         JSONArray windowsArray;
         try {
-            windowsArray = (JSONArray)parser.parse(new FileReader(BASE_PATH+"windows.json"));
+            windowsArray = (JSONArray)parser.parse(new FileReader(BASE_PATH+"Windows.json"));
             picker = new Picker<JSONObject>(windowsArray).pickerIterator();
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Something breaks in reading JSON file");

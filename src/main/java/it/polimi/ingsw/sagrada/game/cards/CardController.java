@@ -25,7 +25,7 @@ public class CardController {
 	private static final Logger logger = Logger.getAnonymousLogger();
 	private static final int NUM_MAX_PLAYER = 4;
 	private static final int NUM_PUBLIC_OBJECTIVE = 3;
-	private static final String BASE_PATH_OBJECTIVE = "res\\json\\objective\\";
+	private static final String BASE_PATH_OBJECTIVE = "res\\json\\Objective\\";
 	private final ObjectiveBuilder objectiveBuilder = new ObjectiveBuilder();
 
 
@@ -47,7 +47,7 @@ public class CardController {
 
 		JSONParser parser = new JSONParser();
 		try{
-			JSONArray publicObjective = (JSONArray)parser.parse(new FileReader(BASE_PATH_OBJECTIVE+"publicobjective.json"));
+			JSONArray publicObjective = (JSONArray)parser.parse(new FileReader(BASE_PATH_OBJECTIVE+"PublicObjective.json"));
 			Iterator<JSONObject> picker = new Picker<JSONObject>(publicObjective).pickerIterator();
 			for(int i=0; i<NUM_PUBLIC_OBJECTIVE; i++) {
 				if(picker.hasNext()) {
@@ -78,7 +78,7 @@ public class CardController {
 			case 7: objectiveBuilder.setEveryDiceValueRepeatingObjective(value); break;
 			case 8: objectiveBuilder.setSameDiagonalColorObjective(); break;
 			case 9: objectiveBuilder.setEveryColorRepeatingObjective(value); break;
-			default: throw new JSONErrorException("JSON is not correct. Check publicobjective.json id");
+			default: throw new JSONErrorException("JSON is not correct. Check PublicObjective.json id");
 		}
 		return objectiveBuilder.build();
 	}
