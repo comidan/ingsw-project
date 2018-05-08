@@ -17,7 +17,7 @@ import static it.polimi.ingsw.sagrada.game.base.StateGameController.*;
 
 public class GameController {
 
-    private Player[] players;
+    private List<Player> players;
     private DiceController diceController;
     private RoundTrack roundTrack;
     private ScoreTrack scoreTrack;
@@ -50,9 +50,9 @@ public class GameController {
 
     private void dealPrivateObjectiveState() {
         List<ObjectiveCard> privateObjective;
-        privateObjective = cardController.dealPrivateObjective(players.length);
-        for (int i = 0; i < players.length; i++) {
-            players[i].setPrivateObjectiveCard(privateObjective.get(i));
+        privateObjective = cardController.dealPrivateObjective(players.size());
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).setPrivateObjectiveCard(privateObjective.get(i));
         }
     }
 
@@ -86,12 +86,12 @@ public class GameController {
     /**
      * Default constructor
      */
-    private GameController(Player[] players) {
+    private GameController(List<Player> players) {
         this.players = players;
         cardController = new CardController();
     }
 
-    public static GameController getGameController(Player[] players) {
+    public static GameController getGameController(List<Player> players) {
         if (gameController == null) {
             gameController = new GameController(players);
         }
@@ -99,14 +99,14 @@ public class GameController {
     }
 
     public int getPlayerNumber() {
-        return players.length;
+        return players.size();
     }
 
 
     public Player selectStarterPlayer() {
         Random rand = new Random();
         int index = rand.nextInt(getPlayerNumber());
-        return players[index];
+        return players.get(index);
     }
 
     //if diceNumber!= 0 it's draftPick, else if dice==null it's bagPick
