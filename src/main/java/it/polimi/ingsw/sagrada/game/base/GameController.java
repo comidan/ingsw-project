@@ -23,15 +23,7 @@ public class GameController {
     private ScoreTrack scoreTrack;
     private CardController cardController;
     private StateIterator stateIterator = StateIterator.getInstance();
-    private int currentRound;
     private static GameController gameController;
-
-    /**
-     * Default constructor
-     */
-    public GameController() {
-
-    }
 
     public void setupGame() {
         while (stateIterator.hasNext() && stateIterator.getCurrentState()!=DEAL_PUBLIC_OBJECTIVE) {
@@ -97,10 +89,6 @@ public class GameController {
     private GameController(Player[] players) {
         this.players = players;
         cardController = new CardController();
-        for (Player player : players) {
-            //create new window for each player
-        }
-        currentRound = 0;
     }
 
     public static GameController getGameController(Player[] players) {
@@ -122,7 +110,7 @@ public class GameController {
     }
 
     //if diceNumber!= 0 it's draftPick, else if dice==null it's bagPick
-    public void getDice(int diceNumber, Dice dice) {
+    /*public void getDice(int diceNumber, Dice dice) {
         try {
             diceController.getDice(diceNumber, null);
         } catch (EmptyDraftException | InvalidDiceNumberException | DiceNotFoundException exc) {
@@ -137,13 +125,9 @@ public class GameController {
         this.currentRound += 1;
     }
 
-    public int getCurrentRound() {
-        return currentRound;
-    }
-
     public List<Dice> showDraft() {
         return diceController.showDraft();
-    }
+    }*/
 
 
 }
