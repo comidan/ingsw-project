@@ -25,7 +25,7 @@ public class CardController {
 	private static final Logger logger = Logger.getAnonymousLogger();
 	private static final int NUM_MAX_PLAYER = 4;
 	private static final int NUM_PUBLIC_OBJECTIVE = 3;
-	private static final String BASE_PATH_OBJECTIVE = "JSONResources\\Objective\\";
+	private static final String BASE_PATH_OBJECTIVE = "res\\json\\objective\\";
 	private final ObjectiveBuilder objectiveBuilder = new ObjectiveBuilder();
 
 
