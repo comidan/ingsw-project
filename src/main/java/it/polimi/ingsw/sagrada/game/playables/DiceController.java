@@ -2,7 +2,6 @@ package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.base.GameController;
-import it.polimi.ingsw.sagrada.game.base.Observable;
 import it.polimi.ingsw.sagrada.game.base.Picker;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
@@ -12,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class DiceController implements Observable<Integer> {
+public class DiceController {
     private GameController gameController;
     private static DiceController diceController;
     private List<Dice> draftPool;
@@ -110,10 +109,6 @@ public class DiceController implements Observable<Integer> {
     }
 
 
-    @Override
-    public void update(Integer numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
-    }
 }
 
 
