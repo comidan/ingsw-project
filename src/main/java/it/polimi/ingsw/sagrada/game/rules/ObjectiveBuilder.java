@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.Builder;
 import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.base.Cell;
+import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -32,6 +33,20 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 		return new ObjectiveRule(function, value, cardType, constraints, objectiveType);
 	}
 
+	private int getDiceValue(Cell cell) {
+		Dice dice = cell.getCurrentDice();
+		if(dice == null)
+			return 0;
+		return dice.getValue();
+	}
+
+	private Color getDiceColor(Cell cell) {
+		Dice dice = cell.getCurrentDice();
+		if(dice == null)
+			return Color.BLACK;
+		return dice.getColor();
+	}
+
 	/**
 	 * @param color color constraint
      * @return this ObjectiveBuilder with an updated objective rule
@@ -41,8 +56,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 				int score = 0;
 				for(int row = 0; row < cells.length; row++)
 					for(int col = 0; col < cells[0].length; col++)
-						if(cells[row][col].isOccupied() && cells[row][col].getCurrentDice().getColor().equals(color))
-							score += cells[row][col].getCurrentDice().getValue();
+						if(cells[row][col].isOccupied() && getDiceColor(cells[row][col]).equals(color))
+							score += getDiceValue(cells[row][col]);
 				return score;
 		};
 		constraints = new ArrayList<Color>();
@@ -57,23 +72,23 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
      * @param objectiveScore rule score
      * @return this cell's rule
      */
-	public<S> ObjectiveBuilder<T> setDifferentDiceColorByRowsObjective(int objectiveScore) {
-		function = S -> {
+	public ObjectiveBuilder<T> setDifferentDiceColorByRowsObjective(int objectiveScore) {
+		function = cells -> {
 				int score = 0;
 				int differentDiceByColor = 0;
 				Color diceColor;
 				HashSet<Color> set = new HashSet<>();
-				for (int row = 0; row < S.length; row++) {
-					for (int col = 0; col < S[0].length; col++) {
-						if (!S[row][col].isOccupied())
+				for (int row = 0; row < cells.length; row++) {
+					for (int col = 0; col < cells[0].length; col++) {
+						if (!cells[row][col].isOccupied())
 							continue;
-						diceColor = S[row][col].getCurrentDice().getColor();
+						diceColor = getDiceColor(cells[row][col]);
 						if (!set.contains(diceColor)) {
 							set.add(diceColor);
 							differentDiceByColor++;
 						}
 					}
-					if (differentDiceByColor == S[0].length)
+					if (differentDiceByColor == cells[0].length)
 						score += objectiveScore;
 					differentDiceByColor = 0;
 					set.clear();
@@ -101,7 +116,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 					for (int row = 0; row < cells.length; row++) {
 						if (!cells[row][col].isOccupied())
 							continue;
-						diceColor = cells[row][col].getCurrentDice().getColor();
+						diceColor = getDiceColor(cells[row][col]);
 						if (!set.contains(diceColor)) {
 							set.add(diceColor);
 							differentDiceByColor++;
@@ -135,7 +150,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 					for (int row = 0; row < cells.length; row++) {
 						if (!cells[row][col].isOccupied())
 							continue;
-						diceValue = cells[row][col].getCurrentDice().getValue();
+						diceValue = getDiceValue(cells[row][col]);
 						if (!set.contains(diceValue)) {
 							set.add(diceValue);
 							differentDiceByValue++;
@@ -169,7 +184,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 					for (int col = 0; col < cells[0].length; col++) {
 						if (!cells[row][col].isOccupied())
 							continue;
-						diceValue = cells[row][col].getCurrentDice().getValue();
+						diceValue = getDiceValue(cells[row][col]);
 						if (!set.contains(diceValue)) {
 							set.add(diceValue);
 							differentDiceByValue++;
@@ -203,9 +218,9 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 				for (int col = 0; col < cells[0].length; col++) {
 					if (!cells[row][col].isOccupied())
 						continue;
-					if (cells[row][col].getCurrentDice().getValue() == firstValue)
+					if (getDiceValue(cells[row][col]) == firstValue)
 							firstValueMatch++;
-					else if (cells[row][col].getCurrentDice().getValue() == secondValue)
+					else if (getDiceValue(cells[row][col]) == secondValue)
 							secondValueMatch++;
 					}
 				}
@@ -231,10 +246,10 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 			List<Color> colorList = Colors.getColorList();
 			for (int row = 0; row < cells.length; row++) {
 				for (int col = 0; col < cells[0].length; col++) {
-					if (cells[row][col].isOccupied() && !colorsMatch.contains(cells[row][col].getCurrentDice().getColor()))
-						colorsMatch.add(cells[row][col].getCurrentDice().getColor());
-					else if(colorsMatch.contains(cells[row][col].getCurrentDice().getColor()))
-						reusable.add(cells[row][col].getCurrentDice().getColor());
+					if (cells[row][col].isOccupied() && !colorsMatch.contains(getDiceColor(cells[row][col])))
+						colorsMatch.add(getDiceColor(cells[row][col]));
+					else if(colorsMatch.contains(getDiceColor(cells[row][col])))
+						reusable.add(getDiceColor(cells[row][col]));
 					if(colorsMatch.size() == colorList.size()) {
 						match++;
 						colorsMatch.clear();
@@ -266,10 +281,10 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 			List<Integer> reusable = new ArrayList<>();
 			for (int row = 0; row < cells.length; row++) {
 				for (int col = 0; col < cells[0].length; col++) {
-					if (cells[row][col].isOccupied() && !valuesMatch.contains(cells[row][col].getCurrentDice().getValue()))
-						valuesMatch.add(cells[row][col].getCurrentDice().getValue());
-					else if(valuesMatch.contains(cells[row][col].getCurrentDice().getValue()))
-						reusable.add(cells[row][col].getCurrentDice().getValue());
+					if (cells[row][col].isOccupied() && !valuesMatch.contains(getDiceValue(cells[row][col])))
+						valuesMatch.add(getDiceValue(cells[row][col]));
+					else if(valuesMatch.contains(getDiceValue(cells[row][col])))
+						reusable.add(getDiceValue(cells[row][col]));
 					if(valuesMatch.size() == 6) {
 						match++;
 						valuesMatch.clear();
@@ -338,7 +353,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 			for(int row = rowStart, col = colStart; row < cells.length && col < cells[0].length; row++, col++)
 				if (!(row == cells.length - 1 && col == 0) && !(row == 0 && col == cells[0].length - 1)) {
 			        if(cells[row][col].isOccupied())
-					    diceColor = cells[row][col].getCurrentDice().getColor();
+					    diceColor = getDiceColor(cells[row][col]);
 			        else
 			            diceColor = Color.BLACK;
 					diagonalTrace.get(diagonalCounter).add(diceColor);
@@ -384,7 +399,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 			for(int row = rowStart, col = colStart; row >= 0 && row < cells.length && col < cells[0].length; row--, col++) {
                 if (!(row == 0 && col == 0) && !(row == cells.length - 1 && col == cells[0].length - 1)) {
                     if(cells[row][col].isOccupied())
-                        diceColor = cells[row][col].getCurrentDice().getColor();
+                        diceColor = getDiceColor(cells[row][col]);
                     else
                         diceColor = Color.BLACK;
                     diagonalTrace.get(diagonalCounter).add(diceColor);
