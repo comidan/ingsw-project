@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
-import static it.polimi.ingsw.sagrada.game.base.StateGameController.*;
+import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
 
 /**
  *
@@ -78,7 +78,7 @@ public class GameController {
         // TODO implement here
     }
 
-    public StateGameController getCurrentState() {
+    public StateGameEnum getCurrentState() {
         return stateIterator.getCurrentState();
     }
 
