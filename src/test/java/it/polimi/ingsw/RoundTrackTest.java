@@ -26,20 +26,14 @@ public class RoundTrackTest {
         RoundTrack roundTrack = RoundTrack.getRoundTrack();
         assertNotNull(roundTrack);
         roundTrack.addDice(diceList, 2);
-        try {
-            assertEquals(roundTrack.getDiceFromRound(Colors.RED, 2), dice);
-        } catch (DiceNotFoundException exc) {
-            //to be handled
-        }
+        assertEquals(roundTrack.getDiceFromRound(Colors.RED, 2), dice);
+
         List<Color> colorList = new ArrayList<>();
         colorList.add(dice.getColor());
 
         assertEquals(roundTrack.getAvailableColors(), colorList);
 
-        assertThrows(DiceNotFoundException.class, () -> roundTrack.getDiceFromRound(Colors.GREEN, 2));
         assertEquals(roundTrack.getAvailableColors(), colorList);
-
-        assertThrows(DiceNotFoundException.class, () -> roundTrack.getDiceFromRound(Colors.RED, 3));
 
 
         // get list of color dice from draft and assertEquals with roundTrack.getAvailableColors

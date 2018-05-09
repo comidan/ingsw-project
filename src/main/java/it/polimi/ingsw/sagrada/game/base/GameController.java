@@ -48,7 +48,7 @@ public class GameController implements Observer<Integer> {
     }
 
     public void setupGame() {
-        while (stateIterator.hasNext() && stateIterator.getCurrentState()!=DEAL_PUBLIC_OBJECTIVE) {
+        while (stateIterator.hasNext() && stateIterator.getCurrentState() != DEAL_PUBLIC_OBJECTIVE) {
             stateIterator.next();
 
             switch (stateIterator.getCurrentState()) {
@@ -79,9 +79,9 @@ public class GameController implements Observer<Integer> {
     }
 
     private void dealWindowsState() {
-        WindowParser windowParser=WindowParser.getInstance();
-        for(Player p:players) {
-            List<Window> windowa=windowParser.generateWindowCard();
+        WindowParser windowParser = WindowParser.getInstance();
+        for (Player p : players) {
+            List<Window> windowa = windowParser.generateWindowCard();
         }
     }
 
@@ -91,7 +91,7 @@ public class GameController implements Observer<Integer> {
 
     private void dealPublicObjectiveState() {
         List<ObjectiveCard> publicObjective;
-        publicObjective=cardController.dealPublicObjective();
+        publicObjective = cardController.dealPublicObjective();
         scoreTrack = ScoreTrack.getScoreTrack(publicObjective);
     }
 
@@ -130,7 +130,7 @@ public class GameController implements Observer<Integer> {
 
     @Override
     public boolean subscribe(Observable<Integer> observable) {
-        if(observers.contains(observable))
+        if (observers.contains(observable))
             return false;
         observers.add(observable);
         return true;
@@ -138,31 +138,11 @@ public class GameController implements Observer<Integer> {
 
     @Override
     public boolean unsubscribe(Observable<Integer> observable) {
-        if(!observers.contains(observable))
+        if (!observers.contains(observable))
             return false;
         observers.remove(observable);
         return true;
     }
-
-    //if diceNumber!= 0 it's draftPick, else if dice==null it's bagPick
-    /*public void getDice(int diceNumber, Dice dice) {
-        try {
-            diceController.getDice(diceNumber, null);
-        } catch (EmptyDraftException | InvalidDiceNumberException | DiceNotFoundException exc) {
-            // how do we handle exceptions
-        }
-    }
-
-
-    public void addDiceToRoundTrack() {
-        List<Dice> diceList = diceController.takeDiceForRound();
-        roundTrack.addDice(diceList, getCurrentRound());
-        this.currentRound += 1;
-    }
-
-    public List<Dice> showDraft() {
-        return diceController.showDraft();
-    }*/
 
 
 }

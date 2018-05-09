@@ -30,3 +30,17 @@ _
 /src/test/java/it/polimi/ingsw/CellRuleTest.java,8/0/80833add632bb9600af980169d565ce460157556
 [
 +src/test/java/it/polimi/ingsw/DiceTest.java,7/3/73836149e1ed292860e8623b36103f4219f12343
+s
+Csrc/main/java/it/polimi/ingsw/sagrada/game/rules/ObjectiveRule.java,6/3/63ea8bfdbeebd2b6075f448add928891e214c00a
+v
+Fsrc/main/java/it/polimi/ingsw/sagrada/game/rules/ObjectiveBuilder.java,c/8/c86ee424d6cfc0f4f05716542e9de0e58c8634b2
+i
+9src/main/java/it/polimi/ingsw/sagrada/game/base/Cell.java,a/6/a620d37a809423021086b4176d85b3215806bb83
+q
+Asrc/main/java/it/polimi/ingsw/sagrada/game/rules/CellBuilder.java,1/f/1fbbff9fca36b2814ab296fb9015524a3385f886
+b
+2src/test/java/it/polimi/ingsw/CellBuilderTest.java,f/0/f0e84cca03d75c9eacb94334f22d89b7474f3606
+c
+3src/test/java/it/polimi/ingsw/MainGameRuleTest.java,c/9/c96959c0660fac96cf6ee0c08e28d87de38b52a8
+d
+4src/test/java/it/polimi/ingsw/ObjectiveRuleTest.java,d/3/d36f0979678a4423d59ab0452e2bfba7204f1432

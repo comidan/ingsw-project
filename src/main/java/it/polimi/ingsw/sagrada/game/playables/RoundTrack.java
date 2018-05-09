@@ -49,15 +49,14 @@ public class RoundTrack {
     }
 
 
-    public Dice getDiceFromRound(Color color, int round) throws DiceNotFoundException {
+    public Dice getDiceFromRound(Color color, int round) {
 
-        if (roundDice.length == 0) throw new DiceNotFoundException();
 
-        for (Dice dice : roundDice[round])
+        for (Dice dice : roundDice[round]) {
             if (dice.getColor() == color)
                 return dice;
-
-        throw new DiceNotFoundException(); //SHOULD HANDLE THIS CASE
+        }
+        return null;
 
     }
 
