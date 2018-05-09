@@ -4,6 +4,7 @@
 package it.polimi.ingsw;
 
 
+import it.polimi.ingsw.sagrada.game.base.WindowParser;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.playables.ScoreTrack;
 import it.polimi.ingsw.sagrada.game.playables.Token;
@@ -30,7 +31,8 @@ public class ScoreTrackTest {
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.RED).build();
         List<ObjectiveRule> objectiveRuleList = new ArrayList<>();
         objectiveRuleList.add(objectiveRule);
-        Window window = new Window("Test", new Cell[4][5], new ArrayList<Token>());
+        WindowParser windowParser = WindowParser.getInstance();
+        Window window = windowParser.generateWindowCard().get(0);
         Cell[][] cellMatrix = window.getCellMatrix();
 
         int tokenNumber = 3; //TEMPORARY FOR TESTING
@@ -40,14 +42,14 @@ public class ScoreTrackTest {
             objectiveScore += objectiveRuleTest.getScore();
         }
         int penalityScore = 0;
-/*        for (int i = 0; i < cellMatrix.length; i++)
+        for (int i = 0; i < cellMatrix.length; i++)
             for (int j = 0; j < cellMatrix[0].length; j++) {
                 if (!cellMatrix[i][j].isOccupied())
                     penalityScore -= 1;
             }
 
         assertEquals(penalityScore + tokenNumber + objectiveScore, scoreTrack.calculateScore(objectiveRuleList, cellMatrix, tokenNumber));
-*/
+
 
     }
 

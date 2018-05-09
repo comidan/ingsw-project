@@ -81,7 +81,7 @@ public class GameController implements Observer<Integer> {
     private void dealWindowsState() {
         WindowParser windowParser = WindowParser.getInstance();
         for (Player p : players) {
-            List<Window> windowa = windowParser.generateWindowCard();
+            List<Window> window = windowParser.generateWindowCard();
         }
     }
 
