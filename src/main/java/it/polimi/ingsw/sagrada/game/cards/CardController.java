@@ -26,7 +26,7 @@ public class CardController {
 	private static final int NUM_MAX_PLAYER = 4;
 	private static final int NUM_PUBLIC_OBJECTIVE = 3;
 
-	private static final String BASE_PATH_OBJECTIVE = "res\\json\\objective\\";
+	private static final String BASE_PATH_OBJECTIVE = "res/json/objective/";
 
 	private final ObjectiveBuilder objectiveBuilder = new ObjectiveBuilder();
 

@@ -20,7 +20,7 @@ public class WindowParser {
 
     private static WindowParser instance;
 
-    private static final String BASE_PATH = "res\\json\\window\\";
+    private static final String BASE_PATH = "res/json/window/";
     private static final int WINDOWS_PER_CARD = 2;
 
 
