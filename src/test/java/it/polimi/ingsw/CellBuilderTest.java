@@ -20,12 +20,18 @@ public class CellBuilderTest {
     @Test
     public void testCellBuilder() throws RuntimeException {
         CellRule cellRule = CellRule.builder().setNumberConstraint(1).build();
-        assertTrue(checkRule(cellRule, new Dice(1, Colors.LIGHT_BLUE)));
-        assertTrue(!checkRule(cellRule, new Dice(2, Colors.LIGHT_BLUE)));
+        Dice diceOne = new Dice(1, Colors.LIGHT_BLUE);
+        diceOne.setValue(1);
+        assertTrue(checkRule(cellRule, diceOne));
+        Dice diceTwo = new Dice(2, Colors.LIGHT_BLUE);
+        diceTwo.setValue(2);
+        assertTrue(!checkRule(cellRule, diceTwo));
         assertNull(cellRule.getColorConstraint());
         assertEquals(1, cellRule.getValueConstraint());
         cellRule = CellRule.builder().setColorConstraint(Colors.LIGHT_BLUE).build();
-        assertTrue(checkRule(cellRule, new Dice(1, Colors.LIGHT_BLUE)));
+        assertTrue(checkRule(cellRule, diceOne));
+        Dice diceThree = new Dice(3, Colors.RED);
+        diceThree.setValue(2);
         assertTrue(!checkRule(cellRule, new Dice(2, Colors.RED)));
         assertEquals(Colors.LIGHT_BLUE, cellRule.getColorConstraint());
         assertEquals(0, cellRule.getValueConstraint());

@@ -22,14 +22,15 @@ public class DiceControllerTest {
     public void testDicePick() {
         int numberOfPlayers = 3;
         assertEquals(90, DiceController.getDiceController(numberOfPlayers).getBagSize());
-        int num = 9;
         pickedDice = new ArrayList<Dice>();
         List<Dice> diceCompared = new ArrayList<Dice>();
-        pickedDice = DiceController.getDiceController(numberOfPlayers).getDice(RoundStateEnum.SETUP_ROUND);
-        Dice chosenDice = pickedDice.get(0);
+        DiceController diceController = DiceController.getDiceController(numberOfPlayers);
+        diceController.getDice(RoundStateEnum.SETUP_ROUND);
+        pickedDice = diceController.getDraft();
         diceCompared.add(pickedDice.get(0));
-        assertEquals(DiceController.getDiceController(numberOfPlayers).getDice(RoundStateEnum.IN_GAME), diceCompared);
-
+        diceController.setId(pickedDice.get(0).getId());
+        assertNotNull(diceController.getDraft());
+        assertEquals(diceController.getDice(RoundStateEnum.IN_GAME), diceCompared);
 
     }
 

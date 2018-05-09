@@ -35,5 +35,9 @@ public class Dice {
         return this.id;
     }
 
+    public void setValue(int value) {
+        this.value = value;
+    }
+
 
 }

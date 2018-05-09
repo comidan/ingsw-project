@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.game.playables;
 import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.base.Observable;
 import it.polimi.ingsw.sagrada.game.base.Picker;
+import it.polimi.ingsw.sagrada.game.base.RoundStateEnum;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class DiceController implements Observable<Integer> {
     private static final int DICE_PER_COLOR = 18;
     private int diceNumber;
     private int numberOfPlayers; // missing method to fetch this value, temporary value for testing
+    private int currentId; //FOR TESTING, MUST BE REMOVED !
 
     /**
      * initialize pools
@@ -55,6 +57,7 @@ public class DiceController implements Observable<Integer> {
     }
 
     private List<Dice> getDiceDraft(int diceId) {
+        diceId = this.currentId; // FOR TESTING, MUST BE REMOVED
         List<Dice> pickedDice = new ArrayList<>();
         for (Dice dice : draftPool) {
             if (dice.getId() == diceId) pickedDice.add(dice);
@@ -71,6 +74,7 @@ public class DiceController implements Observable<Integer> {
         Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
         for (int i = 0; i < diceNumber; i++) {
             Dice dice = bagPicker.next();
+            dice.setValue(generateRandomInt(6));
             draftPool.add(dice);
         }
     }
@@ -102,7 +106,7 @@ public class DiceController implements Observable<Integer> {
     }
 
     //CAN BE IMPROVED
-    public List<Dice> takeDiceForRound() {
+    public List<Dice> putDiceScoreTrack() {
         List<Dice> takenDiceList = new ArrayList<>(draftPool);
         draftPool.forEach(draftPool::remove);
         return takenDiceList;
@@ -119,6 +123,12 @@ public class DiceController implements Observable<Integer> {
     @Override
     public void update(Integer numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
+    }
+
+    //FOR TESTING, IT MUST BE REMOVED!
+    public void setId(int id) {
+        currentId = id;
+
     }
 }
 

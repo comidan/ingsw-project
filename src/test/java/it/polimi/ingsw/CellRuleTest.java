@@ -21,9 +21,9 @@ public class CellRuleTest {
         CellRule cellRuleColor = CellRule.builder().setColorConstraint(Colors.RED).build();
         try {
             Dice dice = new Dice(5, Colors.RED);
+            dice.setValue(5);
             assertTrue(checkRule(cellRuleColor, dice));
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             fail();
         }
     }
@@ -33,19 +33,18 @@ public class CellRuleTest {
         CellRule cellRuleValue = null;
         try {
             cellRuleValue = CellRule.builder().setNumberConstraint(5).build();
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             fail();
         }
         try {
             Dice dice = new Dice(5, Colors.RED);
-            if(cellRuleValue == null) {
+            dice.setValue(5);
+            if (cellRuleValue == null) {
                 fail();
                 return;
             }
             assertTrue(checkRule(cellRuleValue, dice));
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             fail();
         }
     }
