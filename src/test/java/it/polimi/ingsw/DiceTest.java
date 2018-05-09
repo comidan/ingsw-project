@@ -13,19 +13,13 @@ public class DiceTest {
     @Test
     public void testApp() {
         Dice dice;
-        for (int diceValue = 1; diceValue < 7; diceValue++) {
-            try {
-                dice = new Dice(diceValue, Color.RED);
-                assertEquals(diceValue, dice.getValue());
-            } catch (Exception exc) {
-                assertTrue(false);
-            }
+        for (int id = 0; id < 90; id++) {
+            dice = new Dice(id, Color.RED);
+            assertEquals(id, dice.getId());
         }
-        try {
-            dice = new Dice(7, Color.RED);
-            assertTrue(false);
-        } catch (Exception exc) {
-            assertTrue(true);
-        }
+
+      /*  dice = new Dice(91, Color.RED);
+        assertTrue(false);
+*/
     }
 }

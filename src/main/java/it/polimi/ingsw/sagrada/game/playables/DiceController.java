@@ -14,24 +14,29 @@ public class DiceController implements Observable<Integer> {
     private static DiceController diceController;
     private List<Dice> draftPool;
     private List<Dice> bagPool;
-    private int numberOfPlayers = 4; // missing method to fetch this value, temporary value for testing
+    private static final int DICE_PER_COLOR = 18;
+    private int diceNumber;
+    private int numberOfPlayers; // missing method to fetch this value, temporary value for testing
 
     /**
      * initialize pools
      */
-    private DiceController() {
+    private DiceController(int numberOfPlayers) {
         bagPool = new ArrayList<>();
         draftPool = new ArrayList<>();
+        int id = 0;
         for (Color color : Colors.getColorList()) {
-            for (int j = 0; j < 18; j++) {
-                bagPool.add(new Dice(generateRandomInt(6), color));
+            for (int j = 0; j < DICE_PER_COLOR; j++) {
+                bagPool.add(new Dice(id++, color));
             }
         }
+        this.numberOfPlayers = numberOfPlayers;
+        diceNumber = numberOfPlayers * 2 + 1;
     }
 
-    public static DiceController getDiceController() {
+    public static DiceController getDiceController(int numberOfPlayers) {
         if (diceController == null) {
-            diceController = new DiceController();
+            diceController = new DiceController(numberOfPlayers);
         }
         return diceController;
     }
@@ -45,33 +50,29 @@ public class DiceController implements Observable<Integer> {
      * @return dice from draft
      */
 
-    public List<Dice> showDraft() {
+    public List<Dice> getDraft() {
         return draftPool;
     }
 
-    private List<Dice> getDiceDraft(Dice chosenDice) throws EmptyDraftException, DiceNotFoundException {
+    private List<Dice> getDiceDraft(int diceId) {
         List<Dice> pickedDice = new ArrayList<>();
-        if (draftPool.isEmpty()) throw new EmptyDraftException();
-        if (!draftPool.contains(chosenDice)) throw new DiceNotFoundException();
-        pickedDice.add(draftPool.remove(draftPool.indexOf(chosenDice)));
+        for (Dice dice : draftPool) {
+            if (dice.getId() == diceId) pickedDice.add(dice);
+        }
+
         return pickedDice;
     }
 
     /**
-     * @param num - number of dices to pick
-     * @return num - dices from bag
+     * @return num-dices from bag
      */
-    private List<Dice> getDiceBag(int num) throws InvalidDiceNumberException {
-        if (num != numberOfPlayers * 2 + 1 || num > bagPool.size()) throw new InvalidDiceNumberException();
-        List<Dice> picked_dice = new ArrayList<>();
-        Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
+    private void bagToDraft() {
 
-        for (int i = 0; i < num; i++) {
+        Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
+        for (int i = 0; i < diceNumber; i++) {
             Dice dice = bagPicker.next();
-            picked_dice.add(dice);
             draftPool.add(dice);
         }
-        return picked_dice;
     }
 
     /**
@@ -79,13 +80,25 @@ public class DiceController implements Observable<Integer> {
      */
 
 //THIS MUST BE FIXED
-    public List<Dice> getDice(int num, Dice chosenDice) throws InvalidDiceNumberException, EmptyDraftException, DiceNotFoundException {
-        if (chosenDice == null && num != 0) {
-            return getDiceBag(num);
-        } else {
-            return getDiceDraft(chosenDice);
-        }
+    public List<Dice> getDice(RoundStateEnum stateEnum) {
+        Random rand = new Random();
+        int id = rand.nextInt(90) + 1;
+        List<Dice> pickedDice = new ArrayList<>();
 
+        switch (stateEnum) {
+            case SETUP_ROUND:
+                bagToDraft();
+                break;
+            case IN_GAME:
+                pickedDice = getDiceDraft(id);
+                break;
+            case END_ROUND:
+                pickedDice = putDiceScoreTrack();
+                break;
+
+
+        }
+        return pickedDice;
     }
 
     //CAN BE IMPROVED
@@ -108,4 +121,5 @@ public class DiceController implements Observable<Integer> {
         this.numberOfPlayers = numberOfPlayers;
     }
 }
+
 
