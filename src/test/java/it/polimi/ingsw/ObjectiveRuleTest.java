@@ -15,6 +15,36 @@ import static org.junit.Assert.assertEquals;
 
 public class ObjectiveRuleTest {
 
+    Cell one, two, three, four, five, six;
+    Cell red, yellow, green, blue, purple;
+
+    public ObjectiveRuleTest() {
+        CellRule cellRule = CellRule.builder().build();
+        one = new Cell(cellRule);
+        one.setDice(new Dice(1, Colors.RED));
+        two = new Cell(cellRule);
+        two.setDice(new Dice(2, Colors.YELLOW));
+        three = new Cell(cellRule);
+        three.setDice(new Dice(3, Colors.GREEN));
+        four = new Cell(cellRule);
+        four.setDice(new Dice(4, Colors.PURPLE));
+        five = new Cell(cellRule);
+        five.setDice(new Dice(5, Colors.LIGHT_BLUE));
+        six = new Cell(cellRule);
+        six.setDice(new Dice(6, Colors.LIGHT_BLUE));
+        cellRule = CellRule.builder().build();
+        red = new Cell(cellRule);
+        red.setDice(new Dice(1, Colors.RED));
+        yellow = new Cell(cellRule);
+        yellow.setDice(new Dice(1, Colors.YELLOW));
+        green = new Cell(cellRule);
+        green.setDice(new Dice(1, Colors.GREEN));
+        purple = new Cell(cellRule);
+        purple.setDice(new Dice(1, Colors.PURPLE));
+        blue = new Cell(cellRule);
+        blue.setDice(new Dice(1, Colors.LIGHT_BLUE));
+    }
+
     private synchronized int checkRule(ObjectiveRule objectiveRule, Cell[][] cells) {
         RuleController ruleController = new RuleController();
         return ruleController.validateRule(objectiveRule, cells);
@@ -217,19 +247,7 @@ public class ObjectiveRuleTest {
 
     @Test
     public void testEveryValueRepeatingScore() throws RuntimeException {
-        CellRule cellRule = CellRule.builder().build();
-        Cell one = new Cell(cellRule);
-        one.setDice(new Dice(1, Colors.RED));
-        Cell two = new Cell(cellRule);
-        two.setDice(new Dice(2, Colors.YELLOW));
-        Cell three = new Cell(cellRule);
-        three.setDice(new Dice(3, Colors.GREEN));
-        Cell four = new Cell(cellRule);
-        four.setDice(new Dice(4, Colors.PURPLE));
-        Cell five = new Cell(cellRule);
-        five.setDice(new Dice(5, Colors.LIGHT_BLUE));
-        Cell six = new Cell(cellRule);
-        six.setDice(new Dice(6, Colors.LIGHT_BLUE));
+
         Cell[][] cells = {{five, one, three, six, six},
                           {two, three, four, four, one},
                           {six, five, two, one, one},
