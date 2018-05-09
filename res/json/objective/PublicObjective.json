@@ -1,0 +1,12 @@
+[
+	{ "id":0, "name":"Colori diversi - Riga", "value":6 },
+	{ "id":1, "name":"Colori diversi - Colonna", "value":5 },
+	{ "id":2, "name":"Sfumature diverse - Riga", "value":5 },
+	{ "id":3, "name":"Sfumature diverse - Colonna", "value":4 },
+	{ "id":4, "name":"Sfumature chiare", "value":2},
+	{ "id":5, "name":"Sfumature medie", "value":2},
+	{ "id":6, "name":"Sfumature scure", "value":2},
+	{ "id":7, "name":"Sfumature diverse", "value":5},
+	{ "id":8, "name":"Diagonali Colorate", "value":1},
+	{ "id":9, "name":"Varietà di colore", "value":4}
+]
