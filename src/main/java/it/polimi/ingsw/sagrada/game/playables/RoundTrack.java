@@ -1,11 +1,8 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
-import it.polimi.ingsw.sagrada.game.base.Colors;
-import it.polimi.ingsw.sagrada.game.base.DTO;
-
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -21,9 +18,8 @@ public class RoundTrack {
      */
     private RoundTrack() {
         roundDice = new ArrayList[10];
-        for (int i = 0; i < 10; i++) {
-            roundDice[i] = new ArrayList<Dice>();
-        }
+        for (int i = 0; i < 10; i++)
+            roundDice[i] = new ArrayList<>();
 
     }
 
@@ -44,12 +40,11 @@ public class RoundTrack {
     public List<Color> getAvailableColors() {
 
         List<Color> colorList = new ArrayList<>();
-        for (int i = 0; i < roundDice.length; i++) {
+        for (int i = 0; i < roundDice.length; i++)
             for (Dice dice : roundDice[i]) {
                 Color color = dice.getColor();
                 if (!colorList.contains(color)) colorList.add(color);
             }
-        }
         return colorList;
     }
 
@@ -58,11 +53,9 @@ public class RoundTrack {
 
         if (roundDice.length == 0) throw new DiceNotFoundException();
 
-        for (Dice dice : roundDice[round]) {
-
+        for (Dice dice : roundDice[round])
             if (dice.getColor() == color)
                 return dice;
-        }
 
         throw new DiceNotFoundException(); //SHOULD HANDLE THIS CASE
 
@@ -75,12 +68,8 @@ public class RoundTrack {
      */
     public void addDice(List<Dice> diceList, int round) {
 
-        for (Dice dice : diceList) {
-
+        for (Dice dice : diceList)
             roundDice[round].add(dice);
-        }
-
-
     }
 
 

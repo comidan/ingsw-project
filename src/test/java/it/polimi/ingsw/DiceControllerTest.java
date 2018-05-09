@@ -22,8 +22,8 @@ public class DiceControllerTest {
         assertEquals(90, DiceController.getDiceController().getBagSize());
         int num = 9;
         try {
-            picked_dice = new ArrayList<Dice>();
-            List<Dice> diceCompared = new ArrayList<Dice>();
+            picked_dice = new ArrayList<>();
+            List<Dice> diceCompared = new ArrayList<>();
             picked_dice = DiceController.getDiceController().getDice(num, null);
             assertEquals(picked_dice.size(), num);
             Dice chosenDice = picked_dice.get(0);
@@ -46,9 +46,7 @@ public class DiceControllerTest {
         Colors color = new Colors();
         int num = 0;
         Dice dice = new Dice(1, color.RED);
-        assertThrows(EmptyDraftException.class, () -> {
-            diceController.getDice(0, dice);
-        });
+        assertThrows(EmptyDraftException.class, () -> diceController.getDice(0, dice));
     }
 
 
@@ -57,12 +55,8 @@ public class DiceControllerTest {
         DiceController diceController = DiceController.getDiceController();
         int supLimit = 90;
 
-        assertThrows(InvalidDiceNumberException.class, () -> {
-            diceController.getDice(supLimit, null);
-        });
-        assertThrows(InvalidDiceNumberException.class, () -> {
-            diceController.getDice((5 * 2 + 1), null);
-        });
+        assertThrows(InvalidDiceNumberException.class, () -> diceController.getDice(supLimit, null));
+        assertThrows(InvalidDiceNumberException.class, () -> diceController.getDice((5 * 2 + 1), null));
 
 
     }

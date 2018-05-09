@@ -1,10 +1,8 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Colors;
-import it.polimi.ingsw.sagrada.game.base.GameController;
 import it.polimi.ingsw.sagrada.game.base.Observable;
 import it.polimi.ingsw.sagrada.game.base.Picker;
-import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import java.util.List;
 import java.util.Random;
 
 public class DiceController implements Observable<Integer> {
-    private GameController gameController;
     private static DiceController diceController;
     private List<Dice> draftPool;
     private List<Dice> bagPool;
@@ -41,7 +38,6 @@ public class DiceController implements Observable<Integer> {
 
 
     public int getBagSize() {
-        System.out.println(bagPool.size());
         return bagPool.size();
     }
 
@@ -54,16 +50,16 @@ public class DiceController implements Observable<Integer> {
     }
 
     private List<Dice> getDiceDraft(Dice chosenDice) throws EmptyDraftException, DiceNotFoundException {
-        List<Dice> picked_dice = new ArrayList<>();
-        if (draftPool.size() == 0) throw new EmptyDraftException();
+        List<Dice> pickedDice = new ArrayList<>();
+        if (draftPool.isEmpty()) throw new EmptyDraftException();
         if (!draftPool.contains(chosenDice)) throw new DiceNotFoundException();
-        picked_dice.add(draftPool.remove(draftPool.indexOf(chosenDice)));
-        return picked_dice;
+        pickedDice.add(draftPool.remove(draftPool.indexOf(chosenDice)));
+        return pickedDice;
     }
 
     /**
      * @param num - number of dices to pick
-     * @return num-dices from bag
+     * @return num - dices from bag
      */
     private List<Dice> getDiceBag(int num) throws InvalidDiceNumberException {
         if (num != numberOfPlayers * 2 + 1 || num > bagPool.size()) throw new InvalidDiceNumberException();
@@ -71,7 +67,7 @@ public class DiceController implements Observable<Integer> {
         Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
 
         for (int i = 0; i < num; i++) {
-            Dice dice = bagPicker.next();;
+            Dice dice = bagPicker.next();
             picked_dice.add(dice);
             draftPool.add(dice);
         }
@@ -94,11 +90,8 @@ public class DiceController implements Observable<Integer> {
 
     //CAN BE IMPROVED
     public List<Dice> takeDiceForRound() {
-        List<Dice> takenDiceList = new ArrayList<Dice>();
-        for (Dice dice : draftPool) {
-            Dice takenDice = draftPool.remove(draftPool.size());
-            takenDiceList.add(takenDice);
-        }
+        List<Dice> takenDiceList = new ArrayList<>(draftPool);
+        draftPool.forEach(draftPool::remove);
         return takenDiceList;
 
     }
