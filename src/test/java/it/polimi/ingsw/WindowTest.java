@@ -15,7 +15,7 @@ public class WindowTest {
 
     @Test
     public void testWindowCreation() {
-        WindowParser windowParser=WindowParser.getInstance();
+        WindowParser windowParser=new WindowParser();
         List<Window> windowsCard=windowParser.generateWindowCard();
 
         for(Window w:windowsCard) {
@@ -29,7 +29,7 @@ public class WindowTest {
     @Test
     public void testAllWindowsJSON() {
         GameController gameController=GameController.getGameController();
-        WindowParser windowParser=WindowParser.getInstance();
+        WindowParser windowParser=new WindowParser();
         int counter=0;
 
         while(windowParser.isWindowsLeft()) {

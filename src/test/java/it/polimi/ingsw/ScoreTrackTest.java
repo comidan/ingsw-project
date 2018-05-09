@@ -31,7 +31,7 @@ public class ScoreTrackTest {
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.RED).build();
         List<ObjectiveRule> objectiveRuleList = new ArrayList<>();
         objectiveRuleList.add(objectiveRule);
-        WindowParser windowParser = WindowParser.getInstance();
+        WindowParser windowParser = new WindowParser();
         Window window = windowParser.generateWindowCard().get(0);
         Cell[][] cellMatrix = window.getCellMatrix();
 

@@ -18,8 +18,6 @@ import java.util.logging.Logger;
 
 public class WindowParser {
 
-    private static WindowParser instance;
-
     private static final String BASE_PATH = "res/json/window/";
     private static final int WINDOWS_PER_CARD = 2;
 
@@ -27,7 +25,7 @@ public class WindowParser {
     private Iterator<JSONObject> picker;
     private static final Logger logger = Logger.getAnonymousLogger();
 
-    private WindowParser() {
+    public WindowParser() {
         JSONParser parser;
         parser = new JSONParser();
         JSONArray windowsArray;
@@ -39,11 +37,6 @@ public class WindowParser {
         } catch (ParseException e) {
             logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
         }
-    }
-
-    public static WindowParser getInstance() {
-        if(instance==null) instance = new WindowParser();
-        return instance;
     }
 
     public boolean isWindowsLeft() {
