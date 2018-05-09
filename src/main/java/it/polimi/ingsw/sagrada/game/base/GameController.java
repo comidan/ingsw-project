@@ -3,8 +3,11 @@ package it.polimi.ingsw.sagrada.game.base;
 import it.polimi.ingsw.sagrada.game.cards.CardController;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 
-import it.polimi.ingsw.sagrada.game.playables.*;
+import it.polimi.ingsw.sagrada.game.playables.DiceController;
+import it.polimi.ingsw.sagrada.game.playables.RoundTrack;
+import it.polimi.ingsw.sagrada.game.playables.ScoreTrack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -15,9 +18,10 @@ import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
  *
  */
 
-public class GameController {
+public class GameController implements Observer<Integer> {
 
     private List<Player> players;
+    private List<Observable<Integer>> observers;
     private DiceController diceController;
     private RoundTrack roundTrack;
     private ScoreTrack scoreTrack;
@@ -89,6 +93,7 @@ public class GameController {
     private GameController(List<Player> players) {
         this.players = players;
         cardController = new CardController();
+        observers = new ArrayList<>();
     }
 
     public static GameController getGameController(List<Player> players) {
@@ -107,6 +112,32 @@ public class GameController {
         Random rand = new Random();
         int index = rand.nextInt(getPlayerNumber());
         return players.get(index);
+    }
+
+    @Override
+    public void notify(Observable<Integer> observable, Integer data) {
+        observable.update(data);
+    }
+
+    @Override
+    public void notifyAll(Integer data) {
+        observers.forEach(observer -> observer.update(data));
+    }
+
+    @Override
+    public boolean subscribe(Observable<Integer> observable) {
+        if(observers.contains(observable))
+            return false;
+        observers.add(observable);
+        return true;
+    }
+
+    @Override
+    public boolean unsubscribe(Observable<Integer> observable) {
+        if(!observers.contains(observable))
+            return false;
+        observers.remove(observable);
+        return true;
     }
 
     //if diceNumber!= 0 it's draftPick, else if dice==null it's bagPick

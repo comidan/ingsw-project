@@ -17,6 +17,9 @@ public class Cell {
 	public Cell(CellRule cellRule) {
 		this.cellRule = cellRule;
 	}
+	public Cell(){
+
+	}
 
 	/**
 	 * @return this cell's rule

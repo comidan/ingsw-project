@@ -62,4 +62,8 @@ public class Player {
 	public void setPrivateObjectiveCard(ObjectiveCard privateObjectiveCard) {
 		this.privateObjectiveCard = privateObjectiveCard;
 	}
+
+	public void setWindow(Window window) {
+		this.window=window;
+	}
 }

@@ -31,14 +31,26 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return ErrorType.NO_ERROR;
 	}
 
-	private ErrorType checkCurrentCellRule(Cell cells[][], int row, int col) {
+	/**
+	 * @param cells window matrix
+	 * @param row row location
+	 * @param col col location
+	 * @return type of error
+	 */
+	private ErrorType checkCurrentCellRule(Cell[][] cells, int row, int col) {
 		if (!cells[row][col].getCellRule().checkRule(cells[row][col].getCurrentDice()))
 			return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
 		else
 			return ErrorType.NO_ERROR;
 	}
 
-	private ErrorType checkSameOrtogonalValueColor(Cell cells[][], int row, int col) {
+	/**
+	 * @param cells window matrix
+	 * @param row row location
+	 * @param col col location
+	 * @return type of error
+	 */
+	private ErrorType checkSameOrtogonalValueColor(Cell[][] cells, int row, int col) {
 		if (row < cells.length - 1 && cells[row + 1][col].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row + 1][col])) ||
 				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row + 1][col])))))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
@@ -54,6 +66,10 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return ErrorType.NO_ERROR;
 	}
 
+	/**
+	 * @param cell cell from window
+	 * @return dice value if present
+	 */
 	private int getDiceValue(Cell cell) {
 		Dice dice = cell.getCurrentDice();
 		if(dice == null)
@@ -61,6 +77,10 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return dice.getValue();
 	}
 
+	/**
+	 * @param cell cell from window
+	 * @return dice color if present
+	 */
 	private Color getDiceColor(Cell cell) {
 		Dice dice = cell.getCurrentDice();
 		if(dice == null)

@@ -106,7 +106,7 @@
     - Release:	14.04
     
 # SonarQube last run screen : 
-[![N|SonarQube](https://preview.ibb.co/jgXRdn/sonar_Qube_Test_Intro.png)](https://preview.ibb.co/jgXRdn/sonar_Qube_Test_Intro.png)
+[![N|SonarQube](https://preview.ibb.co/eEGNon/sonar_Qube_Test_Intro.png)](https://preview.ibb.co/eEGNon/sonar_Qube_Test_Intro.png)
 
 # Testing coverage :
 [![N|Coverage](https://preview.ibb.co/dJqJPS/coverage1.png)](https://preview.ibb.co/dJqJPS/coverage1.png)

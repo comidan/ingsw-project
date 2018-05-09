@@ -33,6 +33,10 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 		return new ObjectiveRule(function, value, cardType, constraints, objectiveType);
 	}
 
+	/**
+	 * @param cell cell from window
+	 * @return dice value if present
+	 */
 	private int getDiceValue(Cell cell) {
 		Dice dice = cell.getCurrentDice();
 		if(dice == null)
@@ -40,6 +44,10 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 		return dice.getValue();
 	}
 
+	/**
+	 * @param cell cell from window
+	 * @return dice color if present
+	 */
 	private Color getDiceColor(Cell cell) {
 		Dice dice = cell.getCurrentDice();
 		if(dice == null)

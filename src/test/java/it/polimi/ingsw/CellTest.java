@@ -14,7 +14,7 @@ import org.junit.Test;
 public class CellTest {
 
     @Test
-    public void TestCell() {
+    public void testCell() {
         CellRule cellRuleColor = CellRule.builder().setColorConstraint(Colors.RED).build();
         Cell cell = new Cell(cellRuleColor);
         Dice dice = new Dice(4, Colors.RED);
