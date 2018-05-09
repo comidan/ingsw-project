@@ -12,6 +12,9 @@ public class Colors {
     public static final Color PURPLE = new Color(159, 59, 124);
     public static final Color RED = new Color(198, 47, 39);
 
+    /**
+     * @return list representation of allowed colors
+     */
     public static List<Color> getColorList() {
         List<Color> colorList = new ArrayList<>();
         colorList.add(YELLOW);
@@ -22,10 +25,18 @@ public class Colors {
         return colorList;
     }
 
+    /**
+     * @param color color to be checked
+     * @return true if color is an allowed one
+     */
     public static boolean isColorAllowed(Color color) {
         return getColorList().contains(color);
     }
 
+    /**
+     * @param color color to be string represented
+     * @return string representation of allowed colors
+     */
     public static Color stringToColor(String color) {
         switch(color) {
             case "RED": return RED;

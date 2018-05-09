@@ -60,7 +60,7 @@ public class CellRule extends Rule<Dice, Boolean> {
 	}
 
 	/**
-	 * @return value cnstraint
+	 * @return value constraint
 	 */
 	public int getValueConstraint() {
 		return valueConstraint;
