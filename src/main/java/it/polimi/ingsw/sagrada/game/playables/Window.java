@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
+import it.polimi.ingsw.sagrada.game.base.Colors;
 
 import java.awt.Color;
 import java.util.List;
@@ -47,17 +48,19 @@ public class Window {
     public String toString() {
         StringBuilder output=new StringBuilder("");
 
-        output.append("\n\n");
         output.append(name);
         output.append("\n\n");
         for(int i=0; i<cellMatrix.length; i++) { //row
             for (int j = 0; j < cellMatrix[0].length; j++) { //column
                 if(cellMatrix[i][j].getCellRule()!=null) {
                     Color c = cellMatrix[i][j].getCellRule().getColorConstraint();
-                    if (c != null) output.append(c.toString());
+                    if (c != null) output.append(Colors.colorToString(c));
                     String s = String.valueOf(cellMatrix[i][j].getCellRule().getValueConstraint());
                     if (!s.equals("0")) output.append(s);
                     output.append("|");
+                }
+                else {
+                    output.append(" |");
                 }
             }
             output.append("\n");

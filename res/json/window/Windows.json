@@ -98,9 +98,9 @@
 				{"x":2, "y":2, "constraint":"4"},
 				{"x":3, "y":2, "constraint":"6"},
 				{"x":4, "y":2, "constraint":"GREEN"},
-				{"x":1, "y":2, "constraint":"LIGHT_BLUE"},
-				{"x":2, "y":2, "constraint":"5"},
-				{"x":3, "y":2, "constraint":"GREEN"}
+				{"x":1, "y":3, "constraint":"LIGHT_BLUE"},
+				{"x":2, "y":3, "constraint":"5"},
+				{"x":3, "y":3, "constraint":"GREEN"}
 				]
 		},
 		{
@@ -116,11 +116,11 @@
 				{"x":2, "y":1, "constraint":"2"},
 				{"x":3, "y":1, "constraint":"5"},
 				{"x":4, "y":1, "constraint":"GREEN"},
-				{"x":1, "y":2, "constraint":"1"},
-				{"x":2, "y":2, "constraint":"GREEN"},
-				{"x":3, "y":2, "constraint":"5"},
-				{"x":1, "y":2, "constraint":"3"},
-				{"x":2, "y":2, "constraint":"PURPLE"}
+				{"x":0, "y":2, "constraint":"1"},
+				{"x":1, "y":2, "constraint":"GREEN"},
+				{"x":2, "y":2, "constraint":"5"},
+				{"x":3, "y":2, "constraint":"3"},
+				{"x":4, "y":2, "constraint":"PURPLE"}
 				]
 		}]
 	},
@@ -151,17 +151,18 @@
 		"cells":[
 				{"x":0, "y":0, "constraint":"6"},
 				{"x":1, "y":0, "constraint":"LIGHT_BLUE"},
-				{"x":1, "y":0, "constraint":"5"},
-				{"x":2, "y":0, "constraint":"LIGHT_BLUE"},
-				{"x":0, "y":1, "constraint":"4"},
-				{"x":1, "y":1, "constraint":"RED"},
-				{"x":2, "y":1, "constraint":"2"},
-				{"x":3, "y":1, "constraint":"LIGHT_BLUE"},
-				{"x":0, "y":1, "constraint":"GREEN"},
-				{"x":1, "y":2, "constraint":"6"},
-				{"x":2, "y":2, "constraint":"YELLOW"},
-				{"x":3, "y":2, "constraint":"3"},
-				{"x":4, "y":2, "constraint":"PURPLE"}
+				{"x":4, "y":0, "constraint":"1"},
+				{"x":1, "y":1, "constraint":"5"},
+				{"x":2, "y":1, "constraint":"LIGHT_BLUE"},
+				{"x":0, "y":2, "constraint":"4"},
+				{"x":1, "y":2, "constraint":"RED"},
+				{"x":2, "y":2, "constraint":"2"},
+				{"x":3, "y":2, "constraint":"LIGHT_BLUE"},
+				{"x":0, "y":3, "constraint":"GREEN"},
+				{"x":1, "y":3, "constraint":"6"},
+				{"x":2, "y":3, "constraint":"YELLOW"},
+				{"x":3, "y":3, "constraint":"3"},
+				{"x":4, "y":3, "constraint":"PURPLE"}
 				]
 		}]
 	},
@@ -233,13 +234,13 @@
 				{"x":0, "y":0, "constraint":"RED"},
 				{"x":2, "y":0, "constraint":"LIGHT_BLUE"},
 				{"x":4, "y":0, "constraint":"YELLOW"},
-				{"x":2, "y":1, "constraint":"4"},
-				{"x":0, "y":1, "constraint":"PURPLE"},
-				{"x":1, "y":1, "constraint":"3"},
-				{"x":2, "y":1, "constraint":"GREEN"},
-				{"x":3, "y":1, "constraint":"2"},
-				{"x":0, "y":2, "constraint":"1"},
-				{"x":1, "y":2, "constraint":"5"},
+				{"x":0, "y":1, "constraint":"4"},
+				{"x":1, "y":1, "constraint":"PURPLE"},
+				{"x":2, "y":1, "constraint":"3"},
+				{"x":3, "y":1, "constraint":"GREEN"},
+				{"x":4, "y":1, "constraint":"2"},
+				{"x":1, "y":2, "constraint":"1"},
+				{"x":3, "y":2, "constraint":"5"},
 				{"x":2, "y":3, "constraint":"6"}
 				]
 		}]
@@ -377,18 +378,19 @@
 		"name":"Fulgor del Cielo",
 		"token":5,
 		"cells":[
-				{"x":2, "y":0, "constraint":"LIGHT_BLUE"},
-				{"x":1, "y":0, "constraint":"RED"},
-				{"x":2, "y":1, "constraint":"4"},
-				{"x":3, "y":1, "constraint":"5"},
+				{"x":1, "y":0, "constraint":"LIGHT_BLUE"},
+				{"x":2, "y":0, "constraint":"RED"},
+				{"x":1, "y":1, "constraint":"4"},
+				{"x":2, "y":1, "constraint":"5"},
+				{"x":4, "y":1, "constraint":"LIGHT_BLUE"},
 				{"x":0, "y":2, "constraint":"LIGHT_BLUE"},
 				{"x":1, "y":2, "constraint":"2"},
-				{"x":2, "y":2, "constraint":"RED"},
-				{"x":3, "y":2, "constraint":"5"},
-				{"x":4, "y":3, "constraint":"6"},
-				{"x":0, "y":3, "constraint":"RED"},
-				{"x":1, "y":3, "constraint":"3"},
-				{"x":2, "y":3, "constraint":"1"}
+				{"x":3, "y":2, "constraint":"RED"},
+				{"x":4, "y":2, "constraint":"5"},
+				{"x":0, "y":3, "constraint":"6"},
+				{"x":1, "y":3, "constraint":"RED"},
+				{"x":2, "y":3, "constraint":"3"},
+				{"x":3, "y":3, "constraint":"1"}
 				]
 		},
 		{
@@ -415,7 +417,7 @@
 		"name":"Chromatic Splendor",
 		"token":4,
 		"cells":[
-				{"x":3, "y":0, "constraint":"GREEN"},
+				{"x":2, "y":0, "constraint":"GREEN"},
 				{"x":0, "y":1, "constraint":"2"},
 				{"x":1, "y":1, "constraint":"YELLOW"},
 				{"x":2, "y":1, "constraint":"5"},
