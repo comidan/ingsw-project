@@ -46,6 +46,10 @@ public class WindowParser {
         return instance;
     }
 
+    public boolean isWindowsLeft() {
+        return picker.hasNext();
+    }
+
     public List<Window> generateWindowCard() {
         List<Window> windowCard = new ArrayList<>();
         if(picker.hasNext()) {

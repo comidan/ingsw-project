@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.playables.DiceController;
 import it.polimi.ingsw.sagrada.game.playables.RoundTrack;
 import it.polimi.ingsw.sagrada.game.playables.ScoreTrack;
+import it.polimi.ingsw.sagrada.game.playables.Window;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,23 @@ public class GameController implements Observer<Integer> {
     private CardController cardController;
     private StateIterator stateIterator = StateIterator.getInstance();
     private static GameController gameController;
+
+    private GameController(List<Player> players) {
+        this.players = players;
+        cardController = new CardController();
+        observers = new ArrayList<>();
+    }
+
+    public static GameController getGameController(List<Player> players) {
+        if (gameController == null) {
+            gameController = new GameController(players);
+        }
+        return gameController;
+    }
+
+    public static GameController getGameController() {
+        return gameController;
+    }
 
     public void setupGame() {
         while (stateIterator.hasNext() && stateIterator.getCurrentState()!=DEAL_PUBLIC_OBJECTIVE) {
@@ -61,7 +79,10 @@ public class GameController implements Observer<Integer> {
     }
 
     private void dealWindowsState() {
-        // TODO implement here
+        WindowParser windowParser=WindowParser.getInstance();
+        for(Player p:players) {
+            List<Window> windowa=windowParser.generateWindowCard();
+        }
     }
 
     private void dealToolState() {
@@ -84,23 +105,6 @@ public class GameController implements Observer<Integer> {
 
     public StateGameEnum getCurrentState() {
         return stateIterator.getCurrentState();
-    }
-
-
-    /**
-     * Default constructor
-     */
-    private GameController(List<Player> players) {
-        this.players = players;
-        cardController = new CardController();
-        observers = new ArrayList<>();
-    }
-
-    public static GameController getGameController(List<Player> players) {
-        if (gameController == null) {
-            gameController = new GameController(players);
-        }
-        return gameController;
     }
 
     public int getPlayerNumber() {

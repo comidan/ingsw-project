@@ -47,4 +47,20 @@ public class Colors {
             default: throw new ColorNotFoundException("Color not found");
         }
     }
+
+    public static String colorToString(Color color) {
+        if(color.equals(RED)){
+            return "R";
+        } else if(color.equals(YELLOW)) {
+            return "Y";
+        } else if(color.equals(GREEN)) {
+            return "G";
+        } else if(color.equals(LIGHT_BLUE)) {
+            return "L";
+        } else if(color.equals(PURPLE)) {
+            return "P";
+        }else {
+            return null;
+        }
+    }
 }
