@@ -27,13 +27,16 @@ public class GameController implements Observer<Object> {
     private CardController cardController;
     private WindowParser windowParser;
     private StateIterator stateIterator = StateIterator.getInstance();
+    private RoundIterator roundIterator = RoundIterator.getRoundIterator();
+    private PlayerIterator playerIterator;
     private static GameController gameController;
 
     private GameController(List<Player> players) {
         this.players = players;
         cardController = new CardController();
-        windowParser = new WindowParser();
-        observables = new ArrayList<>();
+        diceController = DiceController.getDiceController(players.size());
+        observers = new ArrayList<>();
+        playerIterator = PlayerIterator.getPlayerIterator(players);
     }
 
     public static GameController getGameController(List<Player> players) {
@@ -90,8 +93,27 @@ public class GameController implements Observer<Object> {
     }
 
     public void playRound() {
-        // TODO implement here
+
+        while (roundIterator.hasNext()) {
+            switch (roundIterator.next()) {
+                case SETUP_ROUND:
+                    diceController.getDice(RoundStateEnum.SETUP_ROUND);
+                    break;
+                case IN_GAME:
+                    while (playerIterator.hasNext()) {
+                        playerIterator.next();
+                        diceController.getDice(RoundStateEnum.IN_GAME);
+                    }
+                    break;
+                case END_ROUND:
+                    diceController.getDice(RoundStateEnum.END_ROUND);
+                    break;
+            }
+
+        }
+
     }
+
 
     private void scoreState() {
         // TODO implement here
@@ -101,16 +123,14 @@ public class GameController implements Observer<Object> {
         return stateIterator.getCurrentState();
     }
 
+    public RoundStateEnum getCurrentRoundState() {
+        return roundIterator.getCurrentState();
+    }
+
     public int getPlayerNumber() {
         return players.size();
     }
 
-
-    public Player selectStarterPlayer() {
-        Random rand = new Random();
-        int index = rand.nextInt(getPlayerNumber());
-        return players.get(index);
-    }
 
     @Override
     public void update(DataType dataType, Object data) {
