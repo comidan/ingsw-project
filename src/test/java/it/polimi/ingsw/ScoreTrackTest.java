@@ -9,6 +9,7 @@ import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.playables.ScoreTrack;
 import it.polimi.ingsw.sagrada.game.playables.Token;
 import it.polimi.ingsw.sagrada.game.playables.Window;
+import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 import org.junit.Test;
 
@@ -32,7 +33,7 @@ public class ScoreTrackTest {
         List<ObjectiveRule> objectiveRuleList = new ArrayList<>();
         objectiveRuleList.add(objectiveRule);
         WindowParser windowParser = new WindowParser();
-        Window window = windowParser.generateWindowCard().get(0);
+        Window window = windowParser.generateWindow(0, WindowSide.FRONT);
         Cell[][] cellMatrix = window.getCellMatrix();
 
         int tokenNumber = 3; //TEMPORARY FOR TESTING

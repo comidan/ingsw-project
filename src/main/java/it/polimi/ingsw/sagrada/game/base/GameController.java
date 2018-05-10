@@ -3,10 +3,7 @@ package it.polimi.ingsw.sagrada.game.base;
 import it.polimi.ingsw.sagrada.game.cards.CardController;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 
-import it.polimi.ingsw.sagrada.game.playables.DiceController;
-import it.polimi.ingsw.sagrada.game.playables.RoundTrack;
-import it.polimi.ingsw.sagrada.game.playables.ScoreTrack;
-import it.polimi.ingsw.sagrada.game.playables.Window;
+import it.polimi.ingsw.sagrada.game.playables.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +78,7 @@ public class GameController implements Observer<Integer> {
     private void dealWindowsState() {
         WindowParser windowParser = new WindowParser();
         for (Player p : players) {
-            List<Window> window = windowParser.generateWindowCard();
+            Window window = windowParser.generateWindow(0, WindowSide.FRONT);
         }
     }
 
