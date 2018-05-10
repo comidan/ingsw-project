@@ -14,8 +14,8 @@ import java.util.List;
 
 public class PlayerIteratorTest {
 
-    @Test
-    public void TestPlayerIterator() {
+
+    public void testPlayerIterator() {
         GameController gameController = GameController.getGameController();
         ToolManager toolManager = new ToolManager();
         DiceController diceController = DiceController.getDiceController(2);
