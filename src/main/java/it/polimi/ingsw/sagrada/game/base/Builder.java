@@ -1,21 +1,15 @@
 package it.polimi.ingsw.sagrada.game.base;
 
-import java.util.function.Function;
+import it.polimi.ingsw.sagrada.game.rules.Rule;
 
 /**
  * 
  */
-public abstract class Builder<T> {
-
-	private Function builder;
-	private Function function;
+public interface Builder<T extends Rule> {
 
 	/**
-	 * @return generic type of this builder
+	 * @return returns built object
 	 */
-	public T build() {
-		// TODO implement here
-		return null;
-	}
+	T build();
 
 }

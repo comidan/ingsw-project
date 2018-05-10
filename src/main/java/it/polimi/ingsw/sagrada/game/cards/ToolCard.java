@@ -1,27 +1,24 @@
 package it.polimi.ingsw.sagrada.game.cards;
 
-import it.polimi.ingsw.sagrada.game.base.State;
 import it.polimi.ingsw.sagrada.game.rules.ToolRule;
 
 /**
  * 
  */
 public class ToolCard extends Card {
-
-	private State used;
+	private Usage usage;
 
 	/**
 	 * Default constructor
 	 */
 	public ToolCard(int id, ToolRule rule) {
 		super(id, rule);
-		used=State.INACTIVE;
+		usage = Usage.NEW;
 	}
 
-	public State getUsed() {
-		return used;
+	public Usage getUsage() {
+		return  usage;
 	}
-	public void setUsed() {
-		used=State.ACTIVE;
-	}
+
+
 }

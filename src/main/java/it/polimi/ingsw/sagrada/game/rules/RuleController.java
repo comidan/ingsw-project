@@ -1,43 +1,37 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
-import it.polimi.ingsw.sagrada.game.cells.Cell;
-
-import javax.lang.model.type.ErrorType;
+import it.polimi.ingsw.sagrada.game.base.Cell;
 
 /**
  * 
  */
 public class RuleController {
 
-	/**
-	 * Default constructor
-	 */
-	public RuleController() {
+	private final MainGameRule mainGameRule = new MainGameRule();
+
+	public ObjectiveBuilder getObjectiveBuilder() {
+		return new ObjectiveBuilder();
 	}
 
-	/**
-	 * 
-	 */
-	//public MainGameRule 1;
-
-
+	public CellBuilder getCellBuilder() {
+		return new CellBuilder();
+	}
 
 	/**
 	 * @param rule - rule to be validated
-	 * @return boolean
+	 * @return true if rule is validated
 	 */
-	public boolean validateRule(Rule rule) {
-		// TODO implement here
-		return false;
+	public <P, R> R validateRule(Rule<P, R> rule, P data) {
+		return rule.checkRule(data);
 	}
+
 
 	/**
-	 * @param cell - game window
+	 * @param cells - game window
 	 * @return ErrrorType - cause of validation failure
 	 */
-	public ErrorType validateWindow(Cell[][] cell) {
-		// TODO implement here
-		return null;
-	}
 
+	public ErrorType validateWindow(Cell[][] cells) {
+		return mainGameRule.checkRule(cells);
+	}
 }

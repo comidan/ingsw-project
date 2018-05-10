@@ -17,6 +17,11 @@ public class ToolRule extends Rule {
 		// TODO implement here
 	}
 
+	@Override
+	public Object checkRule(Object t) {
+		return null;
+	}
+
 	/**
 	 * @param dto - data transfer object
 	 */

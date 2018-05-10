@@ -3,36 +3,41 @@ package it.polimi.ingsw.sagrada.game.playables;
 import java.awt.*;
 
 /**
- * 
+ *
  */
 public class Dice {
 
-	private int value;
-	private Color color;
+    private int value;
+    private Color color;
+    private int id;
 
 
-	public Dice(int value, Color color) throws Exception {
-        if(value < 1 || value > 6)
-            throw new Exception("Dice value not allowed");
-        this.value = value;
+    public Dice(int id, Color color) {
         this.color = color;
+        this.id = id;
     }
 
+    /**
+     * @return dice color
+     */
+    public Color getColor() {
+        return this.color;
+    }
 
-	/**
-	 * @return dice color
-	 */
-	public Color getColor() {
-		// TODO implement here
-		return color;
-	}
+    /**
+     * @return dice number value
+     */
+    public int getValue() {
+        return this.value;
+    }
 
-	/**
-	 * @return dice number value
-	 */
-	public int getValue() {
-		// TODO implement here
-		return value;
-	}
+    public int getId() {
+        return this.id;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
 
 }

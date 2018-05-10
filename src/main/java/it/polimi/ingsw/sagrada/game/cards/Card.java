@@ -12,8 +12,8 @@ public abstract class Card {
 	private Rule rule;
 
 	public Card(int id, Rule rule) {
-		this.id=id;
-		this.rule=rule;
+		this.id = id;
+		this.rule = rule;
 	}
 
 	/**

@@ -6,13 +6,24 @@ import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
  * 
  */
 public class ObjectiveCard extends Card {
-	private Type type;
+	private String name;
+	private CardType type;
 
-	/**
-	 * Default constructor
-	 */
-	public ObjectiveCard(int id, ObjectiveRule rule) {
+	public ObjectiveCard(int id, String name, ObjectiveRule rule) {
 		super(id, rule);
-		//gets type from ObjectiveRule
+		this.name=name;
+		type = rule.getType();
+	}
+
+	public CardType getType() {
+		return type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String toString() {
+		return "Id: "+this.getId()+", Name: "+name;
 	}
 }
