@@ -47,7 +47,7 @@ public class MainGameRuleTest {
         diceRed.setValue(3);
         green.setDice(diceGreen);
         Cell purple = new Cell(cellRule);
-        Dice dicePurple = new Dice(4, Colors.PURPLE);
+        Dice dicePurple = new Dice(7, Colors.PURPLE);
         dicePurple.setValue(4);
         purple.setDice(dicePurple);
         Cell blue = new Cell(cellRule);
@@ -84,7 +84,7 @@ public class MainGameRuleTest {
         diceThree.setValue(3);
         three.setDice(diceThree);
         Cell four = new Cell(cellRule);
-        Dice diceFour = new Dice(4, Colors.PURPLE);
+        Dice diceFour = new Dice(7, Colors.PURPLE);
         diceFour.setValue(4);
         four.setDice(diceFour);
         Cell five = new Cell(cellRule);
