@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.game.base;
 
 import it.polimi.ingsw.sagrada.game.playables.Token;
 import it.polimi.ingsw.sagrada.game.playables.Window;
+import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.game.rules.CellRule;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,22 +19,23 @@ import java.util.logging.Logger;
 
 public class WindowParser {
 
-    private static WindowParser instance;
-
     private static final String BASE_PATH = "res/json/window/";
     private static final int WINDOWS_PER_CARD = 2;
+    private static final int NUM_OF_WINDOWS = 12;
 
 
-    private Iterator<JSONObject> picker;
+    private Iterator<Integer> picker;
     private static final Logger logger = Logger.getAnonymousLogger();
+    private JSONArray windowsArray;
 
-    private WindowParser() {
+    public WindowParser() {
         JSONParser parser;
         parser = new JSONParser();
-        JSONArray windowsArray;
+        List<Integer> id=new ArrayList<>();
+        for(int i=0; i<NUM_OF_WINDOWS; i++) id.add(i);
         try {
             windowsArray = (JSONArray)parser.parse(new FileReader(BASE_PATH+"Windows.json"));
-            picker = new Picker<JSONObject>(windowsArray).pickerIterator();
+            picker = new Picker<>(id).pickerIterator();
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Something breaks in reading JSON file");
         } catch (ParseException e) {
@@ -41,35 +43,32 @@ public class WindowParser {
         }
     }
 
-    public static WindowParser getInstance() {
-        if(instance==null) instance = new WindowParser();
-        return instance;
-    }
-
     public boolean isWindowsLeft() {
         return picker.hasNext();
     }
 
-    public List<Window> generateWindowCard() {
-        List<Window> windowCard = new ArrayList<>();
-        if(picker.hasNext()) {
-            JSONObject card=picker.next();
-            for(int i=0; i<WINDOWS_PER_CARD; i++) {
-                JSONArray windows=(JSONArray)card.get("windows");
-                JSONObject specificWindow=(JSONObject)windows.get(i);
-                String name=(String)specificWindow.get("name");
-                int numTokens=((Long)specificWindow.get("token")).intValue();
-                List<Token> tokens = new ArrayList<>();
-                for(int j=0; j<numTokens; j++) {
-                    tokens.add(new Token());
-                }
-                Cell[][] cells=createCellMatrix((JSONArray)specificWindow.get("cells"));
-
-                windowCard.add(new Window(name, cells, tokens));
-            }
+    public List<Integer> dealWindowId() {
+        List<Integer> windowId=new ArrayList<>();
+        for(int i=0; i<WINDOWS_PER_CARD; i++) {
+            if(picker.hasNext()) windowId.add(picker.next());
         }
+        return windowId;
+    }
 
-        return windowCard;
+    public Window generateWindow(int id, WindowSide side) {
+        JSONObject card=(JSONObject)windowsArray.get(id);
+
+        JSONArray windows=(JSONArray)card.get("windows");
+        JSONObject specificWindow=(JSONObject)windows.get(WindowSide.sidetoInt(side));
+        String name=(String)specificWindow.get("name");
+        int numTokens=((Long)specificWindow.get("token")).intValue();
+        List<Token> tokens = new ArrayList<>();
+        for(int j=0; j<numTokens; j++) {
+            tokens.add(new Token());
+        }
+        Cell[][] cells=createCellMatrix((JSONArray)specificWindow.get("cells"));
+
+        return new Window(name, cells, tokens);
     }
 
     private Cell[][] createCellMatrix(JSONArray cells) {
@@ -85,30 +84,28 @@ public class WindowParser {
         String constraint="0";
 
         if(numCellWithConstraint!=0) {
-            singleCell=(JSONObject) cells.get(index);
+            singleCell=(JSONObject) cells.get(index++);
             nextX=((Long)singleCell.get("x")).intValue();
             nextY=((Long)singleCell.get("y")).intValue();
             constraint=(String)singleCell.get("constraint");
-            index++;
         }
         else constraintLeft=false;
 
         for(int i=0; i<cellMatrix.length; i++) { //row
             for(int j=0; j<cellMatrix[0].length; j++) { //column
                 if(constraintLeft&&(i==nextY && j==nextX)) {
-                    if(49<=(int)constraint.charAt(0)&&(int)constraint.charAt(0)<=54) { //if string is a number
-                        cellMatrix[i][j]=new Cell(CellRule.builder().setNumberConstraint((int)constraint.charAt(0)-48).build());
+                    if(isNumeric(constraint)) { //if string is a number
+                        cellMatrix[i][j]=new Cell(CellRule.builder().setNumberConstraint(Integer.parseInt(constraint)).build());
                     }
                     else {
                         cellMatrix[i][j]=new Cell(CellRule.builder().setColorConstraint(Colors.stringToColor(constraint)).build());
                     }
 
                     if(index<numCellWithConstraint) {
-                        singleCell=(JSONObject) cells.get(index);
+                        singleCell=(JSONObject) cells.get(index++);
                         nextX=((Long)singleCell.get("x")).intValue();
                         nextY=((Long)singleCell.get("y")).intValue();
                         constraint=(String)singleCell.get("constraint");
-                        index++;
                     }
                     else constraintLeft=false;
                 }
@@ -119,5 +116,9 @@ public class WindowParser {
         }
 
         return cellMatrix;
+    }
+
+    private boolean isNumeric(String s) {
+        return s!=null && s.matches("[-+]?\\d*\\.?\\d+");
     }
 }

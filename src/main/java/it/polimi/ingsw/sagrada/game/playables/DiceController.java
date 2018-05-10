@@ -57,10 +57,9 @@ public class DiceController implements Observable<Integer> {
     }
 
     private List<Dice> getDiceDraft(int diceId) {
-        diceId = this.currentId; // FOR TESTING, MUST BE REMOVED
         List<Dice> pickedDice = new ArrayList<>();
         for (Dice dice : draftPool) {
-            if (dice.getId() == diceId) pickedDice.add(dice);
+            if (dice.getId() == this.currentId) pickedDice.add(dice); //to be changed to diceId
         }
 
         return pickedDice;
@@ -136,5 +135,3 @@ public class DiceController implements Observable<Integer> {
 
     }
 }
-
-
