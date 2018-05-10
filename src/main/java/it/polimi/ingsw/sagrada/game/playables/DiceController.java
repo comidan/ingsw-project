@@ -99,8 +99,6 @@ public class DiceController implements Observable<Integer> {
             case END_ROUND:
                 pickedDice = putDiceScoreTrack();
                 break;
-
-
         }
         return pickedDice;
     }
@@ -108,7 +106,14 @@ public class DiceController implements Observable<Integer> {
     //CAN BE IMPROVED
     public List<Dice> putDiceScoreTrack() {
         List<Dice> takenDiceList = new ArrayList<>(draftPool);
-        draftPool.forEach(draftPool::remove);
+        for (Dice dice : draftPool) {
+
+            takenDiceList.add(dice);
+
+        }
+
+        draftPool.clear();
+
         return takenDiceList;
 
     }

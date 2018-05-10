@@ -33,6 +33,7 @@ public class ScoreTrackTest {
         objectiveRuleList.add(objectiveRule);
         WindowParser windowParser = WindowParser.getInstance();
         Window window = windowParser.generateWindowCard().get(0);
+
         Cell[][] cellMatrix = window.getCellMatrix();
 
         int tokenNumber = 3; //TEMPORARY FOR TESTING
