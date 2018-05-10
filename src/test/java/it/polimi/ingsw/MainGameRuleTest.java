@@ -5,7 +5,6 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.rules.CellRule;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.rules.ErrorType;
-import it.polimi.ingsw.sagrada.game.rules.MainGameRule;
 import it.polimi.ingsw.sagrada.game.rules.RuleController;
 import org.junit.Test;
 
@@ -15,27 +14,25 @@ import static org.junit.Assert.assertSame;
 
 public class MainGameRuleTest {
 
-    private synchronized ErrorType checkRule(MainGameRule mainGameRule, Cell[][] cells) {
+    private synchronized ErrorType checkRule(Cell[][] cells) {
         RuleController ruleController = new RuleController();
-        return ruleController.validateRule(mainGameRule, cells);
+        return ruleController.validateWindow(cells);
     }
 
     @Test
     public void testValidateWindowMainRule() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
-        MainGameRule mainGameRule = new MainGameRule();
         for (int i = 0; i < cells.length; i++)
             for (int j = 0; j < cells[i].length; j++) {
                 cells[i][j] = new Cell(CellRule.builder().setColorConstraint(Colors.RED).build());
                 cells[i][j].setDice(new Dice(1, Colors.RED));
             }
-        ErrorType errorType = checkRule(mainGameRule, cells);
+        ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE, errorType);
     }
 
     @Test
     public void testValidateWindowRuleBruteColor() {
-        MainGameRule mainGameRule = new MainGameRule();
         CellRule cellRule = CellRule.builder().build();
         Cell red = new Cell(cellRule);
         Dice diceRed = new Dice(1, Colors.RED);
@@ -61,20 +58,19 @@ public class MainGameRuleTest {
                 {blue, red, yellow, green, purple},
                 {purple, blue, red, yellow, green},
                 {green, purple, blue, red, yellow}};
-        ErrorType errorType = checkRule(mainGameRule, _cells);
+        ErrorType errorType = checkRule(_cells);
         assertSame(ErrorType.NO_ERROR, errorType);
         Cell[][] __cells = {{red, yellow, green, purple, blue},
                 {blue, red, yellow, green, purple},
                 {purple, blue, red, yellow, purple},
                 {green, purple, blue, red, yellow}};
-        errorType = checkRule(mainGameRule, __cells);
+        errorType = checkRule(__cells);
         assertSame(ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE, errorType);
     }
 
     @Test
-    public void testValidateWindowRuelBruteValue() {
+    public void testValidateWindowRuleBruteValue() {
         CellRule cellRule = CellRule.builder().build();
-        MainGameRule mainGameRule = new MainGameRule();
         Cell one = new Cell(cellRule);
         Dice diceOne = new Dice(1, Colors.RED);
         diceOne.setValue(1);
@@ -103,33 +99,32 @@ public class MainGameRuleTest {
                 {two, three, four, four, one},
                 {six, five, two, one, one},
                 {one, two, five, six, three}};
-        ErrorType errorType = checkRule(mainGameRule, cells);
+        ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE, errorType);
         Cell[][] _cells = {{five, one, three, six, two},
                 {two, three, four, five, one},
                 {six, five, two, one, three},
                 {one, two, five, six, three}};
-        errorType = checkRule(mainGameRule, _cells);
+        errorType = checkRule(_cells);
         assertSame(ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE, errorType);
         Cell[][] __cells = {{five, one, three, six, two},
                 {two, three, five, four, one},
                 {six, four, two, one, three},
                 {one, two, three, six, four}};
-        errorType = checkRule(mainGameRule, __cells);
+        errorType = checkRule(__cells);
         assertSame(ErrorType.NO_ERROR, errorType);
     }
 
     @Test
     public void testValidateWindowCellRule() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
-        MainGameRule mainGameRule = new MainGameRule();
         for (int i = 0; i < cells.length; i++)
             for (int j = 0; j < cells[i].length; j++)
                 cells[i][j] = new Cell(CellRule.builder().setColorConstraint(Colors.RED).build());
         Dice dice = new Dice(1, Colors.PURPLE);
         dice.setValue(1);
         cells[0][0].setDice(dice);
-        ErrorType errorType = checkRule(mainGameRule, cells);
+        ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED, errorType);
     }
 }

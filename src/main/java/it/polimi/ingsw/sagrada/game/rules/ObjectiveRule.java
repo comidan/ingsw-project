@@ -17,8 +17,8 @@ public class ObjectiveRule extends Rule<Cell[][], Integer> {
 	private CardType cardType;
 	private CardType objectiveType;
 	private Function<Cell[][], Integer> function;
-	private List<Color> colorConstraints = null;
-	private List<Integer> valueConstraints = null;
+	private List<Color> colorConstraints;
+	private List<Integer> valueConstraints;
 
 	/**
 	 * @param function

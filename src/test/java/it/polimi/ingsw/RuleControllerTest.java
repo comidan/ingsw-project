@@ -33,7 +33,9 @@ public class RuleControllerTest {
         for(int i = 0; i < cells.length; i++)
             for(int j = 0; j < cells[i].length; j++)
                 cells[i][j] = new Cell(CellRule.builder().setColorConstraint(Colors.RED).build());
-        cells[0][0].setDice(new Dice(1, Colors.PURPLE));
+        Dice dice = new Dice(1, Colors.PURPLE);
+        dice.setValue(1);
+        cells[0][0].setDice(dice);
         ErrorType errorType = ruleController.validateWindow(cells);
         assertSame(errorType, ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED);
     }

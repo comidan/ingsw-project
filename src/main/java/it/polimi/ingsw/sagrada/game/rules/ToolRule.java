@@ -7,26 +7,30 @@ import java.util.function.Function;
 /**
  * 
  */
-public class ToolRule extends Rule {
+public class ToolRule extends Rule<DTO, ErrorType> {
 
 
+	private Function<DTO, ErrorType> function;
 	/**
 	 * @param function - building object's constructor
 	 */
-	private ToolRule(final Function function) {
-		// TODO implement here
-	}
-
-	@Override
-	public Object checkRule(Object t) {
-		return null;
+	ToolRule(final Function function) {
+		this.function = function;
 	}
 
 	/**
-	 * @param dto - data transfer object
+	 * @return builder object
 	 */
-	public void applyRule(DTO dto) {
-		// TODO implement here
+	public static ToolBuilder<ToolRule> builder() {
+		return new ToolBuilder<>();
+	}
+
+	/**
+	 * @param dto - data transfer object containing action data
+	 */
+	@Override
+	public ErrorType checkRule(DTO dto) {
+		return function.apply(dto);
 	}
 
 }
