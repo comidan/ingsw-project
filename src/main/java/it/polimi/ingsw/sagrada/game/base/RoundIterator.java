@@ -32,12 +32,13 @@ public class RoundIterator implements Iterator<RoundStateEnum> {
 
     @Override
     public boolean hasNext() {
-        System.out.print(roundNumber);
         return (!(currentState == RoundStateEnum.END_ROUND && roundNumber == 10));
     }
 
     @Override
-    public RoundStateEnum next() {
+    public RoundStateEnum next() throws NoSuchElementException {
+        if(!hasNext())
+            throw new NoSuchElementException();
         if (currentState == null) {
             currentState = RoundStateEnum.SETUP_ROUND;
         } else {
@@ -52,7 +53,6 @@ public class RoundIterator implements Iterator<RoundStateEnum> {
                     currentState = RoundStateEnum.SETUP_ROUND;
                     roundNumber++;
                     break;
-
             }
         }
         return currentState;

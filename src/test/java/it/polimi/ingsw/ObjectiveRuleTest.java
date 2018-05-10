@@ -195,35 +195,7 @@ public class ObjectiveRuleTest {
 
     @Test
     public void testValueCoupleScore() throws RuntimeException {
-        CellRule cellRule = CellRule.builder().build();
-        one = new Cell(cellRule);
-        Dice diceRed = new Dice(1, Colors.RED);
-        diceRed.setValue(1);
-        one.setDice(diceRed);
-        two = new Cell(cellRule);
-        Dice diceYellow = new Dice(2, Colors.YELLOW);
-        diceYellow.setValue(2);
-        two.setDice(diceYellow);
-        three = new Cell(cellRule);
-        Dice diceGreen = new Dice(3, Colors.GREEN);
-        diceGreen.setValue(3);
-        three.setDice(diceGreen);
-        four = new Cell(cellRule);
-        Dice dicePurple = new Dice(4, Colors.PURPLE);
-        dicePurple.setValue(4);
-        four.setDice(dicePurple);
-        five = new Cell(cellRule);
-        Dice diceBlue = new Dice(5, Colors.LIGHT_BLUE);
-        diceBlue.setValue(5);
-        five.setDice(diceBlue);
-        six = new Cell(cellRule);
-        Dice diceBlueTwo = new Dice(6, Colors.LIGHT_BLUE);
-        diceBlueTwo.setValue(6);
-        six.setDice(diceBlueTwo);
-        Cell[][] cells = {{five, one, three, six, six},
-                {two, three, four, four, one},
-                {six, five, two, one, one},
-                {one, two, five, six, three}};
+        Cell[][] cells = initCells();
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setValueCoupleObjective(2, 1, 2).build();
         assertEquals(6, checkRule(objectiveRule, cells));
         Cell[][] _cells = {{one, one, one, one, one},
@@ -271,6 +243,17 @@ public class ObjectiveRuleTest {
 
     @Test
     public void testEveryValueRepeatingScore() throws RuntimeException {
+        Cell[][] cells = initCells();
+        ObjectiveRule objectiveRule = ObjectiveRule.builder().setEveryDiceValueRepeatingObjective(5).build();
+        assertEquals(10, checkRule(objectiveRule, cells));
+        Cell[][] _cells = {{five, one, three, six, six},
+                {two, two, two, two, two},
+                {two, two, two, two, two},
+                {two, two, two, two, two}};
+        assertEquals(0, checkRule(objectiveRule, _cells));
+    }
+
+    private Cell[][] initCells() {
         CellRule cellRule = CellRule.builder().build();
         one = new Cell(cellRule);
         Dice diceRed = new Dice(1, Colors.RED);
@@ -300,12 +283,6 @@ public class ObjectiveRuleTest {
                 {two, three, four, four, one},
                 {six, five, two, one, one},
                 {one, two, five, six, three}};
-        ObjectiveRule objectiveRule = ObjectiveRule.builder().setEveryDiceValueRepeatingObjective(5).build();
-        assertEquals(10, checkRule(objectiveRule, cells));
-        Cell[][] _cells = {{five, one, three, six, six},
-                {two, two, two, two, two},
-                {two, two, two, two, two},
-                {two, two, two, two, two}};
-        assertEquals(0, checkRule(objectiveRule, _cells));
+        return cells;
     }
 }

@@ -14,7 +14,7 @@ import static org.junit.Assert.assertSame;
 
 public class ToolRuleTest {
 
-    final RuleController ruleController = new RuleController();
+    private final RuleController ruleController = new RuleController();
 
     private synchronized ErrorType checkRule(Cell[][] cells) {
         return ruleController.validateWindow(cells);
@@ -65,32 +65,32 @@ public class ToolRuleTest {
     @Test
     public void testMoveIgnoringColorRuleFeature() {
         CellRule cellRule = CellRule.builder().build();
-        Cell one = new Cell(cellRule);
+        Cell _one = new Cell(cellRule);
         Dice diceOne = new Dice(1, Colors.RED);
         diceOne.setValue(1);
-        one.setDice(diceOne);
-        Cell two = new Cell(cellRule);
+        _one.setDice(diceOne);
+        Cell _two = new Cell(cellRule);
         Dice diceTwo = new Dice(2, Colors.YELLOW);
         diceOne.setValue(2);
-        two.setDice(diceTwo);
-        Cell three = new Cell(cellRule);
+        _two.setDice(diceTwo);
+        Cell _three = new Cell(cellRule);
         Dice diceThree = new Dice(3, Colors.GREEN);
         diceThree.setValue(3);
-        three.setDice(diceThree);
-        Cell four = new Cell(cellRule);
+        _three.setDice(diceThree);
+        Cell _four = new Cell(cellRule);
         Dice diceFour = new Dice(10, Colors.PURPLE);
         diceFour.setValue(4);
-        four.setDice(diceFour);
-        Cell five = new Cell(cellRule);
+        _four.setDice(diceFour);
+        Cell _five = new Cell(cellRule);
         Dice diceFive = new Dice(5, Colors.LIGHT_BLUE);
         diceFive.setValue(5);
-        five.setDice(diceFive);
+        _five.setDice(diceFive);
         CellRule cellRulecolor = CellRule.builder().setColorConstraint(Colors.RED).build();
         Cell empty = new Cell(cellRulecolor);
-        Cell[][] cells = {{five, one, three, empty, three},
-                          {two, three, four, five, one},
-                          {empty, five, two, one, two},
-                          {one, two, five, empty, three}};
+        Cell[][] cells = {{_five, _one, _three, empty, _three},
+                          {_two, _three, _four, _five, _one},
+                          {empty, _five, _two, _one, _two},
+                          {_one, _two, _five, empty, _three}};
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
         ToolRule toolRule = ToolRule.builder().setMoveIgnoringColorRuleFeature().build();
@@ -107,32 +107,32 @@ public class ToolRuleTest {
     @Test
     public void testMoveIgnoringValueRuleFeature() {
         CellRule cellRule = CellRule.builder().build();
-        Cell one = new Cell(cellRule);
+        Cell __one = new Cell(cellRule);
         Dice diceOne = new Dice(1, Colors.RED);
         diceOne.setValue(1);
-        one.setDice(diceOne);
-        Cell two = new Cell(cellRule);
+        __one.setDice(diceOne);
+        Cell __two = new Cell(cellRule);
         Dice diceTwo = new Dice(2, Colors.YELLOW);
         diceOne.setValue(2);
-        two.setDice(diceTwo);
-        Cell three = new Cell(cellRule);
+        __two.setDice(diceTwo);
+        Cell __three = new Cell(cellRule);
         Dice diceThree = new Dice(3, Colors.GREEN);
         diceThree.setValue(3);
-        three.setDice(diceThree);
-        Cell four = new Cell(cellRule);
+        __three.setDice(diceThree);
+        Cell __four = new Cell(cellRule);
         Dice diceFour = new Dice(13, Colors.PURPLE);
         diceFour.setValue(4);
-        four.setDice(diceFour);
-        Cell five = new Cell(cellRule);
+        __four.setDice(diceFour);
+        Cell __five = new Cell(cellRule);
         Dice diceFive = new Dice(5, Colors.LIGHT_BLUE);
         diceFive.setValue(5);
-        five.setDice(diceFive);
+        __five.setDice(diceFive);
         CellRule cellRulecolor = CellRule.builder().setNumberConstraint(6).build();
         Cell empty = new Cell(cellRulecolor);
-        Cell[][] cells = {{five, one, three, empty, three},
-                          {two, three, four, five, one},
-                          {empty, five, two, one, two},
-                          {one, two, five, empty, three}};
+        Cell[][] cells = {{__five, __one, __three, empty, __three},
+                          {__two, __three, __four, __five, __one},
+                          {empty, __five, __two, __one, __two},
+                          {__one, __two, __five, empty, __three}};
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
         ToolRule toolRule = ToolRule.builder().setMoveIgnoringValueRuleFeature().build();
