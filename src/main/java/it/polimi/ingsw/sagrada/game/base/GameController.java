@@ -35,7 +35,6 @@ public class GameController implements Observer<Object> {
         this.players = players;
         cardController = new CardController();
         diceController = DiceController.getDiceController(players.size());
-        observers = new ArrayList<>();
         playerIterator = PlayerIterator.getPlayerIterator(players);
     }
 
