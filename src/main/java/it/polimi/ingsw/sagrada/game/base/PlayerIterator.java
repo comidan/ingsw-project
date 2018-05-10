@@ -20,9 +20,7 @@ public class PlayerIterator implements Iterator<Player> {
         turnNumber = 0;
         roundNumber = 1;
         playerList = new ReverseCircularList<>();
-        for (Player player : players) {
-            playerList.add(player);
-        }
+        playerList.addAll(players);
         currentPlayer = null;
         this.playerNumber = playerList.size();
 
@@ -55,9 +53,9 @@ public class PlayerIterator implements Iterator<Player> {
     public Player next() throws NoSuchElementException {
         if(!hasNext())
             throw new NoSuchElementException();
-        if (roundNumber == 1 && turnNumber == 0) playerList.setOffset(selectStarterPlayer());
+        if (roundNumber == 1 && turnNumber == 0)
+            playerList.setOffset(selectStarterPlayer());
         currentPlayer = playerList.get(turnNumber);
-        System.out.println(playerList.indexOf((currentPlayer)));
         turnNumber++;
         if (turnNumber == playerNumber * 2) {
             playerList.setOffset(playerList.getOffset() + 1);
