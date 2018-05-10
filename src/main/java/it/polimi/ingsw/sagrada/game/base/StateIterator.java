@@ -53,10 +53,10 @@ public class StateIterator implements Iterator<StateGameEnum> {
             currentState= StateGameEnum.getFirstState();
         } else {
             switch (currentState) {
-                case DEAL_PRIVATE_OBJECTIVE: currentState=DEAL_WINDOWS; break;
-                case DEAL_WINDOWS: currentState=DEAL_TOOL; break;
+                case DEAL_PRIVATE_OBJECTIVE: currentState=DEAL_TOOL; break;
                 case DEAL_TOOL: currentState=DEAL_PUBLIC_OBJECTIVE; break;
-                case DEAL_PUBLIC_OBJECTIVE: currentState=TURN; break;
+                case DEAL_PUBLIC_OBJECTIVE: currentState=DEAL_WINDOWS; break;
+                case DEAL_WINDOWS: currentState=TURN; break;
                 case TURN: if(roundNumber<9) roundNumber++;else currentState=SCORE; break;
                 default: throw new NoSuchElementException();
             }

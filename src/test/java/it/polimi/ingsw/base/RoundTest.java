@@ -19,9 +19,9 @@ public class RoundTest {
 
         List<StateGameEnum> stateSequence = new ArrayList<>();
         stateSequence.add(StateGameEnum.DEAL_PRIVATE_OBJECTIVE);
-        stateSequence.add(StateGameEnum.DEAL_WINDOWS);
         stateSequence.add(StateGameEnum.DEAL_TOOL);
         stateSequence.add(StateGameEnum.DEAL_PUBLIC_OBJECTIVE);
+        stateSequence.add(StateGameEnum.DEAL_WINDOWS);
         for(int i=0; i<10; i++) {
             stateSequence.add(StateGameEnum.TURN);
         }

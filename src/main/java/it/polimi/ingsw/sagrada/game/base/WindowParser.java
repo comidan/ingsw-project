@@ -12,12 +12,13 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class WindowParser {
+public class WindowParser implements Observable<Object>{
 
     private static final String BASE_PATH = "res/json/window/";
     private static final int WINDOWS_PER_CARD = 2;
@@ -27,6 +28,8 @@ public class WindowParser {
     private Iterator<Integer> picker;
     private static final Logger logger = Logger.getAnonymousLogger();
     private JSONArray windowsArray;
+
+    private List<Observer<Object>> observer;
 
     public WindowParser() {
         JSONParser parser;
@@ -41,6 +44,8 @@ public class WindowParser {
         } catch (ParseException e) {
             logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
         }
+
+        observer = new ArrayList<>();
     }
 
     public boolean isWindowsLeft() {
@@ -49,9 +54,10 @@ public class WindowParser {
 
     public List<Integer> dealWindowId() {
         List<Integer> windowId=new ArrayList<>();
-        for(int i=0; i<WINDOWS_PER_CARD; i++) {
-            if(picker.hasNext()) windowId.add(picker.next());
+        for (int i = 0; i < WINDOWS_PER_CARD; i++) {
+            if (picker.hasNext()) windowId.add(picker.next());
         }
+
         return windowId;
     }
 
@@ -120,5 +126,28 @@ public class WindowParser {
 
     private boolean isNumeric(String s) {
         return s!=null && s.matches("[-+]?\\d*\\.?\\d+");
+    }
+
+    public void setReadedWindow(Player player, int windowId, WindowSide windowSide) {
+        Window w = generateWindow(windowId, windowSide);
+        WindowMessage windowMessage = new WindowMessage(w, player);
+        notifyAll(DataType.WINDOW_MESSAGE, windowMessage);
+    }
+
+    @Override
+    public void notifyAll(DataType dataType, Object data) {
+        for(Observer<Object> o:observer) {
+            o.update(dataType, data);
+        }
+    }
+
+    @Override
+    public void notify(Observer<Object> observer, DataType dataType, Object data) {
+        observer.update(dataType, data);
+    }
+
+    @Override
+    public void setSubscription(Observer<Object> observer) {
+        this.observer.add(observer);
     }
 }

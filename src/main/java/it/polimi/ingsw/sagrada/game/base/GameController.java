@@ -10,27 +10,30 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
+import static it.polimi.ingsw.sagrada.game.base.DataType.WINDOW_MESSAGE;
 import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
 
 /**
  *
  */
 
-public class GameController implements Observer<Integer> {
+public class GameController implements Observer<Object> {
 
     private List<Player> players;
-    private List<Observable<Integer>> observers;
+    private List<Observable<Object>> observables;
     private DiceController diceController;
     private RoundTrack roundTrack;
     private ScoreTrack scoreTrack;
     private CardController cardController;
+    private WindowParser windowParser;
     private StateIterator stateIterator = StateIterator.getInstance();
     private static GameController gameController;
 
     private GameController(List<Player> players) {
         this.players = players;
         cardController = new CardController();
-        observers = new ArrayList<>();
+        windowParser = new WindowParser();
+        observables = new ArrayList<>();
     }
 
     public static GameController getGameController(List<Player> players) {
@@ -52,9 +55,6 @@ public class GameController implements Observer<Integer> {
                 case DEAL_PRIVATE_OBJECTIVE:
                     dealPrivateObjectiveState();
                     break;
-                case DEAL_WINDOWS:
-                    dealWindowsState();
-                    break;
                 case DEAL_TOOL:
                     dealToolState();
                     break;
@@ -75,13 +75,6 @@ public class GameController implements Observer<Integer> {
         }
     }
 
-    private void dealWindowsState() {
-        WindowParser windowParser = new WindowParser();
-        for (Player p : players) {
-            Window window = windowParser.generateWindow(0, WindowSide.FRONT);
-        }
-    }
-
     private void dealToolState() {
         // TODO implement here
     }
@@ -90,6 +83,10 @@ public class GameController implements Observer<Integer> {
         List<ObjectiveCard> publicObjective;
         publicObjective = cardController.dealPublicObjective();
         scoreTrack = ScoreTrack.getScoreTrack(publicObjective);
+    }
+
+    private void dealWindowsState(Player player, Window window) {
+
     }
 
     public void playRound() {
@@ -116,30 +113,25 @@ public class GameController implements Observer<Integer> {
     }
 
     @Override
-    public void notify(Observable<Integer> observable, Integer data) {
-        observable.update(data);
+    public void update(DataType dataType, Object data) {
+        if(dataType==WINDOW_MESSAGE) {
+            WindowMessage windowMessage = (WindowMessage) data;
+            dealWindowsState(windowMessage.getPlayer(), windowMessage.getWindow());
+        }
     }
 
     @Override
-    public void notifyAll(Integer data) {
-        observers.forEach(observer -> observer.update(data));
+    public boolean subscribe(Observable<Object> observable) {
+        if(!observables.contains(observable)){
+            observables.add(observable);
+            observable.setSubscription(this);
+            return true;
+        }
+        return  false;
     }
 
     @Override
-    public boolean subscribe(Observable<Integer> observable) {
-        if (observers.contains(observable))
-            return false;
-        observers.add(observable);
-        return true;
+    public boolean unsubscribe(Observable<Object> observable) {
+        return false;
     }
-
-    @Override
-    public boolean unsubscribe(Observable<Integer> observable) {
-        if (!observers.contains(observable))
-            return false;
-        observers.remove(observable);
-        return true;
-    }
-
-
 }

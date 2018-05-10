@@ -40,25 +40,6 @@ public class Player {
 		return null;
 	}
 
-	/**
-	 * @param dice dice to be set
-	 * @param x x-position
-	 * @param y y-position
-	 * @return
-	 */
-	public boolean setDice(Dice dice, int x, int y) {
-		// TODO implement here
-		return false;
-	}
-
-	/**
-	 * @return getDice from diceController
-	 */
-	public List<Dice> getDice() {
-		// TODO implement here
-		return null;
-	}
-
 	public void setPrivateObjectiveCard(ObjectiveCard privateObjectiveCard) {
 		this.privateObjectiveCard = privateObjectiveCard;
 	}
