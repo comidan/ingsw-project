@@ -28,13 +28,17 @@ public class GameController implements Observer<Object> {
     private StateIterator stateIterator = StateIterator.getInstance();
     private RoundIterator roundIterator = RoundIterator.getRoundIterator();
     private PlayerIterator playerIterator;
+    private WindowParser windowParser;
     private static GameController gameController;
+
+    private int numWindowDealed = 0;
 
     private GameController(List<Player> players) {
         this.players = players;
         cardController = new CardController();
         diceController = DiceController.getDiceController(players.size());
         playerIterator = PlayerIterator.getPlayerIterator(players);
+        windowParser = new WindowParser();
     }
 
     public static GameController getGameController(List<Player> players) {
@@ -48,8 +52,8 @@ public class GameController implements Observer<Object> {
         return gameController;
     }
 
-    public void setupGame() {
-        while (stateIterator.hasNext() && stateIterator.getCurrentState() != DEAL_PUBLIC_OBJECTIVE) {
+    public void startGame() {
+        while (stateIterator.hasNext() && stateIterator.getCurrentState() != DEAL_WINDOWS) {
             stateIterator.next();
 
             switch (stateIterator.getCurrentState()) {
@@ -61,6 +65,9 @@ public class GameController implements Observer<Object> {
                     break;
                 case DEAL_PUBLIC_OBJECTIVE:
                     dealPublicObjectiveState();
+                    break;
+                case DEAL_WINDOWS:
+                    dealWindowState();
                     break;
                 default:
                     throw new NoSuchElementException();
@@ -86,8 +93,19 @@ public class GameController implements Observer<Object> {
         scoreTrack = ScoreTrack.getScoreTrack(publicObjective);
     }
 
-    private void dealWindowsState(Player player, Window window) {
+    private void dealWindowState() {
+        for(Player p:players) {
+            List<Integer> windowsId = windowParser.dealWindowId();
+            //this id will be passed to Player in the view
+        }
+    }
 
+    private void dealWindowsToPlayer(Player player, Window window) {
+        player.setWindow(window);
+        numWindowDealed++;
+        if(numWindowDealed == players.size() && stateIterator.hasNext()) {
+            stateIterator.next();
+        }
     }
 
     public void playRound() {
@@ -136,8 +154,10 @@ public class GameController implements Observer<Object> {
     @Override
     public void update(DataType dataType, Object data) {
         if (dataType == WINDOW_MESSAGE) {
-            WindowMessage windowMessage = (WindowMessage) data;
-            dealWindowsState(windowMessage.getPlayer(), windowMessage.getWindow());
+            if(stateIterator.getCurrentState()==DEAL_WINDOWS) {
+                WindowMessage windowMessage = (WindowMessage) data;
+                dealWindowsToPlayer(windowMessage.getPlayer(), windowMessage.getWindow());
+            }
         }
     }
 
