@@ -4,11 +4,11 @@ import it.polimi.ingsw.sagrada.game.cards.CardController;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 
 import it.polimi.ingsw.sagrada.game.playables.*;
+import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Random;
 
 import static it.polimi.ingsw.sagrada.game.base.DataType.WINDOW_MESSAGE;
 import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
@@ -25,7 +25,6 @@ public class GameController implements Observer<Object> {
     private RoundTrack roundTrack;
     private ScoreTrack scoreTrack;
     private CardController cardController;
-    private WindowParser windowParser;
     private StateIterator stateIterator = StateIterator.getInstance();
     private RoundIterator roundIterator = RoundIterator.getRoundIterator();
     private PlayerIterator playerIterator;
@@ -84,7 +83,7 @@ public class GameController implements Observer<Object> {
     private void dealPublicObjectiveState() {
         List<ObjectiveCard> publicObjective;
         publicObjective = cardController.dealPublicObjective();
-        scoreTrack = ScoreTrack.getScoreTrack(publicObjective);
+        scoreTrack = ScoreTrack.getScoreTrack();
     }
 
     private void dealWindowsState(Player player, Window window) {
@@ -114,8 +113,15 @@ public class GameController implements Observer<Object> {
     }
 
 
-    private void scoreState() {
-        // TODO implement here
+    public void scoreState() {
+        List<ObjectiveRule> objectiveList;
+        List<Integer> scoreList = new ArrayList<>();
+        for (int i = 0; i < players.size(); i++) {
+            objectiveList = new ArrayList<>();
+            objectiveList.add((ObjectiveRule) (players.get(i).getPrivateObjectiveCard().getRule()));
+            objectiveList.add((ObjectiveRule) (players.get(i).getPublicObjectiveCard().getRule()));
+            scoreList.add(scoreTrack.calculateScore(objectiveList, players.get(i)));
+        }
     }
 
     public StateGameEnum getCurrentState() {
@@ -133,7 +139,7 @@ public class GameController implements Observer<Object> {
 
     @Override
     public void update(DataType dataType, Object data) {
-        if(dataType==WINDOW_MESSAGE) {
+        if (dataType == WINDOW_MESSAGE) {
             WindowMessage windowMessage = (WindowMessage) data;
             dealWindowsState(windowMessage.getPlayer(), windowMessage.getWindow());
         }
@@ -141,12 +147,12 @@ public class GameController implements Observer<Object> {
 
     @Override
     public boolean subscribe(Observable<Object> observable) {
-        if(!observables.contains(observable)){
+        if (!observables.contains(observable)) {
             observables.add(observable);
             observable.setSubscription(this);
             return true;
         }
-        return  false;
+        return false;
     }
 
     @Override

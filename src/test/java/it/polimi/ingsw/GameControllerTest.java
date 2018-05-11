@@ -3,8 +3,12 @@ package it.polimi.ingsw;
 
 
 import it.polimi.ingsw.sagrada.game.base.*;
+import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.playables.DiceController;
+import it.polimi.ingsw.sagrada.game.playables.Window;
+import it.polimi.ingsw.sagrada.game.playables.WindowSide;
+import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -33,7 +37,6 @@ public class GameControllerTest {
         gameController.setupGame();
         assertEquals(StateGameEnum.DEAL_PUBLIC_OBJECTIVE, gameController.getCurrentState());
         gameController.playRound();
-
 
     }
 }
