@@ -18,15 +18,13 @@ public class Player {
     private Window window;
     private ToolManager toolManager;
     private GameController gameController;
-    private DiceController diceController;
 
     /**
      * Default constructor
      */
-    public Player(GameController gameController, ToolManager toolManager, DiceController diceController) {
+    public Player(GameController gameController, ToolManager toolManager) {
         this.gameController = gameController;
         this.toolManager = toolManager;
-        this.diceController = diceController;
     }
 
     /**

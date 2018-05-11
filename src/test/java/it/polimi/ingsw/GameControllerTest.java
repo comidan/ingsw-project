@@ -17,9 +17,8 @@ public class GameControllerTest {
 
     private GameController gameController;
     private ToolManager toolManager;
-    private DiceController diceController;
-    private Player playerOne = new Player(gameController, toolManager, diceController);
-    private Player playerTwo = new Player(gameController, toolManager, diceController);
+    private Player playerOne = new Player(gameController, toolManager);
+    private Player playerTwo = new Player(gameController, toolManager);
     private List<Player> players = new ArrayList<>();
 
 
@@ -28,7 +27,7 @@ public class GameControllerTest {
 
         players.add(playerOne);
         players.add(playerTwo);
-        GameController gameController = GameController.getGameController(players);
+        gameController = GameController.getGameController(players);
         assertTrue(gameController.getPlayerNumber() > 0);
         gameController.startGame();
         assertEquals(StateGameEnum.DEAL_WINDOWS, gameController.getCurrentState());

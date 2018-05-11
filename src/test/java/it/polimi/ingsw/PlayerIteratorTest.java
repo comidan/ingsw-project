@@ -18,10 +18,9 @@ public class PlayerIteratorTest {
     public void testPlayerIterator() {
         GameController gameController = GameController.getGameController();
         ToolManager toolManager = new ToolManager();
-        DiceController diceController = DiceController.getDiceController(2);
-        Player playerOne = new Player(gameController, toolManager, diceController);
-        Player playerTwo = new Player(gameController, toolManager, diceController);
-        Player playerThree = new Player(gameController, toolManager, diceController);
+        Player playerOne = new Player(gameController, toolManager);
+        Player playerTwo = new Player(gameController, toolManager);
+        Player playerThree = new Player(gameController, toolManager);
         List<Player> playerList = new ArrayList<>();
         playerList.add(playerOne);
         playerList.add(playerTwo);

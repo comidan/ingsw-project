@@ -14,9 +14,9 @@ import static org.junit.Assert.*;
 public class RoundIteratorTest {
 
     @Test
-    public void TestRoundIterator() {
-        RoundIterator roundIterator = RoundIterator.getRoundIterator();
-        DiceController diceController = DiceController.getDiceController(2);
+    public void testRoundIterator() {
+        assertNotNull(RoundIterator.getRoundIterator());
+        assertNotNull(DiceController.getDiceController(2));
 
     }
 

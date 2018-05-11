@@ -5,16 +5,15 @@ package it.polimi.ingsw;
 
 
 import it.polimi.ingsw.sagrada.game.base.*;
-import it.polimi.ingsw.sagrada.game.cards.CardController;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.playables.*;
+import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
-import it.polimi.ingsw.sagrada.game.rules.ToolBuilder;
 import org.junit.Test;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -22,37 +21,26 @@ import static org.junit.Assert.*;
 public class ScoreTrackTest {
 
 
-    /*@Test
-    public void TestScoreTrack() {
-        CardController cardController = new CardController();
-        GameController gameController = GameController.getGameController();
-        DiceController diceController = DiceController.getDiceController(2);
-        ToolManager toolManager = new ToolManager();
-        Player playerOne = new Player(gameController, toolManager, diceController);
+    @Test
+    public void testScoreTrack() {
+        Player playerOne = new Player(null, null);
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.RED).build();
         ObjectiveCard card = new ObjectiveCard(1, "test", objectiveRule);
+        ObjectiveRule objectiveRulePublic = ObjectiveRule.builder().setValueCoupleObjective(2, 5, 6).build();
+        ObjectiveCard cardPublic = new ObjectiveCard(2, "testPublic", objectiveRulePublic);
         playerOne.setPrivateObjectiveCard(card);
         WindowParser windowParser = new WindowParser();
         Window window = windowParser.generateWindow(0, WindowSide.FRONT);
         playerOne.setWindow(window);
-        int tokenNumber = playerOne.getWindow().getTokenNumber();
         List<ObjectiveRule> objectiveRuleList = new ArrayList<>();
-        objectiveRuleList.add(((ObjectiveRule) playerOne.getPrivateObjectiveCard().getRule()));
-        Cell[][] cellMatrix = playerOne.getWindow().getCellMatrix();
-        ScoreTrack scoreTrack = ScoreTrack.getScoreTrack(cardController.dealPublicObjective());
-
-        int objectiveScore = 0;
-        for (ObjectiveRule objectiveRuleTest : objectiveRuleList) {
-            objectiveScore += objectiveRuleTest.getScore();
-        }
-        int penalityScore = 0;
-        for (int i = 0; i < cellMatrix.length; i++)
-            for (int j = 0; j < cellMatrix[0].length; j++) {
-                if (!cellMatrix[i][j].isOccupied())
-                    penalityScore -= 1;
-            }
-
-        assertEquals(penalityScore + tokenNumber + objectiveScore, scoreTrack.calculateScore(playerOne));
+        objectiveRuleList.add(playerOne.getPrivateObjectiveCard().getRule());
+        List<ObjectiveCard> objectivesPublic = new ArrayList<>();
+        objectivesPublic.add(cardPublic);
+        ScoreTrack.destroy();
+        ScoreTrack scoreTrack = ScoreTrack.getScoreTrack(objectivesPublic);
+        Dice dice = new Dice(23, Colors.RED);
+        window.setCell(dice, 2, 2);
+        int score = scoreTrack.calculateScore(playerOne);
+        assertEquals(-15, score);
     }
-    */
 }

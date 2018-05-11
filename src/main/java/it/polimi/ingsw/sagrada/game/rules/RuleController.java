@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.game.rules;
 import it.polimi.ingsw.sagrada.game.base.Cell;
 
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * 
@@ -29,10 +30,23 @@ public class RuleController {
 
 	/**
 	 * @param rule - rule to be validated
-	 * @return true if rule is validated
+	 * @return R
 	 */
 	public <P, R> R validateRule(Rule<P, R> rule, P data) {
 		return rule.checkRule(data);
+	}
+
+	/**
+	 * @param rules - rules to be validated
+	 * @return R
+	 */
+	public int validateObjectiveRules(List<ObjectiveRule> rules, Cell[][] cells) {
+		int score = rules.stream().mapToInt(rule -> validateRule(rule, cells)).sum();
+		for (int i = 0; i < cells.length; i++)
+			for (int j = 0; j < cells[0].length; j++)
+				if (!cells[i][j].isOccupied())
+					score --;
+		return score;
 	}
 
 	/**
