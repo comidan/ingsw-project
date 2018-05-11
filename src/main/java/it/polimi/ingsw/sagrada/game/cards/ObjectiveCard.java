@@ -15,6 +15,10 @@ public class ObjectiveCard extends Card {
 		type = rule.getType();
 	}
 
+	public  ObjectiveRule getRule() {
+		return (ObjectiveRule) super.getRule();
+	}
+
 	public CardType getType() {
 		return type;
 	}

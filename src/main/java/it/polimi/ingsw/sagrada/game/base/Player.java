@@ -14,7 +14,6 @@ import java.util.*;
  */
 public class Player {
 
-    private ObjectiveCard publicObjectiveCard;
     private ObjectiveCard privateObjectiveCard;
     private Window window;
     private ToolManager toolManager;
@@ -53,9 +52,5 @@ public class Player {
 
     public ObjectiveCard getPrivateObjectiveCard() {
         return privateObjectiveCard;
-    }
-
-    public ObjectiveCard getPublicObjectiveCard() {
-        return publicObjectiveCard;
     }
 }

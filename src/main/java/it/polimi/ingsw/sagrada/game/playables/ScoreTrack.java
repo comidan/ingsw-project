@@ -4,7 +4,6 @@ package it.polimi.ingsw.sagrada.game.playables;
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
-import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 
 
 import java.util.*;
@@ -14,33 +13,33 @@ import java.util.*;
  */
 public class ScoreTrack {
     private static ScoreTrack scoreTrack;
-    private int score;
     private List<ObjectiveCard> objectiveCards;
 
-    private ScoreTrack() {
-        score = 0;
-
+    private ScoreTrack(List<ObjectiveCard> objectiveCards) {
+        this.objectiveCards = objectiveCards;
     }
 
-    public static ScoreTrack getScoreTrack() {
+    public static ScoreTrack getScoreTrack(List<ObjectiveCard> objectiveCards) {
 
         if (scoreTrack == null) {
-            scoreTrack = new ScoreTrack();
+            scoreTrack = new ScoreTrack(objectiveCards);
         }
         return scoreTrack;
     }
 
     /**
-     * @param objective - objective card to check
      * @return score - total score for player
      */
-    public int calculateScore(List objective, Player player) {
+    public int calculateScore(Player player) {
+        int score = 0;
         int tokenNumber = player.getWindow().getTokenNumber();
         Cell[][] cellMatrix = player.getWindow().getCellMatrix();
+        List<ObjectiveCard> objectives = objectiveCards;
+        objectives.add(player.getPrivateObjectiveCard());
 
-        for (Object objectiveRule : objective) {
+        for (ObjectiveCard objectiveCard : objectives) {
 
-            score += ((ObjectiveRule) objectiveRule).getScore();
+            score += objectiveCard.getRule().getScore();
 
         }
         score += tokenNumber;
@@ -53,6 +52,5 @@ public class ScoreTrack {
 
         return score;
     }
-
 }
 

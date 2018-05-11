@@ -83,7 +83,7 @@ public class GameController implements Observer<Object> {
     private void dealPublicObjectiveState() {
         List<ObjectiveCard> publicObjective;
         publicObjective = cardController.dealPublicObjective();
-        scoreTrack = ScoreTrack.getScoreTrack();
+        scoreTrack = ScoreTrack.getScoreTrack(publicObjective);
     }
 
     private void dealWindowsState(Player player, Window window) {
@@ -114,13 +114,9 @@ public class GameController implements Observer<Object> {
 
 
     public void scoreState() {
-        List<ObjectiveRule> objectiveList;
         List<Integer> scoreList = new ArrayList<>();
         for (int i = 0; i < players.size(); i++) {
-            objectiveList = new ArrayList<>();
-            objectiveList.add((ObjectiveRule) (players.get(i).getPrivateObjectiveCard().getRule()));
-            objectiveList.add((ObjectiveRule) (players.get(i).getPublicObjectiveCard().getRule()));
-            scoreList.add(scoreTrack.calculateScore(objectiveList, players.get(i)));
+            scoreList.add(scoreTrack.calculateScore(players.get(i)));
         }
     }
 
