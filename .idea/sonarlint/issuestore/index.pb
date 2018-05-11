@@ -5,7 +5,7 @@
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 N
-SoftwareEngineeringProject.iml,4\e\4eedaecfa89fc4074d3b625b9fcdb89616adc120
+SoftwareEngineeringProject.iml,4/e/4eedaecfa89fc4074d3b625b9fcdb89616adc120
 p
 @src/main/java/it/polimi/ingsw/sagrada/game/playables/Window.java,2/9/29abf7e8fc29ef525a75af132a90d627e5c76685
 a
@@ -66,3 +66,11 @@ r
 Bsrc/main/java/it/polimi/ingsw/sagrada/game/base/StateGameEnum.java,f/c/fc5973d77e3f63abae02c66a2f2b87d05e3c93cd
 k
 ;src/main/java/it/polimi/ingsw/sagrada/game/base/Player.java,5/2/52cb8060afedb827edee26f433eaba50f0f578a1
+j
+:src/main/java/it/polimi/ingsw/sagrada/game/base/State.java,7/d/7d409c816205d2fe710710035bf32d57c2c76171
+x
+Hsrc/main/java/it/polimi/ingsw/sagrada/game/base/ReverseCircularList.java,e/1/e1ad1c12961d4e063b0bdea1e4782b0131812895
+e
+5src/test/java/it/polimi/ingsw/PlayerIteratorTest.java,3/c/3cc726e333517d6c4ff815fb1dbd6cc7c934a2b3
+s
+Csrc/main/java/it/polimi/ingsw/sagrada/game/base/PlayerIterator.java,f/e/fe35ef50782d19a091f480474c3e785c402ecc7d

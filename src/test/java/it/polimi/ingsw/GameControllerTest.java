@@ -23,7 +23,7 @@ public class GameControllerTest {
     private List<Player> players = new ArrayList<>();
 
 
-
+    @Test
     public void testGameController() {
 
         players.add(playerOne);

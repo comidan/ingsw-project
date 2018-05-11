@@ -18,7 +18,7 @@ public class ScoreTrack {
 
     private ScoreTrack(List<ObjectiveCard> objectiveCards) {
         score = 0;
-        this.objectiveCards=objectiveCards;
+        this.objectiveCards = objectiveCards;
     }
 
     public static ScoreTrack getScoreTrack(List<ObjectiveCard> objectiveCards) {
