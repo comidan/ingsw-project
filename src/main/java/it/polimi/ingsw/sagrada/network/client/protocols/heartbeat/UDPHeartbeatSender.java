@@ -3,8 +3,7 @@ package it.polimi.ingsw.sagrada.network.client.protocols.heartbeat;
 import java.io.IOException;
 import java.net.*;
 import java.util.logging.Level;
-
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+import java.util.logging.Logger;
 
 class UDPHeartbeatSender {
 
@@ -19,13 +18,13 @@ class UDPHeartbeatSender {
             clientSocket.send(sendPacket);
         }
         catch (SocketException exc) {
-            LOGGER.log(Level.SEVERE, exc.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, exc.getMessage());
         }
         catch (UnknownHostException exc) {
-            LOGGER.log(Level.SEVERE, exc.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, exc.getMessage());
         }
         catch (IOException exc) {
-            LOGGER.log(Level.SEVERE, exc.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, exc.getMessage());
         }
     }
 }

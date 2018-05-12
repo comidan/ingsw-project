@@ -7,8 +7,7 @@ import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
-
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+import java.util.logging.Logger;
 
 public class HeartbeatProtocolManager implements Runnable, Observer<HeartbeatState, HeartbeatEvent>, NetworkUtils {
 
@@ -47,7 +46,7 @@ public class HeartbeatProtocolManager implements Runnable, Observer<HeartbeatSta
                 }
             }
             catch (IOException exc) {
-                LOGGER.log(Level.SEVERE, exc.getMessage());
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, exc.getMessage());
             }
         }
     }

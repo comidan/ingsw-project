@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+import java.util.logging.Logger;
 
 class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, HeartbeatEvent>, NetworkUtils {
 
@@ -51,7 +51,7 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
                 try {
                     Thread.sleep(TIME_INTERVAL);
                 } catch (InterruptedException exc) {
-                    LOGGER.log(Level.SEVERE, exc.getMessage());
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, exc.getMessage());
                     event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
                     notify(HeartbeatState.HOST_OFFLINE, event);
                     asynchronousHeartbeat.cancel(true);
