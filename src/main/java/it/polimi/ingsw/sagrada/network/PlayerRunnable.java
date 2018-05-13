@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 import java.io.*;
 import java.net.Socket;
 
-public class PlayerThread implements Runnable {
+public class PlayerRunnable implements Runnable {
 
 
     private Socket clientSocket;
@@ -16,7 +16,7 @@ public class PlayerThread implements Runnable {
     private String userName;
 
 
-    public PlayerThread(Socket clientSocket) {
+    public PlayerRunnable(Socket clientSocket) {
         this.clientSocket = clientSocket;
         try {
             inSocket = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));

@@ -22,8 +22,6 @@ public class Server {
             e.printStackTrace();
         }
         mainExecutor = Executors.newSingleThreadExecutor();
-
-
     }
 
     @java.lang.SuppressWarnings("squid:S2189")
@@ -33,11 +31,10 @@ public class Server {
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
-            Thread thread = new Thread(new PlayerThread(clientSocket));
-            executor.submit(thread);
+            PlayerRunnable playerRunnable = new PlayerRunnable(clientSocket);
+            executor.submit(playerRunnable);
         }
 
     }
-
 
 }
