@@ -49,9 +49,7 @@ public class PlayerRunnable implements Runnable {
     }
 
     private boolean login() throws IOException {
-        userName = inSocket.readLine();
-        if (userPool.addUser(userName)) ;
-        outSocket.flush();
+
         return true;
     }
 
