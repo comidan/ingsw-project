@@ -1,27 +1,17 @@
 package it.polimi.ingsw.sagrada.network;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class UserPool {
 
-    private List<String> userNames;
+    private HashMap<String, String> userNames;
 
     public void UserPool() {
-        userNames = new ArrayList<>();
+        userNames = new HashMap<>();
     }
 
-
-    public boolean addUser(String userName) {
-
-        if (userNames.stream().filter(name -> name.equals(userName)).count() > 0)
-            return false;
-        else {
-            this.userNames.add(userName);
-            return true;
-        }
-
-    }
-
+    
 
 }

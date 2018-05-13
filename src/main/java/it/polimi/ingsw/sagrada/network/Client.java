@@ -30,9 +30,9 @@ public class Client {
         }
     }
 
-    private JSONObject createMessage(String userName) {
+    private JSONObject createMessage(String userName, String auth) {
         loginMessage = new JsonMessage();
-        return loginMessage.createLoginMessage(userName);
+        return loginMessage.createLoginMessage(userName, auth);
     }
 
     private void doActions() {
@@ -86,7 +86,9 @@ public class Client {
             while (!loginSuccessful) {
                 outVideo.println("username:");
                 String username = inKeyboard.readLine();
-                JSONObject message = createMessage(username);
+                outVideo.println("password:");
+                String auth = inKeyboard.readLine();
+                JSONObject message = createMessage(username, auth);
                 outSocket.println(message);
                 outSocket.flush();
                 loginSuccessful = Boolean.valueOf(inSocket.readLine()).booleanValue();
