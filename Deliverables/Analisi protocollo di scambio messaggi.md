@@ -7,7 +7,7 @@ In particolare, un generico messaggio avrà la seguente struttura:
   "tipo di messaggio": {
     "tipo di azione" : {
         "[nome dell'azione]" : {
-      "contenuto dell'azione'
+      "contenuto dell'azione"
       }
     }
   }
@@ -18,6 +18,12 @@ Con "tipo di messaggio" si intende sinteticamente il genere di contenuto del mes
 Con "tipo di azione" si entra ulteriormente nel dettaglio: si indica infatti quale genere di azione, fra quelle disponibili, si intende compiere. Dunque la parola "login" indicherà la richiesta di registrazione, la parola "settings" indicherà il settaggio di alcune impostazioni di gioco, la parola "choice" indicherà un'azione di scelta fra varie opzioni. 
 Fanno parte del "contenuto dell'azione" tutte le informazioni aggiuntive necessarie per portare a termine l'azione; ad esempio, in un messaggio di login questa sezione conterrà le credenziali dell'utente, mentre in un messaggio di scelta indicherà la scelta effettuata fra le opzioni disponibili, quali per esempio le coordinate a cui si intende posizionare un dado sulla Window. 
 Il nome dell'azione, nel caso di un'azione specifica e identificata univocamente, indica il nome (che costituisce una breve descrizione dell'azione) attraverso il quale è possibile risalire all'azione stessa.
+
+Lo scambio di messaggi nell'architettura astratta di rete è possibile visuallizzarla in una maniera più relativa all'infrastuttura di rete nel seguente grafico dove è possibile vedere lo scambio di pacchetti dati contententi messaggi in JSON scambiati in questo caso durante l'interazione login tra un client ed il server.
+<p align="center">
+  <img src="https://preview.ibb.co/i0q1oy/Sagrada_Network_Architecture_Example.jpg">
+</p>
+
 
 # Analisi interazioni client server attraverso scambio di messaggi in formato JSON
 Il server avviandosi creerà un servizio basato su TCP-IP in ascolto su una porta generata attraverso un protocollo di port discovery, al connettersi un certo client, oltre ad avviare il protocollo Heartbeat lato client al server via UDP, invierà un messaggio sotto forma di JSON contenete i dati per il login e ricevendo dal server una risposta, come da esempio.
