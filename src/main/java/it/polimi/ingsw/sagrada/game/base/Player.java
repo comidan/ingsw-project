@@ -27,15 +27,6 @@ public class Player {
         this.toolManager = toolManager;
     }
 
-    /**
-     * @param tokens - tools buying player's tokens
-     * @return
-     */
-    public ToolCard selectTool(List<Token> tokens) {
-        // TODO implement here
-        return null;
-    }
-
     public void setPrivateObjectiveCard(ObjectiveCard privateObjectiveCard) {
         this.privateObjectiveCard = privateObjectiveCard;
     }
