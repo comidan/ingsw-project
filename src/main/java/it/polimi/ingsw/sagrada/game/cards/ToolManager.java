@@ -9,15 +9,21 @@ import java.util.*;
  */
 public class ToolManager {
 
+	private static ToolManager instance;
 	private List<ToolCard> toolCards;
 
 
 	/**
 	 * Default constructor
 	 */
-	public ToolManager() {
+	private ToolManager(List<ToolCard> toolCards) {
+		this.toolCards = toolCards;
 	}
 
+	public static ToolManager getInstance(List<ToolCard> toolCards) {
+		if(instance==null) return new ToolManager(toolCards);
+		else return instance;
+	}
 
 
 	/**

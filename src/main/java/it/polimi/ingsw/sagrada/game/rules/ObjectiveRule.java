@@ -51,7 +51,7 @@ public class ObjectiveRule extends Rule<Cell[][], Integer> {
 	 */
 
 	@Override
-	Integer checkRule(Cell[][] cells) {
+	public Integer checkRule(Cell[][] cells) {
 		return function.apply(cells);
 	}
 

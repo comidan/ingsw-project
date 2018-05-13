@@ -44,8 +44,16 @@
 - # ScoreTrack
     - correct score calculation ✓
 - # CardController
-    - deal private objective without repetitions and with correct type ✓
-    - deal public objective without repetitions and with correct type ✓
+    - deal private objectives without repetitions and with correct type ✓
+    - private objectives are well formed ✓
+    - deal public objectives without repetitions and with correct type ✓
+    - public objectives are well formed ✓
+    - deal tools without repetitions and with correct type ✓
+    - tools are well formed ✓
+- # WindowParser
+    - Window are read correctly from JSON ✓
+    - JSON tested for correctness ✓
+    - Window are created in the right way ✓
 - # Picker
     - picks from a list of generic object an element without repetitions ✓
 

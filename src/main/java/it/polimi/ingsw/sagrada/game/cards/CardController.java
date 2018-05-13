@@ -4,6 +4,8 @@ import it.polimi.ingsw.sagrada.game.base.Picker;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveBuilder;
 
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
+import it.polimi.ingsw.sagrada.game.rules.ToolBuilder;
+import it.polimi.ingsw.sagrada.game.rules.ToolRule;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,18 +20,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 
+ * This class is utilised to generate all sets of cards that are used in the game.
+ * This class should be called only from GameController to deal various cards to the respective class
+ * that will manage and utilised the sets.
  */
 public class CardController {
 
 	private static final Logger logger = Logger.getAnonymousLogger();
 	private static final int NUM_MAX_PLAYER = 4;
 	private static final int NUM_PUBLIC_OBJECTIVE = 3;
+	private static final int NUM_TOOLS = 3;
 
 	private static final String BASE_PATH_OBJECTIVE = "res/json/objective/";
-
-	private final ObjectiveBuilder objectiveBuilder = new ObjectiveBuilder();
-
+	private static final String BASE_PATH_TOOL = "res/json/tool/";
 
 	/**
 	 * default constructor
@@ -37,12 +40,52 @@ public class CardController {
 	public CardController() {
 	}
 
+	/**
+	 * @return list of of already scrambled tools
+	 */
 	public List<ToolCard> dealTool() {
-		return null;
+		List<ToolCard> toolCards = new ArrayList<>();
+
+		JSONParser parser = new JSONParser();
+		try{
+			JSONArray tools = (JSONArray)parser.parse(new FileReader(BASE_PATH_TOOL+"ToolCard.json"));
+			Iterator<JSONObject> picker = new Picker<JSONObject>(tools).pickerIterator();
+			for(int i=0; i<NUM_TOOLS; i++) {
+				if(picker.hasNext()) {
+					JSONObject tool = picker.next();
+					int id = ((Long)tool.get("id")).intValue();
+					String name = (String)tool.get("name");
+					JSONArray actions = (JSONArray)tool.get("action");
+
+					toolCards.add(new ToolCard(id, name, getToolRule(actions)));
+				}
+			}
+		}catch (IOException e) {
+			logger.log(Level.SEVERE, "Something breaks in reading JSON file");
+		} catch (ParseException e) {
+			logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
+		}
+
+		return toolCards;
+	}
+
+	private ToolRule getToolRule(JSONArray actions) {
+		ToolBuilder toolBuilder = ToolRule.builder();
+		for(int j=0; j<actions.size(); j++) {
+			String action = (String)actions.get(j);
+			switch (action) {
+				case "setIncrementDiceFeature": toolBuilder.setIncrementDiceFeature(); break;
+				case "setMoveIgnoringColorRuleFeature": toolBuilder.setMoveIgnoringColorRuleFeature(); break;
+				case "setMoveIgnoringValueRuleFeature": toolBuilder.setMoveIgnoringValueRuleFeature(); break;
+				default: throw new JSONErrorException("JSON is not correct. Check PublicObjective.json id");
+			}
+		}
+
+		return toolBuilder.build();
 	}
 
 	/**
-	 * @return list of publicObjective
+	 * @return list of of already scrambled publicObjective
 	 */
 	public List<ObjectiveCard> dealPublicObjective() {
 		List<ObjectiveCard> cards = new ArrayList<>();
@@ -57,7 +100,7 @@ public class CardController {
 					int id = ((Long)card.get("id")).intValue();
 					int value = ((Long)card.get("value")).intValue();
 					String name = (String)card.get("name");
-					cards.add(new ObjectiveCard(id, name, findRule(id, value)));
+					cards.add(new ObjectiveCard(id, name, findObjectiveRule(id, value)));
 				}
 			}
 		} catch (IOException e) {
@@ -68,7 +111,8 @@ public class CardController {
 		return cards;
 	}
 
-	private ObjectiveRule findRule(int id, int value) {
+	private ObjectiveRule findObjectiveRule(int id, int value) {
+		ObjectiveBuilder objectiveBuilder = ObjectiveRule.builder();
 		switch (id) {
 			case 0: objectiveBuilder.setDifferentDiceColorByRowsObjective(value); break;
 			case 1: objectiveBuilder.setDifferentDiceColorByColsObjective(value); break;
@@ -86,7 +130,7 @@ public class CardController {
 	}
 
 	/**
-	 * @return list of privateObjective
+	 * @return list of already scrambled privateObjective
 	 */
 	public List<ObjectiveCard> dealPrivateObjective(int numPlayer) {
 		List<ObjectiveCard> cards = new ArrayList<>();
@@ -97,6 +141,7 @@ public class CardController {
 
 		for(int i=0; i<numPlayer; i++) {
 			if(picker.hasNext()) {
+				ObjectiveBuilder objectiveBuilder = ObjectiveRule.builder();
 				Color color = picker.next();
 				objectiveBuilder.setColorShadeColorObjective(color);
 				cards.add(new ObjectiveCard(i, "Obiettivo "+color.toString(), objectiveBuilder.build()));

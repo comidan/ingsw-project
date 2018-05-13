@@ -3,8 +3,9 @@ package it.polimi.ingsw.sagrada.game.base;
 import it.polimi.ingsw.sagrada.game.cards.CardController;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 
+import it.polimi.ingsw.sagrada.game.cards.ToolCard;
+import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.playables.*;
-import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class GameController implements Observer<Object> {
     private RoundTrack roundTrack;
     private ScoreTrack scoreTrack;
     private CardController cardController;
+    private ToolManager toolManager;
     private StateIterator stateIterator = StateIterator.getInstance();
     private RoundIterator roundIterator = RoundIterator.getRoundIterator();
     private PlayerIterator playerIterator;
@@ -84,7 +86,8 @@ public class GameController implements Observer<Object> {
     }
 
     private void dealToolState() {
-        // TODO implement here
+        List<ToolCard> tools = cardController.dealTool();
+        toolManager = ToolManager.getInstance(tools);
     }
 
     private void dealPublicObjectiveState() {

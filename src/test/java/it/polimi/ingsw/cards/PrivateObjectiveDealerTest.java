@@ -29,4 +29,18 @@ public class PrivateObjectiveDealerTest {
         privateObjective = c.dealPrivateObjective(numPlayer);
         assertEquals(privateObjective.size(), 0);
     }
+
+    @Test
+    public void testDealtPrivateObjective() {
+        int numPlayer = 4;
+        List<ObjectiveCard> privateObjective;
+        CardController c = new CardController();
+
+        privateObjective = c.dealPrivateObjective(numPlayer);
+        assertEquals(numPlayer, privateObjective.size());
+
+        for(ObjectiveCard card:privateObjective) {
+            assertEquals(1, card.getRule().getColorConstraints().size());
+        }
+    }
 }

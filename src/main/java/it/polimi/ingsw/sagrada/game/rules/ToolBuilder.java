@@ -6,7 +6,6 @@ import it.polimi.ingsw.sagrada.game.base.DTO;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -16,7 +15,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 
 	private Function<DTO, ErrorType> function;
 
-	ToolBuilder() {
+	public ToolBuilder() {
 
 	}
 
