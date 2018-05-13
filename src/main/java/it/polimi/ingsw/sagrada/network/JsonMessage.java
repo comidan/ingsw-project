@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 public class JsonMessage {
 
 
-    public JSONObject createMessage(String username) {
+    public JSONObject createLoginMessage(String username) {
 
         JSONObject content = new JSONObject();
         content.put("username", username);

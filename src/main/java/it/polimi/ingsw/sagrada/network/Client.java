@@ -14,27 +14,25 @@ public class Client {
     private PrintWriter outVideo;
     private JsonMessage loginMessage;
 
-    private final static int PORT = 3000;
-    private final static String address = "localhost";
+    private static final int PORT = 3000;
+    private static final String address = "localhost";
 
     public Client() {
 
         try {
             doActions();
         } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 socket.close();
             } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
 
     private JSONObject createMessage(String userName) {
         loginMessage = new JsonMessage();
-        return loginMessage.createMessage(userName);
+        return loginMessage.createLoginMessage(userName);
     }
 
     private void doActions() {
@@ -43,13 +41,10 @@ public class Client {
             login();
             close();
         } catch (Exception e) {
-            e.printStackTrace();
         } finally {
-            // Always close it:
             try {
                 socket.close();
             } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -66,7 +61,6 @@ public class Client {
             try {
                 socket.close();
             } catch (IOException ex) {
-                e.printStackTrace();
             }
         }
     }
@@ -75,12 +69,10 @@ public class Client {
         try {
             socket.close();
         } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 socket.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
 
             }
         }
@@ -103,7 +95,6 @@ public class Client {
             try {
                 socket.close();
             } catch (IOException ex) {
-                System.err.println("Socket not closed");
             }
         }
     }
