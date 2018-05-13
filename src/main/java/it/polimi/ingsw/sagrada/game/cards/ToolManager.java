@@ -21,8 +21,8 @@ public class ToolManager {
 	}
 
 	public static ToolManager getInstance(List<ToolCard> toolCards) {
-		if(instance==null) return new ToolManager(toolCards);
-		else return instance;
+		if(instance==null) instance = new ToolManager(toolCards);
+		return instance;
 	}
 
 
@@ -30,9 +30,22 @@ public class ToolManager {
 	 * @param tokens - available player's tokens
 	 * @return selected tool card
 	 */
-	public ToolCard getTool(List<Token> tokens) {
-		// TODO implement here
-		return null;
+	public boolean canBuyTool(int id, List<Token> tokens) {
+		ToolCard card;
+		int cost;
+		int i=0;
+
+		while(i<toolCards.size()) {
+			card = toolCards.get(i);
+			if(card.getId() == id) {
+				if(card.getUsage()==Usage.NEW) cost=1;
+				else cost=2;
+
+				return tokens.size()>=cost;
+			}
+			i++;
+		}
+		return false;
 	}
 
 }
