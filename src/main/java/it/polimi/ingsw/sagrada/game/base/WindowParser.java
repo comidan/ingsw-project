@@ -1,5 +1,8 @@
 package it.polimi.ingsw.sagrada.game.base;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.WindowEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.WindowGameControllerEvent;
 import it.polimi.ingsw.sagrada.game.playables.Token;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
@@ -17,7 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class WindowParser implements Observable<Object>{
+public class WindowParser implements Channel<WindowEvent> {
 
     private static final String BASE_PATH = "res/json/window/";
     private static final int WINDOWS_PER_CARD = 2;
@@ -27,8 +30,7 @@ public class WindowParser implements Observable<Object>{
     private Iterator<Integer> picker;
     private static final Logger logger = Logger.getAnonymousLogger();
     private JSONArray windowsArray;
-
-    private List<Observer<Object>> observer;
+    private GameController gameController;
 
     public WindowParser() {
         JSONParser parser;
@@ -44,7 +46,19 @@ public class WindowParser implements Observable<Object>{
             logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
         }
 
-        observer = new ArrayList<>();
+        gameController = GameController.getGameController();
+    }
+
+    /**
+     * ONLY FOR TESTING
+    */
+    private List<Player> generatePlayer() {
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(0));
+        players.add(new Player(1));
+        players.add(new Player(2));
+
+        return players;
     }
 
     public boolean isWindowsLeft() {
@@ -127,26 +141,10 @@ public class WindowParser implements Observable<Object>{
         return s!=null && s.matches("[-+]?\\d*\\.?\\d+");
     }
 
-    public void setReadedWindow(Player player, int windowId, WindowSide windowSide) {
-        Window w = generateWindow(windowId, windowSide);
-        WindowMessage windowMessage = new WindowMessage(w, player);
-        notifyAll(DataType.WINDOW_MESSAGE, windowMessage);
-    }
 
     @Override
-    public void notifyAll(DataType dataType, Object data) {
-        for(Observer<Object> o:observer) {
-            o.update(dataType, data);
-        }
-    }
-
-    @Override
-    public void notify(Observer<Object> observer, DataType dataType, Object data) {
-        observer.update(dataType, data);
-    }
-
-    @Override
-    public void setSubscription(Observer<Object> observer) {
-        this.observer.add(observer);
+    public void dispatch(WindowEvent message) {
+        Window window = generateWindow(message.getIdWindow(), message.getWindowSide());
+        gameController.dispatch(new WindowGameControllerEvent(message.getIdPlayer(), window));
     }
 }

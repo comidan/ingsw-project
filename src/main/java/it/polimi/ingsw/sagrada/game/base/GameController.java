@@ -5,11 +5,16 @@ import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 
 import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.playables.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static it.polimi.ingsw.sagrada.game.base.DataType.WINDOW_MESSAGE;
 import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
@@ -18,10 +23,9 @@ import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
  *
  */
 
-public class GameController implements Observer<Object> {
+public class GameController implements Channel<Message> {
 
     private List<Player> players;
-    private List<Observable<Object>> observables;
     private DiceController diceController;
     private RoundTrack roundTrack;
     private ScoreTrack scoreTrack;
@@ -34,6 +38,8 @@ public class GameController implements Observer<Object> {
     private static GameController gameController;
 
     private int numWindowDealed = 0;
+
+    private static final Logger LOGGER = Logger.getLogger(GameController.class.getName());
 
     private GameController(List<Player> players) {
         this.players = players;
@@ -153,27 +159,11 @@ public class GameController implements Observer<Object> {
 
 
     @Override
-    public void update(DataType dataType, Object data) {
-        if (dataType == WINDOW_MESSAGE) {
-            if(stateIterator.getCurrentState()==DEAL_WINDOWS) {
-                WindowMessage windowMessage = (WindowMessage) data;
-                dealWindowsToPlayer(windowMessage.getPlayer(), windowMessage.getWindow());
-            }
+    public void dispatch(Message message) {
+        String eventType = message.getType().getName();
+        switch(eventType) {
+            case "WindowGameControllerMessage": ; break;
+            default: LOGGER.log(Level.SEVERE, "Type not found");
         }
-    }
-
-    @Override
-    public boolean subscribe(Observable<Object> observable) {
-        if (!observables.contains(observable)) {
-            observables.add(observable);
-            observable.setSubscription(this);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean unsubscribe(Observable<Object> observable) {
-        return false;
     }
 }
