@@ -313,6 +313,7 @@
 [![N|SonarQube](https://preview.ibb.co/dPiY1J/sonar_Qube_Test_Intro.png)](https://preview.ibb.co/dPiY1J/sonar_Qube_Test_Intro.png)
 
 # Testing coverage :
+ - ### Detailed coverage [here](https://github.com/Daniele-Comi/ingsw-project/wiki/Coverage-report)
 [![N|Coverage](https://preview.ibb.co/dJqJPS/coverage1.png)](https://preview.ibb.co/dJqJPS/coverage1.png)
 [![N|Coverage](https://preview.ibb.co/mWudPS/coverage2.png)](https://preview.ibb.co/mWudPS/coverage2.png)
 [![N|Coverage](https://preview.ibb.co/kjUOr7/coverage3.png)](https://preview.ibb.co/kjUOr7/coverage3.png)
