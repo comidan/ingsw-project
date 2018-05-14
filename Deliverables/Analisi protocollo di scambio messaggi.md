@@ -21,7 +21,7 @@ Il nome dell'azione, nel caso di un'azione specifica e identificata univocamente
 
 Lo scambio di messaggi nell'architettura astratta di rete è possibile visuallizzarla in una maniera più relativa all'infrastuttura di rete nel seguente grafico dove è possibile vedere lo scambio di pacchetti dati contententi messaggi in JSON scambiati in questo caso durante l'interazione login tra un client ed il server.
 <p align="center">
-  <img src="https://preview.ibb.co/i0q1oy/Sagrada_Network_Architecture_Example.jpg">
+  <img src="https://preview.ibb.co/hZEXVd/Network_Topology_Sagrada.png">
 </p>
 
 
@@ -76,9 +76,11 @@ Dopo la scelta delle Window, il server invia al client l'ID della _Private Objec
 #### Scelta iniziale window:
 ```json{
   "action": {
-    "choose_window" : {
-      "window_one_id" : "id",
-      "window_two_id" : "id"
+    "choice" : {
+      "window" : {
+        "window_one_id" : "id",
+        "window_two_id" : "id"
+      }
     }
   }
 }
