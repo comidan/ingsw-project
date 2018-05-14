@@ -234,7 +234,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 				}
 			return firstValueMatch <= secondValueMatch ? firstValueMatch * objectiveScore : secondValueMatch * objectiveScore;
 		};
-		constraints = Arrays.asList(new Integer[]{firstValue, secondValue});
+		constraints = Arrays.asList(firstValue, secondValue);
 		objectiveType = CardType.OBJECTIVE_VALUE;
 		cardType = CardType.PUBLIC;
 		value = objectiveScore;

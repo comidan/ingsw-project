@@ -17,9 +17,5 @@ public class DiceTest {
             dice = new Dice(id, Color.RED);
             assertEquals(id, dice.getId());
         }
-
-      /*  dice = new Dice(91, Color.RED);
-        assertTrue(false);
-*/
     }
 }

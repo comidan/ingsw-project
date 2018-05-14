@@ -1,11 +1,9 @@
-
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.rules.CellRule;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
-
 
 import static org.junit.Assert.*;
 

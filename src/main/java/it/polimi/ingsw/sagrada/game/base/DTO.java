@@ -2,13 +2,13 @@ package it.polimi.ingsw.sagrada.game.base;
 
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
-import java.util.HashSet;
+import java.util.Set;
 
 public class DTO {
 
     private Dice dice;
-    private HashSet<Integer> ignoreColorSet;
-    private HashSet<Integer> ignoreValueSet;
+    private Set<Integer> ignoreColorSet;
+    private Set<Integer> ignoreValueSet;
     private Cell[][] windowMatrix;
     private Position currentPosition;
     private Position newPosition;
@@ -21,19 +21,19 @@ public class DTO {
         this.dice = dice;
     }
 
-    public HashSet<Integer> getIgnoreColorSet() {
+    public Set<Integer> getIgnoreColorSet() {
         return ignoreColorSet;
     }
 
-    public void setIgnoreColorSet(HashSet<Integer> ignoreColorSet) {
+    public void setIgnoreColorSet(Set<Integer> ignoreColorSet) {
         this.ignoreColorSet = ignoreColorSet;
     }
 
-    public HashSet<Integer> getIgnoreValueSet() {
+    public Set<Integer> getIgnoreValueSet() {
         return ignoreValueSet;
     }
 
-    public void setIgnoreValueSet(HashSet<Integer> ignoreValueSet) {
+    public void setIgnoreValueSet(Set<Integer> ignoreValueSet) {
         this.ignoreValueSet = ignoreValueSet;
     }
 

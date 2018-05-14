@@ -13,7 +13,6 @@ public class CellRule extends Rule<Dice, Boolean> {
 
 	private int valueConstraint;
 	private Color colorConstraint;
-	private State state;
 	private Function<Dice, Boolean> function;
 
 	/**
@@ -41,13 +40,6 @@ public class CellRule extends Rule<Dice, Boolean> {
 	 */
 	public static CellBuilder<CellRule> builder() {
 		return new CellBuilder<>();
-	}
-
-	/**
-	 * @param state - active or inactive
-	 */
-	public void setState(State state) {
-		this.state = state;
 	}
 
 	/**

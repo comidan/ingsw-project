@@ -5,7 +5,7 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.DTO;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
-import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -45,7 +45,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 				int currentValue = dice.getValue();
 				if(currentValue == 6)
 					return ErrorType.MAX_DICE_VALUE_EXCEEDED;
-				HashSet<Integer> ignoreDiceValueRule = dto.getIgnoreValueSet();
+				Set<Integer> ignoreDiceValueRule = dto.getIgnoreValueSet();
 				if(ignoreDiceValueRule == null)
 					return ErrorType.NULL_DATA;
 				ignoreDiceValueRule.add(dice.getId());
@@ -67,7 +67,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 			int newCol = dto.getNewPosition().getCol();
 			int oldRow = dto.getCurrentPosition().getRow();
 			int oldCol = dto.getCurrentPosition().getCol();
-			HashSet<Integer> ignoreDiceColorRule = dto.getIgnoreColorSet();
+			Set<Integer> ignoreDiceColorRule = dto.getIgnoreColorSet();
 			Cell[][] cells = dto.getWindowMatrix();
 			ErrorType nullError = checkIfNull(cells, ignoreDiceColorRule);
 			if(nullError != ErrorType.NO_ERROR)
@@ -97,7 +97,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 			int newCol = dto.getNewPosition().getCol();
 			int oldRow = dto.getCurrentPosition().getRow();
 			int oldCol = dto.getCurrentPosition().getCol();
-			HashSet<Integer> ignoreDiceValueSet = dto.getIgnoreValueSet();
+			Set<Integer> ignoreDiceValueSet = dto.getIgnoreValueSet();
 			Cell[][] cells = dto.getWindowMatrix();
 			ErrorType nullError = checkIfNull(cells, ignoreDiceValueSet);
 			if(nullError != ErrorType.NO_ERROR)

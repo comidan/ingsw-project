@@ -5,7 +5,6 @@ import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import org.junit.Test;
 
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

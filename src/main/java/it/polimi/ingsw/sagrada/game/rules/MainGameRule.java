@@ -4,8 +4,9 @@ package it.polimi.ingsw.sagrada.game.rules;
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 
@@ -101,11 +102,11 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return dice.getColor();
 	}
 
-	public HashSet<Integer> getIgnoreColorSet() {
+	Set<Integer> getIgnoreColorSet() {
 		return ignoreColorSet;
 	}
 
-	public HashSet<Integer> getIgnoreValueSet() {
+	Set<Integer> getIgnoreValueSet() {
 		return ignoreValueSet;
 	}
 }

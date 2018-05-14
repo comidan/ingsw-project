@@ -1,8 +1,5 @@
-
-
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.base.RoundStateEnum;
 import it.polimi.ingsw.sagrada.game.playables.*;
 
@@ -10,20 +7,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Test;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DiceControllerTest {
-    List<Dice> pickedDice;
-
-// test execution is simultaneous, test will always fail, how to fix?
+    private List<Dice> pickedDice;
 
     @Test
     public void testDicePick() {
         int numberOfPlayers = 3;
         assertEquals(90, DiceController.getDiceController(numberOfPlayers).getBagSize());
-        pickedDice = new ArrayList<Dice>();
-        List<Dice> diceCompared = new ArrayList<Dice>();
+        pickedDice = new ArrayList<>();
+        List<Dice> diceCompared = new ArrayList<>();
         DiceController diceController = DiceController.getDiceController(numberOfPlayers);
         diceController.getDice(RoundStateEnum.SETUP_ROUND);
         pickedDice = diceController.getDraft();

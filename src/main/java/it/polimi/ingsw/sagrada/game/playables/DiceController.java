@@ -1,8 +1,10 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
-import it.polimi.ingsw.sagrada.game.base.*;
+import it.polimi.ingsw.sagrada.game.base.Colors;
+import it.polimi.ingsw.sagrada.game.base.Picker;
+import it.polimi.ingsw.sagrada.game.base.RoundStateEnum;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

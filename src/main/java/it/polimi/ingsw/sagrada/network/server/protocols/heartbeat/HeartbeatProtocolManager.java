@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -11,16 +12,16 @@ import java.util.logging.Logger;
 
 public class HeartbeatProtocolManager implements Runnable, Observer<HeartbeatState, HeartbeatEvent>, NetworkUtils {
 
-    private int port;
+    private static final Logger LOGGER = Logger.getLogger(HeartbeatProtocolManager.class.getName());
+
     private HeartbeatListener listener;
     private ExecutorService executor;
     private ExecutorService serverExecutor;
     private DatagramSocket datagramSocket;
-    private HashSet<String> monitoredHosts;
+    private Set<String> monitoredHosts;
 
     public HeartbeatProtocolManager(HeartbeatListener listener, int port) throws IOException {
         this.listener = listener;
-        this.port = port;
         datagramSocket = new DatagramSocket(port);
         monitoredHosts = new HashSet<>();
         executor = Executors.newCachedThreadPool();
@@ -46,7 +47,7 @@ public class HeartbeatProtocolManager implements Runnable, Observer<HeartbeatSta
                 }
             }
             catch (IOException exc) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, exc.getMessage());
+                LOGGER.log(Level.SEVERE, exc.getMessage());
             }
         }
     }

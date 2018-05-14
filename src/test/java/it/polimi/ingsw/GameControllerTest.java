@@ -4,7 +4,6 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.sagrada.game.base.*;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
-import it.polimi.ingsw.sagrada.game.playables.DiceController;
 import org.junit.Test;
 
 import java.util.ArrayList;

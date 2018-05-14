@@ -17,10 +17,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class PublicObjectiveDealerTest {
-    private Cell oneR, twoY, threeG, fourL, fiveP, sixL, oneG, oneY, sixG;
+    private Cell oneR;
+    private Cell twoY;
+    private Cell threeG;
+    private Cell fourL;
+    private Cell fiveP;
+    private Cell sixL;
+    private Cell oneG;
+    private Cell oneY;
+    private Cell sixG;
 
     public PublicObjectiveDealerTest() {
-        Dice DoneR, DtwoY, DthreeG, DfourL, DfiveP, DsixL, DoneG, DoneY, DsixG;
+        Dice DoneR;
+        Dice DtwoY;
+        Dice DthreeG;
+        Dice DfourL;
+        Dice DfiveP;
+        Dice DsixL;
+        Dice DoneG;
+        Dice DoneY;
+        Dice DsixG;
         CellRule cellRule = CellRule.builder().build();
 
         oneR = new Cell(cellRule);

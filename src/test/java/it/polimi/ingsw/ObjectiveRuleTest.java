@@ -15,8 +15,18 @@ import static org.junit.Assert.assertEquals;
 
 public class ObjectiveRuleTest {
 
-    Cell one, two, three, four, five, six;
-    Cell red, yellow, green, blue, purple;
+    private Cell one;
+    private Cell two;
+    private Cell three;
+    private Cell four;
+    private Cell five;
+    private Cell six;
+    private Cell red;
+    private Cell yellow;
+    private Cell green;
+    private Cell blue;
+    private Cell purple;
+
 
     public ObjectiveRuleTest() {
         CellRule cellRule = CellRule.builder().build();

@@ -12,6 +12,10 @@ public class Colors {
     public static final Color PURPLE = new Color(159, 59, 124);
     public static final Color RED = new Color(198, 47, 39);
 
+
+    private Colors() {
+        
+    }
     /**
      * @return list representation of allowed colors
      */

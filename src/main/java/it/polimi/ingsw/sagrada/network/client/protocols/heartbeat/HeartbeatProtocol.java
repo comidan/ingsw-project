@@ -9,7 +9,7 @@ class HeartbeatProtocol implements Runnable {
     private UDPHeartbeatSender udpHeartbeatSender;
     private int port;
 
-    public HeartbeatProtocol(String serverAddress, int port) throws IOException {
+    HeartbeatProtocol(String serverAddress, int port) throws IOException {
         this.serverAddress = InetAddress.getByName(serverAddress);
         udpHeartbeatSender = new UDPHeartbeatSender();
         this.port = port;

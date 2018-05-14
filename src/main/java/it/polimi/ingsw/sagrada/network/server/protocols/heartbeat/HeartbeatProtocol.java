@@ -21,7 +21,7 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     private String data;
     private Observer<HeartbeatState, HeartbeatEvent> observer;
 
-    public HeartbeatProtocol(DatagramSocket datagramSocket, Observer observer) {
+    HeartbeatProtocol(DatagramSocket datagramSocket, Observer<HeartbeatState, HeartbeatEvent> observer) {
         executor = Executors.newSingleThreadExecutor();
         this.datagramSocket = datagramSocket;
         this.observer = observer;
@@ -31,9 +31,9 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
      * @return received heartbeat
      */
     private byte[] receiveHeartbeat() throws IOException{
-        byte[] data = receiveData(datagramSocket);
-        this.data = new String(data);
-        return data;
+        byte[] payload = receiveData(datagramSocket);
+        this.data = new String(payload);
+        return payload;
     }
 
     /**
@@ -58,29 +58,40 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
                     Thread.currentThread().interrupt();
                 }
                 timeElapsed += TIME_INTERVAL;
-                if (timeElapsed > TIME_LOSS_COMMUNICATION_FRAME * TIME_INTERVAL && !lossCommsAlreadyNotified) {
-                    event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
-                    notify(HeartbeatState.COMMUNICATION_LOST, event);
-                    lossCommsAlreadyNotified = true;
-                }
-                if (timeElapsed > TIME_LIFE_FRAMES * TIME_INTERVAL) {
-                    event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
-                    notify(HeartbeatState.HOST_OFFLINE, event);
-                    isDead = true;
-                    asynchronousHeartbeat.cancel(true);
-                }
+                if (timeElapsed > TIME_LOSS_COMMUNICATION_FRAME * TIME_INTERVAL && !lossCommsAlreadyNotified)
+                    lossCommsAlreadyNotified = notifyLostComm(timeElapsed);
+
+                if (timeElapsed > TIME_LIFE_FRAMES * TIME_INTERVAL)
+                   isDead = notifyDeath(timeElapsed, asynchronousHeartbeat);
             }
             if(!isDead) {
-                event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
-                if (lossCommsAlreadyNotified)
-                    notify(HeartbeatState.HOST_ONLINE, event);
-                else
-                    notify(HeartbeatState.HEARTBEAT_RECEIVED, event);
+                notifyHeartbeat(lossCommsAlreadyNotified, timeElapsed);
                 lossCommsAlreadyNotified = false;
                 timeElapsed = 0;
                 asynchronousHeartbeat = executor.submit(this::receiveHeartbeat);
             }
         }
+    }
+
+    private boolean notifyLostComm(int timeElapsed) {
+        HeartbeatEvent event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
+        notify(HeartbeatState.COMMUNICATION_LOST, event);
+        return true;
+    }
+
+    private boolean notifyDeath(int timeElapsed, Future asynchronousHeartbeat) {
+        HeartbeatEvent event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
+        notify(HeartbeatState.HOST_OFFLINE, event);
+        asynchronousHeartbeat.cancel(true);
+        return true;
+    }
+
+    private void notifyHeartbeat(boolean lossCommsAlreadyNotified, int timeElapsed) {
+        HeartbeatEvent event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
+        if (lossCommsAlreadyNotified)
+            notify(HeartbeatState.HOST_ONLINE, event);
+        else
+            notify(HeartbeatState.HEARTBEAT_RECEIVED, event);
     }
 
     @Override

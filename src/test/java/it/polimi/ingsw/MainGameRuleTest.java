@@ -8,7 +8,7 @@ import it.polimi.ingsw.sagrada.game.rules.ErrorType;
 import it.polimi.ingsw.sagrada.game.rules.RuleController;
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Color;
 
 import static org.junit.Assert.assertSame;
 

@@ -2,8 +2,8 @@ package it.polimi.ingsw.sagrada.game.rules;
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 
@@ -20,11 +20,11 @@ public class RuleController {
 		return new CellBuilder();
 	}
 
-	public HashSet<Integer> getIgnoreValueSet() {
+	public Set<Integer> getIgnoreValueSet() {
 		return mainGameRule.getIgnoreValueSet();
 	}
 
-	public HashSet<Integer> getIgnoreColorSet() {
+	public Set<Integer> getIgnoreColorSet() {
 		return mainGameRule.getIgnoreColorSet();
 	}
 
