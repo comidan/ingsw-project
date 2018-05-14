@@ -19,6 +19,12 @@ Con "tipo di azione" si entra ulteriormente nel dettaglio: si indica infatti qua
 Fanno parte del "contenuto dell'azione" tutte le informazioni aggiuntive necessarie per portare a termine l'azione; ad esempio, in un messaggio di login questa sezione conterrà le credenziali dell'utente, mentre in un messaggio di scelta indicherà la scelta effettuata fra le opzioni disponibili, quali per esempio le coordinate a cui si intende posizionare un dado sulla Window. 
 Il nome dell'azione, nel caso di un'azione specifica e identificata univocamente, indica il nome (che costituisce una breve descrizione dell'azione) attraverso il quale è possibile risalire all'azione stessa.
 
+La struttura dei messaggi può essere visualizzata attraverso il seguente albero
+
+<p align="center">
+  <img src="https://preview.ibb.co/mJmqYy/command_Tree.jpg">
+</p>
+
 Lo scambio di messaggi nell'architettura astratta di rete è possibile visuallizzarla in una maniera più relativa all'infrastuttura di rete nel seguente grafico dove è possibile vedere lo scambio di pacchetti dati contententi messaggi in JSON scambiati in questo caso durante l'interazione login tra un client ed il server.
 <p align="center">
   <img src="https://preview.ibb.co/hZEXVd/Network_Topology_Sagrada.png">
