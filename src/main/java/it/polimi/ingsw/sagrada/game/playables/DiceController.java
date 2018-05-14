@@ -1,23 +1,30 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Colors;
+import it.polimi.ingsw.sagrada.game.base.GameController;
 import it.polimi.ingsw.sagrada.game.base.Picker;
 import it.polimi.ingsw.sagrada.game.base.RoundStateEnum;
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.DiceGameControllerEvent;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class DiceController {
+public class DiceController implements Channel<DiceEvent> {
     private static DiceController diceController;
     private List<Dice> draftPool;
     private List<Dice> bagPool;
     private static final int DICE_PER_COLOR = 18;
     private int diceNumber;
     private int numberOfPlayers; // missing method to fetch this value, temporary value for testing
-    private int currentId; //FOR TESTING, MUST BE REMOVED !
+    private GameController gameController;
+
+    private static final Logger LOGGER = Logger.getLogger(GameController.class.getName());
 
     /**
      * initialize pools
@@ -31,8 +38,9 @@ public class DiceController {
                 bagPool.add(new Dice(id++, color));
             }
         }
+        gameController = GameController.getGameController();
         this.numberOfPlayers = numberOfPlayers;
-        diceNumber = numberOfPlayers * 2 + 1;
+        diceNumber = this.numberOfPlayers * 2 + 1;
     }
 
     public static DiceController getDiceController(int numberOfPlayers) {
@@ -45,7 +53,7 @@ public class DiceController {
 
     public int getBagSize() {
         return bagPool.size();
-    }
+    } //TESTING
 
     /**
      * @return dice from draft
@@ -53,29 +61,7 @@ public class DiceController {
 
     public List<Dice> getDraft() {
         return draftPool;
-    }
-
-    private List<Dice> getDiceDraft(int diceId) {
-        List<Dice> pickedDice = new ArrayList<>();
-        for (Dice dice : draftPool) {
-            if (dice.getId() == this.currentId) pickedDice.add(dice); //to be changed to diceId
-        }
-
-        return pickedDice;
-    }
-
-    /**
-     * @return num-dices from bag
-     */
-    private void bagToDraft() {
-
-        Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
-        for (int i = 0; i < diceNumber; i++) {
-            Dice dice = bagPicker.next();
-            dice.setValue(generateRandomInt(6));
-            draftPool.add(dice);
-        }
-    }
+    } //TESTING
 
     /**
      * @return one or more dice
@@ -83,8 +69,6 @@ public class DiceController {
 
 //THIS MUST BE FIXED
     public List<Dice> getDice(RoundStateEnum stateEnum) {
-        Random rand = new Random();
-        int id = rand.nextInt(90) + 1;
         List<Dice> pickedDice = new ArrayList<>();
 
         switch (stateEnum) {
@@ -92,39 +76,48 @@ public class DiceController {
                 bagToDraft();
                 break;
             case IN_GAME:
-                pickedDice = getDiceDraft(id);
+                //pickedDice = getDiceDraft(id);
                 break;
             case END_ROUND:
                 pickedDice = putDiceScoreTrack();
                 break;
+                default: LOGGER.log(Level.SEVERE, "Wrong state of round");
         }
         return pickedDice;
     }
 
-    //CAN BE IMPROVED
-    public List<Dice> putDiceScoreTrack() {
-        List<Dice> takenDiceList = new ArrayList<>(draftPool);
-        for (Dice dice : draftPool) {
-
-            takenDiceList.add(dice);
-
-        }
-
+    private void bagToDraft() {
         draftPool.clear();
-
-        return takenDiceList;
-
+        Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
+        for (int i = 0; i < diceNumber; i++) {
+            Dice dice = bagPicker.next();
+            dice.roll();
+            draftPool.add(dice);
+        }
     }
 
-
-    private int generateRandomInt(int bound) {
-        Random rand = new Random();
-        return rand.nextInt(bound) + 1;
+    private Dice getDiceDraft(int idDice) {
+        for(Dice dice:draftPool) {
+            if(dice.getId()==idDice) {
+                draftPool.remove(dice);
+                return dice;
+            }
+        }
+        return null;
     }
 
-    //FOR TESTING, IT MUST BE REMOVED!
-    public void setId(int id) {
-        currentId = id;
+    private List<Dice> putDiceScoreTrack() {
+        return new ArrayList<>(draftPool);
+    }
 
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
+
+    @Override
+    public void dispatch(DiceEvent message) {
+        Dice dice = getDiceDraft(message.getIdDice());
+        DiceGameControllerEvent diceGameControllerEvent = new DiceGameControllerEvent(dice, message);
+        gameController.dispatch(diceGameControllerEvent);
     }
 }

@@ -50,8 +50,6 @@ t
 Dsrc/main/java/it/polimi/ingsw/sagrada/game/playables/ScoreTrack.java,8/9/896dc2ea23876ef69a86d95012f4c0e78844fdbb
 t
 Dsrc/main/java/it/polimi/ingsw/sagrada/game/playables/RoundTrack.java,1/2/12a2ea1ae2c7196818306828fd30ae19d1e5c14a
-q
-Asrc/main/java/it/polimi/ingsw/sagrada/game/base/WindowParser.java,c/3/c31d4e938a5e49282379b5c626f60131f748e319
 a
 1src/test/java/it/polimi/ingsw/RoundTrackTest.java,1/9/19d8aa506daa34ac3ae2aa6afb95c712655401cc
 r

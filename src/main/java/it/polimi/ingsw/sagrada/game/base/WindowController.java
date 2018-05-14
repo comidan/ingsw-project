@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class WindowParser implements Channel<WindowEvent> {
+public class WindowController implements Channel<WindowEvent> {
 
     private static final String BASE_PATH = "res/json/window/";
     private static final int WINDOWS_PER_CARD = 2;
@@ -32,7 +32,7 @@ public class WindowParser implements Channel<WindowEvent> {
     private JSONArray windowsArray;
     private GameController gameController;
 
-    public WindowParser() {
+    public WindowController() {
         JSONParser parser;
         parser = new JSONParser();
         List<Integer> id=new ArrayList<>();
@@ -47,18 +47,6 @@ public class WindowParser implements Channel<WindowEvent> {
         }
 
         gameController = GameController.getGameController();
-    }
-
-    /**
-     * ONLY FOR TESTING
-    */
-    private List<Player> generatePlayer() {
-        List<Player> players = new ArrayList<>();
-        players.add(new Player(0));
-        players.add(new Player(1));
-        players.add(new Player(2));
-
-        return players;
     }
 
     public boolean isWindowsLeft() {

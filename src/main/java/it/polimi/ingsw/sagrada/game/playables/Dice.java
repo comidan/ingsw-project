@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
 import java.awt.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -39,5 +40,7 @@ public class Dice {
         this.value = value;
     }
 
-
+    public void roll() {
+        value = ThreadLocalRandom.current().nextInt(7);
+    }
 }

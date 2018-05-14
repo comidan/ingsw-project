@@ -6,8 +6,9 @@ import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
-import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
+import it.polimi.ingsw.sagrada.game.intercomm.DiceGameControllerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.WindowGameControllerEvent;
 import it.polimi.ingsw.sagrada.game.playables.*;
 
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.polimi.ingsw.sagrada.game.base.DataType.WINDOW_MESSAGE;
 import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
 
 /**
@@ -34,7 +34,7 @@ public class GameController implements Channel<Message> {
     private StateIterator stateIterator = StateIterator.getInstance();
     private RoundIterator roundIterator = RoundIterator.getRoundIterator();
     private PlayerIterator playerIterator;
-    private WindowParser windowParser;
+    private WindowController windowController;
     private static GameController gameController;
 
     private int numWindowDealed = 0;
@@ -46,7 +46,7 @@ public class GameController implements Channel<Message> {
         cardController = new CardController();
         diceController = DiceController.getDiceController(players.size());
         playerIterator = PlayerIterator.getPlayerIterator(players);
-        windowParser = new WindowParser();
+        windowController = new WindowController();
     }
 
     public static GameController getGameController(List<Player> players) {
@@ -104,7 +104,7 @@ public class GameController implements Channel<Message> {
 
     private void dealWindowState() {
         for(Player p:players) {
-            List<Integer> windowsId = windowParser.dealWindowId();
+            List<Integer> windowsId = windowController.dealWindowId();
             //this id will be passed to Player in the view
         }
     }
@@ -137,6 +137,10 @@ public class GameController implements Channel<Message> {
         }
     }
 
+    private void setDiceInWindow(int idPlayer, Dice dice, Position position) {
+        players.get(idPlayer).getWindow().setCell(dice, position.getCol(), position.getRow());
+    }
+
 
     public void scoreState() {
         List<Integer> scoreList = new ArrayList<>();
@@ -162,7 +166,13 @@ public class GameController implements Channel<Message> {
     public void dispatch(Message message) {
         String eventType = message.getType().getName();
         switch(eventType) {
-            case "WindowGameControllerMessage": ; break;
+            case "WindowGameControllerEvent":
+                WindowGameControllerEvent msgW = (WindowGameControllerEvent)message;
+                dealWindowsToPlayer(players.get(msgW.getIdPlayer()), msgW.getWindow()); break;
+            case "DiceGameControllerEvent":
+                DiceGameControllerEvent msgD = (DiceGameControllerEvent)message;
+                setDiceInWindow(msgD.getIdPlayer(), msgD.getDice(), msgD.getPosition());
+                break;
             default: LOGGER.log(Level.SEVERE, "Type not found");
         }
     }
