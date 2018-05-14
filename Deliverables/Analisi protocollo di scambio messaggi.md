@@ -76,9 +76,11 @@ Dopo la scelta delle Window, il server invia al client l'ID della _Private Objec
 #### Scelta iniziale window:
 ```json{
   "action": {
-    "choose_window" : {
-      "window_one_id" : "id",
-      "window_two_id" : "id"
+    "choice" : {
+      "window" : {
+        "window_one_id" : "id",
+        "window_two_id" : "id"
+      }
     }
   }
 }
