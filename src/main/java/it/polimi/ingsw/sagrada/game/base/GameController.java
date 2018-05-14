@@ -128,9 +128,7 @@ public class GameController implements Observer<Object> {
                     diceController.getDice(RoundStateEnum.END_ROUND);
                     break;
             }
-
         }
-
     }
 
 

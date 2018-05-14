@@ -18,7 +18,7 @@ public class ScoreTrackTest {
 
     @Test
     public void testScoreTrack() {
-        Player playerOne = new Player(null, null);
+        Player playerOne = new Player(0);
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.RED).build();
         ObjectiveCard card = new ObjectiveCard(1, "test", objectiveRule);
         ObjectiveRule objectiveRulePublic = ObjectiveRule.builder().setValueCoupleObjective(2, 5, 6).build();

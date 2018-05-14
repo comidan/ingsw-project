@@ -1,10 +1,7 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.sagrada.game.base.GameController;
 import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.base.PlayerIterator;
-import it.polimi.ingsw.sagrada.game.cards.CardController;
-import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -16,12 +13,9 @@ public class PlayerIteratorTest {
 
     @Test
     public void testPlayerIterator() {
-        GameController gameController = GameController.getGameController();
-        CardController cardController = new CardController();
-        ToolManager toolManager = ToolManager.getInstance(cardController.dealTool());
-        Player playerOne = new Player(gameController, toolManager);
-        Player playerTwo = new Player(gameController, toolManager);
-        Player playerThree = new Player(gameController, toolManager);
+        Player playerOne = new Player(0);
+        Player playerTwo = new Player(1);
+        Player playerThree = new Player(2);
         List<Player> playerList = new ArrayList<>();
         playerList.add(playerOne);
         playerList.add(playerTwo);
