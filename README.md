@@ -5,9 +5,10 @@
 </p>
 
 # Project team
- - [Daniele Comi](https://www.linkedin.com/in/daniele-comi-05886981) (10528029)
- - Valerio Colombo (10499221)
- - Valentina Deda (10488563)
+ - ### Group number 34
+    - [Daniele Comi](https://www.linkedin.com/in/daniele-comi-05886981) (10528029)
+    - Valerio Colombo (10499221)
+    - Valentina Deda (10488563)
 
 
 # Project status
