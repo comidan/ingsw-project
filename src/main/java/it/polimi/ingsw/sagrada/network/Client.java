@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import java.net.*;
 import java.io.*;
 
-public class Client {
+public class Client implements Runnable {
 
     private Socket socket;
     private BufferedReader inSocket;
@@ -99,6 +99,10 @@ public class Client {
             } catch (IOException ex) {
             }
         }
+    }
+
+    public void run (){
+
     }
 
 }
