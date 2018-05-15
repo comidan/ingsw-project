@@ -220,7 +220,7 @@ Il canali TCP aperti saranno diversi :
  - Canale TCP di una sala d'attesa e futura partita
  - Vari canali TCP per i client connessi
 ### Contromisure
-Per la gestione delle interruzioni di connessione verrà utilizzato un protocollo denonimato Heartbeat, simile ad uno standard descritto dall'IEEE 1284.
+Per la gestione delle interruzioni di connessione verrà utilizzato un protocollo denonimato Heartbeat, simile ad uno standard descritto dall'IEEE 1278.
 Esso permetterà di ascoltare attraverso il protocollo di trasporto UDP ping inviati dai client al server permettendo attaverso la creazione di eventi catturati da eventuali listener lo stato di un singolo client
 Una maggiore descrizione di tale protocollo è descritta successivamente
 
