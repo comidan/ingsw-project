@@ -226,7 +226,7 @@ Una maggiore descrizione di tale protocollo è descritta successivamente
 
 
 ### Utilizzo del protocollo UDP
-Il protocollo UDP viene utlizzato come detto in precedenza come appoggio per il protoollo Heartbeat controllanete lo stato dei client.
+Il protocollo UDP viene utilizzato come detto in precedenza come appoggio per il protocollo Heartbeat controllando lo stato dei client.
 
 ### Descrizione protocollo Heartbeat
 Il protocollo heartbeat è strutturato su una continua notifica di un datagramma UDP con un delay di 1000 millisecondi. Nel campo payload è contenuto l'ID identificativo dal client
