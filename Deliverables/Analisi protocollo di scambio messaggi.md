@@ -14,7 +14,7 @@ In particolare, un generico messaggio avrà la seguente struttura:
 } 
 ```
 
-Con "tipo di messaggio" si intende sinteticamente il genere di contenuto del messaggio: ad esempio, la parola chiave _action_ indicherà che il messaggio contiene un'azione, mentre la parola chiave _response_ indicherà che si tratta di una risposta. 
+Con "tipo di messaggio" si intende sinteticamente il genere di contenuto del messaggio: ad esempio, la parola chiave _action_ indicherà che il messaggio contiene un'azione, mentre invece la parola chiave "response" indica che si tratta della risposta a un messaggio inviato. 
 Con "tipo di azione" si entra ulteriormente nel dettaglio: si indica infatti quale genere di azione, fra quelle disponibili, si intende compiere. Dunque la parola "login" indicherà la richiesta di registrazione, la parola "settings" indicherà il settaggio di alcune impostazioni di gioco, la parola "choice" indicherà un'azione di scelta fra varie opzioni. 
 Fanno parte del "contenuto dell'azione" tutte le informazioni aggiuntive necessarie per portare a termine l'azione; ad esempio, in un messaggio di login questa sezione conterrà le credenziali dell'utente, mentre in un messaggio di scelta indicherà la scelta effettuata fra le opzioni disponibili, quali per esempio le coordinate a cui si intende posizionare un dado sulla Window. 
 Il nome dell'azione, nel caso di un'azione specifica e identificata univocamente, indica il nome (che costituisce una breve descrizione dell'azione) attraverso il quale è possibile risalire all'azione stessa.
