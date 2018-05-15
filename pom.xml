@@ -106,5 +106,15 @@
       <scope>system</scope>
       <systemPath>${basedir}/libs/json-simple-1.1.1.jar</systemPath>
     </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.11</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.ucanaccess</groupId>
+      <artifactId>ucanaccess</artifactId>
+      <version>3.0.1</version>
+    </dependency>
   </dependencies>
 </project>
