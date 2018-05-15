@@ -36,6 +36,7 @@
 
 #IntelliJ
 workspace.xml
+*.iml
 
 #SonarQube
 .scannerwork/
