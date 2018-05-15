@@ -40,70 +40,85 @@ Il server avviandosi creerà un servizio basato su TCP-IP in ascolto su una port
 Questa richiesta di login contiene le credenziali del giocatore che si connette al server. Il server risponde con una conferma che segnala che il login è andato a buon fine.
 
 #### Client request
-```json{
+```
   "action": {
     "login" : {
       "username" : "username",
       "authentication" : "auth"
     }
   }
-}
 ```
 #### Server response :
-```json{
-  "action": {
-    "response" : {
+```
+  "response": {
+    "login" : {
       "valid_response" : "response",
       "metadata" : "metadata"
     }
   }
-}
 ```
 
 Successivamente, il client manda un messaggio in cui sono indicate le proprie scelte per quanto riguardano l'interfaccia di utilizzo (ovvero la scelta fra CLI e GUI) e per quanto riguardano le modalità di invio dati (ovvero la scelta fra socket e RMI). Anche la ricezione di questa richiesta viene confermata dal server.
 #### Client request : 
-```json{
+```
   "action": {
     "settings" : {
       "interface" : "gui",
       "protocol" : "rmi"
     }
   }
-}
 ```
 #### Server response :
-```json{
-  "action": {
-    "response" : {
+```
+  "response": {
+    "settings" : {
       "valid_response" : "response",
       "metadata" : "metadata"
     }
   }
-}
 ```
 Il server poi inoltra al client gli ID delle due _Window Card_ proposte: il client manda al server un messaggio che indica quale delle due _Window Card_ intenda utilizzare e se della carta scelta intenda utilizzare il fronte o il retro. 
 Dopo la scelta delle Window, il server invia al client l'ID della _Private Objective Card_ a lui assegnata. 
+
+#### Inoltro id della window al client:
+```
+  "response": {
+    "choice" : {
+      "windows" : [
+        {
+        "window_id_1" : "id_1",
+        "window_side_1" : "side_1"},
+        {
+        "window_id_2" : "id_2",
+        "window_side_2" : "side_2"
+        }
+      ]
+    }
+  }
+```
+
 #### Scelta iniziale window:
-```json{
+```
   "action": {
     "choice" : {
       "window" : {
-        "window_one_id" : "id",
-        "window_two_id" : "id"
+        "window_id" : "id",
+        "window_side" : "side"
       }
     }
   }
-}
+
 ```
 
 Durante il gioco verrà effettuato uno scambio di messaggi non dissimile dai precedenti, permettendo un'elevata modularità e dinamicità nella comunicazione tra Server e i vari Client, nonché tra le classi interne di un dato processo in esecuzione. Qui si riporta di seguito un esempio per ciascuna delle tipologie rilevanti di messaggio.
 
 #### Posizionamento di un dado nella vetrata :
-```json{
+```
   "action": {
     "choice" : {
       "move_dice" : {
         "dice_id" : "dice_id",
+        "source" : "source",
         "position" : {
           "x" : "x",
           "y" : "y"
@@ -111,10 +126,34 @@ Durante il gioco verrà effettuato uno scambio di messaggi non dissimile dai pre
       }
     }
   }
-}
 ```
+
+#### Inoltro id dei dadi generati dal model :
+```
+  "response": {
+    "choice" : {
+      "move_dice" : {
+        "destination" : "destination",
+        "dice" : [
+          {
+          "dice_id_1" : "dice_id_1",
+          "value" : "value",
+          "color" : "color"
+          },
+          {
+          "dice_id_1" : "dice_id_1",
+          "value" : "value",
+          "color" : "color"
+          },
+          ...
+        ]
+      }
+    }
+  }
+```
+
 #### Acquisto di una toolcard :
-```json{
+```
   "action": {
     "choice" : {
       "buy_toolcard" : {
@@ -122,10 +161,22 @@ Durante il gioco verrà effettuato uno scambio di messaggi non dissimile dai pre
       }
     }
   }
-}
 ```
+
+#### Risposta del server per l'acquisto di una toolcard :
+```
+  "response": {
+    "choice" : {
+      "buy_toolcard" : {
+        "toolcard_id" : "toolcard_id",
+        "purchasable" : "purchasable"
+      }
+    }
+  }
+```
+
 #### Utilizzo toolcard :
-```json{
+```
   "action": {
     "choice" : {
       "toolcard" : {
@@ -143,5 +194,16 @@ Durante il gioco verrà effettuato uno scambio di messaggi non dissimile dai pre
       }
     }
   }
-}
+```
+
+#### Risposta Server riguardo l'utilizzo di una toolcard :
+```
+  "response": {
+    "choice" : {
+      "toolcard" : {
+        "toolcard_id" : "toolcard_id",
+        "used" : "used"
+      }
+    }
+  }
 ```
