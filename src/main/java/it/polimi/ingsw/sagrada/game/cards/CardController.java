@@ -6,9 +6,9 @@ import it.polimi.ingsw.sagrada.game.rules.ObjectiveBuilder;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 import it.polimi.ingsw.sagrada.game.rules.ToolBuilder;
 import it.polimi.ingsw.sagrada.game.rules.ToolRule;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 
 import java.awt.*;
