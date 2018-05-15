@@ -2,7 +2,7 @@ package it.polimi.ingsw.sagrada.network;
 
 public class LoginManager {
 
-    public boolean checkLogin(){
+    public boolean checkLogin() {
         //search in database
         return false;
     }

@@ -18,7 +18,7 @@ public class Server implements Runnable {
     Socket socket;
 
 
-//move to private method called in constructor
+    //move to private method called in constructor
     Server() {
         try {
             serverSocket = new ServerSocket(port);
@@ -33,20 +33,17 @@ public class Server implements Runnable {
 
         mainExecutor = Executors.newSingleThreadExecutor();
         mainExecutor.submit(this);
-    //    executor = Executors.newCachedThreadPool();
+        //    executor = Executors.newCachedThreadPool();
 
         while (!mainExecutor.isShutdown()) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                socketClient= new SocketClient(clientSocket);
-                if(loginManager.checkLogin()) {
+                socketClient = new SocketClient(clientSocket);
+                if (loginManager.checkLogin()) {
 
-                }
+                } else System.out.println("Login Failed");
 
-                else System.out.println("Login Failed");
-
-            }
-            catch(IOException exc){
+            } catch (IOException exc) {
 
             }
 
