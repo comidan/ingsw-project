@@ -207,3 +207,80 @@ Durante il gioco verrà effettuato uno scambio di messaggi non dissimile dai pre
     }
   }
 ```
+
+### Analisi protocollo di trasporto
+
+Per lo scambio di informaioni su stato e funzionamento basilare del sistema clients server vengono utilizzati entrambi i protocolli della pila protocollare
+ISO/OSI a livello 3, ovvero UDP e TCP.
+
+#### Utilizzo del protocollo TCP
+Il protocollo TCP viene utilizzato per lo scambio dei dati di gioco e delle azioni che avvengono in base alle mosse dei client che avvengono nei loro applicativi.
+Il canali TCP aperti saranno diversi : 
+ - Canale TCP in ascolto per nuovi client in arrivo
+ - Canale TCP di una sala d'attesa e futura partita
+ - Vari canali TCP per i client connessi
+### Contromisure
+Per la gestione delle interruzioni di connessione verrà utilizzato un protocollo denonimato Heartbeat, simile ad uno standard descritto dall'IEEE 1284.
+Esso permetterà di ascoltare attraverso il protocollo di trasporto UDP ping inviati dai client al server permettendo attaverso la creazione di eventi catturati da eventuali listener lo stato di un singolo client
+Una maggiore descrizione di tale protocollo è descritta successivamente
+
+
+### Utilizzo del protocollo UDP
+Il protocollo UDP viene utlizzato come detto in precedenza come appoggio per il protoollo Heartbeat controllanete lo stato dei client.
+
+### Descrizione protocollo Heartbeat
+Il protocollo heartbeat è strutturato su una continua notifica di un datagramma UDP con un delay di 1000 millisecondi. Nel campo payload è contenuto l'ID identificativo dal client
+costituito dall'indirizzo MAC della schede di rete in corrente utilizzo dalla sorgente del ping.
+Il server rimarrà in ascolto dei vari ping smistandoli a seconda dell'identificatore MAC address e gestendo i vari stati che essi stessi andranno a definire.
+Ogni qualvolta il server noterà che dopo un delay di 10000 millisecondi non ha ricevuto alcun ping dal client notificherà attraverso un evento l'utilizzatore di questo protocollo della
+probabile perdita di connessione consigliando di limitare lo scambio di dati attraverso un protocollo connessione-dipendente come TCP.
+Se entro 30000 millisecondi si riceverà con tale identificativo il client risulterà di nuovo connesso e verrà ripristanato il canale TCP di comunicazione.
+Altrimenti il client verrà considerato completamente offline.
+Tutto questo verrà notificato come sopra citato attraverso una gestione ad eventi come qui sotto d'esempio è mostrato : 
+ 
+ 
+ 
+    @Override
+     public void onHeartbeat(HeartbeatEvent event) {
+         System.out.println("Received heartbet from " + event.getSource() + " in " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
+     }
+ 
+     @Override
+     public void onDeath(HeartbeatEvent event) {
+         System.out.println(event.getSource() + " died after " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
+     }
+ 
+     @Override
+     public void onLossCommunication(HeartbeatEvent event) {
+         System.out.println("Communication lost of " + event.getSource() + " in " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
+     }
+ 
+     @Override
+     public void onReacquiredCommunication(HeartbeatEvent event) {
+         System.out.println("Communication reacquired of " + event.getSource() + " in " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
+     }
+ 
+     @Override
+     public void onAcquiredCommunication(HeartbeatEvent event) {
+         System.out.println(event.getSource() + " connected at " + event.getBeatTimeStamp());
+     }
+     
+  Il codice d'esempio sopra mostra la cattura dei vari eventi sugli stati di un client, sarà poi compito di chi implementa il listener
+  la decisione su cosa fare alla cattura di un certo tipo di evento.
+  
+  L'evento generato oltre a contenere il payload conterrà anche il delay passato rispetto al precedente con il suo stesso payload identificatore e il timestamp della corrent ricezione del ping.
+  
+  L'utilizzo di questo protocollo permetterà una migliore gestione dello stato delle connessioni tra client e serer ed un maggiore controllo dei relativi errori possibili.
+  
+  
+  ### Analisi creazione server attraverso socket
+  
+  La creazione del server attraverso i socket porta una peculiarità da non sottovalutare, ovvero la scelta della porta.
+  Non è possibile pensare di inizializzare un server in ascolto su una certa porta qualunque in un computer comune perchè comporta la possibilità
+  di incorrere all'errore dovuto al corrente utilizzo di una porta da parte di un altro processo all'interno del sistema.
+  Per evitare ciò verrà utilizzato un sistema di discovery port, dove attraverso le primitive TCP connect() permetteremo l'invio di un pacchetto SYN
+  attentendo il tipo di risposta che verrà suddivisa in SYN|ACK e RST, il primo significherà una porta già in utilizzo mentre il secondo flag RESET
+  ci indicherà l'impossibilità di apertura di una connessione e che quindi la porta è libera, una seconda tecnica sarà l'invio di un pacchetto di tipo FIN perchè accettato da un maggior numero di firewall.
+  La risposta attesa sarà sempre un ACK (su FIN) o un RST.
+  Per la scelta della porta in ascolto per il protocollo di trasporto UDP verrà utilizzato lo stesso sistema ma utiizzando la primitiva
+  reccvfrom(), inviando un generico payload di pochi byte si riceverà dall'host via UDP il flag ICMP_PORT_UNREACH
