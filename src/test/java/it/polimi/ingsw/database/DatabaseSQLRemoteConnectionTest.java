@@ -18,7 +18,7 @@ public class DatabaseSQLRemoteConnectionTest {
     @Test
     public void remoteSQLConncection() throws SQLException,IOException {
 
-        if(System.getProperty("os.name").toLowerCase().contains("windows") && !getConnectionName().toLowerCase().contains("polimi")) { //temporary
+        if(System.getProperty("os.name").toLowerCase().contains("windows") && !getConnectionName().toLowerCase().contains("polimi") && !getConnectionName().toLowerCase().contains("eduroam")) { //temporary
             Database d = Database.initSQLDatabase("daniele_sagrada", "ge7npchy5", 100, "db4free.net", 3306, "sagrada_db_test");
             ResultSet set = d.executeRawQuery("SELECT ID FROM Test");
             while (set.next())
