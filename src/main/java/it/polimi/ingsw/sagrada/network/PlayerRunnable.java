@@ -1,7 +1,9 @@
 package it.polimi.ingsw.sagrada.network;
 
 
-import org.json.simple.JSONObject;
+import org.json.simple.*;
+
+import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.Socket;
@@ -14,9 +16,10 @@ public class PlayerRunnable implements Runnable {
     private PrintWriter outSocket;
     private UserPool userPool;
     private String userName;
+    private JSONParser parser = new JSONParser();
 
 
-    public PlayerRunnable(Socket clientSocket) {
+    protected PlayerRunnable(Socket clientSocket) {
         this.clientSocket = clientSocket;
         try {
             inSocket = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -32,9 +35,18 @@ public class PlayerRunnable implements Runnable {
     public void run() {
         while (true) {
             try {
-                String request = inSocket.readLine();
-                if (request.equals("LOGIN"))
-                    login();
+                String message = inSocket.readLine();
+                try {
+                    JSONObject jsonMessage = (JSONObject) parser.parse(message);
+                    String actionType = (String) jsonMessage.get("action");
+                    if (actionType.equals("login"))
+                        login();
+
+                } catch (org.json.simple.parser.ParseException exc) {
+
+                }
+
+
             } catch (IOException exc) {
                 exc.printStackTrace();
                 try {
@@ -42,8 +54,6 @@ public class PlayerRunnable implements Runnable {
                 } catch (IOException _exc) {
 
                 }
-                return;
-
             }
         }
     }
