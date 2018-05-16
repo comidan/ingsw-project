@@ -5,7 +5,7 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.rules.CellRule;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.rules.ErrorType;
-import it.polimi.ingsw.sagrada.game.rules.RuleController;
+import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import org.junit.Test;
 
 import java.awt.Color;
@@ -15,8 +15,8 @@ import static org.junit.Assert.assertSame;
 public class MainGameRuleTest {
 
     private synchronized ErrorType checkRule(Cell[][] cells) {
-        RuleController ruleController = new RuleController();
-        return ruleController.validateWindow(cells);
+        RuleManager ruleManager = new RuleManager();
+        return ruleManager.validateWindow(cells);
     }
 
     @Test

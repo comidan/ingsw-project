@@ -14,10 +14,10 @@ import static org.junit.Assert.assertSame;
 
 public class ToolRuleTest {
 
-    private final RuleController ruleController = new RuleController();
+    private final RuleManager ruleManager = new RuleManager();
 
     private synchronized ErrorType checkRule(Cell[][] cells) {
-        return ruleController.validateWindow(cells);
+        return ruleManager.validateWindow(cells);
     }
 
     @Test
@@ -48,15 +48,15 @@ public class ToolRuleTest {
         diceSix.setValue(6);
         six.setDice(diceSix);
         Cell[][] cells = {{five, one, three, six, three},
-                          {two, three, four, five, one},
-                          {six, five, two, one, two},
-                          {one, two, five, six, three}};
+                {two, three, four, five, one},
+                {six, five, two, one, two},
+                {one, two, five, six, three}};
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
         ToolRule toolRule = ToolRule.builder().setIncrementDiceFeature().build();
         DTO dto = new DTO();
         dto.setDice(diceFour);
-        dto.setIgnoreValueSet(ruleController.getIgnoreValueSet());
+        dto.setIgnoreValueSet(ruleManager.getIgnoreValueSet());
         toolRule.checkRule(dto);
         errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
@@ -88,14 +88,14 @@ public class ToolRuleTest {
         CellRule cellRulecolor = CellRule.builder().setColorConstraint(Colors.RED).build();
         Cell empty = new Cell(cellRulecolor);
         Cell[][] cells = {{_five, _one, _three, empty, _three},
-                          {_two, _three, _four, _five, _one},
-                          {empty, _five, _two, _one, _two},
-                          {_one, _two, _five, empty, _three}};
+                {_two, _three, _four, _five, _one},
+                {empty, _five, _two, _one, _two},
+                {_one, _two, _five, empty, _three}};
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
         ToolRule toolRule = ToolRule.builder().setMoveIgnoringColorRuleFeature().build();
         DTO dto = new DTO();
-        dto.setIgnoreColorSet(ruleController.getIgnoreColorSet());
+        dto.setIgnoreColorSet(ruleManager.getIgnoreColorSet());
         dto.setCurrentPosition(new Position(1, 2));
         dto.setNewPosition(new Position(0, 3));
         dto.setWindowMatrix(cells);
@@ -130,14 +130,14 @@ public class ToolRuleTest {
         CellRule cellRulecolor = CellRule.builder().setNumberConstraint(6).build();
         Cell empty = new Cell(cellRulecolor);
         Cell[][] cells = {{__five, __one, __three, empty, __three},
-                          {__two, __three, __four, __five, __one},
-                          {empty, __five, __two, __one, __two},
-                          {__one, __two, __five, empty, __three}};
+                {__two, __three, __four, __five, __one},
+                {empty, __five, __two, __one, __two},
+                {__one, __two, __five, empty, __three}};
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
         ToolRule toolRule = ToolRule.builder().setMoveIgnoringValueRuleFeature().build();
         DTO dto = new DTO();
-        dto.setIgnoreValueSet(ruleController.getIgnoreValueSet());
+        dto.setIgnoreValueSet(ruleManager.getIgnoreValueSet());
         dto.setCurrentPosition(new Position(1, 2));
         dto.setNewPosition(new Position(0, 3));
         dto.setWindowMatrix(cells);

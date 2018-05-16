@@ -5,7 +5,7 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
-import it.polimi.ingsw.sagrada.game.rules.RuleController;
+import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 
 
 import java.util.*;
@@ -44,8 +44,8 @@ public class ScoreTrack {
         List<ObjectiveRule> objectiveRules = new ArrayList<>();
         objectives.add(player.getPrivateObjectiveCard());
         objectives.forEach(objective -> objectiveRules.add(objective.getRule()));
-        RuleController ruleController = new RuleController();
-        score = ruleController.validateObjectiveRules(objectiveRules, cellMatrix);
+        RuleManager ruleManager = new RuleManager();
+        score = ruleManager.validateObjectiveRules(objectiveRules, cellMatrix);
         score += tokenNumber;
         return score;
     }

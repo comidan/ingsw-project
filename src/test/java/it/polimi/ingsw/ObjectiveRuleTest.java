@@ -5,7 +5,7 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.rules.CellRule;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
-import it.polimi.ingsw.sagrada.game.rules.RuleController;
+import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import org.junit.Test;
 
 import java.awt.Color;
@@ -56,8 +56,8 @@ public class ObjectiveRuleTest {
     }
 
     private synchronized int checkRule(ObjectiveRule objectiveRule, Cell[][] cells) {
-        RuleController ruleController = new RuleController();
-        return ruleController.validateRule(objectiveRule, cells);
+        RuleManager ruleManager = new RuleManager();
+        return ruleManager.validateRule(objectiveRule, cells);
     }
 
     @Test

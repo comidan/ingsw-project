@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class WindowController implements Channel<WindowEvent> {
+public class WindowManager implements Channel<WindowEvent> {
 
     private static final String BASE_PATH = "src/main/resources/json/window/";
     private static final int WINDOWS_PER_CARD = 2;
@@ -32,13 +32,13 @@ public class WindowController implements Channel<WindowEvent> {
     private JSONArray windowsArray;
     private GameController gameController;
 
-    public WindowController() {
+    public WindowManager() {
         JSONParser parser;
         parser = new JSONParser();
-        List<Integer> id=new ArrayList<>();
-        for(int i=0; i<NUM_OF_WINDOWS; i++) id.add(i);
+        List<Integer> id = new ArrayList<>();
+        for (int i = 0; i < NUM_OF_WINDOWS; i++) id.add(i);
         try {
-            windowsArray = (JSONArray)parser.parse(new FileReader(BASE_PATH+"Windows.json"));
+            windowsArray = (JSONArray) parser.parse(new FileReader(BASE_PATH + "Windows.json"));
             picker = new Picker<>(id).pickerIterator();
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Something breaks in reading JSON file");
@@ -54,7 +54,7 @@ public class WindowController implements Channel<WindowEvent> {
     }
 
     public List<Integer> dealWindowId() {
-        List<Integer> windowId=new ArrayList<>();
+        List<Integer> windowId = new ArrayList<>();
         for (int i = 0; i < WINDOWS_PER_CARD; i++) {
             if (picker.hasNext()) windowId.add(picker.next());
         }
@@ -63,17 +63,17 @@ public class WindowController implements Channel<WindowEvent> {
     }
 
     public Window generateWindow(int id, WindowSide side) {
-        JSONObject card=(JSONObject)windowsArray.get(id);
+        JSONObject card = (JSONObject) windowsArray.get(id);
 
-        JSONArray windows=(JSONArray)card.get("windows");
-        JSONObject specificWindow=(JSONObject)windows.get(WindowSide.sidetoInt(side));
-        String name=(String)specificWindow.get("name");
-        int numTokens=((Long)specificWindow.get("token")).intValue();
+        JSONArray windows = (JSONArray) card.get("windows");
+        JSONObject specificWindow = (JSONObject) windows.get(WindowSide.sidetoInt(side));
+        String name = (String) specificWindow.get("name");
+        int numTokens = ((Long) specificWindow.get("token")).intValue();
         List<Token> tokens = new ArrayList<>();
-        for(int j=0; j<numTokens; j++) {
+        for (int j = 0; j < numTokens; j++) {
             tokens.add(new Token());
         }
-        Cell[][] cells=createCellMatrix((JSONArray)specificWindow.get("cells"));
+        Cell[][] cells = createCellMatrix((JSONArray) specificWindow.get("cells"));
 
         return new Window(name, cells, tokens);
     }
@@ -81,43 +81,39 @@ public class WindowController implements Channel<WindowEvent> {
     private Cell[][] createCellMatrix(JSONArray cells) {
         Cell[][] cellMatrix = new Cell[4][5];
 
-        int index=0;
-        int numCellWithConstraint=cells.size();
-        boolean constraintLeft=true;
+        int index = 0;
+        int numCellWithConstraint = cells.size();
+        boolean constraintLeft = true;
 
         JSONObject singleCell;
-        int nextX=-1;
-        int nextY=-1;
-        String constraint="0";
+        int nextX = -1;
+        int nextY = -1;
+        String constraint = "0";
 
-        if(numCellWithConstraint!=0) {
-            singleCell=(JSONObject) cells.get(index++);
-            nextX=((Long)singleCell.get("x")).intValue();
-            nextY=((Long)singleCell.get("y")).intValue();
-            constraint=(String)singleCell.get("constraint");
-        }
-        else constraintLeft=false;
+        if (numCellWithConstraint != 0) {
+            singleCell = (JSONObject) cells.get(index++);
+            nextX = ((Long) singleCell.get("x")).intValue();
+            nextY = ((Long) singleCell.get("y")).intValue();
+            constraint = (String) singleCell.get("constraint");
+        } else constraintLeft = false;
 
-        for(int i=0; i<cellMatrix.length; i++) { //row
-            for(int j=0; j<cellMatrix[0].length; j++) { //column
-                if(constraintLeft&&(i==nextY && j==nextX)) {
-                    if(isNumeric(constraint)) { //if string is a number
-                        cellMatrix[i][j]=new Cell(CellRule.builder().setNumberConstraint(Integer.parseInt(constraint)).build());
-                    }
-                    else {
-                        cellMatrix[i][j]=new Cell(CellRule.builder().setColorConstraint(Colors.stringToColor(constraint)).build());
+        for (int i = 0; i < cellMatrix.length; i++) { //row
+            for (int j = 0; j < cellMatrix[0].length; j++) { //column
+                if (constraintLeft && (i == nextY && j == nextX)) {
+                    if (isNumeric(constraint)) { //if string is a number
+                        cellMatrix[i][j] = new Cell(CellRule.builder().setNumberConstraint(Integer.parseInt(constraint)).build());
+                    } else {
+                        cellMatrix[i][j] = new Cell(CellRule.builder().setColorConstraint(Colors.stringToColor(constraint)).build());
                     }
 
-                    if(index<numCellWithConstraint) {
-                        singleCell=(JSONObject) cells.get(index++);
-                        nextX=((Long)singleCell.get("x")).intValue();
-                        nextY=((Long)singleCell.get("y")).intValue();
-                        constraint=(String)singleCell.get("constraint");
-                    }
-                    else constraintLeft=false;
-                }
-                else {
-                    cellMatrix[i][j]=new Cell();
+                    if (index < numCellWithConstraint) {
+                        singleCell = (JSONObject) cells.get(index++);
+                        nextX = ((Long) singleCell.get("x")).intValue();
+                        nextY = ((Long) singleCell.get("y")).intValue();
+                        constraint = (String) singleCell.get("constraint");
+                    } else constraintLeft = false;
+                } else {
+                    cellMatrix[i][j] = new Cell();
                 }
             }
         }
@@ -126,7 +122,7 @@ public class WindowController implements Channel<WindowEvent> {
     }
 
     private boolean isNumeric(String s) {
-        return s!=null && s.matches("[-+]?\\d*\\.?\\d+");
+        return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }
 
 

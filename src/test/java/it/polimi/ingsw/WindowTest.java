@@ -1,7 +1,7 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.sagrada.game.base.Colors;
-import it.polimi.ingsw.sagrada.game.base.WindowController;
+import it.polimi.ingsw.sagrada.game.base.WindowManager;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
@@ -15,8 +15,8 @@ public class WindowTest {
 
     @Test
     public void testWindowCreation() {
-        WindowController windowController =new WindowController();
-        Window window= windowController.generateWindow(0, WindowSide.FRONT);
+        WindowManager windowManager = new WindowManager();
+        Window window = windowManager.generateWindow(0, WindowSide.FRONT);
 
         Dice dice = new Dice(3, Colors.RED);
         assertTrue(window.setCell(dice, 1, 1));
@@ -27,17 +27,17 @@ public class WindowTest {
 
     @Test
     public void testAllWindowsJSON() {
-        WindowController windowController =new WindowController();
+        WindowManager windowManager = new WindowManager();
         Window window;
-        int counter=0;
+        int counter = 0;
 
-        while(windowController.isWindowsLeft()) {
-            List<Integer> id = windowController.dealWindowId();
-            for(int i:id) {
-                window= windowController.generateWindow(i, WindowSide.FRONT);
+        while (windowManager.isWindowsLeft()) {
+            List<Integer> id = windowManager.dealWindowId();
+            for (int i : id) {
+                window = windowManager.generateWindow(i, WindowSide.FRONT);
                 System.out.println(window.toString());
                 counter++;
-                window= windowController.generateWindow(i, WindowSide.REAR);
+                window = windowManager.generateWindow(i, WindowSide.REAR);
                 System.out.println(window.toString());
                 counter++;
             }

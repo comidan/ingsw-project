@@ -34,7 +34,7 @@ public class GameController implements Channel<Message> {
     private StateIterator stateIterator = StateIterator.getInstance();
     private RoundIterator roundIterator = RoundIterator.getRoundIterator();
     private PlayerIterator playerIterator;
-    private WindowController windowController;
+    private WindowManager windowManager;
     private static GameController gameController;
 
     private int numWindowDealed = 0;
@@ -46,7 +46,7 @@ public class GameController implements Channel<Message> {
         cardController = new CardController();
         diceManager = DiceManager.getDiceManager(players.size());
         playerIterator = PlayerIterator.getPlayerIterator(players);
-        windowController = new WindowController();
+        windowManager = new WindowManager();
     }
 
     public static GameController getGameController(List<Player> players) {
@@ -104,7 +104,7 @@ public class GameController implements Channel<Message> {
 
     private void dealWindowState() {
         for (Player p : players) {
-            List<Integer> windowsId = windowController.dealWindowId();
+            List<Integer> windowsId = windowManager.dealWindowId();
             //this id will be passed to Player in the view
         }
     }

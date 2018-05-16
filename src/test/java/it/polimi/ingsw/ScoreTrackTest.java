@@ -24,8 +24,8 @@ public class ScoreTrackTest {
         ObjectiveRule objectiveRulePublic = ObjectiveRule.builder().setValueCoupleObjective(2, 5, 6).build();
         ObjectiveCard cardPublic = new ObjectiveCard(2, "testPublic", objectiveRulePublic);
         playerOne.setPrivateObjectiveCard(card);
-        WindowController windowController = new WindowController();
-        Window window = windowController.generateWindow(0, WindowSide.FRONT);
+        WindowManager windowManager = new WindowManager();
+        Window window = windowManager.generateWindow(0, WindowSide.FRONT);
         playerOne.setWindow(window);
         List<ObjectiveRule> objectiveRuleList = new ArrayList<>();
         objectiveRuleList.add(playerOne.getPrivateObjectiveCard().getRule());

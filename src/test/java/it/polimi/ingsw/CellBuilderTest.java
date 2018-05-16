@@ -3,7 +3,7 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.rules.CellRule;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
-import it.polimi.ingsw.sagrada.game.rules.RuleController;
+import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -13,8 +13,8 @@ import static org.junit.Assert.assertTrue;
 public class CellBuilderTest {
 
     private synchronized boolean checkRule(CellRule cellRule, Dice dice) {
-        RuleController ruleController = new RuleController();
-        return ruleController.validateRule(cellRule, dice);
+        RuleManager ruleManager = new RuleManager();
+        return ruleManager.validateRule(cellRule, dice);
     }
 
     @Test
