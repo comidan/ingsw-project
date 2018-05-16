@@ -24,12 +24,9 @@ public class RoundTrackTest {
         assertNotNull(roundTrack);
         roundTrack.addDice(diceList, 2);
         assertEquals(roundTrack.getDiceFromRound(Colors.RED, 2), dice);
-
         List<Color> colorList = new ArrayList<>();
         colorList.add(dice.getColor());
-
         assertEquals(roundTrack.getAvailableColors(), colorList);
-
         assertEquals(roundTrack.getAvailableColors(), colorList);
 
 

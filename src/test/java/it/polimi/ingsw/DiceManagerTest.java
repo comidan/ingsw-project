@@ -23,6 +23,7 @@ public class DiceManagerTest {
         diceManager.getDice(RoundStateEnum.SETUP_ROUND);
         pickedDice = diceManager.getDraft();
         diceCompared.add(pickedDice.get(0));
+
         //diceManager.setId(pickedDice.get(0).getId());
         //assertNotNull(diceManager.getDraft());
         //assertEquals(diceManager.getDice(RoundStateEnum.IN_GAME), diceCompared);

@@ -11,11 +11,15 @@ import java.awt.*;
 public class DiceTest {
 
     @Test
-    public void testApp() {
+    public void testDice() {
         Dice dice;
         for (int id = 0; id < 90; id++) {
             dice = new Dice(id, Color.RED);
             assertEquals(id, dice.getId());
         }
+
+        Dice diceOne = new Dice(3, Color.RED);
+        diceOne.setValue(2);
+        assertEquals(diceOne.getValue(), 2);
     }
 }
