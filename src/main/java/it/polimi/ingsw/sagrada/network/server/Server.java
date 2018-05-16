@@ -7,6 +7,8 @@ import it.polimi.ingsw.sagrada.network.utilities.MatchLobby;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,7 +20,7 @@ public class Server implements Runnable {
     private ExecutorService executor;
     private SocketClient socketClient;
     private LoginManager loginManager;
-    private MatchLobby matchLobby;
+    private List<MatchLobby> matchLobbyList;
     Socket socket;
 
 
@@ -29,6 +31,7 @@ public class Server implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        matchLobbyList = new ArrayList<>();
 
     }
 
@@ -43,7 +46,7 @@ public class Server implements Runnable {
                 Socket clientSocket = serverSocket.accept();
                 socketClient = new SocketClient(clientSocket);
                 if (loginManager.checkLogin()) {
-
+                    choseLobby().addClient(socketClient);
                 } else System.out.println("Login Failed");
 
 
@@ -56,6 +59,17 @@ public class Server implements Runnable {
     }
 
 
+    private MatchLobby choseLobby() {
+        if (matchLobbyList.isEmpty()) {
+            matchLobbyList.add(new MatchLobby());
+        } else for (MatchLobby matchLobby : matchLobbyList) {
+            if (!matchLobby.isFull())
+                return matchLobby;
+        }
+        MatchLobby newLobby = new MatchLobby();
+        matchLobbyList.add(newLobby);
+        return newLobby;
+    }
     //deve controllare se matchlobby e piena, se lo e ne crea un'altra
 
 }
