@@ -51,7 +51,7 @@ public class PlayerIterator implements Iterator<Player> {
 
     @Override
     public Player next() throws NoSuchElementException {
-        if(!hasNext())
+        if (!hasNext())
             throw new NoSuchElementException();
         if (roundNumber == 1 && turnNumber == 0)
             playerList.setOffset(selectStarterPlayer());

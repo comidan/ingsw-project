@@ -26,7 +26,7 @@ import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
 public class GameController implements Channel<Message> {
 
     private List<Player> players;
-    private DiceController diceController;
+    private DiceManager diceManager;
     private RoundTrack roundTrack;
     private ScoreTrack scoreTrack;
     private CardController cardController;
@@ -44,7 +44,7 @@ public class GameController implements Channel<Message> {
     private GameController(List<Player> players) {
         this.players = players;
         cardController = new CardController();
-        diceController = DiceController.getDiceController(players.size());
+        diceManager = DiceManager.getDiceManager(players.size());
         playerIterator = PlayerIterator.getPlayerIterator(players);
         windowController = new WindowController();
     }
@@ -103,7 +103,7 @@ public class GameController implements Channel<Message> {
     }
 
     private void dealWindowState() {
-        for(Player p:players) {
+        for (Player p : players) {
             List<Integer> windowsId = windowController.dealWindowId();
             //this id will be passed to Player in the view
         }
@@ -112,7 +112,7 @@ public class GameController implements Channel<Message> {
     private void dealWindowsToPlayer(Player player, Window window) {
         player.setWindow(window);
         numWindowDealed++;
-        if(numWindowDealed == players.size() && stateIterator.hasNext()) {
+        if (numWindowDealed == players.size() && stateIterator.hasNext()) {
             stateIterator.next();
         }
     }
@@ -122,16 +122,16 @@ public class GameController implements Channel<Message> {
         while (roundIterator.hasNext()) {
             switch (roundIterator.next()) {
                 case SETUP_ROUND:
-                    diceController.getDice(RoundStateEnum.SETUP_ROUND);
+                    diceManager.getDice(RoundStateEnum.SETUP_ROUND);
                     break;
                 case IN_GAME:
                     while (playerIterator.hasNext()) {
                         playerIterator.next();
-                        diceController.getDice(RoundStateEnum.IN_GAME);
+                        diceManager.getDice(RoundStateEnum.IN_GAME);
                     }
                     break;
                 case END_ROUND:
-                    diceController.getDice(RoundStateEnum.END_ROUND);
+                    diceManager.getDice(RoundStateEnum.END_ROUND);
                     break;
             }
         }
@@ -165,15 +165,17 @@ public class GameController implements Channel<Message> {
     @Override
     public void dispatch(Message message) {
         String eventType = message.getType().getName();
-        switch(eventType) {
+        switch (eventType) {
             case "WindowGameControllerEvent":
-                WindowGameControllerEvent msgW = (WindowGameControllerEvent)message;
-                dealWindowsToPlayer(players.get(msgW.getIdPlayer()), msgW.getWindow()); break;
+                WindowGameControllerEvent msgW = (WindowGameControllerEvent) message;
+                dealWindowsToPlayer(players.get(msgW.getIdPlayer()), msgW.getWindow());
+                break;
             case "DiceGameControllerEvent":
-                DiceGameControllerEvent msgD = (DiceGameControllerEvent)message;
+                DiceGameControllerEvent msgD = (DiceGameControllerEvent) message;
                 setDiceInWindow(msgD.getIdPlayer(), msgD.getDice(), msgD.getPosition());
                 break;
-            default: LOGGER.log(Level.SEVERE, "Type not found");
+            default:
+                LOGGER.log(Level.SEVERE, "Type not found");
         }
     }
 }

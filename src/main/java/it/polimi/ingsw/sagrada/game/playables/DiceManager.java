@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DiceController implements Channel<DiceEvent> {
-    private static DiceController diceController;
+public class DiceManager implements Channel<DiceEvent> {
+    private static DiceManager diceManager;
     private List<Dice> draftPool;
     private List<Dice> bagPool;
     private static final int DICE_PER_COLOR = 18;
@@ -29,7 +29,7 @@ public class DiceController implements Channel<DiceEvent> {
     /**
      * initialize pools
      */
-    private DiceController(int numberOfPlayers) {
+    private DiceManager(int numberOfPlayers) {
         bagPool = new ArrayList<>();
         draftPool = new ArrayList<>();
         int id = 0;
@@ -43,11 +43,11 @@ public class DiceController implements Channel<DiceEvent> {
         diceNumber = this.numberOfPlayers * 2 + 1;
     }
 
-    public static DiceController getDiceController(int numberOfPlayers) {
-        if (diceController == null) {
-            diceController = new DiceController(numberOfPlayers);
+    public static DiceManager getDiceManager(int numberOfPlayers) {
+        if (diceManager == null) {
+            diceManager = new DiceManager(numberOfPlayers);
         }
-        return diceController;
+        return diceManager;
     }
 
 
@@ -81,7 +81,8 @@ public class DiceController implements Channel<DiceEvent> {
             case END_ROUND:
                 pickedDice = putDiceScoreTrack();
                 break;
-                default: LOGGER.log(Level.SEVERE, "Wrong state of round");
+            default:
+                LOGGER.log(Level.SEVERE, "Wrong state of round");
         }
         return pickedDice;
     }
@@ -97,8 +98,8 @@ public class DiceController implements Channel<DiceEvent> {
     }
 
     private Dice getDiceDraft(int idDice) {
-        for(Dice dice:draftPool) {
-            if(dice.getId()==idDice) {
+        for (Dice dice : draftPool) {
+            if (dice.getId() == idDice) {
                 draftPool.remove(dice);
                 return dice;
             }
