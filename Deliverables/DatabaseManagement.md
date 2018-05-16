@@ -59,7 +59,7 @@ Qui una schermata dell'utilizzo del serve MySQL su phpMyAdmin per il database Sa
 <img src="https://preview.ibb.co/bD3CYy/Sagrada_DBPhp_My_Admin.png" alt="Sagrada_DBPhp_My_Admin">
 
 #### Problemi riscontrati e soluzioni
-La porta utilizzata per il server in cui sarà presente MySQL dovrebbe essere la standard 3306 in linea teorica (porta registrata a MySQL da IANA), ma per ragioni dovute ad un packet filtering presente all'interno della rete del Politecnico a livello di trasporto, non è possibile utilizzare porte destinazione diverse dalla 80 e dalla 443, ve ne è una dimostrazione nell'immagine sotto riportata relativa ad un packet capturing effettuato attraverso il software Wireshark dove escludendo qualsiasi pacchetto con porta destinazione nell'header corrispondente a 80. Si può vedere come gli unici altri pacchetti presenti sono pacchetti con porte destinazione uguale a 443.
+La porta utilizzata per il server in cui sarà presente MySQL dovrebbe essere la standard 3306 in linea teorica (porta registrata a MySQL da IANA), ma per ragioni dovute ad un packet filtering presente all'interno della rete del Politecnico a livello di trasporto, non è possibile utilizzare porte destinazione diverse dalla 80 e dalla 443, ve ne è una dimostrazione nell'immagine sotto riportata relativa ad un packet capturing effettuato attraverso il software Wireshark dove, escludendo qualsiasi pacchetto con porta destinazione nell'header corrispondente a 80, si può vedere come gli unici altri pacchetti presenti sono pacchetti con porte destinazione uguale a 443.
 
 <img src="https://preview.ibb.co/dwFjwJ/only_Port80_Poli.png" alt="only_Port80_Poli"><br/>  
 
