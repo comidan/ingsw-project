@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 public class WindowController implements Channel<WindowEvent> {
 
-    private static final String BASE_PATH = "res/json/window/";
+    private static final String BASE_PATH = "src/main/resources/json/window/";
     private static final int WINDOWS_PER_CARD = 2;
     private static final int NUM_OF_WINDOWS = 12;
 

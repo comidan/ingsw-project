@@ -6,9 +6,9 @@ import it.polimi.ingsw.sagrada.game.rules.ObjectiveBuilder;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 import it.polimi.ingsw.sagrada.game.rules.ToolBuilder;
 import it.polimi.ingsw.sagrada.game.rules.ToolRule;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 
 import java.awt.*;
@@ -31,8 +31,8 @@ public class CardController {
 	private static final int NUM_PUBLIC_OBJECTIVE = 3;
 	private static final int NUM_TOOLS = 3;
 
-	private static final String BASE_PATH_OBJECTIVE = "res/json/objective/";
-	private static final String BASE_PATH_TOOL = "res/json/tool/";
+	private static final String BASE_PATH_OBJECTIVE = "src/main/resources/json/objective/";
+	private static final String BASE_PATH_TOOL = "src/main/resources/json/tool/";
 
 	/**
 	 * default constructor

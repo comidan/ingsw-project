@@ -11,6 +11,9 @@
     - Valentina Deda (10488563)
 
 
+# Project wiki
+Project [wiki](https://github.com/Daniele-Comi/ingsw-project/wiki) containing development details, project design and technology used is available.
+
 # Project status
  - in development
 
