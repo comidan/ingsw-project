@@ -1,6 +1,6 @@
 package it.polimi.ingsw.cards;
 
-import it.polimi.ingsw.sagrada.game.cards.CardController;
+import it.polimi.ingsw.sagrada.game.cards.CardManager;
 import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import org.junit.Test;
 
@@ -15,9 +15,9 @@ public class ToolDealerTest {
     public void testToolDealer() {
         List<ToolCard> toolCards;
         List<ToolCard> cardCheck = new ArrayList<>();
-        CardController cardController = new CardController();
+        CardManager cardManager = new CardManager();
 
-        toolCards = cardController.dealTool();
+        toolCards = cardManager.dealTool();
         assertEquals(3, toolCards.size());
 
         for(ToolCard card:toolCards) {

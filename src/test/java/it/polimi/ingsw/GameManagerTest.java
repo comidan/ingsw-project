@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 
-public class GameControllerTest {
+public class GameManagerTest {
 
     private Player playerOne = new Player(0);
     private Player playerTwo = new Player(1);
@@ -20,15 +20,15 @@ public class GameControllerTest {
 
     @Test
     public void testGameController() {
-        GameController gameController;
+        GameManager gameManager;
 
         players.add(playerOne);
         players.add(playerTwo);
-        gameController = GameController.getGameController(players);
-        assertTrue(gameController.getPlayerNumber() > 0);
-        gameController.startGame();
-        assertEquals(StateGameEnum.DEAL_WINDOWS, gameController.getCurrentState());
-        gameController.playRound();
+        gameManager = GameManager.getGameController(players);
+        assertTrue(gameManager.getPlayerNumber() > 0);
+        gameManager.startGame();
+        assertEquals(StateGameEnum.DEAL_WINDOWS, gameManager.getCurrentState());
+        gameManager.playRound();
 
     }
 }

@@ -84,7 +84,7 @@
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.DiceTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.GameControllerTest
+    Running it.polimi.ingsw.GameManagerTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.MainGameRuleTest
     Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec

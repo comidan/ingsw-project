@@ -1,14 +1,14 @@
 package it.polimi.ingsw.sagrada.game.base;
 
-import it.polimi.ingsw.sagrada.game.cards.CardController;
+import it.polimi.ingsw.sagrada.game.cards.CardManager;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 
 import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
-import it.polimi.ingsw.sagrada.game.intercomm.DiceGameControllerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.WindowGameControllerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.WindowGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.playables.*;
 
 import java.util.ArrayList;
@@ -23,41 +23,41 @@ import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
  *
  */
 
-public class GameController implements Channel<Message> {
+public class GameManager implements Channel<Message> {
 
     private List<Player> players;
     private DiceManager diceManager;
     private RoundTrack roundTrack;
     private ScoreTrack scoreTrack;
-    private CardController cardController;
+    private CardManager cardManager;
     private ToolManager toolManager;
     private StateIterator stateIterator = StateIterator.getInstance();
     private RoundIterator roundIterator = RoundIterator.getRoundIterator();
     private PlayerIterator playerIterator;
     private WindowManager windowManager;
-    private static GameController gameController;
+    private static GameManager gameManager;
 
     private int numWindowDealed = 0;
 
-    private static final Logger LOGGER = Logger.getLogger(GameController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
 
-    private GameController(List<Player> players) {
+    private GameManager(List<Player> players) {
         this.players = players;
-        cardController = new CardController();
+        cardManager = new CardManager();
         diceManager = DiceManager.getDiceManager(players.size());
         playerIterator = PlayerIterator.getPlayerIterator(players);
         windowManager = new WindowManager();
     }
 
-    public static GameController getGameController(List<Player> players) {
-        if (gameController == null) {
-            gameController = new GameController(players);
+    public static GameManager getGameController(List<Player> players) {
+        if (gameManager == null) {
+            gameManager = new GameManager(players);
         }
-        return gameController;
+        return gameManager;
     }
 
-    public static GameController getGameController() {
-        return gameController;
+    public static GameManager getGameManager() {
+        return gameManager;
     }
 
     public void startGame() {
@@ -85,20 +85,20 @@ public class GameController implements Channel<Message> {
 
     private void dealPrivateObjectiveState() {
         List<ObjectiveCard> privateObjective;
-        privateObjective = cardController.dealPrivateObjective(players.size());
+        privateObjective = cardManager.dealPrivateObjective(players.size());
         for (int i = 0; i < players.size(); i++) {
             players.get(i).setPrivateObjectiveCard(privateObjective.get(i));
         }
     }
 
     private void dealToolState() {
-        List<ToolCard> tools = cardController.dealTool();
+        List<ToolCard> tools = cardManager.dealTool();
         toolManager = ToolManager.getInstance(tools);
     }
 
     private void dealPublicObjectiveState() {
         List<ObjectiveCard> publicObjective;
-        publicObjective = cardController.dealPublicObjective();
+        publicObjective = cardManager.dealPublicObjective();
         scoreTrack = ScoreTrack.getScoreTrack(publicObjective);
     }
 
@@ -166,12 +166,12 @@ public class GameController implements Channel<Message> {
     public void dispatch(Message message) {
         String eventType = message.getType().getName();
         switch (eventType) {
-            case "WindowGameControllerEvent":
-                WindowGameControllerEvent msgW = (WindowGameControllerEvent) message;
+            case "WindowGameManagerEvent":
+                WindowGameManagerEvent msgW = (WindowGameManagerEvent) message;
                 dealWindowsToPlayer(players.get(msgW.getIdPlayer()), msgW.getWindow());
                 break;
-            case "DiceGameControllerEvent":
-                DiceGameControllerEvent msgD = (DiceGameControllerEvent) message;
+            case "DiceGameManagerEvent":
+                DiceGameManagerEvent msgD = (DiceGameManagerEvent) message;
                 setDiceInWindow(msgD.getIdPlayer(), msgD.getDice(), msgD.getPosition());
                 break;
             default:

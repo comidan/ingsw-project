@@ -21,10 +21,10 @@ import java.util.logging.Logger;
 
 /**
  * This class is utilised to generate all sets of cards that are used in the game.
- * This class should be called only from GameController to deal various cards to the respective class
+ * This class should be called only from GameManager to deal various cards to the respective class
  * that will manage and utilised the sets.
  */
-public class CardController {
+public class CardManager {
 
 	private static final Logger logger = Logger.getAnonymousLogger();
 	private static final int NUM_MAX_PLAYER = 4;
@@ -37,7 +37,7 @@ public class CardController {
 	/**
 	 * default constructor
 	 */
-	public CardController() {
+	public CardManager() {
 	}
 
 	/**

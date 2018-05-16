@@ -1,6 +1,6 @@
 package it.polimi.ingsw.cards;
 
-import it.polimi.ingsw.sagrada.game.cards.CardController;
+import it.polimi.ingsw.sagrada.game.cards.CardManager;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class PrivateObjectiveDealerTest {
     public void testPrivateDealer() {
         int numPlayer = 3;
         List<ObjectiveCard> privateObjective;
-        CardController c = new CardController();
+        CardManager c = new CardManager();
 
         privateObjective = c.dealPrivateObjective(numPlayer);
         assertEquals(privateObjective.size(), numPlayer);
@@ -33,7 +33,7 @@ public class PrivateObjectiveDealerTest {
     public void testDealtPrivateObjective() {
         int numPlayer = 4;
         List<ObjectiveCard> privateObjective;
-        CardController c = new CardController();
+        CardManager c = new CardManager();
 
         privateObjective = c.dealPrivateObjective(numPlayer);
         assertEquals(numPlayer, privateObjective.size());

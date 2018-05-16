@@ -1,12 +1,12 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Colors;
-import it.polimi.ingsw.sagrada.game.base.GameController;
+import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Picker;
 import it.polimi.ingsw.sagrada.game.base.RoundStateEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DiceEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.DiceGameControllerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.DiceGameManagerEvent;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -22,9 +22,9 @@ public class DiceManager implements Channel<DiceEvent> {
     private static final int DICE_PER_COLOR = 18;
     private int diceNumber;
     private int numberOfPlayers; // missing method to fetch this value, temporary value for testing
-    private GameController gameController;
+    private GameManager gameManager;
 
-    private static final Logger LOGGER = Logger.getLogger(GameController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
 
     /**
      * initialize pools
@@ -38,7 +38,7 @@ public class DiceManager implements Channel<DiceEvent> {
                 bagPool.add(new Dice(id++, color));
             }
         }
-        gameController = GameController.getGameController();
+        gameManager = GameManager.getGameManager();
         this.numberOfPlayers = numberOfPlayers;
         diceNumber = this.numberOfPlayers * 2 + 1;
     }
@@ -118,7 +118,7 @@ public class DiceManager implements Channel<DiceEvent> {
     @Override
     public void dispatch(DiceEvent message) {
         Dice dice = getDiceDraft(message.getIdDice());
-        DiceGameControllerEvent diceGameControllerEvent = new DiceGameControllerEvent(dice, message);
-        gameController.dispatch(diceGameControllerEvent);
+        DiceGameManagerEvent diceGameManagerEvent = new DiceGameManagerEvent(dice, message);
+        gameManager.dispatch(diceGameManagerEvent);
     }
 }

@@ -2,7 +2,7 @@ package it.polimi.ingsw.sagrada.game.base;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.WindowEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.WindowGameControllerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.WindowGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.playables.Token;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
@@ -30,7 +30,7 @@ public class WindowManager implements Channel<WindowEvent> {
     private Iterator<Integer> picker;
     private static final Logger logger = Logger.getAnonymousLogger();
     private JSONArray windowsArray;
-    private GameController gameController;
+    private GameManager gameManager;
 
     public WindowManager() {
         JSONParser parser;
@@ -46,7 +46,7 @@ public class WindowManager implements Channel<WindowEvent> {
             logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
         }
 
-        gameController = GameController.getGameController();
+        gameManager = GameManager.getGameManager();
     }
 
     public boolean isWindowsLeft() {
@@ -129,6 +129,6 @@ public class WindowManager implements Channel<WindowEvent> {
     @Override
     public void dispatch(WindowEvent message) {
         Window window = generateWindow(message.getIdWindow(), message.getWindowSide());
-        gameController.dispatch(new WindowGameControllerEvent(message.getIdPlayer(), window));
+        gameManager.dispatch(new WindowGameManagerEvent(message.getIdPlayer(), window));
     }
 }

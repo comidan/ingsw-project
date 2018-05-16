@@ -2,7 +2,7 @@ package it.polimi.ingsw.cards;
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.Colors;
-import it.polimi.ingsw.sagrada.game.cards.CardController;
+import it.polimi.ingsw.sagrada.game.cards.CardManager;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
@@ -89,7 +89,7 @@ public class PublicObjectiveDealerTest {
     public void testPublicDealer() {
         List<ObjectiveCard> cards;
         List<ObjectiveCard> cardCheck = new ArrayList<>();
-        CardController c = new CardController();
+        CardManager c = new CardManager();
 
         cards = c.dealPublicObjective();
         assertEquals(3, cards.size());
@@ -104,7 +104,7 @@ public class PublicObjectiveDealerTest {
     @Test
     public void testDealtPublicObjective() {
         List<ObjectiveCard> publicObjective;
-        CardController c = new CardController();
+        CardManager c = new CardManager();
         Cell[][] cells = {
                 {oneR, twoY, threeG, fourL, fiveP},
                 {sixL, oneG, sixL, oneY, sixG},
