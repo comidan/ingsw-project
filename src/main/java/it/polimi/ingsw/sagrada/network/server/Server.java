@@ -16,7 +16,6 @@ import java.util.concurrent.Executors;
 public class Server implements Runnable {
     private int port;
     private ServerSocket serverSocket;
-    private ExecutorService mainExecutor;
     private ExecutorService executor;
     private SocketClient socketClient;
     private LoginManager loginManager;
@@ -25,51 +24,52 @@ public class Server implements Runnable {
 
 
     //move to private method called in constructor
-    Server() {
+    public void Server() {
+
+        matchLobbyList = new ArrayList<>();
+
+    }
+
+
+    private void createServerSocket() {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        matchLobbyList = new ArrayList<>();
-
     }
 
     @Override
     public void run() {
+        executor = Executors.newSingleThreadExecutor();
+        executor.submit(this);
 
-        mainExecutor = Executors.newSingleThreadExecutor();
-        mainExecutor.submit(this);
-
-        while (!mainExecutor.isShutdown()) {
+        while (!executor.isShutdown()) {
             try {
                 Socket clientSocket = serverSocket.accept();
                 socketClient = new SocketClient(clientSocket);
                 if (loginManager.checkLogin()) {
                     choseLobby().addClient(socketClient);
-                } else System.out.println("Login Failed");
-
-
+                } else {
+                    System.out.println("Login Failed");
+                }
             } catch (IOException exc) {
-
+                System.out.print("Error");
             }
-
         }
-
     }
 
 
     private MatchLobby choseLobby() {
-        if (matchLobbyList.isEmpty()) {
-            matchLobbyList.add(new MatchLobby());
-        } else for (MatchLobby matchLobby : matchLobbyList) {
-            if (!matchLobby.isFull())
-                return matchLobby;
+        if (!matchLobbyList.isEmpty()) {
+            for (MatchLobby matchLobby : matchLobbyList) {
+                if (!matchLobby.isFull())
+                    return matchLobby;
+            }
         }
         MatchLobby newLobby = new MatchLobby();
         matchLobbyList.add(newLobby);
         return newLobby;
     }
-    //deve controllare se matchlobby e piena, se lo e ne crea un'altra
 
 }
