@@ -17,6 +17,9 @@ public class RoundTest {
         StateIterator itr = StateIterator.getInstance();
         int index=0;
 
+        //Method used only for testing. Please read StateIterator method to get full image of what's going on
+        itr.forceState(null);
+
         List<StateGameEnum> stateSequence = new ArrayList<>();
         stateSequence.add(StateGameEnum.DEAL_PRIVATE_OBJECTIVE);
         stateSequence.add(StateGameEnum.DEAL_TOOL);
@@ -33,9 +36,8 @@ public class RoundTest {
             index++;
         }
 
-        /**
-         * Method used only for testing. Please read StateIterator method to get full image of what's going on
-         */
-        itr.forceState(StateGameEnum.DEAL_PRIVATE_OBJECTIVE);
+
+         //Method used only for testing. Please read StateIterator method to get full image of what's going on
+        itr.forceState(null);
     }
 }
