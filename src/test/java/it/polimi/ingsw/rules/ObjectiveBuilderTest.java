@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.rules;
 
 import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.cards.CardType;

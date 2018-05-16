@@ -1,5 +1,5 @@
 
-package it.polimi.ingsw;
+package it.polimi.ingsw.base;
 
 
 import it.polimi.ingsw.sagrada.game.base.*;

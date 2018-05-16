@@ -74,19 +74,19 @@
     Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 sec
     Running it.polimi.ingsw.cards.ToolDealerTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.CellBuilderTest
+    Running it.polimi.ingsw.rules.CellBuilderTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.CellRuleTest
+    Running it.polimi.ingsw.rules.CellRuleTest
     Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.CellTest
+    Running it.polimi.ingsw.playables.CellTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.DiceControllerTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.DiceTest
+    Running it.polimi.ingsw.playables.DiceTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.GameManagerTest
+    Running it.polimi.ingsw.base.GameManagerTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.MainGameRuleTest
+    Running it.polimi.ingsw.rules.MainGameRuleTest
     Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.network.protocols.HeartbeatTest
     mag 14, 2018 11:36:58 AM it.polimi.ingsw.network.protocols.HeartbeatTest onAcquiredCommunication
@@ -96,23 +96,23 @@
     mag 14, 2018 11:37:01 AM it.polimi.ingsw.network.protocols.HeartbeatTest onHeartbeat
     INFORMAZIONI: Received heartbet from 02-15-6C-C1-13-AF in 2000 at 1526290621608
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.966 sec
-    Running it.polimi.ingsw.ObjectiveBuilderTest
+    Running it.polimi.ingsw.rules.ObjectiveBuilderTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.ObjectiveRuleTest
+    Running it.polimi.ingsw.rules.ObjectiveRuleTest
     Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.PlayerIteratorTest
+    Running it.polimi.ingsw.base.PlayerIteratorTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.RoundTrackTest
+    Running it.polimi.ingsw.playables.RoundTrackTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.RuleControllerTest
     Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.ScoreTrackTest
+    Running it.polimi.ingsw.playables.ScoreTrackTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.ToolBuilderTest
+    Running it.polimi.ingsw.rules.ToolBuilderTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.ToolRuleTest
+    Running it.polimi.ingsw.rules.ToolRuleTest
     Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.WindowTest
+    Running it.polimi.ingsw.playables.WindowTest
     Fractal Drops
 
      |4| |Y|6|

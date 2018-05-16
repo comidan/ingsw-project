@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.playables;
 
 
 import it.polimi.ingsw.sagrada.game.playables.*;
