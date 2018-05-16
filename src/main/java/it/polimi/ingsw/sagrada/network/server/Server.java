@@ -23,19 +23,19 @@ public class Server implements Runnable {
     Socket socket;
 
 
-    //move to private method called in constructor
     public void Server() {
-
+        serverSocket = createServerSocket();
         matchLobbyList = new ArrayList<>();
 
     }
 
 
-    private void createServerSocket() {
+    private ServerSocket createServerSocket() {
         try {
-            serverSocket = new ServerSocket(port);
+            return new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -58,7 +58,6 @@ public class Server implements Runnable {
             }
         }
     }
-
 
     private MatchLobby choseLobby() {
         if (!matchLobbyList.isEmpty()) {
