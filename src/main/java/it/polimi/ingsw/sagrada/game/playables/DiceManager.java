@@ -4,10 +4,10 @@ import it.polimi.ingsw.sagrada.game.base.Colors;
 import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Picker;
 import it.polimi.ingsw.sagrada.game.base.RoundStateEnum;
-import it.polimi.ingsw.sagrada.game.intercomm.Channel;
-import it.polimi.ingsw.sagrada.game.intercomm.DiceEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.DiceGameManagerEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -17,20 +17,21 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DiceManager implements Channel<DiceEvent> {
+public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     private List<Dice> draftPool;
     private List<Dice> bagPool;
     private static final int DICE_PER_COLOR = 18;
     private int diceNumber;
     private int numberOfPlayers; // missing method to fetch this value, temporary value for testing
     private Consumer<Message> dispatchGameManager;
+    private DynamicRouter dynamicRouter;
 
     private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
 
     /**
      * initialize pools
      */
-    public DiceManager(int numberOfPlayers, Consumer<Message> dispatchGameManager) {
+    public DiceManager(int numberOfPlayers, Consumer<Message> dispatchGameManager, DynamicRouter dynamicRouter) {
         bagPool = new ArrayList<>();
         draftPool = new ArrayList<>();
         int id = 0;
@@ -43,6 +44,8 @@ public class DiceManager implements Channel<DiceEvent> {
         diceNumber = this.numberOfPlayers * 2 + 1;
 
         this.dispatchGameManager = dispatchGameManager;
+        this.dynamicRouter = dynamicRouter;
+        this.dynamicRouter.subscribeChannel(DiceEvent.class, this);
     }
 
     public int getBagSize() {
@@ -114,5 +117,10 @@ public class DiceManager implements Channel<DiceEvent> {
         Dice dice = getDiceDraft(message.getIdDice());
         DiceGameManagerEvent diceGameManagerEvent = new DiceGameManagerEvent(dice, message);
         dispatchGameManager.accept(diceGameManagerEvent);
+    }
+
+    @Override
+    public void sendMessage(DiceResponse message) {
+        dynamicRouter.dispatch(message);
     }
 }

@@ -1,5 +1,7 @@
-package it.polimi.ingsw.sagrada.game.intercomm;
+package it.polimi.ingsw.sagrada.game.intercomm.message;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 public class DiceGameManagerEvent extends DiceEvent {

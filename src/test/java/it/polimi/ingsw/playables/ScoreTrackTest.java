@@ -33,7 +33,7 @@ public class ScoreTrackTest {
         DynamicRouter dynamicRouter = new MessageDispatcher();
         GameManager gameManager = new GameManager(players, dynamicRouter);
 
-        WindowManager windowManager = new WindowManager(gameManager.getDispatchReference());
+        WindowManager windowManager = new WindowManager(gameManager.getDispatchReference(), dynamicRouter);
         Window window = windowManager.generateWindow(0, WindowSide.FRONT);
         playerOne.setWindow(window);
         List<ObjectiveRule> objectiveRuleList = new ArrayList<>();

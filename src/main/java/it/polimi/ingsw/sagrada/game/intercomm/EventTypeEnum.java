@@ -11,8 +11,8 @@ public enum EventTypeEnum {
     public static String toString(EventTypeEnum eventTypeEnum) {
         Logger logger = Logger.getLogger(EventTypeEnum.class.getName());
         switch(eventTypeEnum) {
-            case WINDOW_GAME_MANAGER_EVENT: return "it.polimi.ingsw.sagrada.game.intercomm.WindowGameManagerEvent";
-            case DICE_GAME_MANAGER_EVENT: return "it.polimi.ingsw.sagrada.game.intercomm.DiceGameManagerEvent";
+            case WINDOW_GAME_MANAGER_EVENT: return "it.polimi.ingsw.sagrada.game.intercomm.message.WindowGameManagerEvent";
+            case DICE_GAME_MANAGER_EVENT: return "it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent";
             default: logger.log(Level.SEVERE, "Wrong type of Event");
         }
         return null;

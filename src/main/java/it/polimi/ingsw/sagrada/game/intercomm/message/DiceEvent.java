@@ -1,8 +1,9 @@
-package it.polimi.ingsw.sagrada.game.intercomm;
+package it.polimi.ingsw.sagrada.game.intercomm.message;
 
 import it.polimi.ingsw.sagrada.game.base.Position;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
 
-public class DiceEvent implements Message{
+public class DiceEvent implements Message {
 
     private int idPlayer;
     private int idDice;

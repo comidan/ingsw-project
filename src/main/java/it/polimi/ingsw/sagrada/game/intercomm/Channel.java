@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.game.intercomm;
 
-public interface Channel<T extends Message> {
-    void dispatch(T message);
+public interface Channel<R extends Message, T extends Message> {
+    void dispatch(R message);
+    void sendMessage(T message);
 }

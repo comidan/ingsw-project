@@ -1,9 +1,9 @@
 package it.polimi.ingsw.sagrada.game.base;
 
-import it.polimi.ingsw.sagrada.game.intercomm.Channel;
-import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.WindowEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.WindowGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.WindowEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.WindowGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.game.playables.Token;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
@@ -19,11 +19,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class WindowManager implements Channel<WindowEvent> {
+public class WindowManager implements Channel<WindowEvent, WindowResponse> {
 
     private static final String BASE_PATH = "src/main/resources/json/window/";
     private static final int WINDOWS_PER_CARD = 2;
@@ -35,8 +34,9 @@ public class WindowManager implements Channel<WindowEvent> {
     private JSONArray windowsArray;
 
     private Consumer<Message> dispatchGameManager;
+    private DynamicRouter dynamicRouter;
 
-    public WindowManager(Consumer<Message> dispatchGameManager) {
+    public WindowManager(Consumer<Message> dispatchGameManager, DynamicRouter dynamicRouter) {
         JSONParser parser;
         parser = new JSONParser();
         List<Integer> id = new ArrayList<>();
@@ -51,19 +51,21 @@ public class WindowManager implements Channel<WindowEvent> {
         }
 
         this.dispatchGameManager = dispatchGameManager;
+        this.dynamicRouter = dynamicRouter;
+        this.dynamicRouter.subscribeChannel(WindowEvent.class, this);
     }
 
     public boolean isWindowsLeft() {
         return picker.hasNext();
     }
 
-    public List<Integer> dealWindowId() {
+    public void dealWindowId(int playerId) {
         List<Integer> windowId = new ArrayList<>();
         for (int i = 0; i < WINDOWS_PER_CARD; i++) {
             if (picker.hasNext()) windowId.add(picker.next());
         }
 
-        return windowId;
+        sendMessage(new WindowResponse(playerId, windowId));
     }
 
     public Window generateWindow(int id, WindowSide side) {
@@ -134,5 +136,10 @@ public class WindowManager implements Channel<WindowEvent> {
     public void dispatch(WindowEvent message) {
         Window window = generateWindow(message.getIdWindow(), message.getWindowSide());
         dispatchGameManager.accept(new WindowGameManagerEvent(message.getIdPlayer(), window));
+    }
+
+    @Override
+    public void sendMessage(WindowResponse message) {
+        dynamicRouter.dispatch(message);
     }
 }
