@@ -4,10 +4,11 @@ package it.polimi.ingsw.sagrada.network.server;
 import it.polimi.ingsw.sagrada.network.utilities.*;
 import org.json.simple.*;
 
-import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.Socket;
+
+import static java.lang.Boolean.*;
 
 public class PlayerRunnable implements Runnable {
 
@@ -15,13 +16,13 @@ public class PlayerRunnable implements Runnable {
     private Socket clientSocket;
     private BufferedReader inSocket;
     private PrintWriter outSocket;
-    private UserPool userPool;
     private String userName;
-    private JSONParser parser = new JSONParser();
+    private CommandParser commandParser;
 
 
     protected PlayerRunnable(Socket clientSocket) {
         this.clientSocket = clientSocket;
+        commandParser = new CommandParser();
         try {
             inSocket = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             outSocket = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())), true);
@@ -31,23 +32,21 @@ public class PlayerRunnable implements Runnable {
 
     }
 
-    @java.lang.SuppressWarnings("squid:S2189")
     @Override
     public void run() {
-        while (true) {
+        boolean exit = FALSE;
+        while (exit == FALSE) {
             try {
                 String message = inSocket.readLine();
-                try {
-                    JSONObject jsonMessage = (JSONObject) parser.parse(message);
-                    String actionType = (String) jsonMessage.get("action");
-                    if (actionType.equals("login"))
+                ActionEnum action = commandParser.parse(message);
+                switch (action) {
+                    case LOGIN:
                         login();
-
-                } catch (org.json.simple.parser.ParseException exc) {
-
+                        break;
+                    case END:
+                        exit = TRUE;
+                        break;
                 }
-
-
             } catch (IOException exc) {
                 exc.printStackTrace();
                 try {

@@ -23,11 +23,6 @@ public class Client implements Runnable {
         try {
             doActions();
         } catch (Exception e) {
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-            }
         }
     }
 

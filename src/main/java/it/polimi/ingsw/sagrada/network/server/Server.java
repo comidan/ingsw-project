@@ -23,7 +23,8 @@ public class Server implements Runnable {
     Socket socket;
 
 
-    public void Server() {
+    public Server() {
+
         serverSocket = createServerSocket();
         matchLobbyList = new ArrayList<>();
 
