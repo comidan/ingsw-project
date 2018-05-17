@@ -11,9 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Server implements Runnable {
+
+    private static final Logger LOGGER = Logger.getLogger(Server.class.getName());
+
     private int port;
     private ServerSocket serverSocket;
     private ExecutorService executor;
@@ -35,7 +40,7 @@ public class Server implements Runnable {
         try {
             return new ServerSocket(port);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, () -> "server init error");
             return null;
         }
     }
@@ -52,10 +57,10 @@ public class Server implements Runnable {
                 if (loginManager.checkLogin()) {
                     choseLobby().addClient(socketClient);
                 } else {
-                    System.out.println("Login Failed");
+                    LOGGER.log(Level.INFO, () -> "Login failed");
                 }
             } catch (IOException exc) {
-                System.out.print("Error");
+                LOGGER.log(Level.SEVERE, () -> "server accept error");
             }
         }
     }

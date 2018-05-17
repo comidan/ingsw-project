@@ -7,11 +7,14 @@ import org.json.simple.*;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.lang.Boolean.*;
 
 public class PlayerRunnable implements Runnable {
 
+    private static final Logger LOGGER = Logger.getLogger(PlayerRunnable.class.getName());
 
     private Socket clientSocket;
     private BufferedReader inSocket;
@@ -27,7 +30,7 @@ public class PlayerRunnable implements Runnable {
             inSocket = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             outSocket = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())), true);
         } catch (IOException exc) {
-            exc.printStackTrace();
+            LOGGER.log(Level.SEVERE, () -> "error");
         }
 
     }
@@ -48,7 +51,7 @@ public class PlayerRunnable implements Runnable {
                         break;
                 }
             } catch (IOException exc) {
-                exc.printStackTrace();
+                LOGGER.log(Level.SEVERE, () -> "error");
                 try {
                     clientSocket.close();
                 } catch (IOException _exc) {
