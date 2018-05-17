@@ -25,14 +25,14 @@ public class PortDiscovery {
         for(int port = MIN_PORT_NUMBER; port <= MAX_PORT_NUMBER; port++)
             if(isPortAvailableOnTCP(port))
                 return port;
-        throw new RuntimeException("No avilable port has been found");
+        throw new RuntimeException("No available port has been found");
     }
 
     public int obtainAvailableUDPPort() {
         for(int port = MIN_PORT_NUMBER; port <= MAX_PORT_NUMBER; port++)
             if(isPortAvailableOnUDP(port))
                 return port;
-        throw new RuntimeException("No avilable port has been found");
+        throw new RuntimeException("No available port has been found");
     }
 
     public Future<Integer> obtainAvailablePortAsync() {
