@@ -12,13 +12,13 @@ import java.util.logging.Logger;
 class AdvancedEncryptionStandard {
 
     private static final Logger LOGGER = Logger.getLogger(AdvancedEncryptionStandard.class.getName());
-    private static final String KEY = "Bar12345Bar12345"; // WARNING : PLEASE FIND A MORE SECURE WAY
+    private static final String KEY = "31415926ecehigic"; // WARNING : PLEASE FIND A MORE SECURE WAY
     private static String INIT_VECTOR = "";
 
-    private static String encrypt(String key, String initVector, String value) {
+    private static String encrypt(String initVector, String value) {
         try {
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+            SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes("UTF-8"), "AES");
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
@@ -34,10 +34,10 @@ class AdvancedEncryptionStandard {
         return null;
     }
 
-    private static String decrypt(String key, String initVector, String encrypted) {
+    private static String decrypt(String initVector, String encrypted) {
         try {
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+            SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes("UTF-8"), "AES");
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
@@ -55,13 +55,13 @@ class AdvancedEncryptionStandard {
 
     static String getEncryptedData(String data) {
         INIT_VECTOR = generateInitializationVector();
-        return encrypt(KEY, INIT_VECTOR, data);
+        return encrypt(INIT_VECTOR, data);
     }
 
     static String getDecryptedData(String encryptedData) {
         if(INIT_VECTOR.isEmpty())
             INIT_VECTOR = generateInitializationVector();
-        String decrypted = decrypt(KEY, INIT_VECTOR, encryptedData);
+        String decrypted = decrypt(INIT_VECTOR, encryptedData);
         INIT_VECTOR = "";
         return decrypted;
     }
