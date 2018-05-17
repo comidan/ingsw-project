@@ -15,7 +15,8 @@ public class DiceManagerTest {
 
     @Test
     public void testDicePick() {
-        int numberOfPlayers = 3;
+        /*int numberOfPlayers = 3;
+        DiceManager diceManager = new DiceManager(2, )
         assertEquals(90, DiceManager.getDiceManager(numberOfPlayers).getBagSize());
         pickedDice = new ArrayList<>();
         List<Dice> diceCompared = new ArrayList<>();
@@ -26,6 +27,6 @@ public class DiceManagerTest {
 
         //diceManager.setId(pickedDice.get(0).getId());
         //assertNotNull(diceManager.getDraft());
-        //assertEquals(diceManager.getDice(RoundStateEnum.IN_GAME), diceCompared);
+        //assertEquals(diceManager.getDice(RoundStateEnum.IN_GAME), diceCompared);*/
     }
 }

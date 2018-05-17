@@ -2,6 +2,8 @@ package it.polimi.ingsw.playables;
 
 import it.polimi.ingsw.sagrada.game.base.*;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
 import it.polimi.ingsw.sagrada.game.playables.*;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
@@ -24,7 +26,14 @@ public class ScoreTrackTest {
         ObjectiveRule objectiveRulePublic = ObjectiveRule.builder().setValueCoupleObjective(2, 5, 6).build();
         ObjectiveCard cardPublic = new ObjectiveCard(2, "testPublic", objectiveRulePublic);
         playerOne.setPrivateObjectiveCard(card);
-        WindowManager windowManager = new WindowManager();
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(0));
+        players.add(new Player(1));
+        players.add(new Player(2));
+        DynamicRouter dynamicRouter = new MessageDispatcher();
+        GameManager gameManager = new GameManager(players, dynamicRouter);
+
+        WindowManager windowManager = new WindowManager(gameManager.getDispatchReference());
         Window window = windowManager.generateWindow(0, WindowSide.FRONT);
         playerOne.setWindow(window);
         List<ObjectiveRule> objectiveRuleList = new ArrayList<>();

@@ -3,7 +3,6 @@ package it.polimi.ingsw.sagrada.game.base;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import it.polimi.ingsw.sagrada.game.base.RoundStateEnum;
 
 /**
  * This Iterator manages various phase of the game. It's a Singleton

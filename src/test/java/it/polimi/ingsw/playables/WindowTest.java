@@ -1,12 +1,17 @@
 package it.polimi.ingsw.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Colors;
+import it.polimi.ingsw.sagrada.game.base.GameManager;
+import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.base.WindowManager;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -15,7 +20,14 @@ public class WindowTest {
 
     @Test
     public void testWindowCreation() {
-        WindowManager windowManager = new WindowManager();
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(0));
+        players.add(new Player(1));
+        players.add(new Player(2));
+        DynamicRouter dynamicRouter = new MessageDispatcher();
+        GameManager gameManager = new GameManager(players, dynamicRouter);
+
+        WindowManager windowManager = new WindowManager(gameManager.getDispatchReference());
         Window window = windowManager.generateWindow(0, WindowSide.FRONT);
 
         Dice dice = new Dice(3, Colors.RED);
@@ -27,7 +39,14 @@ public class WindowTest {
 
     @Test
     public void testAllWindowsJSON() {
-        WindowManager windowManager = new WindowManager();
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(0));
+        players.add(new Player(1));
+        players.add(new Player(2));
+        DynamicRouter dynamicRouter = new MessageDispatcher();
+        GameManager gameManager = new GameManager(players, dynamicRouter);
+
+        WindowManager windowManager = new WindowManager(gameManager.getDispatchReference());
         Window window;
         int counter = 0;
 

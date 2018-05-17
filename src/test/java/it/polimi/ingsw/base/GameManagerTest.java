@@ -3,6 +3,8 @@ package it.polimi.ingsw.base;
 
 
 import it.polimi.ingsw.sagrada.game.base.*;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -21,10 +23,11 @@ public class GameManagerTest {
     @Test
     public void testGameController() {
         GameManager gameManager;
+        DynamicRouter dynamicRouter = new MessageDispatcher();
 
         players.add(playerOne);
         players.add(playerTwo);
-        gameManager = GameManager.getGameController(players);
+        gameManager = new GameManager(players, dynamicRouter);
         assertTrue(gameManager.getPlayerNumber() > 0);
         gameManager.startGame();
         assertEquals(StateGameEnum.DEAL_WINDOWS, gameManager.getCurrentState());

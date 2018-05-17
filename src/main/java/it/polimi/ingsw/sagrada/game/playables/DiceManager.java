@@ -7,29 +7,30 @@ import it.polimi.ingsw.sagrada.game.base.RoundStateEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.DiceGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DiceManager implements Channel<DiceEvent> {
-    private static DiceManager diceManager;
     private List<Dice> draftPool;
     private List<Dice> bagPool;
     private static final int DICE_PER_COLOR = 18;
     private int diceNumber;
     private int numberOfPlayers; // missing method to fetch this value, temporary value for testing
-    private GameManager gameManager;
+    private Consumer<Message> dispatchGameManager;
 
     private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
 
     /**
      * initialize pools
      */
-    private DiceManager(int numberOfPlayers) {
+    public DiceManager(int numberOfPlayers, Consumer<Message> dispatchGameManager) {
         bagPool = new ArrayList<>();
         draftPool = new ArrayList<>();
         int id = 0;
@@ -38,18 +39,11 @@ public class DiceManager implements Channel<DiceEvent> {
                 bagPool.add(new Dice(id++, color));
             }
         }
-        gameManager = GameManager.getGameManager();
         this.numberOfPlayers = numberOfPlayers;
         diceNumber = this.numberOfPlayers * 2 + 1;
-    }
 
-    public static DiceManager getDiceManager(int numberOfPlayers) {
-        if (diceManager == null) {
-            diceManager = new DiceManager(numberOfPlayers);
-        }
-        return diceManager;
+        this.dispatchGameManager = dispatchGameManager;
     }
-
 
     public int getBagSize() {
         return bagPool.size();
@@ -119,6 +113,6 @@ public class DiceManager implements Channel<DiceEvent> {
     public void dispatch(DiceEvent message) {
         Dice dice = getDiceDraft(message.getIdDice());
         DiceGameManagerEvent diceGameManagerEvent = new DiceGameManagerEvent(dice, message);
-        gameManager.dispatch(diceGameManagerEvent);
+        dispatchGameManager.accept(diceGameManagerEvent);
     }
 }

@@ -5,19 +5,18 @@ import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 
 import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
-import it.polimi.ingsw.sagrada.game.intercomm.Channel;
-import it.polimi.ingsw.sagrada.game.intercomm.DiceGameManagerEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.WindowGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.playables.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
+import static it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum.*;
 
 /**
  *
@@ -35,29 +34,32 @@ public class GameManager implements Channel<Message> {
     private RoundIterator roundIterator = RoundIterator.getRoundIterator();
     private PlayerIterator playerIterator;
     private WindowManager windowManager;
-    private static GameManager gameManager;
 
-    private int numWindowDealed = 0;
+    private int numWindowDealt = 0;
 
     private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
 
-    private GameManager(List<Player> players) {
+    public GameManager(List<Player> players, DynamicRouter dynamicRouter) {
+        Consumer<Message> function = this::dispatch;
+
         this.players = players;
+
         cardManager = new CardManager();
-        diceManager = DiceManager.getDiceManager(players.size());
+        diceManager = new DiceManager(players.size(), function);
+        windowManager = new WindowManager(function);
+
         playerIterator = PlayerIterator.getPlayerIterator(players);
-        windowManager = new WindowManager();
+
+        subscribeManagertoRouter(dynamicRouter);
     }
 
-    public static GameManager getGameController(List<Player> players) {
-        if (gameManager == null) {
-            gameManager = new GameManager(players);
-        }
-        return gameManager;
+    public Consumer<Message> getDispatchReference() {
+        return this::dispatch;
     }
 
-    public static GameManager getGameManager() {
-        return gameManager;
+    private void subscribeManagertoRouter(DynamicRouter dynamicRouter) {
+        dynamicRouter.subscribeChannel(WindowEvent.class, windowManager);
+        dynamicRouter.subscribeChannel(DiceEvent.class, diceManager);
     }
 
     public void startGame() {
@@ -111,8 +113,8 @@ public class GameManager implements Channel<Message> {
 
     private void dealWindowsToPlayer(Player player, Window window) {
         player.setWindow(window);
-        numWindowDealed++;
-        if (numWindowDealed == players.size() && stateIterator.hasNext()) {
+        numWindowDealt++;
+        if (numWindowDealt == players.size() && stateIterator.hasNext()) {
             stateIterator.next();
         }
     }
@@ -165,17 +167,14 @@ public class GameManager implements Channel<Message> {
     @Override
     public void dispatch(Message message) {
         String eventType = message.getType().getName();
-        switch (eventType) {
-            case "WindowGameManagerEvent":
-                WindowGameManagerEvent msgW = (WindowGameManagerEvent) message;
-                dealWindowsToPlayer(players.get(msgW.getIdPlayer()), msgW.getWindow());
-                break;
-            case "DiceGameManagerEvent":
-                DiceGameManagerEvent msgD = (DiceGameManagerEvent) message;
-                setDiceInWindow(msgD.getIdPlayer(), msgD.getDice(), msgD.getPosition());
-                break;
-            default:
-                LOGGER.log(Level.SEVERE, "Type not found");
+        if(eventType.equals(EventTypeEnum.toString(WINDOW_GAME_MANAGER_EVENT))) {
+            WindowGameManagerEvent msgW = (WindowGameManagerEvent) message;
+            dealWindowsToPlayer(players.get(msgW.getIdPlayer()), msgW.getWindow());
+        } else if(eventType.equals(EventTypeEnum.toString(DICE_GAME_MANAGER_EVENT))) {
+            DiceGameManagerEvent msgD = (DiceGameManagerEvent) message;
+            setDiceInWindow(msgD.getIdPlayer(), msgD.getDice(), msgD.getPosition());
+        } else {
+            LOGGER.log(Level.SEVERE, "GameManager has received a wrong event");
         }
     }
 }
