@@ -43,7 +43,7 @@ public class PlayerIterator implements Iterator<Player> {
     }
 
 
-    public int selectStarterPlayer() {
+    private int selectStarterPlayer() {
         Random rand = new Random();
         return rand.nextInt(playerNumber);
     }
