@@ -44,7 +44,7 @@ public class PlayerRunnable implements Runnable {
                 ActionEnum action = commandParser.parse(message);
                 switch (action) {
                     case LOGIN:
-                        login();
+                        login(message);
                         break;
                     case END:
                         exit = TRUE;
@@ -61,7 +61,7 @@ public class PlayerRunnable implements Runnable {
         }
     }
 
-    private boolean login() throws IOException {
+    private boolean login(String message) {
 
         return true;
     }

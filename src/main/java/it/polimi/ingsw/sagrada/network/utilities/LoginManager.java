@@ -2,6 +2,9 @@ package it.polimi.ingsw.sagrada.network.utilities;
 
 public class LoginManager {
 
+    private static LoginManager loginManager;
+
+
     public boolean checkLogin() {
         //search in database
         return false;
