@@ -84,7 +84,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         return pickedDice;
     }
 
-    private void bagToDraft() {
+    public void bagToDraft() {
         draftPool.clear();
         Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
         for (int i = 0; i < diceNumber; i++) {

@@ -40,8 +40,6 @@ public class GameManager implements Channel<Message, Message> {
     private WindowManager windowManager;
     private DynamicRouter dynamicRouter;
 
-    private int numWindowDealt = 0;
-
     private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
 
     public GameManager(List<Player> players, DynamicRouter dynamicRouter) {
@@ -111,16 +109,21 @@ public class GameManager implements Channel<Message, Message> {
     }
 
     private void dealWindowsToPlayer(Player player, Window window) {
+        boolean dealt = true;
+
         player.setWindow(window);
-        numWindowDealt++;
-        if (numWindowDealt == players.size() && stateIterator.hasNext()) {
-            stateIterator.next();
+        for(Player p:players) {
+            if(p.isConnected() && p.getWindow()==null) dealt = false;
         }
+
+        if(dealt) startRound();
     }
 
-    public void playRound() {
-
-        while (roundIterator.hasNext()) {
+    public void startRound() {
+        if(stateIterator.next()==TURN) {
+            diceManager.bagToDraft();
+        }
+        /*while (roundIterator.hasNext()) {
             switch (roundIterator.next()) {
                 case SETUP_ROUND:
                     diceManager.getDice(RoundStateEnum.SETUP_ROUND);
@@ -135,7 +138,7 @@ public class GameManager implements Channel<Message, Message> {
                     diceManager.getDice(RoundStateEnum.END_ROUND);
                     break;
             }
-        }
+        }*/
     }
 
     private void setDiceInWindow(int idPlayer, Dice dice, Position position) {

@@ -32,7 +32,7 @@ public class GameManagerTest {
         assertTrue(gameManager.getPlayerNumber() > 0);
         gameManager.startGame();
         assertEquals(StateGameEnum.DEAL_WINDOWS, gameManager.getCurrentState());
-        gameManager.playRound();
+        gameManager.startRound();
 
     }
 }
