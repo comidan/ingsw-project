@@ -1,13 +1,9 @@
 package it.polimi.ingsw.base;
 
-import it.polimi.ingsw.sagrada.game.base.RoundStateEnum;
 import it.polimi.ingsw.sagrada.game.playables.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DiceManagerTest {

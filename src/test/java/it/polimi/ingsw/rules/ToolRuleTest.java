@@ -1,9 +1,9 @@
 package it.polimi.ingsw.rules;
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
-import it.polimi.ingsw.sagrada.game.base.Colors;
-import it.polimi.ingsw.sagrada.game.base.DTO;
-import it.polimi.ingsw.sagrada.game.base.Position;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.DTO;
+import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.rules.*;
 import org.junit.Test;

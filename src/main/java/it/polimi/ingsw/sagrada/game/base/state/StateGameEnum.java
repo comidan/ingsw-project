@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.game.base;
+package it.polimi.ingsw.sagrada.game.base.state;
 
 public enum StateGameEnum {
     DEAL_PRIVATE_OBJECTIVE,

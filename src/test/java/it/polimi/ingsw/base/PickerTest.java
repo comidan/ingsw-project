@@ -1,6 +1,6 @@
 package it.polimi.ingsw.base;
 
-import it.polimi.ingsw.sagrada.game.base.Picker;
+import it.polimi.ingsw.sagrada.game.base.utility.Picker;
 import org.junit.Test;
 
 import java.util.ArrayList;

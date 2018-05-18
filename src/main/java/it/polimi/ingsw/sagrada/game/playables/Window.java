@@ -1,7 +1,7 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
-import it.polimi.ingsw.sagrada.game.base.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 
 import java.awt.Color;
 import java.util.List;

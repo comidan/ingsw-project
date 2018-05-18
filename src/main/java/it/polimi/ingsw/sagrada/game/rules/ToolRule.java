@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
-import it.polimi.ingsw.sagrada.game.base.DTO;
+import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 
 import java.util.function.Function;
 

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.rules;
 
-import it.polimi.ingsw.sagrada.game.base.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 import org.junit.Test;

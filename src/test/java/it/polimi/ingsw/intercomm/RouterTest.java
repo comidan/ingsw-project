@@ -2,7 +2,7 @@ package it.polimi.ingsw.intercomm;
 
 import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Player;
-import it.polimi.ingsw.sagrada.game.base.Position;
+import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowEvent;

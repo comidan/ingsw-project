@@ -1,7 +1,7 @@
 package it.polimi.ingsw.base;
 
-import it.polimi.ingsw.sagrada.game.base.StateGameEnum;
-import it.polimi.ingsw.sagrada.game.base.StateIterator;
+import it.polimi.ingsw.sagrada.game.base.state.StateGameEnum;
+import it.polimi.ingsw.sagrada.game.base.state.StateIterator;
 import org.junit.Test;
 
 import java.util.ArrayList;

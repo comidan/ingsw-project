@@ -1,10 +1,9 @@
-package it.polimi.ingsw.sagrada.game.base;
+package it.polimi.ingsw.sagrada.game.base.state;
+
+import it.polimi.ingsw.sagrada.game.base.Player;
+import it.polimi.ingsw.sagrada.game.base.utility.ReverseCircularList;
 
 import java.util.*;
-
-import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
-import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.SCORE;
-import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.TURN;
 
 public class PlayerIterator implements Iterator<Player> {
 

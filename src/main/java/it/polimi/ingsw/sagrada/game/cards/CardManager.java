@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada.game.cards;
-import it.polimi.ingsw.sagrada.game.base.Colors;
-import it.polimi.ingsw.sagrada.game.base.Picker;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Picker;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveBuilder;
 
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
@@ -33,12 +33,6 @@ public class CardManager {
 
 	private static final String BASE_PATH_OBJECTIVE = "src/main/resources/json/objective/";
 	private static final String BASE_PATH_TOOL = "src/main/resources/json/tool/";
-
-	/**
-	 * default constructor
-	 */
-	public CardManager() {
-	}
 
 	/**
 	 * @return list of of already scrambled tools

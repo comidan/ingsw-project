@@ -1,9 +1,9 @@
-package it.polimi.ingsw.sagrada.game.base;
+package it.polimi.ingsw.sagrada.game.base.state;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
+import static it.polimi.ingsw.sagrada.game.base.state.StateGameEnum.*;
 
 /**
  * This Iterator manages various phase of the game. It's a Singleton

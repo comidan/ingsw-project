@@ -1,5 +1,7 @@
 package it.polimi.ingsw.sagrada.game.base;
 
+import it.polimi.ingsw.sagrada.game.base.state.*;
+import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.cards.CardManager;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 
@@ -17,7 +19,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.polimi.ingsw.sagrada.game.base.StateGameEnum.*;
+import static it.polimi.ingsw.sagrada.game.base.state.StateGameEnum.*;
 import static it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum.*;
 
 /**

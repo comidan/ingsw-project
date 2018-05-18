@@ -1,7 +1,7 @@
 package it.polimi.ingsw.base;
 
 import it.polimi.ingsw.sagrada.game.base.Player;
-import it.polimi.ingsw.sagrada.game.base.PlayerIterator;
+import it.polimi.ingsw.sagrada.game.base.state.PlayerIterator;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -3,6 +3,7 @@ package it.polimi.ingsw.base;
 
 
 import it.polimi.ingsw.sagrada.game.base.*;
+import it.polimi.ingsw.sagrada.game.base.state.StateGameEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
 import org.junit.Test;

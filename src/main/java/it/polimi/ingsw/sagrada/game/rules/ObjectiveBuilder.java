@@ -1,7 +1,7 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
 import it.polimi.ingsw.sagrada.game.base.Builder;
-import it.polimi.ingsw.sagrada.game.base.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.playables.Dice;

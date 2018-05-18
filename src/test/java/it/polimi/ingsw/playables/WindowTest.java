@@ -1,6 +1,6 @@
 package it.polimi.ingsw.playables;
 
-import it.polimi.ingsw.sagrada.game.base.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.base.WindowManager;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.game.base;
+package it.polimi.ingsw.sagrada.game.base.state;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

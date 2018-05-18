@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada.game.intercomm.message;
 
-import it.polimi.ingsw.sagrada.game.base.Position;
+import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 
 public class DiceEvent implements Message {

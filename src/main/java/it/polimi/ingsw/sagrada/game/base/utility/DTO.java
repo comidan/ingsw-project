@@ -1,5 +1,6 @@
-package it.polimi.ingsw.sagrada.game.base;
+package it.polimi.ingsw.sagrada.game.base.utility;
 
+import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.util.Set;

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.sagrada.game.base;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Picker;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowGameManagerEvent;

@@ -4,7 +4,7 @@ package it.polimi.ingsw.playables;
 import it.polimi.ingsw.sagrada.game.playables.*;
 import org.junit.Test;
 
-import it.polimi.ingsw.sagrada.game.base.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 
 import java.awt.*;
 import java.util.ArrayList;

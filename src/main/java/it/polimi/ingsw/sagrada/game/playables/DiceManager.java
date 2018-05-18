@@ -1,9 +1,9 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
-import it.polimi.ingsw.sagrada.game.base.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.GameManager;
-import it.polimi.ingsw.sagrada.game.base.Picker;
-import it.polimi.ingsw.sagrada.game.base.RoundStateEnum;
+import it.polimi.ingsw.sagrada.game.base.utility.Picker;
+import it.polimi.ingsw.sagrada.game.base.state.RoundStateEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent;

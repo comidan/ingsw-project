@@ -1,6 +1,5 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
-import it.polimi.ingsw.sagrada.game.base.State;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.awt.Color;
