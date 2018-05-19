@@ -36,7 +36,8 @@ public class SocketClient implements Client {
         return loginMessage.createLoginMessage(userName, auth);
     }
 
-    void sendMessage(String message) {
+    @Override
+    public void sendMessage(String message) {
         String payload = commandParser.crateJSONMessage(message);
         output.println(payload);
         output.flush();

@@ -84,23 +84,22 @@ public class Server implements Runnable {
                     switch (loginState) {
                         case AUTH_OK:
                             lobbyPort = joinUserLobby(requestData.get("username"));
-                            loginManager.sendLoginResponse(clientSocket, requestData.get("username"), lobbyPort);
+                            LoginManager.sendLoginResponse(clientSocket, requestData.get("username"), lobbyPort);
                             clientSocket.close();
                             break;
                         case AUTH_FAILED_USER_ALREADY_LOGGED:
-                            loginManager.sendLoginError(clientSocket,"User already logged on");
+                            LoginManager.sendLoginError(clientSocket,"User already logged on");
                             break;
                         case AUTH_FAILED_USER_NOT_EXIST:
                             if (loginManager.signUp("", "")) {
                                 lobbyPort = joinUserLobby(requestData.get("username"));
-                                loginManager.sendLoginResponse(clientSocket, requestData.get("username"), lobbyPort);
+                                LoginManager.sendLoginResponse(clientSocket, requestData.get("username"), lobbyPort);
                                 clientSocket.close();
                             }
                             else
-                                loginManager.sendLoginError(clientSocket,"Username already taken");
+                                LoginManager.sendLoginError(clientSocket,"Username already taken");
                             break;
-                        default:
-                            break;
+                        default: LoginManager.sendLoginError(clientSocket,"Error"); break;
                     }
                 }
             }
@@ -118,7 +117,7 @@ public class Server implements Runnable {
                 break;
             }
         if(availableLobby == null) {
-            availableLobby = new MatchLobby(loginManager.getSignOut(), portDiscovery.obtainAvailableTCPPort());
+            availableLobby = new MatchLobby(loginManager.getSignOut());
             matchLobbyList.add(availableLobby);
         }
         availableLobby.addClient(clientIdToken);

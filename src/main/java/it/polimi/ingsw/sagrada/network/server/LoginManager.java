@@ -128,10 +128,4 @@ public class LoginManager {
         AUTH_FAILED_USER_NOT_EXIST,
         AUTH_FATAL_ERROR
     }
-
-    //ascolta pacchetti di login dal client
-    //comunica col db, fa query e vede corrispondenza
-    //ritorna evento per comunicare esito
-    // oppure potrebbe essere future invece che evento
-    //comunica esito a server, se positivo server passa clientsocket a match lobby
 }

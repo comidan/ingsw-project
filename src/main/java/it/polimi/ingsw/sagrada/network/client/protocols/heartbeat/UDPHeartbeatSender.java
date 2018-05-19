@@ -18,9 +18,9 @@ class UDPHeartbeatSender {
      * @param ipAddress ip address to send UDP datagram
      * @param port port number to associate to UDP datagram
      */
-    void sendHeartBeat(InetAddress ipAddress, int port) {
+    void sendHeartBeat(InetAddress ipAddress, int port, String payload) {
         try (DatagramSocket clientSocket = new DatagramSocket()) {
-            byte[] sendData = NetworkUtils.getMACAddress().getBytes();
+            byte[] sendData = payload.getBytes();
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress, port);
             clientSocket.send(sendPacket);
         }

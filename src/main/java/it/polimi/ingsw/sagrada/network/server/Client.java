@@ -4,5 +4,7 @@ interface Client extends Runnable {
 
     void doActions();
 
+    void sendMessage(String message);
+
     void close();
 }

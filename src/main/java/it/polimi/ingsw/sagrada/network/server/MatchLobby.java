@@ -21,7 +21,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
 
     private static final int MAX_POOL_SIZE = 4;
 
-    private Map<String, SocketClient> socketClientPool;
+    private Map<String, Client> clientPool;
     private List<String> clientIds;
     private List<String> clientIdTokens;
     private ExecutorService executor;
@@ -32,13 +32,13 @@ public class MatchLobby implements HeartbeatListener, Runnable {
     private ServerSocket serverSocket;
     private int port;
 
-    public MatchLobby(Function<String, Boolean> signOut, int port) throws IOException {
-        socketClientPool = new HashMap<>();
+    public MatchLobby(Function<String, Boolean> signOut) throws IOException {
+        clientPool = new HashMap<>();
         portDiscovery = new PortDiscovery();
         clientIds = new ArrayList<>();
         clientIdTokens = new ArrayList<>();
         this.signOut = signOut;
-        this.port = port;
+        port = portDiscovery.obtainAvailableTCPPort();
         serverSocket = new ServerSocket(port);
         heartbeatProtocolManager = new HeartbeatProtocolManager(this, portDiscovery.obtainAvailableUDPPort());
         executor = Executors.newCachedThreadPool();
@@ -46,7 +46,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
     }
 
     public boolean isFull() {
-        return socketClientPool.size() == MAX_POOL_SIZE;
+        return clientPool.size() == MAX_POOL_SIZE;
     }
 
     public void addClient(String clientID) {
@@ -65,6 +65,8 @@ public class MatchLobby implements HeartbeatListener, Runnable {
         synchronized (signOut) {
             signOut.apply(username);
         }
+        clientPool.remove(username);
+        clientIds.remove(username);
     }
 
     @Override
@@ -102,7 +104,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
                     SocketClient socketClient = new SocketClient(client);
                     String id = clientIdTokens.remove(tokenIndex);
                     clientIds.add(id);
-                    socketClientPool.put(id, socketClient);
+                    clientPool.put(id, socketClient);
                     executor.submit(socketClient);
                 }
                 else

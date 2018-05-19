@@ -12,8 +12,8 @@ public class HeartbeatProtocolManager {
     private HeartbeatProtocol heartbeatProtocol;
     private ScheduledExecutorService executor;
 
-    public HeartbeatProtocolManager(String host, int port) throws IOException {
-        heartbeatProtocol = new HeartbeatProtocol(host, port);
+    public HeartbeatProtocolManager(String host, int port, String payload) throws IOException {
+        heartbeatProtocol = new HeartbeatProtocol(host, port, payload);
         executor = Executors.newSingleThreadScheduledExecutor();
         start();
     }
