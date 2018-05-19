@@ -1,67 +1,53 @@
 package it.polimi.ingsw.sagrada.game.base.state;
 
-import it.polimi.ingsw.sagrada.game.base.Player;
-import it.polimi.ingsw.sagrada.game.base.utility.ReverseCircularList;
-
 import java.util.*;
 
-public class PlayerIterator implements Iterator<Player> {
+public class PlayerIterator implements Iterator<Integer> {
+    private List<Integer> idPlayer;
+    private List<Integer> turnIteration = new ArrayList<>();
+    private int numPlayer;
+    private int itr;
+    private int turnNum;
 
-
-    private static PlayerIterator playerIterator;
-    private Player currentPlayer;
-    private int turnNumber;
-    private int playerNumber;
-    private int roundNumber;
-    private ReverseCircularList<Player> playerList;
-
-    private PlayerIterator(List<Player> players) {
-        turnNumber = 0;
-        roundNumber = 1;
-        playerList = new ReverseCircularList<>();
-        playerList.addAll(players);
-        currentPlayer = null;
-        this.playerNumber = playerList.size();
-
+    public PlayerIterator(List<Integer> idPlayer) {
+        this.idPlayer = idPlayer;
+        int size = idPlayer.size();
+        for(int i=0; i<size-1; i++) { //example 0-1-2-0-1
+            this.idPlayer.add(idPlayer.get(i));
+        }
+        this.itr = 0;
+        this.numPlayer = size;
+        this.turnNum = 0;
+        getRoundSequence();
     }
-
-
-    public static PlayerIterator getPlayerIterator(List<Player> players) {
-        if (playerIterator == null) playerIterator = new PlayerIterator(players);
-        return playerIterator;
-    }
-
-    public List<Player> playerList() {
-        return this.playerList;
-    }
-
 
     @Override
     public boolean hasNext() {
-        return (turnNumber < playerNumber * 2);
+        if(itr<2*numPlayer && turnNum<10) return true;
+        else {
+            itr=0;
+            turnNum++;
+            getRoundSequence();
+            return false;
+        }
     }
-
-
-    private int selectStarterPlayer() {
-        Random rand = new Random();
-        return rand.nextInt(playerNumber);
-    }
-
 
     @Override
-    public Player next() throws NoSuchElementException {
-        if (!hasNext())
-            throw new NoSuchElementException();
-        if (roundNumber == 1 && turnNumber == 0)
-            playerList.setOffset(selectStarterPlayer());
-        currentPlayer = playerList.get(turnNumber);
-        turnNumber++;
-        if (turnNumber == playerNumber * 2) {
-            playerList.setOffset(playerList.getOffset() + 1);
-            roundNumber++;
+    public Integer next() {
+        if(itr>=2*numPlayer) throw new NoSuchElementException();
+        return turnIteration.get(itr++);
+    }
+
+    private void getRoundSequence() {
+        turnIteration.clear();
+        int offset = turnNum%numPlayer;
+        for(int i=0; i<2*numPlayer; i++) {
+            if(i<numPlayer) {
+                turnIteration.add(idPlayer.get(i+offset));
+            }
+            else {
+                turnIteration.add(idPlayer.get(numPlayer+2-i+offset));
+            }
         }
-
-        return currentPlayer;
-
     }
 }

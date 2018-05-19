@@ -36,7 +36,7 @@ public class MessageDispatcher implements DynamicRouter<Message> {
             }
         }
         else {
-            logger.log(Level.SEVERE, "Handler not found for ", content.getType().getName());
+            logger.log(Level.SEVERE, "Handler not found for");
         }
     }
 }

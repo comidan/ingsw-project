@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.playables.*;
@@ -19,7 +20,6 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.polimi.ingsw.sagrada.game.base.state.StateGameEnum.*;
 import static it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum.*;
 
 /**
@@ -51,7 +51,11 @@ public class GameManager implements Channel<Message, Message> {
         diceManager = new DiceManager(players.size(), function, dynamicRouter);
         windowManager = new WindowManager(function, dynamicRouter);
 
-        playerIterator = PlayerIterator.getPlayerIterator(players);
+        List<Integer> playersId = new ArrayList<>();
+        for (Player p:players) {
+            playersId.add(p.getId());
+        }
+        playerIterator = new PlayerIterator(playersId);
 
         this.dynamicRouter = dynamicRouter;
     }
@@ -61,7 +65,7 @@ public class GameManager implements Channel<Message, Message> {
     }
 
     public void startGame() {
-        while (stateIterator.hasNext() && stateIterator.getCurrentState() != DEAL_WINDOWS) {
+        while (stateIterator.hasNext() && stateIterator.getCurrentState() != StateGameEnum.DEAL_WINDOWS) {
             stateIterator.next();
 
             switch (stateIterator.getCurrentState()) {
@@ -120,25 +124,20 @@ public class GameManager implements Channel<Message, Message> {
     }
 
     public void startRound() {
-        if(stateIterator.next()==TURN) {
+        if(stateIterator.next()==StateGameEnum.TURN) {
             diceManager.bagToDraft();
+            notifyNextPlayer();
         }
-        /*while (roundIterator.hasNext()) {
-            switch (roundIterator.next()) {
-                case SETUP_ROUND:
-                    diceManager.getDice(RoundStateEnum.SETUP_ROUND);
-                    break;
-                case IN_GAME:
-                    while (playerIterator.hasNext()) {
-                        playerIterator.next();
-                        diceManager.getDice(RoundStateEnum.IN_GAME);
-                    }
-                    break;
-                case END_ROUND:
-                    diceManager.getDice(RoundStateEnum.END_ROUND);
-                    break;
-            }
-        }*/
+        else scoreState();
+    }
+
+    private void notifyNextPlayer() {
+        if(playerIterator.hasNext()) {
+            sendMessage(new BeginTurnEvent(playerIterator.next()));
+        }
+        else {
+            startRound();
+        }
     }
 
     private void setDiceInWindow(int idPlayer, Dice dice, Position position) {

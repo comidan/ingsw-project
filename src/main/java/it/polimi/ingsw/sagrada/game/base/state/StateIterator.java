@@ -15,7 +15,7 @@ public class StateIterator implements Iterator<StateGameEnum> {
     private int roundNumber;
 
     private StateIterator() {
-        roundNumber=0;
+        roundNumber=1;
         currentState=null;
     }
 
@@ -26,7 +26,8 @@ public class StateIterator implements Iterator<StateGameEnum> {
      * using this class because the first test will modify permanently StateIterator
      */
     public void forceState(StateGameEnum s) {
-        currentState=s;
+        currentState = s;
+        roundNumber = 1;
     }
 
     public static StateIterator getInstance() {
@@ -57,7 +58,7 @@ public class StateIterator implements Iterator<StateGameEnum> {
                 case DEAL_TOOL: currentState=DEAL_PUBLIC_OBJECTIVE; break;
                 case DEAL_PUBLIC_OBJECTIVE: currentState=DEAL_WINDOWS; break;
                 case DEAL_WINDOWS: currentState=TURN; break;
-                case TURN: if(roundNumber<9) roundNumber++;else currentState=SCORE; break;
+                case TURN: if(roundNumber<10) roundNumber++;else currentState=SCORE; break;
                 default: throw new NoSuchElementException();
             }
         }
