@@ -1,5 +1,7 @@
 package it.polimi.ingsw.sagrada.network.server;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.LoginEvent;
 import it.polimi.ingsw.sagrada.network.server.tools.PortDiscovery;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.LoginManager.LoginState;
@@ -78,13 +80,14 @@ public class Server implements Runnable {
             try {
                 int lobbyPort;
                 String action = loginManager.receiveLoginData(clientSocket);
-                Map<String, String> requestData = commandParser.parse(action);
-                if (requestData != null && requestData.get("type").equals("login")) {
-                    LoginState loginState = loginManager.autheanticate(requestData.get("username"), requestData.get("password"));
+                Message requestData = commandParser.parse(action);
+                if (requestData instanceof LoginEvent) {
+                    LoginEvent loginEvent = (LoginEvent)requestData;
+                    LoginState loginState = loginManager.autheanticate(loginEvent.getUsername(), loginEvent.getPassword());
                     switch (loginState) {
                         case AUTH_OK:
-                            lobbyPort = joinUserLobby(requestData.get("username"));
-                            LoginManager.sendLoginResponse(clientSocket, requestData.get("username"), lobbyPort);
+                            lobbyPort = joinUserLobby(loginEvent.getUsername());
+                            LoginManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
                             clientSocket.close();
                             break;
                         case AUTH_FAILED_USER_ALREADY_LOGGED:
@@ -92,8 +95,8 @@ public class Server implements Runnable {
                             break;
                         case AUTH_FAILED_USER_NOT_EXIST:
                             if (loginManager.signUp("", "")) {
-                                lobbyPort = joinUserLobby(requestData.get("username"));
-                                LoginManager.sendLoginResponse(clientSocket, requestData.get("username"), lobbyPort);
+                                lobbyPort = joinUserLobby(loginEvent.getUsername());
+                                LoginManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
                                 clientSocket.close();
                             }
                             else
