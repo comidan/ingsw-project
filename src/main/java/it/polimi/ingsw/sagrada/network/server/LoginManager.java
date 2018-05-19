@@ -72,7 +72,7 @@ public class LoginManager {
             long nanoDate = new java.util.Date().getTime();
             int result = database.executeUpdate("INSERT INTO User VALUES ('" + username + "', '" +
                                                                                            hashedPassword + "', '" +
-                                                                                           new Date(nanoDate).toString() +"')");
+                                                                                           new Date(nanoDate).toString() +"'), ' '");
             return result == 1;
         }
         catch (SQLException exc) {
