@@ -19,7 +19,7 @@ public class HeartbeatTest implements HeartbeatListener {
     public void testHeartbeatFunctionality() throws IOException, InterruptedException {
         int port = 9876;
         String host = System.getProperty("myapplication.ip");
-        new HeartbeatProtocolManager(host, port);
+        new HeartbeatProtocolManager(host, port, "identifier");
         new it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatProtocolManager(this, port);
         Thread.sleep(5000);
     }
