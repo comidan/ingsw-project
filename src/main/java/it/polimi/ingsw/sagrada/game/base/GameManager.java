@@ -30,15 +30,16 @@ public class GameManager implements Channel<Message, Message> {
 
     private List<Player> players;
     private DiceManager diceManager;
-    private RoundTrack roundTrack;
     private ScoreTrack scoreTrack;
     private CardManager cardManager;
     private ToolManager toolManager;
+    private RoundTrack roundTrack;
     private StateIterator stateIterator = StateIterator.getInstance();
-    private RoundIterator roundIterator = RoundIterator.getRoundIterator();
     private PlayerIterator playerIterator;
     private WindowManager windowManager;
     private DynamicRouter dynamicRouter;
+
+    private List<Integer> scores = new ArrayList<>();
 
     private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
 
@@ -50,6 +51,7 @@ public class GameManager implements Channel<Message, Message> {
         cardManager = new CardManager();
         diceManager = new DiceManager(players.size(), function, dynamicRouter);
         windowManager = new WindowManager(function, dynamicRouter);
+        roundTrack = new RoundTrack();
 
         List<Integer> playersId = new ArrayList<>();
         for (Player p:players) {
@@ -123,7 +125,7 @@ public class GameManager implements Channel<Message, Message> {
         if(dealt) startRound();
     }
 
-    public void startRound() {
+    private void startRound() {
         if(stateIterator.next()==StateGameEnum.TURN) {
             diceManager.bagToDraft();
             notifyNextPlayer();
@@ -136,6 +138,7 @@ public class GameManager implements Channel<Message, Message> {
             sendMessage(new BeginTurnEvent(playerIterator.next()));
         }
         else {
+            roundTrack.addDice(diceManager.putDiceRoundTrack(), stateIterator.getRoundNumber());
             startRound();
         }
     }
@@ -145,19 +148,18 @@ public class GameManager implements Channel<Message, Message> {
     }
 
 
-    public void scoreState() {
-        List<Integer> scoreList = new ArrayList<>();
-        for (int i = 0; i < players.size(); i++) {
-            scoreList.add(scoreTrack.calculateScore(players.get(i)));
+    private void scoreState() {
+        for (Player p:players) {
+            scores.add(scoreTrack.calculateScore(p));
         }
+    }
+
+    public List<Integer> getScores() {
+        return scores;
     }
 
     public StateGameEnum getCurrentState() {
         return stateIterator.getCurrentState();
-    }
-
-    public RoundStateEnum getCurrentRoundState() {
-        return roundIterator.getCurrentState();
     }
 
     public int getPlayerNumber() {

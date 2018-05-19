@@ -20,7 +20,7 @@ public class RoundTrackTest {
         Dice dice = new Dice(3, Colors.RED);
         List<Dice> diceList = new ArrayList<>();
         diceList.add(dice);
-        RoundTrack roundTrack = RoundTrack.getRoundTrack();
+        RoundTrack roundTrack = new RoundTrack();
         assertNotNull(roundTrack);
         roundTrack.addDice(diceList, 2);
         assertEquals(roundTrack.getDiceFromRound(Colors.RED, 2), dice);

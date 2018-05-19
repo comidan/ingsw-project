@@ -8,40 +8,23 @@ import java.util.ArrayList;
  *
  */
 public class RoundTrack {
+    private List<List<Dice>> roundDice;
 
-    private List<Dice>[] roundDice;
-    private static RoundTrack roundTrack;
-
-
-    /**
-     * Default constructor
-     */
-    private RoundTrack() {
-        roundDice = new ArrayList[10];
-        for (int i = 0; i < 10; i++)
-            roundDice[i] = new ArrayList<>();
-
-    }
-
-    public static RoundTrack getRoundTrack() {
-
-        if (roundTrack == null) {
-            roundTrack = new RoundTrack();
+    public RoundTrack() {
+        roundDice = new ArrayList<>(10);
+        for (int i=0; i<10; i++) {
+            roundDice.add(new ArrayList<>());
         }
-
-        return roundTrack;
     }
-
 
     /**
      * @return iterator of current dices on round track
      */
-
     public List<Color> getAvailableColors() {
 
         List<Color> colorList = new ArrayList<>();
-        for (int i = 0; i < roundDice.length; i++)
-            for (Dice dice : roundDice[i]) {
+        for (List<Dice> list:roundDice)
+            for (Dice dice : list) {
                 Color color = dice.getColor();
                 if (!colorList.contains(color)) colorList.add(color);
             }
@@ -50,9 +33,7 @@ public class RoundTrack {
 
 
     public Dice getDiceFromRound(Color color, int round) {
-
-
-        for (Dice dice : roundDice[round]) {
+        for (Dice dice : roundDice.get(round)) {
             if (dice.getColor() == color)
                 return dice;
         }
@@ -60,15 +41,13 @@ public class RoundTrack {
 
     }
 
-
     /**
      * @param diceList - Dice to be added
      * @param round    - round reference
      */
     public void addDice(List<Dice> diceList, int round) {
-
         for (Dice dice : diceList)
-            roundDice[round].add(dice);
+            roundDice.get(round).add(dice);
     }
 
 

@@ -3,7 +3,6 @@ package it.polimi.ingsw.sagrada.game.playables;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.utility.Picker;
-import it.polimi.ingsw.sagrada.game.base.state.RoundStateEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DiceManager implements Channel<DiceEvent, DiceResponse> {
@@ -48,42 +46,6 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         this.dynamicRouter.subscribeChannel(DiceEvent.class, this);
     }
 
-    public int getBagSize() {
-        return bagPool.size();
-    } //TESTING
-
-    /**
-     * @return dice from draft
-     */
-
-    public List<Dice> getDraft() {
-        return draftPool;
-    } //TESTING
-
-    /**
-     * @return one or more dice
-     */
-
-//THIS MUST BE FIXED
-    public List<Dice> getDice(RoundStateEnum stateEnum) {
-        List<Dice> pickedDice = new ArrayList<>();
-
-        switch (stateEnum) {
-            case SETUP_ROUND:
-                bagToDraft();
-                break;
-            case IN_GAME:
-                //pickedDice = getDiceDraft(id);
-                break;
-            case END_ROUND:
-                pickedDice = putDiceScoreTrack();
-                break;
-            default:
-                LOGGER.log(Level.SEVERE, "Wrong state of round");
-        }
-        return pickedDice;
-    }
-
     public void bagToDraft() {
         draftPool.clear();
         Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
@@ -104,7 +66,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         return null;
     }
 
-    private List<Dice> putDiceScoreTrack() {
+    public List<Dice> putDiceRoundTrack() {
         return new ArrayList<>(draftPool);
     }
 

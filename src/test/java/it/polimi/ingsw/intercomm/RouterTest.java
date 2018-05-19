@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
@@ -24,7 +25,9 @@ public class RouterTest {
         players.add(new Player(1));
         GameManager gameManager = new GameManager(players, dynamicRouter);
         WindowController windowController = new WindowController();
+        DiceController diceController = new DiceController();
         dynamicRouter.subscribeChannel(WindowResponse.class, windowController);
+        dynamicRouter.subscribeChannel(DiceResponse.class, diceController);
         gameManager.startGame();
 
         for(Message message:messageGenerator(windowController)) {
