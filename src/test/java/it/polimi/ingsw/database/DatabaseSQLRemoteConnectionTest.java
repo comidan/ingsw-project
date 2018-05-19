@@ -30,13 +30,14 @@ public class DatabaseSQLRemoteConnectionTest {
         List<String> ssids=new ArrayList<String>();
         List<String>signals=new ArrayList<String>();
         ProcessBuilder builder = new ProcessBuilder(
-                "cmd.exe", "/c", "netsh wlan show interfaces");
+                "cmd.exe", "/c", "netsh lan show interfaces");
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line;
         while (r.read()!=-1) {
             line = r.readLine();
+            System.out.println(line);
             if (line.contains("SSID") || line.contains("Signal")) {
                 line = line.substring(8);
                 ssids.add(line);

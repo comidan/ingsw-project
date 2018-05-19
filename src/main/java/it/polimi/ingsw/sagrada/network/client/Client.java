@@ -1,12 +1,11 @@
 package it.polimi.ingsw.sagrada.network.client;
 
-import it.polimi.ingsw.sagrada.network.JsonMessage;
 import org.json.simple.JSONObject;
 
 import java.net.*;
 import java.io.*;
 
-public class Client implements Runnable {
+class Client implements Runnable {
 
     private Socket socket;
     private BufferedReader inSocket;

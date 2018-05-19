@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.network.utilities;
+package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,19 +20,18 @@ public class KeyParser {
     public String getKey(String message) {
         try {
             JSONObject jsonMessage = (JSONObject) jsonParser.parse(message);
-            return jsonMessage.keySet().toArray()[0].toString();
-
+            String mainKey = jsonMessage.keySet().toArray()[0].toString();
+            return accessNextLevel(message, mainKey);
         } catch (ParseException exc) {
             LOGGER.log(Level.SEVERE, () -> "error");
             return null;
         }
     }
 
-    public String accessNextLevel(String message) {
+    private String accessNextLevel(String message, String mainKey) {
         try {
             JSONObject firstLevel = (JSONObject) jsonParser.parse(message);
-            String key = firstLevel.keySet().toArray()[0].toString();
-            return firstLevel.get(key).toString();
+            return ((JSONObject)firstLevel.get(mainKey)).keySet().toArray()[0].toString();
 
         } catch (ParseException exc) {
             LOGGER.log(Level.SEVERE, () -> "error");

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.network.utilities;
+package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
 public enum ActionEnum {
     LOGIN,

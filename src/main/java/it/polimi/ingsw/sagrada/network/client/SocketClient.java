@@ -2,7 +2,7 @@ package it.polimi.ingsw.sagrada.network.client;
 
 import java.net.Socket;
 
-public class SocketClient extends Client {
+class SocketClient extends Client {
     Socket socket;
 
     public SocketClient(Socket socket) {
