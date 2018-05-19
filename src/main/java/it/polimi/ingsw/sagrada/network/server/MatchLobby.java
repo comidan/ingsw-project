@@ -31,6 +31,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
     private Function<String, Boolean> signOut;
     private ServerSocket serverSocket;
     private int port;
+    private int heartbeatPort;
 
     public MatchLobby(Function<String, Boolean> signOut) throws IOException {
         clientPool = new HashMap<>();
@@ -40,7 +41,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
         this.signOut = signOut;
         port = portDiscovery.obtainAvailableTCPPort();
         serverSocket = new ServerSocket(port);
-        heartbeatProtocolManager = new HeartbeatProtocolManager(this, portDiscovery.obtainAvailableUDPPort());
+        heartbeatProtocolManager = new HeartbeatProtocolManager(this, heartbeatPort = portDiscovery.obtainAvailableUDPPort());
         executor = Executors.newCachedThreadPool();
         lobbyServer = Executors.newSingleThreadExecutor();
     }
@@ -77,21 +78,29 @@ public class MatchLobby implements HeartbeatListener, Runnable {
     @Override
     public void onDeath(HeartbeatEvent event) {
         removePlayer(event.getSource());
+        for(String clientId : clientIds)
+            clientPool.get(clientId).sendMessage(event.getSource() + " is offline");
     }
 
     @Override
     public void onLossCommunication(HeartbeatEvent event) {
-        //warning : maybe is down, wait for onDeath event before removal AND notify other player of imminent loss comm to player x
+        for(String clientId : clientIds)
+            if(!clientId.equals(event.getSource()))
+                clientPool.get(clientId).sendMessage(event.getSource() + " may have lost communication");
     }
 
     @Override
     public void onReacquiredCommunication(HeartbeatEvent event) {
-        //notify every player that player x came back online
+        for(String clientId : clientIds)
+            if(!clientId.equals(event.getSource()))
+                clientPool.get(clientId).sendMessage(event.getSource() + " came back!");
     }
 
     @Override
     public void onAcquiredCommunication(HeartbeatEvent event) {
-        //notifyAll or use addClient above
+        for(String clientId : clientIds)
+            if(!clientId.equals(event.getSource()))
+                clientPool.get(clientId).sendMessage(event.getSource() + " came back online");
     }
 
     @Override
@@ -105,10 +114,11 @@ public class MatchLobby implements HeartbeatListener, Runnable {
                     String id = clientIdTokens.remove(tokenIndex);
                     clientIds.add(id);
                     clientPool.put(id, socketClient);
+                    LoginManager.sendLoginLobbyResponse(client, heartbeatPort);
                     executor.submit(socketClient);
                 }
                 else
-                    LoginManager.sendLoginError(client, "level two auth error");
+                    LoginManager.sendLoginError(client);
             }
             catch (IOException exc) {
             }

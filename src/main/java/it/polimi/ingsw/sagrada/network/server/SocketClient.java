@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.network.server;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.network.client.JsonMessage;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import org.json.simple.JSONObject;
@@ -75,7 +76,7 @@ public class SocketClient implements Client {
             catch (IOException exc) {
 
             }
-            Map<String, String> dataReceived = commandParser.parse(partialJSON.toString());
+            Message dataReceived = commandParser.parse(partialJSON.toString());
             //notify someone
         }
     }

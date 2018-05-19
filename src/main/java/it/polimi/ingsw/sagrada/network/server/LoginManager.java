@@ -49,7 +49,7 @@ public class LoginManager {
     }
 
 
-    public synchronized LoginState autheanticate(String username, String hashedPassowrd) {
+    public synchronized LoginState authenticate(String username, String hashedPassowrd) {
         if(loggedUsers.get(username) != null)
             return LoginState.AUTH_FAILED_USER_ALREADY_LOGGED;
         try {
@@ -96,10 +96,31 @@ public class LoginManager {
         output.flush();
     }
 
+    public static void sendLoginError(Socket clientSocket) throws IOException {
+        CommandParser commandParser = new CommandParser();
+        PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
+        output.println(commandParser.crateJSONLoginResponseError());
+        output.flush();
+    }
+
+    public static void sendLoginSignup(Socket clientSocket) throws IOException {
+        CommandParser commandParser = new CommandParser();
+        PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
+        output.println(commandParser.crateJSONLoginResponseRegister());
+        output.flush();
+    }
+
     public static void sendLoginResponse(Socket clientSocket, String token, int lobbyPort) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
         output.println(commandParser.crateJSONLoginResponse(token, lobbyPort));
+        output.flush();
+    }
+
+    public static void sendLoginLobbyResponse(Socket clientSocket, int lobbyPort) throws IOException {
+        CommandParser commandParser = new CommandParser();
+        PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
+        output.println(commandParser.crateJSONLoginLobbyResponse(lobbyPort));
         output.flush();
     }
 
