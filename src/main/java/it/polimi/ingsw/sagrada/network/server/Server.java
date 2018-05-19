@@ -76,26 +76,28 @@ public class Server implements Runnable {
     private Runnable initializeUserSession(Socket clientSocket) {
         return () -> {
             try {
-                SocketClient socketClient;
+                int lobbyPort;
                 String action = loginManager.receiveLoginData(clientSocket);
                 Map<String, String> requestData = commandParser.parse(action);
                 if (requestData != null && requestData.get("type").equals("login")) {
                     LoginState loginState = loginManager.autheanticate(requestData.get("username"), requestData.get("password"));
                     switch (loginState) {
                         case AUTH_OK:
-                            socketClient = new SocketClient(clientSocket);
-                            joinUserLobby(requestData.get("username"), socketClient);
+                            lobbyPort = joinUserLobby(requestData.get("username"));
+                            loginManager.sendLoginResponse(clientSocket, requestData.get("username"), lobbyPort);
+                            clientSocket.close();
                             break;
                         case AUTH_FAILED_USER_ALREADY_LOGGED:
-                            loginManager.sendLoginData(clientSocket,"User already logged on");
+                            loginManager.sendLoginError(clientSocket,"User already logged on");
                             break;
                         case AUTH_FAILED_USER_NOT_EXIST:
                             if (loginManager.signUp("", "")) {
-                                socketClient = new SocketClient(clientSocket);
-                                joinUserLobby(requestData.get("username"), socketClient);
+                                lobbyPort = joinUserLobby(requestData.get("username"));
+                                loginManager.sendLoginResponse(clientSocket, requestData.get("username"), lobbyPort);
+                                clientSocket.close();
                             }
                             else
-                                loginManager.sendLoginData(clientSocket,"Username already taken");
+                                loginManager.sendLoginError(clientSocket,"Username already taken");
                             break;
                         default:
                             break;
@@ -108,19 +110,18 @@ public class Server implements Runnable {
         };
     }
 
-
-
-    private synchronized void joinUserLobby(String clientID, SocketClient socketClient) throws IOException{
-        MatchLobby availableLoby = null;
+    private synchronized int joinUserLobby(String clientIdToken) throws IOException{
+        MatchLobby availableLobby = null;
         for(MatchLobby lobby : matchLobbyList)
             if(!lobby.isFull()) {
-                availableLoby = lobby;
+                availableLobby = lobby;
                 break;
             }
-        if(availableLoby == null) {
-            availableLoby = new MatchLobby(loginManager.getSignOut());
-            matchLobbyList.add(availableLoby);
+        if(availableLobby == null) {
+            availableLobby = new MatchLobby(loginManager.getSignOut(), portDiscovery.obtainAvailableTCPPort());
+            matchLobbyList.add(availableLobby);
         }
-        availableLoby.addClient(clientID, socketClient);
+        availableLobby.addClient(clientIdToken);
+        return availableLobby.getPort();
     }
 }

@@ -3,6 +3,9 @@ package it.polimi.ingsw.sagrada.network.server;
 
 import it.polimi.ingsw.sagrada.database.Database;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.net.Socket;
@@ -10,13 +13,13 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 public class LoginManager {
 
     private Database database;
-    private CommandParser commandParser;
     private Map<String, String> loggedUsers;
     private static final String DBMS_USERNAME = "daniele_sagrada";
     private static final String DBMS_AUTH = "ge7npchy5";
@@ -26,7 +29,6 @@ public class LoginManager {
 
     public LoginManager() throws SQLException {
         loggedUsers = new HashMap<>();
-        commandParser = new CommandParser();
         try {
             database = Database.initSQLDatabase(DBMS_USERNAME,
                                                 DBMS_AUTH,
@@ -87,10 +89,33 @@ public class LoginManager {
         return partialJSON.toString();
     }
 
-    public void sendLoginData(Socket clientSocket, String data) throws IOException {
+    public static void sendLoginError(Socket clientSocket, String data) throws IOException {
+        CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
         output.println(commandParser.crateJSONMessage(data));
         output.flush();
+    }
+
+    public static void sendLoginResponse(Socket clientSocket, String token, int lobbyPort) throws IOException {
+        CommandParser commandParser = new CommandParser();
+        PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
+        output.println(commandParser.crateJSONLoginResponse(token, lobbyPort));
+        output.flush();
+    }
+
+    public static int tokenAuthentication(List<String> tokens, Socket client) throws IOException {
+        BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        String data;
+        StringBuilder partialJSON = new StringBuilder();
+        while ((data = input.readLine()) != null)
+            partialJSON.append(data);
+        try {
+            JSONObject jsonToken = (JSONObject) new JSONParser().parse(partialJSON.toString());
+            return tokens.indexOf(jsonToken.get("token"));
+        }
+        catch (ParseException exc) {
+            return -1;
+        }
     }
 
     public Function<String, Boolean> getSignOut() {

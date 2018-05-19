@@ -46,9 +46,18 @@ public class CommandParser {
 
     public String crateJSONMessage(String message) {
         JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("response", message);
-        return jsonMessage.toJSONString();
+        jsonMessage.put("metadata", message);
+        JSONObject container = new JSONObject();
+        container.put("response", jsonMessage);
+        return container.toJSONString();
     }
 
-
+    public String crateJSONLoginResponse(String token, int lobbyPort) {
+        JSONObject jsonMessage = new JSONObject();
+        jsonMessage.put("token", token);
+        jsonMessage.put("lobby_port", lobbyPort);
+        JSONObject container = new JSONObject();
+        container.put("response", jsonMessage);
+        return container.toJSONString();
+    }
 }
