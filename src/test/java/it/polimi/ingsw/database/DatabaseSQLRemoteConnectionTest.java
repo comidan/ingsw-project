@@ -23,6 +23,11 @@ public class DatabaseSQLRemoteConnectionTest {
             ResultSet set = d.executeRawQuery("SELECT ID FROM Test");
             while (set.next())
                 assertEquals(1, Integer.parseInt(set.getString("ID")));
+
+            d = Database.initSQLDatabase("root", "", 100, "127.0.0.1", 3306, "sagrada");
+            set = d.executeRawQuery("SELECT Username FROM User");
+            while (set.next())
+                assertEquals("admin", set.getString("Username"));
         }
     }
 
