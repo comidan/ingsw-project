@@ -17,8 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoginManager {
+
+    private static final Logger LOGGER = Logger.getLogger(LoginManager.class.getName());
 
     private Database database;
     private Map<String, String> loggedUsers;
@@ -64,7 +68,7 @@ public class LoginManager {
                 return LoginState.AUTH_FAILED_USER_NOT_EXIST;
         }
         catch (SQLException exc) {
-            exc.printStackTrace();
+            LOGGER.log(Level.SEVERE, exc.getMessage());
             return LoginState.AUTH_FATAL_ERROR;
         }
     }
@@ -81,7 +85,7 @@ public class LoginManager {
             return query.executeUpdate() == 1;
         }
         catch (SQLException exc) {
-            exc.printStackTrace();
+            LOGGER.log(Level.SEVERE, exc.getMessage());
             return false;
         }
     }

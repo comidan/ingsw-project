@@ -12,9 +12,12 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SocketClient implements Client {
 
+    private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     private static final int PORT = 49152; //change to dynamic in some elegant way
     private static final String ADDRESS = "localhost"; //just for now, next will be obtained in far smarter way
     private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
@@ -45,7 +48,7 @@ public class SocketClient implements Client {
                 Thread.sleep(SERVER_WAITING_RESPONSE_TIME);
             }
             catch (InterruptedException exc) {
-
+                Thread.currentThread().interrupt();
             }
         login();
 
@@ -66,8 +69,8 @@ public class SocketClient implements Client {
             inSocket = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             outSocket = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             return true;
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exc) {
+            LOGGER.log(Level.SEVERE, exc.getMessage());
             return false;
         }
     }
@@ -105,7 +108,8 @@ public class SocketClient implements Client {
     private void close() {
         try {
             socket.close();
-        } catch (IOException e) {
+        } catch (IOException exc) {
+            LOGGER.log(Level.SEVERE, exc.getMessage());
 
         }
     }
@@ -153,12 +157,9 @@ public class SocketClient implements Client {
                     socket.close();
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                socket.close();
-            } catch (IOException ex) {
-            }
+        } catch (IOException exc) {
+            LOGGER.log(Level.SEVERE, exc.getMessage());
+            close();
         }
     }
 
@@ -185,12 +186,12 @@ public class SocketClient implements Client {
                     Thread.sleep(1000);
                 }
                 catch (InterruptedException exc) {
-
+                    Thread.currentThread().interrupt();
                 }
             initializeLobbyLink(username);
         }
         catch (IOException exc) {
-            //dns / server error
+            LOGGER.log(Level.SEVERE, exc.getMessage());
         }
     }
 

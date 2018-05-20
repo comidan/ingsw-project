@@ -9,6 +9,7 @@ import it.polimi.ingsw.sagrada.network.server.LoginManager.LoginState;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class Server implements Runnable {
     private List<MatchLobby> matchLobbyList;
     private PortDiscovery portDiscovery;
 
-    public Server() throws InterruptedException, ExecutionException, SQLException {
+    public Server() throws InterruptedException, ExecutionException, SQLException, SocketException {
         portDiscovery = new PortDiscovery();
         Future<Integer> discoveringPort = portDiscovery.obtainAvailablePortOnTCPAsync();
         matchLobbyList = new ArrayList<>();
@@ -39,7 +40,7 @@ public class Server implements Runnable {
         loginManager = new LoginManager();
         port = discoveringPort.get();
         if((serverSocket = createServerSocket()) == null)
-            System.exit(-1);
+            throw new SocketException("Could not create server");
         initializeCoreFunction();
     }
 

@@ -41,7 +41,6 @@ class SQLDatabase extends Database {
                 connection = DriverManager.getConnection(databaseURL, getProperties());
             } catch (ClassNotFoundException | SQLException exc) {
                 LOGGER.log(Level.SEVERE, () -> "Fatal DB error : " + exc.getMessage());
-                exc.printStackTrace();
             }
         }
         return connection;
