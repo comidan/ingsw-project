@@ -12,14 +12,12 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class Server implements Runnable {
 
@@ -49,6 +47,7 @@ public class Server implements Runnable {
         executor = Executors.newSingleThreadExecutor();
         cachedExecutor = Executors.newCachedThreadPool();
         executor.submit(this);
+        System.out.println("Server correctly initialized and running on port " + port);
     }
 
     private ServerSocket createServerSocket() {
@@ -67,6 +66,7 @@ public class Server implements Runnable {
         while (!executor.isShutdown()) {
             try {
                 Socket clientSocket = serverSocket.accept();
+                System.out.println("Received new login request");
                 cachedExecutor.submit(initializeUserSession(clientSocket));
             }
             catch (IOException exc) {
@@ -82,28 +82,35 @@ public class Server implements Runnable {
                 String action = loginManager.receiveLoginData(clientSocket);
                 Message requestData = commandParser.parse(action);
                 if (requestData instanceof LoginEvent) {
+                    System.out.println("Parsing received json login request");
                     LoginEvent loginEvent = (LoginEvent)requestData;
                     LoginState loginState = loginManager.authenticate(loginEvent.getUsername(), loginEvent.getPassword());
+                    System.out.println(loginEvent.getUsername() + " " + loginEvent.getPassword());
                     switch (loginState) {
                         case AUTH_OK:
                             lobbyPort = joinUserLobby(loginEvent.getUsername());
                             LoginManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
+                            System.out.println("Correctly logged, migrating client to lobby server");
                             clientSocket.close();
                             break;
                         case AUTH_FAILED_USER_ALREADY_LOGGED:
                             LoginManager.sendLoginError(clientSocket,"User already logged on");
+                            System.out.println("Login error");
                             break;
                         case AUTH_FAILED_USER_NOT_EXIST:
                             LoginManager.sendLoginSignup(clientSocket);
                             if (loginManager.signUp("", "")) {
                                 lobbyPort = joinUserLobby(loginEvent.getUsername());
                                 LoginManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
+                                System.out.println("Correctly signed up, migrating client to lobby server");
                                 clientSocket.close();
                             }
-                            else
+                            else {
+                                System.out.println("Login error");
                                 LoginManager.sendLoginError(clientSocket);
+                            }
                             break;
-                        default: LoginManager.sendLoginError(clientSocket); break;
+                        default: System.out.println("No correct command was found"); LoginManager.sendLoginError(clientSocket); break;
                     }
                 }
             }

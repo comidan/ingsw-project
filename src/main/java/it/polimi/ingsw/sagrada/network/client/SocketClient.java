@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-class SocketClient implements Client {
+public class SocketClient implements Client {
 
     private static final int PORT = 49152; //change to dynamic in some elegant way
     private static final String ADDRESS = "localhost";
@@ -24,12 +24,13 @@ class SocketClient implements Client {
     private HeartbeatProtocolManager heartbeatProtocolManager;
 
 
-    SocketClient() throws IOException {
+    public SocketClient() throws IOException {
         socket = new Socket(ADDRESS, PORT);
         executor = Executors.newSingleThreadExecutor();
         initializeConnectionStream();
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
+        login();
     }
 
     private void initializeConnectionStream() throws IOException {
@@ -38,8 +39,7 @@ class SocketClient implements Client {
     }
 
     private JSONObject createMessage(String userName, String auth) {
-        loginMessage = new JsonMessage();
-        return loginMessage.createLoginMessage(userName, auth);
+        return JsonMessage.createLoginMessage(userName, auth);
     }
 
     private void doActions() {
@@ -76,14 +76,6 @@ class SocketClient implements Client {
         }
     }
 
-    private String getServerData() throws IOException {
-        String data;
-        StringBuilder partialJSON = new StringBuilder();
-        while ((data = inSocket.readLine()) != null)
-            partialJSON.append(data);
-        return partialJSON.toString();
-    }
-
     private void login() {
         try {
             boolean loginSuccessful = false;
@@ -94,24 +86,31 @@ class SocketClient implements Client {
                 outVideo.println("password:");
                 String auth = inKeyboard.readLine();
                 JSONObject message = createMessage(username, auth);
-                outSocket.println(message);
-                outSocket.flush();
-                String jsonResponse = getServerData();
+                outSocket.println(message.toJSONString());
+                System.out.println("Data sent");
+                String jsonResponse = inSocket.readLine();
                 Map<String, String> dataMap = JsonMessage.parseJsonData(jsonResponse);
-                if (dataMap.get("login").equals("successful"))
+                if (dataMap.get("login").equals("successful")) {
                     initializeLobbyLink(dataMap, username);
+                    loginSuccessful = true;
+                }
                 else if (dataMap.get("login").equals("register")) {
                     outVideo.println("Registering...");
-                    jsonResponse = getServerData();
+                    jsonResponse = inSocket.readLine();
                     dataMap = JsonMessage.parseJsonData(jsonResponse);
-                    if (dataMap.get("login").equals("successful"))
+                    if (dataMap.get("login").equals("successful")) {
+                        System.out.println("Connecting to lobby");
                         initializeLobbyLink(dataMap, username);
+                        System.out.println("login successful");
+                        loginSuccessful = true;
+                    }
                     else
                         outVideo.println("Username already taken");
                 } else if (dataMap.get("login").equals("error"))
                     outVideo.println("Username already logged on");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 socket.close();
             } catch (IOException ex) {
@@ -123,9 +122,11 @@ class SocketClient implements Client {
         socket.close();
         socket = new Socket(ADDRESS, Integer.parseInt(dataMap.get("lobby_port")));
         initializeConnectionStream();
-        String jsonResponse = getServerData();
+        outSocket.println(JsonMessage.createTokenMessage(identifier).toJSONString());
+        System.out.println("Waiting lobby response");
+        String jsonResponse = inSocket.readLine();
         dataMap = JsonMessage.parseJsonData(jsonResponse);
-        if (dataMap.get("login").equals("successful"))
+        if (dataMap.get("login").equals("successful_lobby"))
             heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, Integer.parseInt(dataMap.get("heartbeat_port")), identifier);
         else
             outVideo.println("Second level auth");
@@ -134,15 +135,11 @@ class SocketClient implements Client {
 
     public void run() {
         while (!executor.isShutdown()) {
-            String data;
-            StringBuilder partialJSON = new StringBuilder();
             try {
-                while ((data = inSocket.readLine()) != null)
-                    partialJSON.append(data);
+                outVideo.println(inSocket.readLine());
             } catch (IOException exc) {
 
             }
-            outVideo.println("message received");
         }
     }
 }

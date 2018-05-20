@@ -56,13 +56,17 @@ public class LoginManager {
             ResultSet queryResult = database.executeRawQuery("SELECT Username, Password FROM User WHERE Username = '" + username + "' AND " +
                     "Password = '" + hashedPassowrd + "'");
             if(queryResult.next()) {
+                System.out.println("Login ok");
                 loggedUsers.put(username, hashedPassowrd);
                 return LoginState.AUTH_OK;
             }
-            else
+            else {
+                System.out.println("user not registered");
                 return LoginState.AUTH_FAILED_USER_NOT_EXIST;
+            }
         }
         catch (SQLException exc) {
+            exc.printStackTrace();
             return LoginState.AUTH_FATAL_ERROR;
         }
     }
@@ -72,21 +76,19 @@ public class LoginManager {
             long nanoDate = new java.util.Date().getTime();
             int result = database.executeUpdate("INSERT INTO User VALUES ('" + username + "', '" +
                                                                                            hashedPassword + "', '" +
-                                                                                           new Date(nanoDate).toString() +"'), ' '");
+                                                                                           new Date(nanoDate).toString() +"', 'test')");
+            System.out.println(result);
             return result == 1;
         }
         catch (SQLException exc) {
+            exc.printStackTrace();
             return false;
         }
     }
 
     public String receiveLoginData(Socket clientSocket) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        String data;
-        StringBuilder partialJSON = new StringBuilder();
-        while ((data = input.readLine()) != null)
-            partialJSON.append(data);
-        return partialJSON.toString();
+        return input.readLine();
     }
 
     public static void sendLoginError(Socket clientSocket, String data) throws IOException {
@@ -126,13 +128,10 @@ public class LoginManager {
 
     public static int tokenAuthentication(List<String> tokens, Socket client) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        String data;
-        StringBuilder partialJSON = new StringBuilder();
-        while ((data = input.readLine()) != null)
-            partialJSON.append(data);
+        String data = input.readLine();
         try {
-            JSONObject jsonToken = (JSONObject) new JSONParser().parse(partialJSON.toString());
-            return tokens.indexOf(jsonToken.get("token"));
+            JSONObject jsonToken = (JSONObject) new JSONParser().parse(data);
+            return tokens.indexOf((String)jsonToken.get("token"));
         }
         catch (ParseException exc) {
             return -1;

@@ -44,6 +44,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
         heartbeatProtocolManager = new HeartbeatProtocolManager(this, heartbeatPort = portDiscovery.obtainAvailableUDPPort());
         executor = Executors.newCachedThreadPool();
         lobbyServer = Executors.newSingleThreadExecutor();
+        lobbyServer.submit(this);
     }
 
     public boolean isFull() {
@@ -108,6 +109,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
         while(!lobbyServer.isShutdown()) {
             try {
                 Socket client = serverSocket.accept();
+                System.out.println("Client entered in lobby");
                 int tokenIndex = LoginManager.tokenAuthentication(clientIdTokens, client);
                 if(tokenIndex != -1) {
                     SocketClient socketClient = new SocketClient(client);
@@ -116,6 +118,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
                     clientPool.put(id, socketClient);
                     LoginManager.sendLoginLobbyResponse(client, heartbeatPort);
                     executor.submit(socketClient);
+                    System.out.println("Correctly logged on lobby server");
                 }
                 else
                     LoginManager.sendLoginError(client);

@@ -46,7 +46,7 @@ public class CommandParser {
     public String crateJSONLoginResponse(String token, int lobbyPort) {
         JSONObject jsonMessage = new JSONObject();
         jsonMessage.put("token", token);
-        jsonMessage.put("lobby_port", lobbyPort);
+        jsonMessage.put("lobby_port", lobbyPort+"");
         jsonMessage.put("login", "successful");
         JSONObject container = new JSONObject();
         container.put("response", jsonMessage);
@@ -55,8 +55,8 @@ public class CommandParser {
 
     public String crateJSONLoginLobbyResponse(int lobbyPort) {
         JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("heartbeat_port", lobbyPort);
-        jsonMessage.put("login", "successful");
+        jsonMessage.put("heartbeat_port", lobbyPort+"");
+        jsonMessage.put("login", "successful_lobby");
         JSONObject container = new JSONObject();
         container.put("response", jsonMessage);
         return container.toJSONString();

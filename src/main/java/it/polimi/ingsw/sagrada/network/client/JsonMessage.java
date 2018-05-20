@@ -15,11 +15,17 @@ public class JsonMessage {
         JSONObject content = new JSONObject();
         content.put("username", username);
         content.put("auth", authentication);
-        JSONObject actionType = new JSONObject();
-        actionType.put("login", content);
         JSONObject container = new JSONObject();
-        container.put("action", actionType);
+        container.put("type_msg", "action");
+        container.put("type_cmd", "login");
+        container.put("login", content);
         return container;
+    }
+
+    public static JSONObject createTokenMessage(String token) {
+        JSONObject jsonToken = new JSONObject();
+        jsonToken.put("token", token);
+        return jsonToken;
     }
 
     public static Map<String, String> parseJsonData(String json) {
@@ -34,6 +40,8 @@ public class JsonMessage {
                 dataMap.put("token", (String) jsonLoginData.get("token"));
                 dataMap.put("lobby_port", (String) jsonLoginData.get("lobby_port"));
             }
+            else if(dataMap.get("login").equals("successful_lobby"))
+                dataMap.put("heartbeat_port", (String) jsonLoginData.get("heartbeat_port"));
             return dataMap;
         }
         catch (ParseException exc) {

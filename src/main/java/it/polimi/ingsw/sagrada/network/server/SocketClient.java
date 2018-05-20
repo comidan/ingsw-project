@@ -1,13 +1,10 @@
 package it.polimi.ingsw.sagrada.network.server;
 
-import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.network.client.JsonMessage;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
-import org.json.simple.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,11 +27,6 @@ public class SocketClient implements Client {
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
         executor.submit(this);
-    }
-
-    private JSONObject createMessage(String userName, String auth) {
-        loginMessage = new JsonMessage();
-        return loginMessage.createLoginMessage(userName, auth);
     }
 
     @Override
@@ -66,18 +58,12 @@ public class SocketClient implements Client {
 
     @Override
     public void run() {
-        while(!executor.isShutdown()) {
-            String data;
-            StringBuilder partialJSON = new StringBuilder();
+        while (!executor.isShutdown()) {
             try {
-                while ((data = input.readLine()) != null)
-                    partialJSON.append(data);
-            }
-            catch (IOException exc) {
+                System.out.println(input.readLine());
+            } catch (IOException exc) {
 
             }
-            Message dataReceived = commandParser.parse(partialJSON.toString());
-            //notify someone
         }
     }
 }
