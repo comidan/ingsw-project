@@ -10,6 +10,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.net.Socket;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -56,14 +57,11 @@ public class LoginManager {
             ResultSet queryResult = database.executeRawQuery("SELECT Username, Password FROM User WHERE Username = '" + username + "' AND " +
                     "Password = '" + hashedPassowrd + "'");
             if(queryResult.next()) {
-                System.out.println("Login ok");
                 loggedUsers.put(username, hashedPassowrd);
                 return LoginState.AUTH_OK;
             }
-            else {
-                System.out.println("user not registered");
+            else
                 return LoginState.AUTH_FAILED_USER_NOT_EXIST;
-            }
         }
         catch (SQLException exc) {
             exc.printStackTrace();
@@ -74,11 +72,13 @@ public class LoginManager {
     public boolean signUp(String username, String hashedPassword) {
         try {
             long nanoDate = new java.util.Date().getTime();
-            int result = database.executeUpdate("INSERT INTO User VALUES ('" + username + "', '" +
-                                                                                           hashedPassword + "', '" +
-                                                                                           new Date(nanoDate).toString() +"', 'test')");
-            System.out.println(result);
-            return result == 1;
+            PreparedStatement query = database.prepareQuery("INSERT INTO User (Username, Password, SubscriptionDate, Email) VALUES (?, ?, ?, ?)");
+            String email = "emailTestForNow";
+            query.setString(1, username);
+            query.setString(2, hashedPassword);
+            query.setDate(3, new Date(nanoDate));
+            query.setString(4, email);
+            return query.executeUpdate() == 1;
         }
         catch (SQLException exc) {
             exc.printStackTrace();

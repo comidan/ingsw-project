@@ -73,7 +73,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
 
     @Override
     public void onHeartbeat(HeartbeatEvent event) {
-        //ok
+        System.out.println(event.getSource() + " : i'm alive");
     }
 
     @Override
@@ -99,9 +99,11 @@ public class MatchLobby implements HeartbeatListener, Runnable {
 
     @Override
     public void onAcquiredCommunication(HeartbeatEvent event) {
-        for(String clientId : clientIds)
-            if(!clientId.equals(event.getSource()))
-                clientPool.get(clientId).sendMessage(event.getSource() + " came back online");
+        for(String clientId : clientIds) {
+            System.out.println(event.getSource().length() + " " + clientId.length() + " " + (clientId.equals(event.getSource())));
+            if (!clientId.equals(event.getSource()))
+                clientPool.get(clientId).sendMessage(event.getSource() + " is online");
+        }
     }
 
     @Override
@@ -114,6 +116,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
                 if(tokenIndex != -1) {
                     SocketClient socketClient = new SocketClient(client);
                     String id = clientIdTokens.remove(tokenIndex);
+                    System.out.println("Identifier : " + id);
                     clientIds.add(id);
                     clientPool.put(id, socketClient);
                     LoginManager.sendLoginLobbyResponse(client, heartbeatPort);

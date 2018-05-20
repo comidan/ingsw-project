@@ -85,7 +85,6 @@ public class Server implements Runnable {
                     System.out.println("Parsing received json login request");
                     LoginEvent loginEvent = (LoginEvent)requestData;
                     LoginState loginState = loginManager.authenticate(loginEvent.getUsername(), loginEvent.getPassword());
-                    System.out.println(loginEvent.getUsername() + " " + loginEvent.getPassword());
                     switch (loginState) {
                         case AUTH_OK:
                             lobbyPort = joinUserLobby(loginEvent.getUsername());
@@ -99,7 +98,7 @@ public class Server implements Runnable {
                             break;
                         case AUTH_FAILED_USER_NOT_EXIST:
                             LoginManager.sendLoginSignup(clientSocket);
-                            if (loginManager.signUp("", "")) {
+                            if (loginManager.signUp(loginEvent.getUsername(), loginEvent.getPassword())) {
                                 lobbyPort = joinUserLobby(loginEvent.getUsername());
                                 LoginManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
                                 System.out.println("Correctly signed up, migrating client to lobby server");

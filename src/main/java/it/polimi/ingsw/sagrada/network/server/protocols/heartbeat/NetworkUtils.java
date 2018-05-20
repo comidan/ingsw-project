@@ -17,6 +17,8 @@ public interface NetworkUtils {
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
         datagramSocket.receive(receivePacket);
         receiveData = receivePacket.getData();
-        return receiveData;
+        byte[] data = new byte[receivePacket.getLength()];
+        System.arraycopy(receiveData, receivePacket.getOffset(), data, 0, receivePacket.getLength());
+        return data;
     }
 }

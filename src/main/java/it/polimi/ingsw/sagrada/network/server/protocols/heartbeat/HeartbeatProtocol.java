@@ -32,7 +32,7 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
      */
     private byte[] receiveHeartbeat() throws IOException{
         byte[] payload = receiveData(datagramSocket);
-        this.data = new String(payload);
+        data = new String(payload);
         return payload;
     }
 

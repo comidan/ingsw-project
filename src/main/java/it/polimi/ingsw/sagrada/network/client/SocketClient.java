@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.network.client;
 
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
+import it.polimi.ingsw.sagrada.network.security.Security;
 import org.json.simple.JSONObject;
 
 import java.io.*;
@@ -85,7 +86,7 @@ public class SocketClient implements Client {
                 String username = inKeyboard.readLine();
                 outVideo.println("password:");
                 String auth = inKeyboard.readLine();
-                JSONObject message = createMessage(username, auth);
+                JSONObject message = createMessage(username, Security.generateMD5Hash(auth));
                 outSocket.println(message.toJSONString());
                 System.out.println("Data sent");
                 String jsonResponse = inSocket.readLine();
