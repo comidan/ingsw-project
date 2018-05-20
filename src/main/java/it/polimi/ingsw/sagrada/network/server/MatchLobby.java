@@ -69,6 +69,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
         }
         clientPool.remove(username);
         clientIds.remove(username);
+        clientIdTokens.remove(username);
         heartbeatProtocolManager.removeFromMonitoredHost(username);
         return true;
     }
@@ -110,6 +111,11 @@ public class MatchLobby implements HeartbeatListener, Runnable {
         }
     }
 
+    private boolean fastRecoveryClientConnection(String identifier) {
+        clientIdTokens.add(identifier);
+        return true;
+    }
+
     @Override
     public void run() {
         while(!lobbyServer.isShutdown()) {
@@ -118,13 +124,15 @@ public class MatchLobby implements HeartbeatListener, Runnable {
                 int tokenIndex = LoginManager.tokenAuthentication(clientIdTokens, client);
                 if(tokenIndex != -1) {
                     String id = clientIdTokens.remove(tokenIndex);
-                    Function<String, Boolean> function = this::removePlayer;
-                    SocketClient socketClient = new SocketClient(client, id, function);
-                    clientIds.add(id);
+                    Function<String, Boolean> disconnect = this::removePlayer;
+                    Function<String, Boolean> fastRecovery = this::fastRecoveryClientConnection;
+                    SocketClient socketClient = new SocketClient(client, id, disconnect, fastRecovery);
+                    if(!clientIds.contains(id)) //in case of communication loss
+                        clientIds.add(id);
                     clientPool.put(id, socketClient);
                     LoginManager.sendLoginLobbyResponse(client, heartbeatPort);
                     executor.submit(socketClient);
-                    System.out.println("Correctly logged on lobby server");
+                    System.out.println(id + " correctly logged on lobby server");
                 }
                 else
                     LoginManager.sendLoginError(client);

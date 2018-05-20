@@ -3,7 +3,6 @@ package it.polimi.ingsw.sagrada.network.server;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.MessageEvent;
-import it.polimi.ingsw.sagrada.network.client.JsonMessage;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 
 import java.io.*;
@@ -16,17 +15,18 @@ public class SocketClient implements Client {
     private Socket socket;
     private BufferedReader input;
     private PrintWriter output;
-    private JsonMessage loginMessage;
     private CommandParser commandParser;
     private ExecutorService executor;
     private Function disconnect;
+    private Function fastRecovery;
     private String identifier;
 
-    public SocketClient(Socket socket, String identifier, Function disconnect) throws IOException {
+    public SocketClient(Socket socket, String identifier, Function disconnect, Function fastRecovery) throws IOException {
         this.socket = socket;
         commandParser = new CommandParser();
         executor = Executors.newSingleThreadExecutor();
         this.disconnect = disconnect;
+        this.fastRecovery = fastRecovery;
         this.identifier = identifier;
         initCoreFunctions();
     }
@@ -81,7 +81,9 @@ public class SocketClient implements Client {
             try {
                 executePayload(input.readLine());
             } catch (IOException exc) {
-
+                fastRecovery.apply(identifier);
+                executor.shutdown();
+                close();
             }
         }
     }

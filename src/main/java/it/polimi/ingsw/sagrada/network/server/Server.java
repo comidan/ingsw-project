@@ -82,30 +82,29 @@ public class Server implements Runnable {
                 String action = loginManager.receiveLoginData(clientSocket);
                 Message requestData = commandParser.parse(action);
                 if (requestData instanceof LoginEvent) {
-                    System.out.println("Parsing received json login request");
                     LoginEvent loginEvent = (LoginEvent)requestData;
                     LoginState loginState = loginManager.authenticate(loginEvent.getUsername(), loginEvent.getPassword());
                     switch (loginState) {
                         case AUTH_OK:
                             lobbyPort = joinUserLobby(loginEvent.getUsername());
                             LoginManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
-                            System.out.println("Correctly logged, migrating client to lobby server");
+                            System.out.println(loginEvent.getUsername() + " correctly logged, migrating client to lobby server");
                             clientSocket.close();
                             break;
                         case AUTH_FAILED_USER_ALREADY_LOGGED:
                             LoginManager.sendLoginError(clientSocket,"User already logged on");
-                            System.out.println("Login error");
+                            System.out.println(loginState);
                             break;
                         case AUTH_FAILED_USER_NOT_EXIST:
                             LoginManager.sendLoginSignup(clientSocket);
                             if (loginManager.signUp(loginEvent.getUsername(), loginEvent.getPassword())) {
                                 lobbyPort = joinUserLobby(loginEvent.getUsername());
                                 LoginManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
-                                System.out.println("Correctly signed up, migrating client to lobby server");
+                                System.out.println(loginEvent.getUsername() + "correctly signed up, migrating client to lobby server");
                                 clientSocket.close();
                             }
                             else {
-                                System.out.println("Login error");
+                                System.out.println("Sign up failed");
                                 LoginManager.sendLoginError(clientSocket);
                             }
                             break;

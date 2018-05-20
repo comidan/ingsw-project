@@ -1,10 +1,12 @@
 package it.polimi.ingsw.sagrada.network.client;
 
+import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.security.Security;
 import org.json.simple.JSONObject;
 
 import java.io.*;
+import java.net.Inet4Address;
 import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -24,6 +26,7 @@ public class SocketClient implements Client {
     private JsonMessage loginMessage;
     private ExecutorService executor;
     private String username;
+    private int lobbyPort;
     private HeartbeatProtocolManager heartbeatProtocolManager;
 
 
@@ -108,6 +111,7 @@ public class SocketClient implements Client {
 
             while (!loginSuccessful) {
                 socket = new Socket(ADDRESS, PORT);
+                outVideo.println("Connected to " + ADDRESS + ":" + PORT + "\nThis is the first login firewall : \n");
                 initializeConnectionStream();
                 outVideo.println("username:");
                 String username = inKeyboard.readLine();
@@ -115,11 +119,12 @@ public class SocketClient implements Client {
                 String auth = inKeyboard.readLine();
                 JSONObject message = createMessage(username, Security.generateMD5Hash(auth));
                 outSocket.println(message.toJSONString());
-                System.out.println("Data sent");
                 String jsonResponse = inSocket.readLine();
                 Map<String, String> dataMap = JsonMessage.parseJsonData(jsonResponse);
                 if (dataMap.get("login").equals("successful")) {
-                    initializeLobbyLink(dataMap, username);
+                    lobbyPort = Integer.parseInt(dataMap.get("lobby_port"));
+                    socket.close();
+                    initializeLobbyLink(username);
                     loginSuccessful = true;
                     this.username = username;
                 }
@@ -128,16 +133,18 @@ public class SocketClient implements Client {
                     jsonResponse = inSocket.readLine();
                     dataMap = JsonMessage.parseJsonData(jsonResponse);
                     if (dataMap.get("login").equals("successful")) {
-                        System.out.println("Connecting to lobby");
-                        initializeLobbyLink(dataMap, username);
-                        System.out.println("login successful");
+                        outVideo.println("Connecting to lobby");
+                        lobbyPort = Integer.parseInt(dataMap.get("lobby_port"));
+                        socket.close();
+                        initializeLobbyLink(username);
+                        outVideo.println("Login successful");
                         loginSuccessful = true;
                         this.username = username;
                     }
                     else
                         outVideo.println("Username already taken");
                 } else if (dataMap.get("login").equals("error")) {
-                    outVideo.println("Username already logged on");
+                    outVideo.println("User already logged on");
                     socket.close();
                 }
             }
@@ -150,14 +157,13 @@ public class SocketClient implements Client {
         }
     }
 
-    private void initializeLobbyLink(Map<String, String> dataMap, String identifier) throws IOException {
-        socket.close();
-        socket = new Socket(ADDRESS, Integer.parseInt(dataMap.get("lobby_port")));
+    private void initializeLobbyLink(String identifier) throws IOException {
+        socket = new Socket(ADDRESS, lobbyPort);
         initializeConnectionStream();
         outSocket.println(JsonMessage.createTokenMessage(identifier).toJSONString());
         System.out.println("Waiting lobby response");
         String jsonResponse = inSocket.readLine();
-        dataMap = JsonMessage.parseJsonData(jsonResponse);
+        Map<String, String> dataMap = JsonMessage.parseJsonData(jsonResponse);
         if (dataMap.get("login").equals("successful_lobby"))
             heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, Integer.parseInt(dataMap.get("heartbeat_port")), identifier);
         else
@@ -166,12 +172,30 @@ public class SocketClient implements Client {
         executeOrders();
     }
 
+    private void fastRecovery() {
+        DiscoverLan discoverLan = new DiscoverLan();
+        try {
+            while(!discoverLan.isDirectlyAttachedAndReachable(Inet4Address.getByName(ADDRESS)))
+                try {
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException exc) {
+
+                }
+            initializeLobbyLink(username);
+        }
+        catch (IOException exc) {
+            //dns / server error
+        }
+    }
+
     public void run() {
         while (!executor.isShutdown()) {
             try {
                 outVideo.println("Message from server : " + inSocket.readLine());
             } catch (IOException exc) {
-
+                fastRecovery();
+                executor.shutdown();
             }
         }
     }
