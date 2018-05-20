@@ -37,6 +37,7 @@ public class LoginManager {
                                                 "localhost",
                                                 DBMS_PORT,
                                                 DB_NAME);
+            System.out.println("MySQL database connection initialized on port " + DBMS_PORT);
         }
         catch (SQLException exc) {
             database = Database.initMSAccessDatabase(DBMS_USERNAME,

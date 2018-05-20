@@ -38,7 +38,8 @@ public class Server implements Runnable {
         commandParser = new CommandParser();
         loginManager = new LoginManager();
         port = discoveringPort.get();
-        serverSocket = createServerSocket();
+        if((serverSocket = createServerSocket()) == null)
+            System.exit(-1);
         initializeCoreFunction();
     }
 

@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 public class SocketClient implements Client {
 
     private static final int PORT = 49152; //change to dynamic in some elegant way
-    private static final String ADDRESS = "192.168.1.5";
+    private static final String ADDRESS = "localhost"; //just for now, next will be obtained in far smarter way
     private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
 
     private Socket socket;
@@ -35,10 +35,10 @@ public class SocketClient implements Client {
         executor = Executors.newSingleThreadExecutor();
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
-        estabilishServerConnection();
+        establishServerConnection();
     }
 
-    private void estabilishServerConnection()  {
+    private void establishServerConnection()  {
         while(!connect())
             try {
                 System.out.println(ADDRESS + ":" + PORT + " not responding, retrying in 3 seconds...");
@@ -86,8 +86,7 @@ public class SocketClient implements Client {
                 case 1 : outSocket.println(JsonMessage.creatDisconnectMessage(username).toJSONString());
                          heartbeatProtocolManager.kill();
                          close();
-                         login();
-                         estabilishServerConnection();
+                         establishServerConnection();
                          break;
                 case 2 : System.out.println("Write your message");
                          try {

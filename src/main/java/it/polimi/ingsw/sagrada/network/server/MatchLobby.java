@@ -71,6 +71,9 @@ public class MatchLobby implements HeartbeatListener, Runnable {
         clientIds.remove(username);
         clientIdTokens.remove(username);
         heartbeatProtocolManager.removeFromMonitoredHost(username);
+        System.out.println(username + " disconnected");
+        for(String clientId : clientIds)
+            clientPool.get(clientId).sendMessage(username + " disconnected");
         return true;
     }
 
@@ -105,7 +108,6 @@ public class MatchLobby implements HeartbeatListener, Runnable {
     @Override
     public void onAcquiredCommunication(HeartbeatEvent event) {
         for(String clientId : clientIds) {
-            System.out.println(event.getSource().length() + " " + clientId.length() + " " + (clientId.equals(event.getSource())));
             if (!clientId.equals(event.getSource()))
                 clientPool.get(clientId).sendMessage(event.getSource() + " is online");
         }

@@ -21,6 +21,7 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     private String data;
     private String expectedPayload;
     private Observer<HeartbeatState, HeartbeatEvent> observer;
+    private boolean isDead = false;
 
     HeartbeatProtocol(DatagramSocket datagramSocket, Observer observer, String expectedPayload) {
         executor = Executors.newSingleThreadExecutor();
@@ -30,7 +31,9 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     }
 
     public void kill() {
-        executor.shutdown();
+        executor.shutdownNow();
+        isDead = true;
+        Thread.currentThread().interrupt();
     }
 
     /**
@@ -49,10 +52,9 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     public void run() {
         Future asynchronousHeartbeat = executor.submit(this::receiveHeartbeat);
         boolean lossCommsAlreadyNotified = false;
-        boolean isDead = false;
         int timeElapsed = 0;
         HeartbeatEvent event;
-        while (!isDead) {
+        while (!isDead && !executor.isShutdown()) {
             while (!asynchronousHeartbeat.isDone()) {
                 try {
                     Thread.sleep(TIME_INTERVAL);
