@@ -1,5 +1,8 @@
 package it.polimi.ingsw.sagrada.network.server;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DisconnectEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.MessageEvent;
 import it.polimi.ingsw.sagrada.network.client.JsonMessage;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 
@@ -7,6 +10,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 
 public class SocketClient implements Client {
     private Socket socket;
@@ -15,11 +19,15 @@ public class SocketClient implements Client {
     private JsonMessage loginMessage;
     private CommandParser commandParser;
     private ExecutorService executor;
+    private Function disconnect;
+    private String identifier;
 
-    public SocketClient(Socket socket) throws IOException {
+    public SocketClient(Socket socket, String identifier, Function disconnect) throws IOException {
         this.socket = socket;
         commandParser = new CommandParser();
         executor = Executors.newSingleThreadExecutor();
+        this.disconnect = disconnect;
+        this.identifier = identifier;
         initCoreFunctions();
     }
 
@@ -41,6 +49,17 @@ public class SocketClient implements Client {
 
     }
 
+    private void executePayload(String json) {
+        Message parsedMessage = commandParser.parse(json);
+        if(parsedMessage instanceof DisconnectEvent) {
+            disconnect.apply(identifier);
+            close();
+            executor.shutdown();
+        }
+        else if(parsedMessage instanceof MessageEvent)
+            System.out.println(((MessageEvent) parsedMessage).getMessage());
+    }
+
     @Override
     public void close() {
         try {
@@ -60,7 +79,7 @@ public class SocketClient implements Client {
     public void run() {
         while (!executor.isShutdown()) {
             try {
-                System.out.println(input.readLine());
+                executePayload(input.readLine());
             } catch (IOException exc) {
 
             }

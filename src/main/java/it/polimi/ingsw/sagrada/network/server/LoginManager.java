@@ -25,7 +25,7 @@ public class LoginManager {
     private static final String DBMS_USERNAME = "root";  //temporary credentials, TO BE CHANGED
     private static final String DBMS_AUTH = "";
     private static final String DB_NAME = "sagrada";
-    private static final int portDBMS = 3306;
+    private static final int DBMS_PORT = 3306;
 
 
     public LoginManager() throws SQLException {
@@ -35,7 +35,7 @@ public class LoginManager {
                                                 DBMS_AUTH,
                                                 100,
                                                 "localhost",
-                                                3306,
+                                                DBMS_PORT,
                                                 DB_NAME);
         }
         catch (SQLException exc) {
@@ -43,10 +43,9 @@ public class LoginManager {
                                                     DBMS_AUTH,
                                                     100,
                                                     "localhost",
-                                                    3306,
+                                                    DBMS_PORT,
                                                     DB_NAME);
             }
-
     }
 
 

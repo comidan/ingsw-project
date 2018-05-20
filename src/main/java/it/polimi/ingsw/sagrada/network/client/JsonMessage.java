@@ -22,10 +22,30 @@ public class JsonMessage {
         return container;
     }
 
+    public static JSONObject creatDisconnectMessage(String username) {
+        JSONObject content = new JSONObject();
+        content.put("username", username);
+        JSONObject container = new JSONObject();
+        container.put("type_msg", "action");
+        container.put("type_cmd", "disconnect");
+        container.put("disconnect", content);
+        return container;
+    }
+
     public static JSONObject createTokenMessage(String token) {
         JSONObject jsonToken = new JSONObject();
         jsonToken.put("token", token);
         return jsonToken;
+    }
+
+    public static JSONObject createMessage(String message) {
+        JSONObject content = new JSONObject();
+        content.put("message", message);
+        JSONObject container = new JSONObject();
+        container.put("type_msg", "action");
+        container.put("type_cmd", "message");
+        container.put("message", content);
+        return container;
     }
 
     public static Map<String, String> parseJsonData(String json) {
@@ -42,12 +62,12 @@ public class JsonMessage {
             }
             else if(dataMap.get("login").equals("successful_lobby"))
                 dataMap.put("heartbeat_port", (String) jsonLoginData.get("heartbeat_port"));
+            else if(dataMap.get("login").equals("error"))
+                dataMap.put("metadata", (String) jsonLoginData.get("metadata"));
             return dataMap;
         }
         catch (ParseException exc) {
             return null;
         }
     }
-
 }
-

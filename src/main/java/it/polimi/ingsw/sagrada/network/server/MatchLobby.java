@@ -63,12 +63,14 @@ public class MatchLobby implements HeartbeatListener, Runnable {
         return port;
     }
 
-    private void removePlayer(String username) {
+    private boolean removePlayer(String username) {
         synchronized (signOut) {
             signOut.apply(username);
         }
         clientPool.remove(username);
         clientIds.remove(username);
+        heartbeatProtocolManager.removeFromMonitoredHost(username);
+        return true;
     }
 
     @Override
@@ -78,6 +80,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
 
     @Override
     public void onDeath(HeartbeatEvent event) {
+        System.out.println(event.getSource() + " is offline");
         removePlayer(event.getSource());
         for(String clientId : clientIds)
             clientPool.get(clientId).sendMessage(event.getSource() + " is offline");
@@ -85,6 +88,7 @@ public class MatchLobby implements HeartbeatListener, Runnable {
 
     @Override
     public void onLossCommunication(HeartbeatEvent event) {
+        System.out.println(event.getSource() + " has lost communication");
         for(String clientId : clientIds)
             if(!clientId.equals(event.getSource()))
                 clientPool.get(clientId).sendMessage(event.getSource() + " may have lost communication");
@@ -111,12 +115,11 @@ public class MatchLobby implements HeartbeatListener, Runnable {
         while(!lobbyServer.isShutdown()) {
             try {
                 Socket client = serverSocket.accept();
-                System.out.println("Client entered in lobby");
                 int tokenIndex = LoginManager.tokenAuthentication(clientIdTokens, client);
                 if(tokenIndex != -1) {
-                    SocketClient socketClient = new SocketClient(client);
                     String id = clientIdTokens.remove(tokenIndex);
-                    System.out.println("Identifier : " + id);
+                    Function<String, Boolean> function = this::removePlayer;
+                    SocketClient socketClient = new SocketClient(client, id, function);
                     clientIds.add(id);
                     clientPool.put(id, socketClient);
                     LoginManager.sendLoginLobbyResponse(client, heartbeatPort);

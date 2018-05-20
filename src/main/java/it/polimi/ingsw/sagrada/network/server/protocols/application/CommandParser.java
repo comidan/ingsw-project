@@ -2,7 +2,9 @@ package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.LoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.MessageEvent;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -15,12 +17,17 @@ public class CommandParser {
         JSONParser parser = new JSONParser();
         try {
             JSONObject jsonMsg = (JSONObject)parser.parse(message);
+            JSONObject data;
             switch ((String)jsonMsg.get("type_cmd")) {
                 case "login":
-                    JSONParser jsonParser = new JSONParser();
-                    JSONObject jsonObject = (JSONObject) jsonParser.parse(message);
-                    JSONObject data = (JSONObject) jsonObject.get("login");
+                    data = (JSONObject) jsonMsg.get("login");
                     return new LoginEvent((String)data.get("username"), (String)data.get("auth"));
+                case "disconnect":
+                    data = (JSONObject) jsonMsg.get("disconnect");
+                    return new DisconnectEvent((String)data.get("username"));
+                case "message":
+                    data = (JSONObject) jsonMsg.get("message");
+                    return new MessageEvent((String)data.get("message"));
                 case "choice":
                     return null;
                 case "settings":  //is settings response useless?
@@ -38,6 +45,7 @@ public class CommandParser {
     public String crateJSONMessage(String message) {
         JSONObject jsonMessage = new JSONObject();
         jsonMessage.put("metadata", message);
+        jsonMessage.put("login", "error");
         JSONObject container = new JSONObject();
         container.put("response", jsonMessage);
         return container.toJSONString();

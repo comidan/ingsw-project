@@ -19,12 +19,18 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     private DatagramSocket datagramSocket;
     private ExecutorService executor;
     private String data;
+    private String expectedPayload;
     private Observer<HeartbeatState, HeartbeatEvent> observer;
 
-    HeartbeatProtocol(DatagramSocket datagramSocket, Observer<HeartbeatState, HeartbeatEvent> observer) {
+    HeartbeatProtocol(DatagramSocket datagramSocket, Observer observer, String expectedPayload) {
         executor = Executors.newSingleThreadExecutor();
         this.datagramSocket = datagramSocket;
         this.observer = observer;
+        this.expectedPayload = expectedPayload;
+    }
+
+    public void kill() {
+        executor.shutdown();
     }
 
     /**
@@ -56,21 +62,23 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
                     notify(HeartbeatState.HOST_OFFLINE, event);
                     asynchronousHeartbeat.cancel(true);
                     Thread.currentThread().interrupt();
+                    isDead = true;
                 }
                 timeElapsed += TIME_INTERVAL;
                 if (timeElapsed > TIME_LOSS_COMMUNICATION_FRAME * TIME_INTERVAL && !lossCommsAlreadyNotified)
                     lossCommsAlreadyNotified = notifyLostComm(timeElapsed);
 
                 if (timeElapsed > TIME_LIFE_FRAMES * TIME_INTERVAL)
-                   isDead = notifyDeath(timeElapsed, asynchronousHeartbeat);
+                    isDead = notifyDeath(timeElapsed, asynchronousHeartbeat);
             }
-            if(!isDead) {
+            if(!isDead && data.equals(expectedPayload)) {
                 notifyHeartbeat(lossCommsAlreadyNotified, timeElapsed);
                 lossCommsAlreadyNotified = false;
                 timeElapsed = 0;
-                asynchronousHeartbeat = executor.submit(this::receiveHeartbeat);
             }
+            asynchronousHeartbeat = executor.submit(this::receiveHeartbeat);
         }
+        asynchronousHeartbeat.cancel(true);
     }
 
     private boolean notifyLostComm(int timeElapsed) {
