@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 
 import java.io.*;
 import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -15,7 +16,7 @@ import java.util.concurrent.Executors;
 public class SocketClient implements Client {
 
     private static final int PORT = 49152; //change to dynamic in some elegant way
-    private static final String ADDRESS = "localhost";
+    private static final String ADDRESS = "192.168.1.5";
     private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
 
     private Socket socket;
@@ -35,7 +36,6 @@ public class SocketClient implements Client {
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
         estabilishServerConnection();
-        login();
     }
 
     private void estabilishServerConnection()  {
@@ -62,11 +62,12 @@ public class SocketClient implements Client {
 
     private boolean connect() {
         try {
-            socket = new Socket(ADDRESS, PORT);
+            socket = new Socket(InetAddress.getByName(ADDRESS), PORT);
             inSocket = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             outSocket = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -82,7 +83,12 @@ public class SocketClient implements Client {
                 continue;
             }
             switch (choice) {
-                case 1 : outSocket.println(JsonMessage.creatDisconnectMessage(username).toJSONString()); break;
+                case 1 : outSocket.println(JsonMessage.creatDisconnectMessage(username).toJSONString());
+                         heartbeatProtocolManager.kill();
+                         close();
+                         login();
+                         estabilishServerConnection();
+                         break;
                 case 2 : System.out.println("Write your message");
                          try {
                              outSocket.println(JsonMessage.createMessage(inKeyboard.readLine()).toJSONString());

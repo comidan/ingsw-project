@@ -29,13 +29,6 @@ public class HeartbeatProtocolManager {
      * @apiNote kill protocol execution
      */
     public void kill() {
-        executor.shutdown();
-    }
-
-    /**
-     * @apiNote kill protocol execution NOW
-     */
-    public void killNow() {
         executor.shutdownNow();
     }
 
