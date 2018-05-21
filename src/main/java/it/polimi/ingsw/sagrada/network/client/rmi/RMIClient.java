@@ -1,21 +1,35 @@
 package it.polimi.ingsw.sagrada.network.client.rmi;
 
+import it.polimi.ingsw.sagrada.network.security.Security;
+import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
+import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
 import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
 import it.polimi.ingsw.sagrada.network.server.rmi.ServerRMI;
+import it.polimi.ingsw.sagrada.network.server.rmi.ClientRMI;
+import org.json.simple.JSONObject;
 
+import java.io.*;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.DriverManager;
 
 public class RMIClient extends UnicastRemoteObject implements ClientRMI {
 
+    private CommandParser commandParser;
+    private BufferedReader inKeyboard;
+    private PrintWriter outVideo;
     private static final String ADDRESS = "localhost";
 
     private ServerRMI server;
 
     public RMIClient() throws RemoteException {
+
+        commandParser = new CommandParser();
+        inKeyboard = new BufferedReader(new InputStreamReader(System.in));
+        outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
 
     }
 
@@ -23,31 +37,43 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
         try {
             server = (ServerRMI) Naming.lookup("rmi://" + ADDRESS + "/ServerRMI");
             return true;
-        }
-        catch (RemoteException|NotBoundException|MalformedURLException exc) {
+        } catch (RemoteException | NotBoundException | MalformedURLException exc) {
             return false;
         }
     }
 
-    private void establishServerConnection()  {
-        while(!connect())
+    private void establishServerConnection() {
+        while (!connect())
             try {
-                System.out.println("RMI server at " + ADDRESS +" not responding, retrying in 3 seconds...");
+                System.out.println("RMI server at " + ADDRESS + " not responding, retrying in 3 seconds...");
                 Thread.sleep(SERVER_WAITING_RESPONSE_TIME);
-            }
-            catch (InterruptedException exc) {
+            } catch (InterruptedException exc) {
                 Thread.currentThread().interrupt();
             }
         login();
     }
 
     private void login() {
+        boolean loginSuccessful = false;
 
+        while (!loginSuccessful) {
+            try {
+                outVideo.println("username:");
+                String username = null;
+                username = inKeyboard.readLine();
+                outVideo.println("password:");
+                String auth = null;
+                auth = inKeyboard.readLine();
+                loginSuccessful = this.server.login(this, username, Security.generateMD5Hash(auth)).equals(LoginManager.LoginState.AUTH_OK);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void notifyLobby(MatchLobby matchLobby) {
-        
+
     }
 
     @Override
@@ -67,6 +93,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
 
     @Override
     public void sendMessage(String message) {
+        String payload = commandParser.crateJSONMessage(message);
 
     }
 

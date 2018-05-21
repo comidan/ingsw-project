@@ -42,13 +42,12 @@ public class SocketClient implements Runnable, Client {
         establishServerConnection();
     }
 
-    private void establishServerConnection()  {
-        while(!connect())
+    private void establishServerConnection() {
+        while (!connect())
             try {
                 System.out.println(ADDRESS + ":" + PORT + " not responding, retrying in 3 seconds...");
                 Thread.sleep(SERVER_WAITING_RESPONSE_TIME);
-            }
-            catch (InterruptedException exc) {
+            } catch (InterruptedException exc) {
                 Thread.currentThread().interrupt();
             }
         login();
@@ -77,29 +76,30 @@ public class SocketClient implements Runnable, Client {
 
     private void executeOrders() {
         int choice;
-        while(!executor.isShutdown()) {
+        while (!executor.isShutdown()) {
             System.out.println("Choose what you wanna do :\n1. Disconnect from server\n2. Send message to server");
             try {
                 choice = Integer.parseInt(inKeyboard.readLine());
-            }
-            catch (NumberFormatException|IOException exc) {
+            } catch (NumberFormatException | IOException exc) {
                 continue;
             }
             switch (choice) {
-                case 1 : outSocket.println(JsonMessage.creatDisconnectMessage(username).toJSONString());
-                         heartbeatProtocolManager.kill();
-                         close();
-                         establishServerConnection();
-                         break;
-                case 2 : System.out.println("Write your message");
-                         try {
-                             outSocket.println(JsonMessage.createMessage(inKeyboard.readLine()).toJSONString());
-                         }
-                         catch (IOException exc) {
-                             continue;
-                         }
-                         break;
-                default: System.out.println("No actions available for " + choice);
+                case 1:
+                    outSocket.println(JsonMessage.creatDisconnectMessage(username).toJSONString());
+                    heartbeatProtocolManager.kill();
+                    close();
+                    establishServerConnection();
+                    break;
+                case 2:
+                    System.out.println("Write your message");
+                    try {
+                        outSocket.println(JsonMessage.createMessage(inKeyboard.readLine()).toJSONString());
+                    } catch (IOException exc) {
+                        continue;
+                    }
+                    break;
+                default:
+                    System.out.println("No actions available for " + choice);
             }
         }
 
@@ -107,7 +107,6 @@ public class SocketClient implements Runnable, Client {
 
     @Override
     public void doActions() {
-
     }
 
     @Override
@@ -147,8 +146,7 @@ public class SocketClient implements Runnable, Client {
                     initializeLobbyLink(username);
                     loginSuccessful = true;
                     this.username = username;
-                }
-                else if (dataMap.get("login").equals("register")) {
+                } else if (dataMap.get("login").equals("register")) {
                     outVideo.println("Registering...");
                     jsonResponse = inSocket.readLine();
                     dataMap = JsonMessage.parseJsonData(jsonResponse);
@@ -160,8 +158,7 @@ public class SocketClient implements Runnable, Client {
                         outVideo.println("Login successful");
                         loginSuccessful = true;
                         this.username = username;
-                    }
-                    else
+                    } else
                         outVideo.println("Username already taken");
                 } else if (dataMap.get("login").equals("error")) {
                     outVideo.println("User already logged on");
@@ -192,16 +189,14 @@ public class SocketClient implements Runnable, Client {
     private void fastRecovery() {
         DiscoverLan discoverLan = new DiscoverLan();
         try {
-            while(!discoverLan.isDirectlyAttachedAndReachable(Inet4Address.getByName(ADDRESS)))
+            while (!discoverLan.isDirectlyAttachedAndReachable(Inet4Address.getByName(ADDRESS)))
                 try {
                     Thread.sleep(1000);
-                }
-                catch (InterruptedException exc) {
+                } catch (InterruptedException exc) {
                     Thread.currentThread().interrupt();
                 }
             initializeLobbyLink(username);
-        }
-        catch (IOException exc) {
+        } catch (IOException exc) {
             LOGGER.log(Level.SEVERE, exc.getMessage());
         }
     }
