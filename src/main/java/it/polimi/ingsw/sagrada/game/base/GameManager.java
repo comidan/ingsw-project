@@ -10,6 +10,7 @@ import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.playables.*;
 
@@ -60,6 +61,7 @@ public class GameManager implements Channel<Message, Message> {
         playerIterator = new PlayerIterator(playersId);
 
         this.dynamicRouter = dynamicRouter;
+        this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
     }
 
     public Consumer<Message> getDispatchReference() {
@@ -176,7 +178,10 @@ public class GameManager implements Channel<Message, Message> {
         } else if(eventType.equals(EventTypeEnum.toString(DICE_GAME_MANAGER_EVENT))) {
             DiceGameManagerEvent msgD = (DiceGameManagerEvent) message;
             setDiceInWindow(msgD.getIdPlayer(), msgD.getDice(), msgD.getPosition());
-        } else {
+        } else if(eventType.equals(EventTypeEnum.toString(END_TURN_EVENT))) {
+            notifyNextPlayer();
+        }
+        else {
             LOGGER.log(Level.SEVERE, "GameManager has received a wrong event");
         }
     }

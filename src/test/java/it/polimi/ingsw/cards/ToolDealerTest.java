@@ -24,6 +24,5 @@ public class ToolDealerTest {
             assertFalse(cardCheck.contains(card));
             cardCheck.add(card);
         }
-
     }
 }

@@ -46,7 +46,7 @@ public class PlayerIterator implements Iterator<Integer> {
                 turnIteration.add(idPlayer.get(i+offset));
             }
             else {
-                turnIteration.add(idPlayer.get(numPlayer+2-i+offset));
+                turnIteration.add(idPlayer.get(2*numPlayer-1-i+offset));
             }
         }
     }

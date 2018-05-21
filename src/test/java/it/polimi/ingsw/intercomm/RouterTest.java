@@ -4,10 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -34,6 +31,7 @@ public class RouterTest {
 
     @Test
     public void routerTest() {
+        DiceResponse diceResponse;
         DynamicRouter dynamicRouter = new MessageDispatcher();
 
         List<Player> players = new ArrayList<>();
@@ -49,16 +47,31 @@ public class RouterTest {
         for(Message message:messageGenerator("window")) {
             dynamicRouter.dispatch(message);
         }
-        for(Message message:messageGenerator("dice")) {
-            dynamicRouter.dispatch(message);
-        }
 
         assertEquals
                 (idWindowToName(windowController.getMessage().get(0).get(0), WindowSide.FRONT),
-                playerOne.getWindow().getName());
+                        playerOne.getWindow().getName());
         assertEquals
                 (idWindowToName(windowController.getMessage().get(1).get(0), WindowSide.REAR),
-                playerTwo.getWindow().getName());
+                        playerTwo.getWindow().getName());
+
+        for(Message message:messageGenerator("dice")) {
+            dynamicRouter.dispatch(message);
+        }
+        diceResponse = diceController.getDiceResponse();
+
+        assertEquals(
+                diceResponse.getDiceList().get(0),
+                playerOne.getWindow().getCellMatrix()[0][0].getCurrentDice());
+        assertEquals(
+                diceResponse.getDiceList().get(1),
+                playerTwo.getWindow().getCellMatrix()[0][0].getCurrentDice());
+        assertEquals(
+                diceResponse.getDiceList().get(2),
+                playerTwo.getWindow().getCellMatrix()[0][1].getCurrentDice());
+        assertEquals(
+                diceResponse.getDiceList().get(3),
+                playerOne.getWindow().getCellMatrix()[0][1].getCurrentDice());
     }
 
     private List<Message> messageGenerator(String type) {
@@ -71,7 +84,13 @@ public class RouterTest {
         } else if(type.equals("dice")) {
             DiceResponse diceResponse = diceController.getDiceResponse();
             messages.add(new DiceEvent(0, diceResponse.getDiceList().get(0).getId(), new Position(0, 0)));
+            messages.add(new EndTurnEvent(0));
             messages.add(new DiceEvent(1, diceResponse.getDiceList().get(1).getId(), new Position(0, 0)));
+            messages.add(new EndTurnEvent(1));
+            messages.add(new DiceEvent(1, diceResponse.getDiceList().get(2).getId(), new Position(1, 0)));
+            messages.add(new EndTurnEvent(1));
+            messages.add(new DiceEvent(0, diceResponse.getDiceList().get(3).getId(), new Position(1, 0)));
+            //messages.add(new EndTurnEvent(0));
         }
 
         return messages;
