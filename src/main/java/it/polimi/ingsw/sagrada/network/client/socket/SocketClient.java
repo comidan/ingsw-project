@@ -1,5 +1,7 @@
-package it.polimi.ingsw.sagrada.network.client;
+package it.polimi.ingsw.sagrada.network.client.socket;
 
+import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.security.Security;
@@ -15,12 +17,11 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SocketClient implements Client {
+public class SocketClient implements Runnable, Client {
 
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     private static final int PORT = 49152; //change to dynamic in some elegant way
     private static final String ADDRESS = "localhost"; //just for now, next will be obtained in far smarter way
-    private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
 
     private Socket socket;
     private BufferedReader inSocket;
@@ -51,7 +52,6 @@ public class SocketClient implements Client {
                 Thread.currentThread().interrupt();
             }
         login();
-
     }
 
     private void initializeConnectionStream() throws IOException {
@@ -105,7 +105,18 @@ public class SocketClient implements Client {
 
     }
 
-    private void close() {
+    @Override
+    public void doActions() {
+
+    }
+
+    @Override
+    public void sendMessage(String message) {
+
+    }
+
+    @Override
+    public void close() {
         try {
             socket.close();
         } catch (IOException exc) {

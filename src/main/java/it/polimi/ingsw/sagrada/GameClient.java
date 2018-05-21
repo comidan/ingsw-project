@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada;
 
-import it.polimi.ingsw.sagrada.network.client.SocketClient;
+import it.polimi.ingsw.sagrada.network.client.socket.SocketClient;
 
 import java.io.IOException;
 

@@ -1,8 +1,9 @@
-package it.polimi.ingsw.sagrada.network.server;
+package it.polimi.ingsw.sagrada.network.server.socket;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.MessageEvent;
+import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 
 import java.io.*;
@@ -12,6 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 public class SocketClient implements Client {
+
     private Socket socket;
     private BufferedReader input;
     private PrintWriter output;

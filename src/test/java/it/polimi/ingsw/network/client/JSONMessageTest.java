@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.sagrada.network.client.JsonMessage;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import org.junit.Test;
 

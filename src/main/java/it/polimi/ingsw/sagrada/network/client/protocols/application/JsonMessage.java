@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.network.client;
+package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

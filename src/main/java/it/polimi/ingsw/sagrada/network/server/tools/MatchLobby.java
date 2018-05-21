@@ -1,13 +1,17 @@
-package it.polimi.ingsw.sagrada.network.server;
+package it.polimi.ingsw.sagrada.network.server.tools;
 
+import it.polimi.ingsw.sagrada.network.server.rmi.ClientRMI;
+import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.server.socket.SocketClient;
 import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatEvent;
 import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatListener;
 import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatProtocolManager;
-import it.polimi.ingsw.sagrada.network.server.tools.PortDiscovery;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.Remote;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +21,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 
-public class MatchLobby implements HeartbeatListener, Runnable {
+public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener, Runnable, Remote {
 
     private static final int MAX_POOL_SIZE = 4;
 
@@ -115,6 +119,16 @@ public class MatchLobby implements HeartbeatListener, Runnable {
 
     private boolean fastRecoveryClientConnection(String identifier) {
         clientIdTokens.add(identifier);
+        return true;
+    }
+
+    public boolean joinLobby(String token, ClientRMI clientRMI) {
+        if(!clientIdTokens.contains(token))
+            return false;
+        if(!clientIds.contains(token))
+            clientIds.add(token);
+        clientPool.put(token, clientRMI);
+        clientRMI.notifyHeartbeatPort(heartbeatPort);
         return true;
     }
 

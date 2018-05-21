@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.network;
 
 
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.network.server;
+package it.polimi.ingsw.sagrada.network.server.tools;
 
 
 import it.polimi.ingsw.sagrada.database.Database;
@@ -23,17 +23,17 @@ import java.util.logging.Logger;
 public class LoginManager {
 
     private static final Logger LOGGER = Logger.getLogger(LoginManager.class.getName());
+    private static final Map<String, String> loggedUsers = new HashMap<>();
 
     private Database database;
-    private Map<String, String> loggedUsers;
     private static final String DBMS_USERNAME = "root";  //temporary credentials, TO BE CHANGED
     private static final String DBMS_AUTH = "";
     private static final String DB_NAME = "sagrada";
     private static final int DBMS_PORT = 3306;
 
 
-    public LoginManager() throws SQLException {
-        loggedUsers = new HashMap<>();
+    public LoginManager()  {
+
         try {
             database = Database.initSQLDatabase(DBMS_USERNAME,
                                                 DBMS_AUTH,
@@ -44,13 +44,8 @@ public class LoginManager {
             System.out.println("MySQL database connection initialized on port " + DBMS_PORT);
         }
         catch (SQLException exc) {
-            database = Database.initMSAccessDatabase(DBMS_USERNAME,
-                                                    DBMS_AUTH,
-                                                    100,
-                                                    "localhost",
-                                                    DBMS_PORT,
-                                                    DB_NAME);
-            }
+            LOGGER.log(Level.SEVERE, () -> "Fatal error while initializing MySQL database connection " + exc.getMessage());
+        }
     }
 
 
@@ -73,7 +68,7 @@ public class LoginManager {
         }
     }
 
-    public boolean signUp(String username, String hashedPassword) {
+    public synchronized boolean signUp(String username, String hashedPassword) {
         try {
             long nanoDate = new java.util.Date().getTime();
             PreparedStatement query = database.prepareQuery("INSERT INTO User (Username, Password, SubscriptionDate, Email) VALUES (?, ?, ?, ?)");
@@ -90,7 +85,7 @@ public class LoginManager {
         }
     }
 
-    public String receiveLoginData(Socket clientSocket) throws IOException {
+    public synchronized String receiveLoginData(Socket clientSocket) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         return input.readLine();
     }
@@ -142,7 +137,7 @@ public class LoginManager {
         }
     }
 
-    public Function<String, Boolean> getSignOut() {
+    public static synchronized Function<String, Boolean> getSignOut() {
         return username -> loggedUsers.remove(username) != null;
     }
 

@@ -18,16 +18,16 @@ import static org.junit.Assert.assertTrue;
 public class DatabaseSQLRemoteConnectionTest {
 
     @Test
-    public void remoteSQLConncection() throws SQLException,IOException {
+    public void testRemoteSQLConnection() throws SQLException,IOException {
 
         if(System.getProperty("os.name").toLowerCase().contains("windows") && !getConnectionName().toLowerCase().contains("polimi") && !getConnectionName().toLowerCase().contains("eduroam")) { //temporary
-            Database d = Database.initSQLDatabase("daniele_sagrada", "ge7npchy5", 100, "db4free.net", 3306, "sagrada_db_test");
+            /*Database d = Database.initSQLDatabase("daniele_sagrada", "ge7npchy5", 100, "db4free.net", 3306, "sagrada_db_test");
             ResultSet set = d.executeRawQuery("SELECT ID FROM Test");
             while (set.next())
-                assertEquals(1, Integer.parseInt(set.getString("ID")));
+                assertEquals(1, Integer.parseInt(set.getString("ID")));*/
 
-            d = Database.initSQLDatabase("root", "", 100, "localhost", 3306, "sagrada");
-            set = d.executeRawQuery("SELECT Username FROM User");
+            Database d = Database.initSQLDatabase("root", "", 100, "localhost", 3306, "sagrada");
+            ResultSet set = d.executeRawQuery("SELECT Username FROM User");
             assertNotNull(set != null);
         }
     }
