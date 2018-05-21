@@ -45,6 +45,10 @@ public class Window {
         return tokens.size();
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String toString() {
         StringBuilder output=new StringBuilder("");
 

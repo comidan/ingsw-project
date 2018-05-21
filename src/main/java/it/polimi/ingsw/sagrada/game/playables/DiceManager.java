@@ -54,6 +54,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
             dice.roll();
             draftPool.add(dice);
         }
+        sendMessage(new DiceResponse("draft", new ArrayList<>(draftPool)));
     }
 
     private Dice getDiceDraft(int idDice) {

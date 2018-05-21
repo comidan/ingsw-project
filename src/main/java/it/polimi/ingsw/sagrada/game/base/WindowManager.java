@@ -57,10 +57,6 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         this.dynamicRouter.subscribeChannel(WindowEvent.class, this);
     }
 
-    public boolean isWindowsLeft() {
-        return picker.hasNext();
-    }
-
     public void dealWindowId(int playerId) {
         List<Integer> windowId = new ArrayList<>();
         for (int i = 0; i < WINDOWS_PER_CARD; i++) {
