@@ -1,5 +1,8 @@
 package it.polimi.ingsw.sagrada.game.base.utility;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +14,8 @@ public class Colors {
     public static final Color LIGHT_BLUE = new Color(81, 169, 168);
     public static final Color PURPLE = new Color(159, 59, 124);
     public static final Color RED = new Color(198, 47, 39);
+
+    private static final Logger LOGGER = Logger.getLogger(Colors.class.getName());
 
 
     private Colors() {
@@ -48,7 +53,8 @@ public class Colors {
             case "GREEN": return GREEN;
             case "LIGHT_BLUE": return LIGHT_BLUE;
             case "PURPLE": return PURPLE;
-            default: throw new ColorNotFoundException("Color not found");
+            default: LOGGER.log(Level.SEVERE, () -> "Not a valid color!!! Ing Conti is judging you");
+                return null;
         }
     }
 

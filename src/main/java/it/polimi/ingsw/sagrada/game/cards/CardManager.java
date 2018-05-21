@@ -25,14 +25,14 @@ import java.util.logging.Logger;
  * that will manage and utilised the sets.
  */
 public class CardManager {
-
-	private static final Logger logger = Logger.getAnonymousLogger();
 	private static final int NUM_MAX_PLAYER = 4;
 	private static final int NUM_PUBLIC_OBJECTIVE = 3;
 	private static final int NUM_TOOLS = 3;
 
 	private static final String BASE_PATH_OBJECTIVE = "src/main/resources/json/objective/";
 	private static final String BASE_PATH_TOOL = "src/main/resources/json/tool/";
+
+	private static final Logger LOGGER = Logger.getLogger(Colors.class.getName());
 
 	/**
 	 * @return list of of already scrambled tools
@@ -55,9 +55,9 @@ public class CardManager {
 				}
 			}
 		}catch (IOException e) {
-			logger.log(Level.SEVERE, "Something breaks in reading JSON file");
+			LOGGER.log(Level.SEVERE, "Something breaks in reading JSON file");
 		} catch (ParseException e) {
-			logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
+			LOGGER.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
 		}
 
 		return toolCards;
@@ -71,7 +71,7 @@ public class CardManager {
 				case "setIncrementDiceFeature": toolBuilder.setIncrementDiceFeature(); break;
 				case "setMoveIgnoringColorRuleFeature": toolBuilder.setMoveIgnoringColorRuleFeature(); break;
 				case "setMoveIgnoringValueRuleFeature": toolBuilder.setMoveIgnoringValueRuleFeature(); break;
-				default: throw new JSONErrorException("JSON is not correct. Check PublicObjective.json id");
+				default: LOGGER.log(Level.SEVERE, () -> "JSON is not correct. Check PublicObjective.json id");
 			}
 		}
 
@@ -98,9 +98,9 @@ public class CardManager {
 				}
 			}
 		} catch (IOException e) {
-			logger.log(Level.SEVERE, "Something breaks in reading JSON file");
+			LOGGER.log(Level.SEVERE, () -> "Something breaks in reading JSON file");
 		} catch (ParseException e) {
-			logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
+			LOGGER.log(Level.SEVERE, () -> "JSON parser founds something wrong, check JSON file");
 		}
 		return cards;
 	}
@@ -118,7 +118,7 @@ public class CardManager {
 			case 7: objectiveBuilder.setEveryDiceValueRepeatingObjective(value); break;
 			case 8: objectiveBuilder.setSameDiagonalColorObjective(); break;
 			case 9: objectiveBuilder.setEveryColorRepeatingObjective(value); break;
-			default: throw new JSONErrorException("JSON is not correct. Check PublicObjective.json id");
+			default: LOGGER.log(Level.SEVERE, () -> "JSON is not correct. Check PublicObjective.json id");
 		}
 		return objectiveBuilder.build();
 	}
