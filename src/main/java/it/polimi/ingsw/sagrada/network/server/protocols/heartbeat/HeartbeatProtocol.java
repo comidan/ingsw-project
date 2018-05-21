@@ -10,7 +10,7 @@ import java.util.logging.Level;
 
 import java.util.logging.Logger;
 
-class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, HeartbeatEvent>, NetworkUtils {
+class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, HeartbeatEvent> {
 
     private static final int TIME_INTERVAL = 1000;
     private static final int TIME_LIFE_FRAMES = 30;
@@ -40,7 +40,7 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
      * @return received heartbeat
      */
     private byte[] receiveHeartbeat() throws IOException{
-        byte[] payload = receiveData(datagramSocket);
+        byte[] payload = NetworkUtils.receiveData(datagramSocket);
         data = new String(payload);
         return payload;
     }

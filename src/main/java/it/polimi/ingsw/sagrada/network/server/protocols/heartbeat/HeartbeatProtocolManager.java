@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class HeartbeatProtocolManager implements Runnable, Observer<HeartbeatState, HeartbeatEvent>, NetworkUtils {
+public class HeartbeatProtocolManager implements Runnable, Observer<HeartbeatState, HeartbeatEvent> {
 
     private static final Logger LOGGER = Logger.getLogger(HeartbeatProtocolManager.class.getName());
 
@@ -35,7 +35,7 @@ public class HeartbeatProtocolManager implements Runnable, Observer<HeartbeatSta
     public void run() {
         while (!serverExecutor.isShutdown()) {
             try {
-                byte[] remoteData = receiveData(datagramSocket);
+                byte[] remoteData = NetworkUtils.receiveData(datagramSocket);
                 String hostId = new String(remoteData);
                 if(monitoredHosts.get(hostId) == null) {
                     HeartbeatProtocol heartbeatProtocol = new HeartbeatProtocol(datagramSocket, this, new String(remoteData));
