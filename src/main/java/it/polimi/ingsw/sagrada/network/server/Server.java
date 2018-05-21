@@ -6,5 +6,4 @@ import it.polimi.ingsw.sagrada.network.server.tools.MatchLobbyPool;
 public interface Server {
 
     MatchLobbyPool lobbyPool = new MatchLobbyPool();
-    LoginManager loginManager = new LoginManager();
 }

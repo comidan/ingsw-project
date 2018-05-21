@@ -30,9 +30,11 @@ public class SocketServer implements Runnable, Server {
     private ExecutorService executor, cachedExecutor;
     private CommandParser commandParser;
     private PortDiscovery portDiscovery;
+    private LoginManager loginManager;
 
     public SocketServer() throws InterruptedException, ExecutionException, SQLException, SocketException {
         portDiscovery = new PortDiscovery();
+        loginManager = LoginManager.getLoginManager();
         Future<Integer> discoveringPort = portDiscovery.obtainAvailablePortOnTCPAsync();
         commandParser = new CommandParser();
         port = discoveringPort.get();

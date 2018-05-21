@@ -31,8 +31,10 @@ public class LoginManager {
     private static final String DB_NAME = "sagrada";
     private static final int DBMS_PORT = 3306;
 
+    private static LoginManager loginManager;
 
-    public LoginManager()  {
+
+    private LoginManager()  {
 
         try {
             database = Database.initSQLDatabase(DBMS_USERNAME,
@@ -46,6 +48,12 @@ public class LoginManager {
         catch (SQLException exc) {
             LOGGER.log(Level.SEVERE, () -> "Fatal error while initializing MySQL database connection " + exc.getMessage());
         }
+    }
+
+    public static LoginManager getLoginManager() {
+        if(loginManager == null)
+            loginManager = new LoginManager();
+        return loginManager;
     }
 
 
@@ -85,7 +93,7 @@ public class LoginManager {
         }
     }
 
-    public synchronized String receiveLoginData(Socket clientSocket) throws IOException {
+    public String receiveLoginData(Socket clientSocket) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         return input.readLine();
     }

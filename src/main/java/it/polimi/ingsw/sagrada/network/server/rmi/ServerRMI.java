@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.network.server.rmi;
 
 import it.polimi.ingsw.sagrada.network.server.Server;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
+import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
 import it.polimi.ingsw.sagrada.network.server.tools.LoginManager.LoginState;
 import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
 
@@ -22,6 +23,7 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
 
     private ExecutorService executor, cachedExecutor;
     private CommandParser commandParser;
+    private LoginManager loginManager;
 
     public ServerRMI() throws RemoteException {
         try {
@@ -36,6 +38,7 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
     }
 
     private void initializeCoreFunction() {
+        loginManager = LoginManager.getLoginManager();
         executor = Executors.newSingleThreadExecutor();
         cachedExecutor = Executors.newCachedThreadPool();
         executor.submit(this);
