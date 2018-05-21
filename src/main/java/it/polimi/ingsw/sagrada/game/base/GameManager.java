@@ -146,7 +146,7 @@ public class GameManager implements Channel<Message, Message> {
     }
 
     private void setDiceInWindow(int idPlayer, Dice dice, Position position) {
-        players.get(idPlayer).getWindow().setCell(dice, position.getCol(), position.getRow());
+        players.get(idPlayer).getWindow().setCell(dice, position.getRow(), position.getCol());
     }
 
 

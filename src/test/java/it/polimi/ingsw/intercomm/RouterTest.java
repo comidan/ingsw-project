@@ -68,10 +68,10 @@ public class RouterTest {
                 playerTwo.getWindow().getCellMatrix()[0][0].getCurrentDice());
         assertEquals(
                 diceResponse.getDiceList().get(2),
-                playerTwo.getWindow().getCellMatrix()[0][1].getCurrentDice());
+                playerTwo.getWindow().getCellMatrix()[1][0].getCurrentDice());
         assertEquals(
                 diceResponse.getDiceList().get(3),
-                playerOne.getWindow().getCellMatrix()[0][1].getCurrentDice());
+                playerOne.getWindow().getCellMatrix()[1][0].getCurrentDice());
     }
 
     private List<Message> messageGenerator(String type) {
