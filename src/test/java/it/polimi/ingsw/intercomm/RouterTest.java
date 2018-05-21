@@ -72,6 +72,8 @@ public class RouterTest {
         assertEquals(
                 diceResponse.getDiceList().get(3),
                 playerOne.getWindow().getCellMatrix()[1][0].getCurrentDice());
+
+        dynamicRouter.dispatch(new EndTurnEvent(0));
     }
 
     private List<Message> messageGenerator(String type) {
@@ -90,7 +92,6 @@ public class RouterTest {
             messages.add(new DiceEvent(1, diceResponse.getDiceList().get(2).getId(), new Position(1, 0)));
             messages.add(new EndTurnEvent(1));
             messages.add(new DiceEvent(0, diceResponse.getDiceList().get(3).getId(), new Position(1, 0)));
-            //messages.add(new EndTurnEvent(0));
         }
 
         return messages;
