@@ -1,15 +1,16 @@
 package it.polimi.ingsw.sagrada.network.client.rmi;
 
 import it.polimi.ingsw.sagrada.network.client.Client;
-import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
 
-import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-public interface ClientRMI extends Client, Remote {
+public interface ClientRMI extends Client{
 
-    void notifyLobby(MatchLobby matchLobby);
+    void notifyLobby(String lobbyId) throws RemoteException;
 
-    void signUp();
+    void signUp() throws RemoteException;
 
-    void notifyHeartbeatPort(Integer port);
+    void notifyHeartbeatPort(Integer port) throws RemoteException;
+
+    void notifyRemoteClientInterface(Client client) throws RemoteException;
 }

@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,7 +37,6 @@ public class SocketClient implements Runnable, Client {
 
 
     public SocketClient() throws IOException {
-        executor = Executors.newSingleThreadExecutor();
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
         establishServerConnection();
@@ -74,7 +74,7 @@ public class SocketClient implements Runnable, Client {
         }
     }
 
-    private void executeOrders() {
+    private void executeOrders() throws RemoteException{
         int choice;
         while (!executor.isShutdown()) {
             System.out.println("Choose what you wanna do :\n1. Disconnect from server\n2. Send message to server");
@@ -85,10 +85,8 @@ public class SocketClient implements Runnable, Client {
             }
             switch (choice) {
                 case 1:
-                    outSocket.println(JsonMessage.creatDisconnectMessage(username).toJSONString());
-                    heartbeatProtocolManager.kill();
-                    close();
-                    establishServerConnection();
+                    disconnect();
+                    System.exit(0);
                     break;
                 case 2:
                     System.out.println("Write your message");
@@ -111,7 +109,7 @@ public class SocketClient implements Runnable, Client {
 
     @Override
     public void sendMessage(String message) {
-
+        System.out.println(message);
     }
 
     @Override
@@ -124,19 +122,26 @@ public class SocketClient implements Runnable, Client {
         }
     }
 
+    @Override
+    public void disconnect() throws RemoteException {
+        outSocket.println(JsonMessage.creatDisconnectMessage(username).toJSONString());
+        heartbeatProtocolManager.kill();
+        executor.shutdown();
+        close();
+    }
+
     private void login() {
         try {
             boolean loginSuccessful = false;
 
             while (!loginSuccessful) {
-                socket = new Socket(ADDRESS, PORT);
                 outVideo.println("Connected to " + ADDRESS + ":" + PORT + "\nThis is the first login firewall : \n");
-                initializeConnectionStream();
                 outVideo.println("username:");
                 String username = inKeyboard.readLine();
                 outVideo.println("password:");
                 String auth = inKeyboard.readLine();
                 JSONObject message = createMessage(username, Security.generateMD5Hash(auth));
+                initializeConnectionStream();
                 outSocket.println(message.toJSONString());
                 String jsonResponse = inSocket.readLine();
                 Map<String, String> dataMap = JsonMessage.parseJsonData(jsonResponse);
@@ -182,6 +187,7 @@ public class SocketClient implements Runnable, Client {
             heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, Integer.parseInt(dataMap.get("heartbeat_port")), identifier);
         else
             outVideo.println("Second level auth");
+        executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
         executeOrders();
     }

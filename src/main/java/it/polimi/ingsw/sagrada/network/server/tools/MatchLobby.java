@@ -1,8 +1,10 @@
 package it.polimi.ingsw.sagrada.network.server.tools;
 
-import it.polimi.ingsw.sagrada.network.server.rmi.ClientRMI;
 import it.polimi.ingsw.sagrada.network.client.Client;
-import it.polimi.ingsw.sagrada.network.server.socket.SocketClient;
+import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
+import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
+import it.polimi.ingsw.sagrada.network.server.rmi.RemoteRMIClient;
+import it.polimi.ingsw.sagrada.network.server.socket.RemoteSocketClient;
 import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatEvent;
 import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatListener;
 import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatProtocolManager;
@@ -10,7 +12,10 @@ import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatProto
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.rmi.Remote;
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 
-public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener, Runnable, Remote {
+public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener, Runnable, AbstractMatchLobbyRMI {
 
     private static final int MAX_POOL_SIZE = 4;
 
@@ -34,10 +39,11 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     private PortDiscovery portDiscovery;
     private Function<String, Boolean> signOut;
     private ServerSocket serverSocket;
+    private String identifier;
     private int port;
     private int heartbeatPort;
 
-    public MatchLobby(Function<String, Boolean> signOut) throws IOException {
+    public MatchLobby(Function<String, Boolean> signOut, String identifier) throws IOException {
         clientPool = new HashMap<>();
         portDiscovery = new PortDiscovery();
         clientIds = new ArrayList<>();
@@ -49,12 +55,21 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         executor = Executors.newCachedThreadPool();
         lobbyServer = Executors.newSingleThreadExecutor();
         lobbyServer.submit(this);
+        try {
+            Registry registry = LocateRegistry.getRegistry(1099);
+            registry.bind("Lobby:"+identifier , this);
+            this.identifier = "Lobby:" + identifier;
+        }
+        catch (RemoteException|AlreadyBoundException exc ) {
+
+        }
     }
 
     public boolean isFull() {
         return clientPool.size() == MAX_POOL_SIZE;
     }
 
+    @Override
     public void addClient(String clientID) {
         clientIdTokens.add(clientID);
     }
@@ -67,7 +82,11 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         return port;
     }
 
-    private boolean removePlayer(String username) {
+    public String getLobbyIdentifier() {
+        return identifier;
+    }
+
+    public boolean removePlayer(String username) {
         synchronized (signOut) {
             signOut.apply(username);
         }
@@ -77,13 +96,18 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         heartbeatProtocolManager.removeFromMonitoredHost(username);
         System.out.println(username + " disconnected");
         for(String clientId : clientIds)
-            clientPool.get(clientId).sendMessage(username + " disconnected");
+            try {
+                clientPool.get(clientId).sendMessage(username + " disconnected");
+            }
+            catch (RemoteException exc) {
+                System.out.println("RMI error on " + clientId);
+            }
         return true;
     }
 
     @Override
     public void onHeartbeat(HeartbeatEvent event) {
-        System.out.println(event.getSource() + " : i'm alive");
+
     }
 
     @Override
@@ -91,29 +115,34 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         System.out.println(event.getSource() + " is offline");
         removePlayer(event.getSource());
         for(String clientId : clientIds)
-            clientPool.get(clientId).sendMessage(event.getSource() + " is offline");
+            try {
+                clientPool.get(clientId).sendMessage(event.getSource() + " is offline");
+            }
+            catch (RemoteException exc) {
+                System.out.println("RMI error on " + clientId);
+            }
     }
 
     @Override
     public void onLossCommunication(HeartbeatEvent event) {
-        System.out.println(event.getSource() + " has lost communication");
-        for(String clientId : clientIds)
-            if(!clientId.equals(event.getSource()))
-                clientPool.get(clientId).sendMessage(event.getSource() + " may have lost communication");
+
     }
 
     @Override
     public void onReacquiredCommunication(HeartbeatEvent event) {
-        for(String clientId : clientIds)
-            if(!clientId.equals(event.getSource()))
-                clientPool.get(clientId).sendMessage(event.getSource() + " came back!");
+
     }
 
     @Override
     public void onAcquiredCommunication(HeartbeatEvent event) {
         for(String clientId : clientIds) {
             if (!clientId.equals(event.getSource()))
-                clientPool.get(clientId).sendMessage(event.getSource() + " is online");
+                try {
+                    clientPool.get(clientId).sendMessage(event.getSource() + " is online");
+                }
+                catch (RemoteException exc) {
+                    System.out.println("RMI error on " + clientId);
+                }
         }
     }
 
@@ -122,13 +151,16 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         return true;
     }
 
-    public boolean joinLobby(String token, ClientRMI clientRMI) {
+    @Override
+    public boolean joinLobby(String token, ClientRMI clientRMI) throws RemoteException {
         if(!clientIdTokens.contains(token))
             return false;
         if(!clientIds.contains(token))
             clientIds.add(token);
         clientPool.put(token, clientRMI);
         clientRMI.notifyHeartbeatPort(heartbeatPort);
+        Function<String, Boolean> disconnect = this::removePlayer;
+        clientRMI.notifyRemoteClientInterface(new RemoteRMIClient(token, disconnect));
         return true;
     }
 
@@ -142,7 +174,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     String id = clientIdTokens.remove(tokenIndex);
                     Function<String, Boolean> disconnect = this::removePlayer;
                     Function<String, Boolean> fastRecovery = this::fastRecoveryClientConnection;
-                    SocketClient socketClient = new SocketClient(client, id, disconnect, fastRecovery);
+                    RemoteSocketClient socketClient = new RemoteSocketClient(client, id, disconnect, fastRecovery);
                     if(!clientIds.contains(id)) //in case of communication loss
                         clientIds.add(id);
                     clientPool.put(id, socketClient);

@@ -8,11 +8,12 @@ import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParse
 
 import java.io.*;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
 
-public class SocketClient implements Client {
+public class RemoteSocketClient implements Client, Runnable {
 
     private Socket socket;
     private BufferedReader input;
@@ -23,7 +24,7 @@ public class SocketClient implements Client {
     private Function fastRecovery;
     private String identifier;
 
-    public SocketClient(Socket socket, String identifier, Function disconnect, Function fastRecovery) throws IOException {
+    public RemoteSocketClient(Socket socket, String identifier, Function disconnect, Function fastRecovery) throws IOException {
         this.socket = socket;
         commandParser = new CommandParser();
         executor = Executors.newSingleThreadExecutor();
@@ -51,15 +52,24 @@ public class SocketClient implements Client {
 
     }
 
-    private void executePayload(String json) {
+    @Override
+    public void disconnect() throws RemoteException {
+        disconnect.apply(identifier);
+        close();
+        executor.shutdown();
+    }
+
+    private void executePayload(String json) throws RemoteException{
         Message parsedMessage = commandParser.parse(json);
         if(parsedMessage instanceof DisconnectEvent) {
-            disconnect.apply(identifier);
-            close();
-            executor.shutdown();
+            disconnect();
         }
         else if(parsedMessage instanceof MessageEvent)
-            System.out.println(((MessageEvent) parsedMessage).getMessage());
+            notifyMessage(((MessageEvent) parsedMessage).getMessage());
+    }
+
+    private void notifyMessage(String message) {
+        System.out.println(message);
     }
 
     @Override

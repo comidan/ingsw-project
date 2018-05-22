@@ -1,13 +1,14 @@
 package it.polimi.ingsw.sagrada.network.client.rmi;
 
-import it.polimi.ingsw.sagrada.game.base.GameManager;
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.security.Security;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
+import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
+import it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI;
 import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
-import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
-import it.polimi.ingsw.sagrada.network.server.rmi.ServerRMI;
-import it.polimi.ingsw.sagrada.network.server.rmi.ClientRMI;
-import org.json.simple.JSONObject;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -15,31 +16,31 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.DriverManager;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class RMIClient extends UnicastRemoteObject implements ClientRMI {
 
     private CommandParser commandParser;
     private BufferedReader inKeyboard;
     private PrintWriter outVideo;
+    private AbstractMatchLobbyRMI lobby;
+    private String identifier;
+    private HeartbeatProtocolManager heartbeatProtocolManager;
     private static final String ADDRESS = "localhost";
-    private static final Logger LOGGER = Logger.getLogger(RMIClient.class.getName());
+    private Client remoteClient;
 
-
-    private ServerRMI server;
+    private AbstractServerRMI server;
 
     public RMIClient() throws RemoteException {
 
         commandParser = new CommandParser();
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
+        establishServerConnection();
     }
 
     private boolean connect() {
         try {
-            server = (ServerRMI) Naming.lookup("rmi://" + ADDRESS + "/ServerRMI");
+            server = (AbstractServerRMI) Naming.lookup("rmi://" + ADDRESS + "/ServerRMI");
             return true;
         } catch (RemoteException | NotBoundException | MalformedURLException exc) {
             return false;
@@ -58,36 +59,87 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
     }
 
     private void login() {
-        boolean loginSuccessful = false;
+        LoginManager.LoginState loginSuccessful = null;
 
-        while (!loginSuccessful) {
+        while (loginSuccessful != LoginManager.LoginState.AUTH_OK) {
             try {
                 outVideo.println("username:");
-                String username = null;
-                username = inKeyboard.readLine();
+                identifier = inKeyboard.readLine();
                 outVideo.println("password:");
-                String auth = null;
-                auth = inKeyboard.readLine();
-                loginSuccessful = this.server.login(this, username, Security.generateMD5Hash(auth)).equals(LoginManager.LoginState.AUTH_OK);
-            } catch (IOException exc) {
-                LOGGER.log(Level.SEVERE, exc.getMessage());
+                String auth = inKeyboard.readLine();
+                loginSuccessful = server.login(this, identifier, Security.generateMD5Hash(auth));
+                System.out.println(loginSuccessful);
+                if(loginSuccessful == LoginManager.LoginState.AUTH_OK)
+                    executeOrders();
+            } catch (IOException e) {
+                System.out.println("RMI server error");
             }
         }
     }
 
-    @Override
-    public void notifyLobby(MatchLobby matchLobby) {
+    private void executeOrders() throws RemoteException{
+        int choice;
+        while (true) {
+            System.out.println("Choose what you wanna do :\n1. Disconnect from server\n2. Send message to server");
+            try {
+                choice = Integer.parseInt(inKeyboard.readLine());
+            } catch (NumberFormatException | IOException exc) {
+                continue;
+            }
+            switch (choice) {
+                case 1:
+                    remoteClient.disconnect();
+                    heartbeatProtocolManager.kill();
+                    establishServerConnection();
+                    return;
+                case 2:
+                    System.out.println("Write your message");
+                    try {
+                        remoteClient.sendMessage(inKeyboard.readLine());
+                    } catch (IOException exc) {
+                        continue;
+                    }
+                    break;
+                default:
+                    System.out.println("No actions available for " + choice);
+            }
+        }
 
     }
 
     @Override
-    public void signUp() {
-
+    public void notifyLobby(String lobbyId) throws RemoteException{
+        try {
+            lobby = (AbstractMatchLobbyRMI) Naming.lookup("rmi://" + ADDRESS + "/" + lobbyId);
+            lobby.addClient(identifier);
+            if (lobby.joinLobby(identifier, this))
+                System.out.println("Lobby joined");
+            else
+                System.out.println("Error");
+        }
+        catch (NotBoundException|MalformedURLException exc) {
+            System.out.println("RMI Error");
+        }
     }
 
     @Override
-    public void notifyHeartbeatPort(Integer port) {
+    public void signUp() throws RemoteException{
+        System.out.println("Signing up");
+    }
 
+    @Override
+    public void notifyHeartbeatPort(Integer port) throws RemoteException{
+        try {
+            heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, identifier);
+        }
+        catch (IOException exc) {
+            System.out.println("RMI server error");
+        }
+    }
+
+    @Override
+    public void notifyRemoteClientInterface(Client client) throws RemoteException {
+        this.remoteClient = client;
     }
 
     @Override
@@ -97,7 +149,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
 
     @Override
     public void sendMessage(String message) {
-
+        System.out.println(message);
     }
 
     @Override
@@ -105,19 +157,8 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
 
     }
 
-    /**
-     * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
-     * <code>run</code> method to be called in that separately executing
-     * thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may
-     * take any action whatsoever.
-     *
-     * @see Thread#run()
-     */
     @Override
-    public void run() {
+    public void disconnect() throws RemoteException {
 
     }
 }
