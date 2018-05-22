@@ -93,7 +93,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
                 case 1:
                     remoteClient.disconnect();
                     heartbeatProtocolManager.kill();
-                    establishServerConnection();
+                    System.exit(0);
                     return;
                 case 2:
                     System.out.println("Write your message");
