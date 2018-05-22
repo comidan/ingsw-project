@@ -30,7 +30,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
         commandParser = new CommandParser();
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
-
     }
 
     private boolean connect() {
@@ -93,7 +92,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
 
     @Override
     public void sendMessage(String message) {
-        String payload = commandParser.crateJSONMessage(message);
 
     }
 

@@ -14,8 +14,11 @@ import static org.junit.Assert.*;
 
 public class RoundTrackTest {
 
+    DiceManager diceManager;
+
     @Test
     public void testRoundTrack() {
+
 
         Dice dice = new Dice(3, Colors.RED);
         List<Dice> diceList = new ArrayList<>();
@@ -28,7 +31,6 @@ public class RoundTrackTest {
         colorList.add(dice.getColor());
         assertEquals(roundTrack.getAvailableColors(), colorList);
         assertEquals(roundTrack.getAvailableColors(), colorList);
-
 
         // get list of color dice from draft and assertEquals with roundTrack.getAvailableColors
 
