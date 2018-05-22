@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.network.client.rmi;
 
+import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.network.security.Security;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
@@ -15,6 +16,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.DriverManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RMIClient extends UnicastRemoteObject implements ClientRMI {
 
@@ -22,6 +25,8 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
     private BufferedReader inKeyboard;
     private PrintWriter outVideo;
     private static final String ADDRESS = "localhost";
+    private static final Logger LOGGER = Logger.getLogger(RMIClient.class.getName());
+
 
     private ServerRMI server;
 
@@ -64,8 +69,8 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
                 String auth = null;
                 auth = inKeyboard.readLine();
                 loginSuccessful = this.server.login(this, username, Security.generateMD5Hash(auth)).equals(LoginManager.LoginState.AUTH_OK);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException exc) {
+                LOGGER.log(Level.SEVERE, exc.getMessage());
             }
         }
     }
