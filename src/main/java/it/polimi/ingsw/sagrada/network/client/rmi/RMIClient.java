@@ -1,6 +1,5 @@
 package it.polimi.ingsw.sagrada.network.client.rmi;
 
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.security.Security;
@@ -8,9 +7,13 @@ import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParse
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI;
 import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.PrintWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;

@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
+import it.polimi.ingsw.sagrada.network.client.protocols.networklink.discoverinternet.DiscoverInternet;
 import it.polimi.ingsw.sagrada.network.security.Security;
 import org.json.simple.JSONObject;
 
@@ -195,7 +196,9 @@ public class SocketClient implements Runnable, Client {
     private void fastRecovery() {
         DiscoverLan discoverLan = new DiscoverLan();
         try {
-            while (!discoverLan.isDirectlyAttachedAndReachable(Inet4Address.getByName(ADDRESS)))
+            while ((!discoverLan.isDirectlyAttachedAndReachable(Inet4Address.getByName(ADDRESS))
+                    && DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS))) ||
+                    (DiscoverInternet.checkInternetConnection() && !DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS))))
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException exc) {

@@ -1,7 +1,11 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.NetworkInterface;
+import java.net.InterfaceAddress;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -18,7 +22,7 @@ public class DiscoverLan {
     };
 
     // list of networks on interfaces of machine this code is being run on
-    List<Network> mDirectlyAttachedNetworks = new ArrayList<Network>();
+    List<Network> mDirectlyAttachedNetworks = new ArrayList<>();
 
     private int addrBytesToInt(byte[] addr) {
         int addri = 0;
