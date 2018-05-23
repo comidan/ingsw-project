@@ -18,7 +18,7 @@ public class GameClient extends Application {
     public static void main(String[] args) throws IOException {
 
         launch(args);
-        System.out.println("Choose network application protocol :\n1.TCP Socket\n2.RMI (through HTTP)");
+        /*System.out.println("Choose network application protocol :\n1.TCP Socket\n2.RMI (through HTTP)");
         int choice;
         do
             choice = optionSelector();
@@ -33,7 +33,7 @@ public class GameClient extends Application {
                 break;
             default:
                 System.out.println("Invalid choice");
-        }
+        }*/
     }
 
     private static int optionSelector() {
