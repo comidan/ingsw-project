@@ -1,0 +1,5 @@
+#pane {
+    -fx-background-image: url("../../../../../../resources/images/shapes.jpg");
+    -fx-background-repeat: stretch;
+    -fx-background-position: center center;
+}
