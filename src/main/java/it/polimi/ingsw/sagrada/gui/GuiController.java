@@ -3,11 +3,10 @@ package it.polimi.ingsw.sagrada.gui;
 import it.polimi.ingsw.sagrada.network.client.ClientManager;
 import it.polimi.ingsw.sagrada.network.security.Security;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,35 +15,51 @@ public class GuiController {
     private static String username;
     private static String password;
     @FXML
+    private Button loginButton;
+    @FXML
     private PasswordField passwordField;
     @FXML
-    private TextField usernameField;
+    private CheckBox socketCheckBox;
     @FXML
     private CheckBox rmiCheckBox;
     @FXML
-    private CheckBox socketCheckBox;
-
-
+    private TextField usernameField;
     @FXML
-    private void handleLoginButtonAction() throws IOException { //check for valid username and password
-        username = usernameField.getText();
-        password = passwordField.getText();
+    private Label errorText;
+
+    public void initLoginGui() {
+        socketCheckBox.selectedProperty().addListener(
+                (observable, oldvalue, newvalue) -> {if(socketCheckBox.isSelected()) rmiCheckBox.setSelected(false);});
+        rmiCheckBox.selectedProperty().addListener(
+                (observable, oldvalue, newvalue) -> {if(rmiCheckBox.isSelected()) socketCheckBox.setSelected(false);});
+        loginButton.armedProperty().addListener(
+                (observable, oldvalue, newvalue) -> {
+                    username = usernameField.getText();
+                    password = passwordField.getText();
+                    startConnection();
+                }
+        );
+    }
+
+    private void startConnection() {
         if(username.length()!=0 && password.length() != 0) {
-            if (socketCheckBox.isSelected()) ClientManager.getSocketClient();
-            else if (rmiCheckBox.isSelected()) ClientManager.getRMIClient();
-            else LOGGER.log(Level.SEVERE, () -> "Something gone wrong in selecting type of connection");
+            if (socketCheckBox.isSelected()) {
+                try {
+                    ClientManager.getSocketClient();
+                } catch (IOException e) {
+                    LOGGER.log(Level.SEVERE, "Error creating socket communication");
+                }
+            }
+            else if (rmiCheckBox.isSelected()) {
+                try {
+                    ClientManager.getRMIClient();
+                } catch (RemoteException e) {
+                    LOGGER.log(Level.SEVERE, "Error creating RMI communication");
+                }
+            }
+            else errorText.setText("Please select a type of communication");
         }
-        else LOGGER.log(Level.SEVERE, () -> "Invalid username or password");
-    }
-
-    @FXML
-    private void handleSocketCheckBoxAction() {
-        if(socketCheckBox.isSelected()) rmiCheckBox.setSelected(false);
-    }
-
-    @FXML
-    private void handleRmiCheckBoxAction() {
-        if(rmiCheckBox.isSelected()) socketCheckBox.setSelected(false);
+        else errorText.setText("Invalid username or password");
     }
 
     public static String getUsername() {
