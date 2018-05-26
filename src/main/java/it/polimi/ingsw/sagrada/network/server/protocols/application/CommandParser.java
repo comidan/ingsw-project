@@ -32,7 +32,6 @@ public class CommandParser {
                     return null;
                 case "settings":  //is settings response useless?
                     return null;
-
                 default:
                     return null;
             }

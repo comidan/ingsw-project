@@ -8,11 +8,13 @@ public class DiceEvent implements Message {
     private int idPlayer;
     private int idDice;
     private Position position;
+    private String src;
 
-    public DiceEvent(int idPlayer, int idDice, Position position) {
+    public DiceEvent(int idPlayer, int idDice, Position position, String src) {
         this.idPlayer = idPlayer;
         this.idDice = idDice;
         this.position = position;
+        this.src = src;
     }
 
     public int getIdDice() {
@@ -25,6 +27,10 @@ public class DiceEvent implements Message {
 
     public int getIdPlayer() {
         return idPlayer;
+    }
+
+    public String getSrc() {
+        return src;
     }
 
     @Override

@@ -9,7 +9,7 @@ public class DiceGameManagerEvent extends DiceEvent {
     private Dice dice;
 
     public DiceGameManagerEvent(Dice dice, DiceEvent diceEvent) {
-        super(diceEvent.getIdPlayer(), diceEvent.getIdDice(), diceEvent.getPosition());
+        super(diceEvent.getIdPlayer(), diceEvent.getIdDice(), diceEvent.getPosition(), diceEvent.getSrc());
         this.dice = dice;
     }
 

@@ -85,13 +85,13 @@ public class RouterTest {
             messages.add(new WindowEvent(1, ids.get(1).get(0), WindowSide.REAR));
         } else if(type.equals("dice")) {
             DiceResponse diceResponse = diceController.getDiceResponse();
-            messages.add(new DiceEvent(0, diceResponse.getDiceList().get(0).getId(), new Position(0, 0)));
+            messages.add(new DiceEvent(0, diceResponse.getDiceList().get(0).getId(), new Position(0, 0), "draft"));
             messages.add(new EndTurnEvent(0));
-            messages.add(new DiceEvent(1, diceResponse.getDiceList().get(1).getId(), new Position(0, 0)));
+            messages.add(new DiceEvent(1, diceResponse.getDiceList().get(1).getId(), new Position(0, 0), "draft"));
             messages.add(new EndTurnEvent(1));
-            messages.add(new DiceEvent(1, diceResponse.getDiceList().get(2).getId(), new Position(1, 0)));
+            messages.add(new DiceEvent(1, diceResponse.getDiceList().get(2).getId(), new Position(1, 0), "draft"));
             messages.add(new EndTurnEvent(1));
-            messages.add(new DiceEvent(0, diceResponse.getDiceList().get(3).getId(), new Position(1, 0)));
+            messages.add(new DiceEvent(0, diceResponse.getDiceList().get(3).getId(), new Position(1, 0), "draft"));
         }
 
         return messages;
