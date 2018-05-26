@@ -2,81 +2,67 @@ package it.polimi.ingsw.sagrada.gui;
 
 import it.polimi.ingsw.sagrada.network.client.ClientManager;
 import it.polimi.ingsw.sagrada.network.security.Security;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginGuiController {
-    private static final Logger LOGGER = Logger.getLogger(LoginGuiController.class.getName());
-    private static String username;
-    private static String password;
-    @FXML
-    private Button loginButton;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private CheckBox socketCheckBox;
-    @FXML
-    private CheckBox rmiCheckBox;
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private Label errorText;
-
+    private static final Logger LOGGER = Logger.getLogger(LoginGuiView.class.getName());
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private static LoginGuiView loginGuiView;
 
-    public void initLoginGui() {
-        socketCheckBox.selectedProperty().addListener(
-                (observable, oldvalue, newvalue) -> {if(socketCheckBox.isSelected()) rmiCheckBox.setSelected(false);});
-        rmiCheckBox.selectedProperty().addListener(
-                (observable, oldvalue, newvalue) -> {if(rmiCheckBox.isSelected()) socketCheckBox.setSelected(false);});
-        loginButton.armedProperty().addListener(
-                (observable, oldvalue, newvalue) -> {
-                    username = usernameField.getText();
-                    password = passwordField.getText();
-                    startConnection();
+    public LoginGuiController(LoginGuiView loginGuiView, Stage window) {
+        this.loginGuiView = loginGuiView;
+        this.loginGuiView.addLoginButtonListener((observable, oldvalue, newvalue) -> {
+            if(loginGuiView.isCredentialCorrect()) {
+                if(loginGuiView.getSelectedCommunication().equals("Socket")) {
+                    executorService.submit(() -> {
+                        try {
+                            ClientManager.getSocketClient();
+                        } catch (IOException e) {
+                            LOGGER.log(Level.SEVERE, "Error creating socket communication");
+                        }
+                    });
                 }
-        );
+                else {
+                    executorService.submit(() -> {
+                        try {
+                            ClientManager.getRMIClient();
+                        } catch (IOException e) {
+                            LOGGER.log(Level.SEVERE, "Error creating socket communication");
+                        }
+                    });
+                }
+                //change scene
+                System.out.println("Changing scene");
+            }
+            else loginGuiView.setErrorText("Invalid username or password");
+        });
     }
 
-    private void startConnection() {
-        if(username.length()!=0 && password.length() != 0) {
-            if (socketCheckBox.isSelected()) {
-                executorService.submit(() -> {
-                    try {
-                        ClientManager.getSocketClient();
-                    } catch (IOException e) {
-                        LOGGER.log(Level.SEVERE, "Error creating socket communication");
-                    }
-                });
-
-            }
-            else if (rmiCheckBox.isSelected()) {
-                executorService.submit(() -> {
-                    try {
-                        ClientManager.getRMIClient();
-                    } catch (RemoteException e) {
-                        LOGGER.log(Level.SEVERE, "Error creating RMI communication");
-                    }
-                });
-
-            }
-            else errorText.setText("Please select a type of communication");
+    private void changeScene() {
+        FXMLLoader loaderLobby = new FXMLLoader(getClass().getResource("/templates/MatchLobbyGui.fxml"));
+        Parent lobby = null;
+        try {
+            lobby = loaderLobby.load();
+            loginGuiView.getWindow().setScene(new Scene(lobby, 590, 776));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        else errorText.setText("Invalid username or password");
     }
 
     public static String getUsername() {
-        return username;
+        return loginGuiView.getUsername();
     }
 
     public static String getPassword() {
-        return Security.generateMD5Hash(password);
+        return Security.generateMD5Hash(loginGuiView.getPassword());
     }
 }

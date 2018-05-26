@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.network.client.rmi;
 
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
+import it.polimi.ingsw.sagrada.gui.LoginGuiView;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;

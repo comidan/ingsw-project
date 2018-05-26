@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.network.client.socket;
 
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
+import it.polimi.ingsw.sagrada.gui.LoginGuiView;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
