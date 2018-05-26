@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,6 +29,8 @@ public class GuiController {
     @FXML
     private Label errorText;
 
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+
     public void initLoginGui() {
         socketCheckBox.selectedProperty().addListener(
                 (observable, oldvalue, newvalue) -> {if(socketCheckBox.isSelected()) rmiCheckBox.setSelected(false);});
@@ -44,18 +48,24 @@ public class GuiController {
     private void startConnection() {
         if(username.length()!=0 && password.length() != 0) {
             if (socketCheckBox.isSelected()) {
-                try {
-                    ClientManager.getSocketClient();
-                } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, "Error creating socket communication");
-                }
+                executorService.submit(() -> {
+                    try {
+                        ClientManager.getSocketClient();
+                    } catch (IOException e) {
+                        LOGGER.log(Level.SEVERE, "Error creating socket communication");
+                    }
+                });
+
             }
             else if (rmiCheckBox.isSelected()) {
-                try {
-                    ClientManager.getRMIClient();
-                } catch (RemoteException e) {
-                    LOGGER.log(Level.SEVERE, "Error creating RMI communication");
-                }
+                executorService.submit(() -> {
+                    try {
+                        ClientManager.getRMIClient();
+                    } catch (RemoteException e) {
+                        LOGGER.log(Level.SEVERE, "Error creating RMI communication");
+                    }
+                });
+
             }
             else errorText.setText("Please select a type of communication");
         }
