@@ -1,6 +1,5 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
-
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.LoginEvent;

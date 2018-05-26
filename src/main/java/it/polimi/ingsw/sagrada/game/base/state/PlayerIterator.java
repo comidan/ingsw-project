@@ -2,14 +2,14 @@ package it.polimi.ingsw.sagrada.game.base.state;
 
 import java.util.*;
 
-public class PlayerIterator implements Iterator<Integer> {
-    private List<Integer> idPlayer;
-    private List<Integer> turnIteration = new ArrayList<>();
+public class PlayerIterator implements Iterator<String> {
+    private List<String> idPlayer;
+    private List<String> turnIteration = new ArrayList<>();
     private int numPlayer;
     private int itr;
     private int turnNum;
 
-    public PlayerIterator(List<Integer> idPlayer) {
+    public PlayerIterator(List<String> idPlayer) {
         this.idPlayer = idPlayer;
         int size = idPlayer.size();
         for(int i=0; i<size-1; i++) { //example 0-1-2-0-1
@@ -33,7 +33,7 @@ public class PlayerIterator implements Iterator<Integer> {
     }
 
     @Override
-    public Integer next() {
+    public String next() {
         if(itr>=2*numPlayer) throw new NoSuchElementException();
         return turnIteration.get(itr++);
     }

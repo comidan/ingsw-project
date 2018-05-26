@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 public class WindowController implements Channel<WindowResponse, Message> {
-    private Map<Integer, List<Integer>>windowsId = new HashMap<>();
+    private Map<String, List<Integer>>windowsId = new HashMap<>();
 
     @Override
     public void dispatch(WindowResponse message) {
         windowsId.put(message.getPlayerId(), message.getIds());
     }
 
-    public Map<Integer, List<Integer>> getMessage() {
+    public Map<String, List<Integer>> getMessage() {
         return windowsId;
     }
 

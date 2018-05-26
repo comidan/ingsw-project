@@ -21,16 +21,16 @@ public class ScoreTrackTest {
 
     @Test
     public void testScoreTrack() {
-        Player playerOne = new Player(0);
+        Player playerOne = new Player("Mottola");
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.RED).build();
         ObjectiveCard card = new ObjectiveCard(1, "test", objectiveRule);
         ObjectiveRule objectiveRulePublic = ObjectiveRule.builder().setValueCoupleObjective(2, 5, 6).build();
         ObjectiveCard cardPublic = new ObjectiveCard(2, "testPublic", objectiveRulePublic);
         playerOne.setPrivateObjectiveCard(card);
         List<Player> players = new ArrayList<>();
-        players.add(new Player(0));
-        players.add(new Player(1));
-        players.add(new Player(2));
+        players.add(playerOne);
+        players.add(new Player("Ingconti"));
+        players.add(new Player("Izzo"));
         DynamicRouter dynamicRouter = new MessageDispatcher();
         GameManager gameManager = new GameManager(players, dynamicRouter);
 

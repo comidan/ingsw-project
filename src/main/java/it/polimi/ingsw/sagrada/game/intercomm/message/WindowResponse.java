@@ -6,15 +6,15 @@ import java.util.List;
 
 public class WindowResponse implements Message {
 
-    private int playerId;
+    private String playerId;
     private List<Integer> ids;
 
-    public WindowResponse(int playerId, List<Integer> ids) {
+    public WindowResponse(String playerId, List<Integer> ids) {
         this.playerId = playerId;
         this.ids = ids;
     }
 
-    public int getPlayerId() {
+    public String getPlayerId() {
         return playerId;
     }
 

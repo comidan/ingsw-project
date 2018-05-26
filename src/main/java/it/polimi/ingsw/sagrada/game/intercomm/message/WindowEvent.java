@@ -5,17 +5,17 @@ import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 
 public class WindowEvent implements Message {
 
-    private int idPlayer;
+    private String idPlayer;
     private int idWindow;
     private WindowSide windowSide;
 
-    public WindowEvent(int idPlayer, int idWindow, WindowSide windowSide) {
+    public WindowEvent(String idPlayer, int idWindow, WindowSide windowSide) {
         this.idPlayer = idPlayer;
         this.idWindow = idWindow;
         this.windowSide = windowSide;
     }
 
-    public int getIdPlayer() {
+    public String getIdPlayer() {
         return idPlayer;
     }
 

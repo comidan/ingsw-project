@@ -8,12 +8,12 @@ import it.polimi.ingsw.sagrada.game.playables.Window;
  */
 public class Player {
 
-    private int id;
+    private String id;
     private ObjectiveCard privateObjectiveCard;
     private Window window;
     private boolean connected;
 
-    public Player(int id) {
+    public Player(String id) {
         this.id = id;
         this.connected = true;
     }
@@ -34,7 +34,7 @@ public class Player {
         return privateObjectiveCard;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

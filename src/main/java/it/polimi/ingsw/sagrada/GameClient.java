@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada;
 
-import it.polimi.ingsw.sagrada.gui.GuiController;
+import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,8 +17,8 @@ public class GameClient extends Application {
     public void start(Stage primaryStage) throws Exception { //path is relative to target because getResource is called
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/templates/loginGui.fxml"));
         Parent root = loader.load();
-        GuiController guiController = loader.getController();
-        guiController.initLoginGui();
+        LoginGuiController loginGuiController = loader.getController();
+        loginGuiController.initLoginGui();
         primaryStage.setTitle("SagradaClient");
         primaryStage.setScene(new Scene(root, 590, 776));
         primaryStage.setResizable(false);

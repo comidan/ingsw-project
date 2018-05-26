@@ -35,8 +35,8 @@ public class RouterTest {
         DynamicRouter dynamicRouter = new MessageDispatcher();
 
         List<Player> players = new ArrayList<>();
-        Player playerOne = new Player(0);
-        Player playerTwo = new Player(1);
+        Player playerOne = new Player("Mottola");
+        Player playerTwo = new Player("Ingconti");
         players.add(playerOne);
         players.add(playerTwo);
         GameManager gameManager = new GameManager(players, dynamicRouter);
@@ -49,10 +49,10 @@ public class RouterTest {
         }
 
         assertEquals
-                (idWindowToName(windowController.getMessage().get(0).get(0), WindowSide.FRONT),
+                (idWindowToName(windowController.getMessage().get("Mottola").get(0), WindowSide.FRONT),
                         playerOne.getWindow().getName());
         assertEquals
-                (idWindowToName(windowController.getMessage().get(1).get(0), WindowSide.REAR),
+                (idWindowToName(windowController.getMessage().get("Ingconti").get(0), WindowSide.REAR),
                         playerTwo.getWindow().getName());
 
         for(Message message:messageGenerator("dice")) {
@@ -80,9 +80,9 @@ public class RouterTest {
         List<Message> messages = new ArrayList<>();
 
         if(type.equals("window")){
-            Map<Integer, List<Integer>> ids = windowController.getMessage();
-            messages.add(new WindowEvent(0, ids.get(0).get(0), WindowSide.FRONT));
-            messages.add(new WindowEvent(1, ids.get(1).get(0), WindowSide.REAR));
+            Map<String, List<Integer>> ids = windowController.getMessage();
+            messages.add(new WindowEvent("Mottola", ids.get("Mottola").get(0), WindowSide.FRONT));
+            messages.add(new WindowEvent("Ingconti", ids.get("Ingconti").get(0), WindowSide.REAR));
         } else if(type.equals("dice")) {
             DiceResponse diceResponse = diceController.getDiceResponse();
             messages.add(new DiceEvent(0, diceResponse.getDiceList().get(0).getId(), new Position(0, 0), "draft"));

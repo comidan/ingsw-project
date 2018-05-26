@@ -27,7 +27,7 @@ public class MessageReceiver {
             JSONObject data;
             switch ((String)jsonMsg.get("type_cmd")) {
                 case "choice_window":
-                    int idPlayerW = ((Long)jsonMsg.get("id_player")).intValue();
+                    String idPlayerW = (String)jsonMsg.get("id_player");
                     data = (JSONObject) jsonMsg.get("window");
                     int windowId = ((Long)data.get("window_id")).intValue();
                     WindowSide windowSide = WindowSide.stringtoWindowSide((String)data.get("window_side"));

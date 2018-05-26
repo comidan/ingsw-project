@@ -54,7 +54,7 @@ public class GameManager implements Channel<Message, Message> {
         windowManager = new WindowManager(function, dynamicRouter);
         roundTrack = new RoundTrack();
 
-        List<Integer> playersId = new ArrayList<>();
+        List<String> playersId = new ArrayList<>();
         for (Player p:players) {
             playersId.add(p.getId());
         }
@@ -168,13 +168,19 @@ public class GameManager implements Channel<Message, Message> {
         return players.size();
     }
 
+    private Player idToPlayer(String id) {
+        for(Player p:players) {
+            if(p.getId().equals(id)) return p;
+        }
+        return null;
+    }
 
     @Override
     public void dispatch(Message message) {
         String eventType = message.getType().getName();
         if(eventType.equals(EventTypeEnum.toString(WINDOW_GAME_MANAGER_EVENT))) {
             WindowGameManagerEvent msgW = (WindowGameManagerEvent) message;
-            dealWindowsToPlayer(players.get(msgW.getIdPlayer()), msgW.getWindow());
+            dealWindowsToPlayer(idToPlayer(msgW.getIdPlayer()), msgW.getWindow());
         } else if(eventType.equals(EventTypeEnum.toString(DICE_GAME_MANAGER_EVENT))) {
             DiceGameManagerEvent msgD = (DiceGameManagerEvent) message;
             setDiceInWindow(msgD.getIdPlayer(), msgD.getDice(), msgD.getPosition());

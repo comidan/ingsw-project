@@ -21,9 +21,9 @@ public class WindowTest {
     @Test
     public void testWindowCreation() {
         List<Player> players = new ArrayList<>();
-        players.add(new Player(0));
-        players.add(new Player(1));
-        players.add(new Player(2));
+        players.add(new Player("Mottola"));
+        players.add(new Player("IngConti"));
+        players.add(new Player("Izzo"));
         DynamicRouter dynamicRouter = new MessageDispatcher();
         GameManager gameManager = new GameManager(players, dynamicRouter);
 

@@ -57,7 +57,7 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         this.dynamicRouter.subscribeChannel(WindowEvent.class, this);
     }
 
-    public void dealWindowId(int playerId) {
+    public void dealWindowId(String playerId) {
         List<Integer> windowId = new ArrayList<>();
         for (int i = 0; i < WINDOWS_PER_CARD; i++) {
             if (picker.hasNext()) windowId.add(picker.next());

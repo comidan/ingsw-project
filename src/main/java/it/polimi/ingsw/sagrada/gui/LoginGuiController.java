@@ -12,8 +12,8 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GuiController {
-    private static final Logger LOGGER = Logger.getLogger(GuiController.class.getName());
+public class LoginGuiController {
+    private static final Logger LOGGER = Logger.getLogger(LoginGuiController.class.getName());
     private static String username;
     private static String password;
     @FXML

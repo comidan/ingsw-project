@@ -1,12 +1,11 @@
 package it.polimi.ingsw.sagrada.network.client.socket;
 
-import it.polimi.ingsw.sagrada.gui.GuiController;
+import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.client.protocols.networklink.discoverinternet.DiscoverInternet;
-import it.polimi.ingsw.sagrada.network.security.Security;
 import org.json.simple.JSONObject;
 
 import java.io.*;
@@ -138,8 +137,8 @@ public class SocketClient implements Runnable, Client {
 
             while (!loginSuccessful) {
                 outVideo.println("Connected to " + ADDRESS + ":" + PORT + "\nThis is the first login firewall : \n");
-                username = GuiController.getUsername();
-                JSONObject message = createMessage(username, GuiController.getPassword());
+                username = LoginGuiController.getUsername();
+                JSONObject message = createMessage(username, LoginGuiController.getPassword());
                 initializeConnectionStream();
                 outSocket.println(message.toJSONString());
                 String jsonResponse = inSocket.readLine();

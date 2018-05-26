@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 
 public class GameManagerTest {
 
-    private Player playerOne = new Player(0);
-    private Player playerTwo = new Player(1);
+    private Player playerOne = new Player("Gianni");
+    private Player playerTwo = new Player("Paolo");
     private List<Player> players = new ArrayList<>();
 
 

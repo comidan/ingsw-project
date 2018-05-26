@@ -4,13 +4,13 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 
 public class BeginTurnEvent implements Message {
 
-    private int idPlayer;
+    private String idPlayer;
 
-    public BeginTurnEvent(int idPlayer) {
+    public BeginTurnEvent(String idPlayer) {
         this.idPlayer = idPlayer;
     }
 
-    public int getIdPlayer() {
+    public String getIdPlayer() {
         return idPlayer;
     }
 

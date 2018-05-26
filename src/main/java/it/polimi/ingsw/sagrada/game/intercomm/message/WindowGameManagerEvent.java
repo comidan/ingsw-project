@@ -5,15 +5,15 @@ import it.polimi.ingsw.sagrada.game.playables.Window;
 
 public class WindowGameManagerEvent implements Message {
 
-    private int idPlayer;
+    private String idPlayer;
     private Window window;
 
-     public WindowGameManagerEvent(int idPlayer, Window window) {
+     public WindowGameManagerEvent(String idPlayer, Window window) {
          this.idPlayer = idPlayer;
          this.window = window;
      }
 
-    public int getIdPlayer() {
+    public String getIdPlayer() {
         return idPlayer;
     }
 

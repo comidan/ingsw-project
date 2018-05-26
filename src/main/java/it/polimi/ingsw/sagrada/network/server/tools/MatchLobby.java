@@ -1,5 +1,9 @@
 package it.polimi.ingsw.sagrada.network.server.tools;
 
+import it.polimi.ingsw.sagrada.game.base.GameManager;
+import it.polimi.ingsw.sagrada.game.base.Player;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
@@ -29,12 +33,15 @@ import java.util.function.Function;
 public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener, Runnable, AbstractMatchLobbyRMI {
 
     private static final int MAX_POOL_SIZE = 4;
+    private long timeToWait = 10000;
 
     private Map<String, Client> clientPool;
     private List<String> clientIds;
     private List<String> clientIdTokens;
     private ExecutorService executor;
     private ExecutorService lobbyServer;
+    private ExecutorService checkGameStart;
+    private long startTime;
     private HeartbeatProtocolManager heartbeatProtocolManager;
     private PortDiscovery portDiscovery;
     private Function<String, Boolean> signOut;
@@ -42,6 +49,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     private String identifier;
     private int port;
     private int heartbeatPort;
+    private GameManager gameManager;
+    private DynamicRouter dynamicRouter;
 
     public MatchLobby(Function<String, Boolean> signOut, String identifier) throws IOException {
         clientPool = new HashMap<>();
@@ -55,6 +64,9 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         executor = Executors.newCachedThreadPool();
         lobbyServer = Executors.newSingleThreadExecutor();
         lobbyServer.submit(this);
+        checkGameStart = Executors.newSingleThreadExecutor();
+        checkGameStart.submit(new CheckStartGameCondition());
+        startTime = System.currentTimeMillis();
         try {
             Registry registry = LocateRegistry.getRegistry(1099);
             registry.bind("Lobby:"+identifier , this);
@@ -187,6 +199,33 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             }
             catch (IOException exc) {
             }
+        }
+    }
+
+    private void startGame() {
+        List<Player> players = new ArrayList<>();
+        clientIds.forEach(username -> players.add(new Player(username)));
+
+        dynamicRouter = new MessageDispatcher();
+        gameManager = new GameManager(players, dynamicRouter);
+        gameManager.startGame();
+    }
+
+    private class CheckStartGameCondition implements Runnable{
+        long elapsedTime;
+        int elapsedTimeSecond=0;
+        @Override
+        public void run() {
+            while (clientPool.size() != 4 && elapsedTime < timeToWait) {
+                elapsedTime = System.currentTimeMillis() - startTime;
+                int currentSeconds = (int) elapsedTime / 1000;
+                if (currentSeconds != elapsedTimeSecond) {
+                    elapsedTimeSecond = currentSeconds;
+                    System.out.println(elapsedTimeSecond);
+                }
+            }
+
+            if(clientPool.size()>1) startGame();
         }
     }
 }
