@@ -11,7 +11,8 @@ public class DiceController implements Channel<DiceResponse, Message> {
     }
 
     @Override
-    public void sendMessage(Message message) {}
+    public void sendMessage(Message message) {
+    }
 
     public DiceResponse getDiceResponse() {
         return diceResponse;

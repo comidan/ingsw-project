@@ -23,6 +23,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     private int numberOfPlayers; // missing method to fetch this value, temporary value for testing
     private Consumer<Message> dispatchGameManager;
     private DynamicRouter dynamicRouter;
+    
 
     private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
 

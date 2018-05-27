@@ -1,5 +1,8 @@
 package it.polimi.ingsw.sagrada.gui;
 
+//TO BE CONNECTED TO MODEL
+
+
 public interface WindowModelInterface {
 
 

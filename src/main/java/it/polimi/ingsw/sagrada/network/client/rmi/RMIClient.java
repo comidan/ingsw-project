@@ -29,7 +29,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
     private AbstractMatchLobbyRMI lobby;
     private String identifier;
     private HeartbeatProtocolManager heartbeatProtocolManager;
-    private static final String ADDRESS = "localhost";
+    private static final String ADDRESS = "10.1.1.1";
     private Client remoteClient;
 
     private AbstractServerRMI server;
@@ -70,7 +70,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
                 identifier = LoginGuiController.getUsername();
                 loginSuccessful = server.login(this, identifier, LoginGuiController.getPassword());
                 System.out.println(loginSuccessful);
-                if(loginSuccessful == LoginManager.LoginState.AUTH_OK)
+                if (loginSuccessful == LoginManager.LoginState.AUTH_OK)
                     executeOrders();
             } catch (IOException e) {
                 System.out.println("RMI server error");
@@ -78,7 +78,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
         }
     }
 
-    private void executeOrders() throws RemoteException{
+    private void executeOrders() throws RemoteException {
         int choice;
         while (true) {
             System.out.println("Choose what you wanna do :\n1. Disconnect from server\n2. Send message to server");
@@ -109,7 +109,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
     }
 
     @Override
-    public void notifyLobby(String lobbyId) throws RemoteException{
+    public void notifyLobby(String lobbyId) throws RemoteException {
         try {
             lobby = (AbstractMatchLobbyRMI) Naming.lookup("rmi://" + ADDRESS + "/" + lobbyId);
             lobby.addClient(identifier);
@@ -117,23 +117,21 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
                 System.out.println("Lobby joined");
             else
                 System.out.println("Error");
-        }
-        catch (NotBoundException|MalformedURLException exc) {
+        } catch (NotBoundException | MalformedURLException exc) {
             System.out.println("RMI Error");
         }
     }
 
     @Override
-    public void signUp() throws RemoteException{
+    public void signUp() throws RemoteException {
         System.out.println("Signing up");
     }
 
     @Override
-    public void notifyHeartbeatPort(Integer port) throws RemoteException{
+    public void notifyHeartbeatPort(Integer port) throws RemoteException {
         try {
             heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, identifier);
-        }
-        catch (IOException exc) {
+        } catch (IOException exc) {
             System.out.println("RMI server error");
         }
     }

@@ -5,6 +5,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
+//done for now (MUST REMOVE PARAMETER WINDOW ID WHEN WINDOW MODEL IS ACTUAL MODEL)
 
 public class WindowView extends StackPane implements ViewUpdate {
     WindowModelInterface windowModel;

@@ -24,7 +24,7 @@ public class SocketClient implements Runnable, Client {
 
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     private static final int PORT = 49152; //change to dynamic in some elegant way
-    private static final String ADDRESS = "localhost"; //just for now, next will be obtained in far smarter way
+    private static final String ADDRESS = "10.1.1.1"; //just for now, next will be obtained in far smarter way
 
     private Socket socket;
     private BufferedReader inSocket;
@@ -76,7 +76,7 @@ public class SocketClient implements Runnable, Client {
         }
     }
 
-    private void executeOrders() throws RemoteException{
+    private void executeOrders() throws RemoteException {
         int choice;
         while (!executor.isShutdown()) {
             System.out.println("Choose what you wanna do :\n1. Disconnect from server\n2. Send message to server");

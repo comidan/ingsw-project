@@ -1,5 +1,8 @@
 package it.polimi.ingsw.sagrada.gui;
 
+
+//done
+
 public class MyWindowView extends WindowView {
 
     MyWindowView(WindowModelInterface windowModel, Integer windowId) {

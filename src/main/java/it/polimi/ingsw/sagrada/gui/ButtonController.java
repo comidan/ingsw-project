@@ -1,7 +1,12 @@
 package it.polimi.ingsw.sagrada.gui;
 
 
+//done for now
+
 public abstract class ButtonController implements ButtonControllerInterface {
+
+
+    //we shouldn't use this static attribute, we should use the model to understand which dice to put
 
     private static DiceView diceView; //TODO this thing shouldn't exist
 
