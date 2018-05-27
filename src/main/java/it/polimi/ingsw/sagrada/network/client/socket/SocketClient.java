@@ -24,7 +24,7 @@ public class SocketClient implements Runnable, Client {
 
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     private static final int PORT = 49152; //change to dynamic in some elegant way
-    private static final String ADDRESS = "192.168.1.5"; //just for now, next will be obtained in far smarter way
+    private static final String ADDRESS = Client.getConfigAddress(); //just for now, next will be obtained in far smarter way
 
     private Socket socket;
     private BufferedReader inSocket;
@@ -210,6 +210,8 @@ public class SocketClient implements Runnable, Client {
             LOGGER.log(Level.SEVERE, exc.getMessage());
         }
     }
+
+
 
     public void run() {
         while (!executor.isShutdown()) {
