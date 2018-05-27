@@ -155,27 +155,28 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 if (dataMap.get("login").equals("successful")) {
                     lobbyPort = Integer.parseInt(dataMap.get("lobby_port"));
                     socket.close();
-                    initializeLobbyLink(username);
-                    loginSuccessful = true;
-                    this.username = username;
                     sendMessage(LoginState.AUTH_OK);
+                    loginSuccessful = true;
+                    initializeLobbyLink(username);
                 } else if (dataMap.get("login").equals("register")) {
-                    outVideo.println("Registering...");
                     jsonResponse = inSocket.readLine();
                     dataMap = JsonMessage.parseJsonData(jsonResponse);
                     if (dataMap.get("login").equals("successful")) {
+                        outVideo.println("Registering...");
                         outVideo.println("Connecting to lobby");
                         lobbyPort = Integer.parseInt(dataMap.get("lobby_port"));
                         socket.close();
-                        initializeLobbyLink(username);
-                        outVideo.println("Login successful");
                         sendMessage(LoginState.AUTH_OK);
+                        outVideo.println("Login successful");
                         loginSuccessful = true;
-                        this.username = username;
-                    } else sendMessage(LoginState.AUTH_WRONG_PASSWORD);
+                        initializeLobbyLink(username);
+                    }
+                    else {
+                        outVideo.println("Wrong password");
+                        sendMessage(LoginState.AUTH_WRONG_PASSWORD);
+                    }
                 } else if (dataMap.get("login").equals("error")) {
                     outVideo.println("User already logged on");
-                    socket.close();
                     sendMessage(LoginState.AUTH_FAILED_USER_ALREADY_LOGGED);
                 }
             }
@@ -253,6 +254,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
 
     @Override
     public void sendMessage(LoginState message) {
-        dynamicRouter.dispatch(message);
+        System.out.println(message);
+        LoginGuiController.getDynamicRouter().dispatch(message);
     }
 }

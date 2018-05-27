@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.ClientManager;
 import it.polimi.ingsw.sagrada.network.security.Security;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -21,6 +22,7 @@ public class LoginGuiController implements Channel<LoginState, Message> {
     private static final DynamicRouter dynamicRouter= new MessageDispatcher();
 
     public LoginGuiController(LoginGuiView loginGuiView) {
+        dynamicRouter.subscribeChannel(LoginState.class, this);
         this.loginGuiView = loginGuiView;
         this.loginGuiView.addLoginButtonListener( event -> {
             if(loginGuiView.isCredentialCorrect()) {
@@ -64,7 +66,7 @@ public class LoginGuiController implements Channel<LoginState, Message> {
     }
 
     private void changeScene() {
-        loginGuiView.changeScene();
+        Platform.runLater(() -> {loginGuiView.changeScene();});
     }
 
     @Override

@@ -105,7 +105,7 @@ public class SocketServer implements Runnable, Server {
                                 clientSocket.close();
                             }
                             else {
-                                System.out.println("Sign up failed");
+                                System.out.println("Wrong password");
                                 LoginManager.sendLoginError(clientSocket);
                             }
                             break;
