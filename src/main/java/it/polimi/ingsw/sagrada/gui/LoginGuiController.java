@@ -20,7 +20,7 @@ public class LoginGuiController {
 
     public LoginGuiController(LoginGuiView loginGuiView, Stage window) {
         this.loginGuiView = loginGuiView;
-        this.loginGuiView.addLoginButtonListener((observable, oldvalue, newvalue) -> {
+        this.loginGuiView.addLoginButtonListener( event -> {
             if(loginGuiView.isCredentialCorrect()) {
                 if(loginGuiView.getSelectedCommunication().equals("Socket")) {
                     executorService.submit(() -> {
@@ -42,20 +42,10 @@ public class LoginGuiController {
                 }
                 //change scene
                 System.out.println("Changing scene");
+                loginGuiView.changeScene();
             }
             else loginGuiView.setErrorText("Invalid username or password");
         });
-    }
-
-    private void changeScene() {
-        FXMLLoader loaderLobby = new FXMLLoader(getClass().getResource("/templates/MatchLobbyGui.fxml"));
-        Parent lobby = null;
-        try {
-            lobby = loaderLobby.load();
-            loginGuiView.getWindow().setScene(new Scene(lobby, 590, 776));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static String getUsername() {

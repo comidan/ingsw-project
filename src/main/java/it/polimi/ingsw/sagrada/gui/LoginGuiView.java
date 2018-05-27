@@ -1,13 +1,16 @@
 package it.polimi.ingsw.sagrada.gui;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class LoginGuiView extends Application {
     @FXML
@@ -25,8 +28,8 @@ public class LoginGuiView extends Application {
 
     private Stage window;
 
-    public void addLoginButtonListener(ChangeListener listener) {
-        loginButton.armedProperty().addListener(listener);
+    public void addLoginButtonListener(EventHandler<ActionEvent> listener) {
+        loginButton.setOnAction(listener);
     }
 
     public void setErrorText(String message) {
@@ -64,6 +67,7 @@ public class LoginGuiView extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.window = primaryStage;
+        System.out.println("is null? " + (window == null));
 
         //Login GUI
         FXMLLoader loaderLogin = new FXMLLoader(getClass().getResource("/templates/LoginGui.fxml"));
@@ -76,5 +80,17 @@ public class LoginGuiView extends Application {
         window.setResizable(false);
         window.setScene(new Scene(root, 590, 776));
         window.show();
+    }
+
+    public void changeScene() {
+        FXMLLoader loaderLobby = new FXMLLoader(getClass().getResource("/templates/MatchLobbyGui.fxml"));
+        Parent lobby = null;
+        try {
+            lobby = loaderLobby.load();
+            window = (Stage) loginButton.getScene().getWindow();
+            window.setScene(new Scene(lobby, 590, 776));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

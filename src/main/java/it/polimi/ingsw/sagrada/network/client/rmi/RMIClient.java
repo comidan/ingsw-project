@@ -18,8 +18,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 public class RMIClient extends UnicastRemoteObject implements ClientRMI {
 
@@ -31,6 +31,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
     private HeartbeatProtocolManager heartbeatProtocolManager;
     private static final String ADDRESS = getConfigAddress();
     private Client remoteClient;
+    private static final Logger LOGGER = Logger.getLogger(RMIClient.class.getName());
 
     private AbstractServerRMI server;
 

@@ -21,8 +21,6 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
-
 public class SocketClient implements Runnable, Client {
 
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
