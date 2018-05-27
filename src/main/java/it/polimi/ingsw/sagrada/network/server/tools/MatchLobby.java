@@ -137,12 +137,12 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
 
     @Override
     public void onLossCommunication(HeartbeatEvent event) {
-
+        System.out.println(event.getSource() + " maybe offline");
     }
 
     @Override
     public void onReacquiredCommunication(HeartbeatEvent event) {
-
+        System.out.println(event.getSource() + " came back");
     }
 
     @Override

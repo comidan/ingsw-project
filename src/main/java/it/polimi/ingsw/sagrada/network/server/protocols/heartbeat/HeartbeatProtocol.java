@@ -21,6 +21,7 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     private String data;
     private String expectedPayload;
     private Observer<HeartbeatState, HeartbeatEvent> observer;
+    private Thread runnableWorkerThread;
     private boolean isDead = false;
 
     HeartbeatProtocol(DatagramSocket datagramSocket, Observer observer, String expectedPayload) {
@@ -28,12 +29,13 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
         this.datagramSocket = datagramSocket;
         this.observer = observer;
         this.expectedPayload = expectedPayload;
+        runnableWorkerThread = null;
     }
 
     public void kill() {
         executor.shutdownNow();
         isDead = true;
-        Thread.currentThread().interrupt();
+        runnableWorkerThread.interrupt();
     }
 
     /**
@@ -54,17 +56,19 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
         boolean lossCommsAlreadyNotified = false;
         int timeElapsed = 0;
         HeartbeatEvent event;
+        runnableWorkerThread = Thread.currentThread();
         while (!isDead && !executor.isShutdown()) {
             while (!asynchronousHeartbeat.isDone()) {
                 try {
                     Thread.sleep(TIME_INTERVAL);
                 } catch (InterruptedException exc) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, exc.getMessage());
-                    event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
-                    notify(HeartbeatState.HOST_OFFLINE, event);
-                    asynchronousHeartbeat.cancel(true);
-                    Thread.currentThread().interrupt();
-                    isDead = true;
+                    if(data.equals(expectedPayload)) {
+                        event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
+                        notify(HeartbeatState.HOST_OFFLINE, event);
+                        asynchronousHeartbeat.cancel(true);
+                        Thread.currentThread().interrupt();
+                        isDead = true;
+                    }
                 }
                 timeElapsed += TIME_INTERVAL;
                 if (timeElapsed > TIME_LOSS_COMMUNICATION_FRAME * TIME_INTERVAL && !lossCommsAlreadyNotified)
