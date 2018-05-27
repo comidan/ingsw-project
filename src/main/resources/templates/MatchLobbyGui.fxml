@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="786.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="786.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.sagrada.gui.LobbyGuiView">
    <children>
       <ImageView fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -24,7 +23,7 @@
             <Font size="40.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="255.0" layoutY="638.0" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+      <Label fx:id="timer" alignment="CENTER" layoutX="255.0" layoutY="638.0" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
@@ -49,22 +48,22 @@
             <Image url="@../images/DiceImages/DiceFourGreen.png" />
          </image>
       </ImageView>
-      <Label layoutX="210.0" layoutY="205.0" AnchorPane.leftAnchor="205.0">
+      <Label fx:id="firstPlayer" layoutX="210.0" layoutY="205.0" text="Waiting player..." AnchorPane.leftAnchor="205.0">
          <font>
             <Font name="Century Gothic" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="205.0" layoutY="295.0" AnchorPane.leftAnchor="205.0">
+      <Label fx:id="secondPlayer" layoutX="205.0" layoutY="295.0" text="Waiting player..." AnchorPane.leftAnchor="205.0">
          <font>
             <Font name="Century Gothic" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="205.0" layoutY="385.0" AnchorPane.leftAnchor="205.0">
+      <Label fx:id="thirdPlayer" layoutX="205.0" layoutY="385.0" text="Waiting player..." AnchorPane.leftAnchor="205.0">
          <font>
             <Font name="Century Gothic" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="205.0" layoutY="475.0" AnchorPane.leftAnchor="205.0">
+      <Label fx:id="fourthPlayer" layoutX="205.0" layoutY="475.0" text="Waiting player..." AnchorPane.leftAnchor="205.0">
          <font>
             <Font name="Century Gothic" size="24.0" />
          </font>

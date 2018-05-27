@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.network.server.rmi;
 
+import it.polimi.ingsw.sagrada.gui.LobbyGuiViewInterface;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 import it.polimi.ingsw.sagrada.network.server.Server;
@@ -73,9 +74,16 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
         }
     }
 
+    @Override
+    public void setLobbyGuiView(LobbyGuiViewInterface lobbyGuiView) throws RemoteException {
+
+    }
+
     private synchronized MatchLobby joinUserLobby(String clientIdToken) throws IOException{
         MatchLobby availableLobby = lobbyPool.getAvailableLobby();
         availableLobby.addClient(clientIdToken);
         return availableLobby;
     }
+
+
 }

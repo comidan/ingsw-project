@@ -38,7 +38,7 @@ public class LoginGuiController implements Channel<LoginState, Message> {
                 else {
                     executorService.submit(() -> {
                         try {
-                            ClientManager.getRMIClient();
+                            ClientManager.getRMIClient(dynamicRouter);
                         } catch (IOException e) {
                             LOGGER.log(Level.SEVERE, "Error creating socket communication");
                         }
@@ -61,12 +61,12 @@ public class LoginGuiController implements Channel<LoginState, Message> {
         loginGuiView.setErrorText(message);
     }
 
-    public static DynamicRouter getDynamicRouter() {
-        return dynamicRouter;
-    }
-
     private void changeScene() {
         Platform.runLater(() -> {loginGuiView.changeScene();});
+    }
+
+    public static DynamicRouter getDynamicRouter() {
+        return dynamicRouter;
     }
 
     @Override

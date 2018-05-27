@@ -29,7 +29,6 @@ public class MessageDispatcher implements DynamicRouter<Message> {
 
     @Override
     public void dispatch(Message content) {
-        System.out.println("message is : " + content);
         List<Channel> channels = handlers.get(content.getType());
         if(channels!=null) {
             //System.out.println("Handler found for "+content.getType());

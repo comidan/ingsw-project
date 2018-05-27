@@ -1,5 +1,8 @@
 package it.polimi.ingsw.sagrada.network.client.rmi;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.gui.LobbyGuiController;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import it.polimi.ingsw.sagrada.gui.LoginGuiView;
 import it.polimi.ingsw.sagrada.network.LoginState;
@@ -22,7 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class RMIClient extends UnicastRemoteObject implements ClientRMI {
+public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel<Message, LoginState> {
 
     private CommandParser commandParser;
     private BufferedReader inKeyboard;
@@ -72,8 +75,13 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
                 identifier = LoginGuiController.getUsername();
                 loginSuccessful = server.login(this, identifier, LoginGuiController.getPassword());
                 System.out.println(loginSuccessful);
-                if (loginSuccessful == LoginState.AUTH_OK)
+                if (loginSuccessful == LoginState.AUTH_OK) {
+                    sendMessage(LoginState.AUTH_OK);
                     executeOrders();
+                }
+                else {
+                    sendMessage(loginSuccessful);
+                }
             } catch (IOException e) {
                 System.out.println("RMI server error");
             }
@@ -175,5 +183,15 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
     @Override
     public void disconnect() throws RemoteException {
 
+    }
+
+    @Override
+    public void dispatch(Message message) {
+
+    }
+
+    @Override
+    public void sendMessage(LoginState message) {
+        LoginGuiController.getDynamicRouter().dispatch(message);
     }
 }

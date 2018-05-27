@@ -254,7 +254,6 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
 
     @Override
     public void sendMessage(LoginState message) {
-        System.out.println(message);
         LoginGuiController.getDynamicRouter().dispatch(message);
     }
 }
