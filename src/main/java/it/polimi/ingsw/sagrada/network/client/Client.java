@@ -25,18 +25,4 @@ public interface Client extends Remote {
     void close() throws RemoteException;
 
     void disconnect() throws RemoteException;
-
-    static String getConfigAddress() {
-            JSONParser parser = new JSONParser();
-            try {
-
-                Object obj = parser.parse(new FileReader(NETWORK_CONFIG_PATH));
-                JSONObject jsonObject = (JSONObject) obj;
-                return (String) jsonObject.get("ip_address");
-            }
-            catch (IOException |ParseException exc) {
-                LOGGER.log(Level.SEVERE, () -> "network config fatal error");
-                return "";
-            }
-    }
 }

@@ -8,18 +8,18 @@ import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParse
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI;
 import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.PrintWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 public class RMIClient extends UnicastRemoteObject implements ClientRMI {
 
@@ -29,7 +29,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
     private AbstractMatchLobbyRMI lobby;
     private String identifier;
     private HeartbeatProtocolManager heartbeatProtocolManager;
-    private static final String ADDRESS = Client.getConfigAddress();
+    private static final String ADDRESS = getConfigAddress();
     private Client remoteClient;
 
     private AbstractServerRMI server;
@@ -106,6 +106,20 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
             }
         }
 
+    }
+
+    private static String getConfigAddress() {
+        JSONParser parser = new JSONParser();
+        try {
+
+            Object obj = parser.parse(new FileReader(NETWORK_CONFIG_PATH));
+            JSONObject jsonObject = (JSONObject) obj;
+            return (String) jsonObject.get("ip_address");
+        }
+        catch (Exception exc) {
+            LOGGER.log(Level.SEVERE, () -> "network config fatal error");
+            return "";
+        }
     }
 
     @Override

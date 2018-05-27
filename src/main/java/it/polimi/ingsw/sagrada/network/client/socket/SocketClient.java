@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.Dis
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.client.protocols.networklink.discoverinternet.DiscoverInternet;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.Inet4Address;
@@ -20,11 +21,13 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+
 public class SocketClient implements Runnable, Client {
 
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     private static final int PORT = 49152; //change to dynamic in some elegant way
-    private static final String ADDRESS = Client.getConfigAddress(); //just for now, next will be obtained in far smarter way
+    private static final String ADDRESS = getConfigAddress(); //just for now, next will be obtained in far smarter way
 
     private Socket socket;
     private BufferedReader inSocket;
@@ -211,7 +214,19 @@ public class SocketClient implements Runnable, Client {
         }
     }
 
+    private static String getConfigAddress() {
+        JSONParser parser = new JSONParser();
+        try {
 
+            Object obj = parser.parse(new FileReader(NETWORK_CONFIG_PATH));
+            JSONObject jsonObject = (JSONObject) obj;
+            return (String) jsonObject.get("ip_address");
+        }
+        catch (Exception exc) {
+            LOGGER.log(Level.SEVERE, () -> "network config fatal error");
+            return "";
+        }
+    }
 
     public void run() {
         while (!executor.isShutdown()) {
