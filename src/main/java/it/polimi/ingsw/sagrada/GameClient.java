@@ -12,23 +12,11 @@ public class GameClient extends Application {
     private Stage window;
 
     public static void main(String[] args) {
-        launch(args);
+        launch(LoginGuiView.class, args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception { //path is relative to target because getResource is called
-        this.window = primaryStage;
 
-        //Login GUI
-        FXMLLoader loaderLogin = new FXMLLoader(getClass().getResource("/templates/LoginGui.fxml"));
-        Parent root = loaderLogin.load();
-        LoginGuiView loginGuiView = loaderLogin.getController();
-        new LoginGuiController(loginGuiView, window);
-        loginGuiView.setRadioGroup();
-
-        window.setTitle("SagradaClient");
-        window.setResizable(false);
-        window.setScene(new Scene(root, 590, 776));
-        window.show();
     }
 }

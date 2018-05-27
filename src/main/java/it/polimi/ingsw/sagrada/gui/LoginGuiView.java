@@ -1,11 +1,15 @@
 package it.polimi.ingsw.sagrada.gui;
 
+import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-public class LoginGuiView {
+public class LoginGuiView extends Application {
     @FXML
     private RadioButton socketRadioButton;
     @FXML
@@ -18,6 +22,8 @@ public class LoginGuiView {
     private TextField usernameField;
     @FXML
     private Label errorText;
+
+    private Stage window;
 
     public void addLoginButtonListener(ChangeListener listener) {
         loginButton.armedProperty().addListener(listener);
@@ -53,5 +59,22 @@ public class LoginGuiView {
 
     public Stage getWindow() {
         return (Stage)loginButton.getScene().getWindow();
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        this.window = primaryStage;
+
+        //Login GUI
+        FXMLLoader loaderLogin = new FXMLLoader(getClass().getResource("/templates/LoginGui.fxml"));
+        Parent root = loaderLogin.load();
+        LoginGuiView loginGuiView = loaderLogin.getController();
+        new LoginGuiController(loginGuiView, window);
+        loginGuiView.setRadioGroup();
+
+        window.setTitle("SagradaClient");
+        window.setResizable(false);
+        window.setScene(new Scene(root, 590, 776));
+        window.show();
     }
 }
