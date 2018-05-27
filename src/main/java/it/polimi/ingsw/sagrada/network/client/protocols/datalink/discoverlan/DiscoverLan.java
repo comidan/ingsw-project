@@ -22,7 +22,8 @@ public class DiscoverLan {
     };
 
     // list of networks on interfaces of machine this code is being run on
-    List<Network> mDirectlyAttachedNetworks = new ArrayList<>();
+    private List<Network> mDirectlyAttachedNetworks = new ArrayList<>();
+    private List<InetAddress> assignedLocalIp = new ArrayList<>();
 
     private int addrBytesToInt(byte[] addr) {
         int addri = 0;
@@ -45,6 +46,7 @@ public class DiscoverLan {
                             int addri = addrBytesToInt(ina.getAddress());
                             int mask = -1 << (32 - ia.getNetworkPrefixLength());
                             addri &= mask;
+                            assignedLocalIp.add(ina);
                             mDirectlyAttachedNetworks.add(new Network(addri, mask));
                         }
                     }
@@ -67,6 +69,19 @@ public class DiscoverLan {
 
         for (Network n : mDirectlyAttachedNetworks) {
             if ((checkedAddr & n.mask) == n.network)
+                return true;
+        }
+        return false;
+    }
+
+    public boolean isHostReachable(InetAddress address) {
+        mDirectlyAttachedNetworks.clear();
+        assignedLocalIp.clear();
+        collectLocalAddresses();
+        for(InetAddress inetAddress : assignedLocalIp) {
+            String assignedIp = inetAddress.getHostAddress();
+            String ipAddress = address.getHostAddress();
+            if(assignedIp.split("\\.")[2].equals(ipAddress.split("\\.")[2]))
                 return true;
         }
         return false;

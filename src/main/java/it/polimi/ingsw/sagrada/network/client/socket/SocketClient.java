@@ -24,7 +24,7 @@ public class SocketClient implements Runnable, Client {
 
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     private static final int PORT = 49152; //change to dynamic in some elegant way
-    private static final String ADDRESS = "10.1.1.1"; //just for now, next will be obtained in far smarter way
+    private static final String ADDRESS = "192.168.1.5"; //just for now, next will be obtained in far smarter way
 
     private Socket socket;
     private BufferedReader inSocket;
@@ -194,15 +194,18 @@ public class SocketClient implements Runnable, Client {
     private void fastRecovery() {
         DiscoverLan discoverLan = new DiscoverLan();
         try {
-            while ((!discoverLan.isDirectlyAttachedAndReachable(Inet4Address.getByName(ADDRESS))
-                    && DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS))) ||
-                    (DiscoverInternet.checkInternetConnection() && !DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS))))
+            //DiscoverLan.isDirectlyAttacchedAndReachable to be fixed to check non-directly connected host
+            while ((DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !discoverLan.isHostReachable(Inet4Address.getByName(ADDRESS)))
+                    || (!DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !DiscoverInternet.checkInternetConnection()))
                 try {
+                    System.out.println("Waiting for available connection...");
                     Thread.sleep(1000);
-                } catch (InterruptedException exc) {
+                }
+                catch (InterruptedException exc) {
                     Thread.currentThread().interrupt();
                 }
-            initializeLobbyLink(username);
+                System.out.println("Restoring connection...");
+                initializeLobbyLink(username);
         } catch (IOException exc) {
             LOGGER.log(Level.SEVERE, exc.getMessage());
         }

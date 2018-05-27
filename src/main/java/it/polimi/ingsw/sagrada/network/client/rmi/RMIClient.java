@@ -29,7 +29,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
     private AbstractMatchLobbyRMI lobby;
     private String identifier;
     private HeartbeatProtocolManager heartbeatProtocolManager;
-    private static final String ADDRESS = "10.1.1.1";
+    private static final String ADDRESS = "192.168.1.5";
     private Client remoteClient;
 
     private AbstractServerRMI server;
