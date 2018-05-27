@@ -1,12 +1,17 @@
 package it.polimi.ingsw.sagrada.network.client.socket;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import it.polimi.ingsw.sagrada.gui.LoginGuiView;
+import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.client.protocols.networklink.discoverinternet.DiscoverInternet;
+import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -21,7 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SocketClient implements Runnable, Client {
+public class SocketClient implements Runnable, Client, Channel<Message, LoginState> {
 
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     private static final int PORT = 49152; //change to dynamic in some elegant way
@@ -37,12 +42,14 @@ public class SocketClient implements Runnable, Client {
     private String username;
     private int lobbyPort;
     private HeartbeatProtocolManager heartbeatProtocolManager;
+    private DynamicRouter dynamicRouter;
 
 
     public SocketClient() throws IOException {
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
         establishServerConnection();
+        dynamicRouter = LoginGuiController.getDynamicRouter();
     }
 
     private void establishServerConnection() {
@@ -151,6 +158,7 @@ public class SocketClient implements Runnable, Client {
                     initializeLobbyLink(username);
                     loginSuccessful = true;
                     this.username = username;
+                    sendMessage(LoginState.AUTH_OK);
                 } else if (dataMap.get("login").equals("register")) {
                     outVideo.println("Registering...");
                     jsonResponse = inSocket.readLine();
@@ -161,13 +169,14 @@ public class SocketClient implements Runnable, Client {
                         socket.close();
                         initializeLobbyLink(username);
                         outVideo.println("Login successful");
+                        sendMessage(LoginState.AUTH_OK);
                         loginSuccessful = true;
                         this.username = username;
-                    } else
-                        outVideo.println("Username already taken");
+                    } else sendMessage(LoginState.AUTH_WRONG_PASSWORD);
                 } else if (dataMap.get("login").equals("error")) {
                     outVideo.println("User already logged on");
                     socket.close();
+                    sendMessage(LoginState.AUTH_FAILED_USER_ALREADY_LOGGED);
                 }
             }
         } catch (IOException exc) {
@@ -235,5 +244,15 @@ public class SocketClient implements Runnable, Client {
                 executor.shutdown();
             }
         }
+    }
+
+    @Override
+    public void dispatch(Message message) {
+
+    }
+
+    @Override
+    public void sendMessage(LoginState message) {
+        dynamicRouter.dispatch(message);
     }
 }

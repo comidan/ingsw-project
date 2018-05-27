@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.network.client.rmi;
 
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import it.polimi.ingsw.sagrada.gui.LoginGuiView;
+import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
@@ -64,14 +65,14 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI {
     }
 
     private void login() {
-        LoginManager.LoginState loginSuccessful = null;
+        LoginState loginSuccessful = null;
 
-        while (loginSuccessful != LoginManager.LoginState.AUTH_OK) {
+        while (loginSuccessful != LoginState.AUTH_OK) {
             try {
                 identifier = LoginGuiController.getUsername();
                 loginSuccessful = server.login(this, identifier, LoginGuiController.getPassword());
                 System.out.println(loginSuccessful);
-                if (loginSuccessful == LoginManager.LoginState.AUTH_OK)
+                if (loginSuccessful == LoginState.AUTH_OK)
                     executeOrders();
             } catch (IOException e) {
                 System.out.println("RMI server error");

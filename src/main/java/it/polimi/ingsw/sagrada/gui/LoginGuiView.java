@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.gui;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,7 +34,9 @@ public class LoginGuiView extends Application {
     }
 
     public void setErrorText(String message) {
-        errorText.setText(message);
+        Platform.runLater(() -> {
+            errorText.setText(message);
+        });
     }
 
     public boolean isCredentialCorrect() {
@@ -67,13 +70,12 @@ public class LoginGuiView extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.window = primaryStage;
-        System.out.println("is null? " + (window == null));
 
         //Login GUI
         FXMLLoader loaderLogin = new FXMLLoader(getClass().getResource("/templates/LoginGui.fxml"));
         Parent root = loaderLogin.load();
         LoginGuiView loginGuiView = loaderLogin.getController();
-        new LoginGuiController(loginGuiView, window);
+        new LoginGuiController(loginGuiView);
         loginGuiView.setRadioGroup();
 
         window.setTitle("SagradaClient");

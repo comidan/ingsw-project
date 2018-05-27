@@ -1,9 +1,9 @@
 package it.polimi.ingsw.sagrada.network.server.rmi;
 
+import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 import it.polimi.ingsw.sagrada.network.server.Server;
 import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
-import it.polimi.ingsw.sagrada.network.server.tools.LoginManager.LoginState;
 import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
 
 import java.io.IOException;

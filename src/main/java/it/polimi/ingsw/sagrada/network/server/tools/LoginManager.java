@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.network.server.tools;
 
 
 import it.polimi.ingsw.sagrada.database.Database;
+import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -147,12 +148,5 @@ public class LoginManager {
 
     public static synchronized Function<String, Boolean> getSignOut() {
         return username -> loggedUsers.remove(username) != null;
-    }
-
-    public enum LoginState {
-        AUTH_OK,
-        AUTH_FAILED_USER_ALREADY_LOGGED,
-        AUTH_FAILED_USER_NOT_EXIST,
-        AUTH_FATAL_ERROR
     }
 }

@@ -2,12 +2,12 @@ package it.polimi.ingsw.sagrada.network.server.socket;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.LoginEvent;
+import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.server.Server;
 import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
 import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
 import it.polimi.ingsw.sagrada.network.server.tools.PortDiscovery;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
-import it.polimi.ingsw.sagrada.network.server.tools.LoginManager.LoginState;
 
 import java.io.*;
 import java.net.ServerSocket;
