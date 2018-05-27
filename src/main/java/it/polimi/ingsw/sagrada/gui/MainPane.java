@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.gui;
 
+import it.polimi.ingsw.sagrada.game.base.Player;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -10,8 +11,11 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //done for now
+
+//ALL IDS AND IDLISTS MUST BE REPLACED WITH MODEL ELEMENT THAT CONTAINS ID OR DIRECTLY IMAGE REFERENCE
 
 public class MainPane extends Application {
     private Stage primaryStage;
@@ -19,12 +23,19 @@ public class MainPane extends Application {
     private List<Integer> idList; // to be removed and accessed as parameter
     private List<Integer> diceIdList;
     private int myId; // to be removed and accessed as parameter
-    private List<WindowView> windowList;
+    private List<WindowView> otherWindowViews;
+    private List<WindowModel> otherWindowModels;
     private MyWindowView myWindow;
+    private WindowModel myWindowModel;
     private WindowModelInterface windowModel;
+    private GameModel gameModel;
+    private PlayerModel myPlayer;
 
     public MainPane() {
         this.windowModel = new WindowModel();
+        this.gameModel = new GameModel();
+        this.otherWindowViews = new ArrayList<>();
+        this.otherWindowModels = new ArrayList<>();
     }
 
     // to be removed, this must be done in controller
@@ -46,17 +57,30 @@ public class MainPane extends Application {
     public void start(Stage primaryStage) {
         createScene(primaryStage);
         setId();
-        myWindow = new MyWindowView(windowModel, 1);
+        setMyView();
+        myWindow = new MyWindowView(windowModel, 1); //this windowmodel must be replaced with attribute mywindowmodel when ready, see setmyview for explaination about mywindowmodel
         root.setBottomAnchor(myWindow, 0.0);
         root.setRightAnchor(myWindow, 460.0);
         root.getChildren().add(myWindow);
-        setOtherWindows(idList);
-        setDraft(diceIdList);
+        setOtherWindows(idList); //TO BE REPLACED WITH OTHERWINDOWMODELS LIST
+        setDraft(diceIdList); //TO BE REPLACED WITH DICE MODEL OBJECT LIST
 
 
         primaryStage.show();
     }
 
+
+    public void setMyView() {
+        otherWindowModels = gameModel.getPlayerList().stream().filter(player -> !player.equals(myPlayer)).map(PlayerModel::getWindowModel).collect(Collectors.toList());
+
+        //until playerList is empty will always throw null pointer exception, remove comment after passing playerlist from model
+
+
+        /* myWindowModel = gameModel.getPlayerList().stream().filter(player -> player.equals(myPlayer)).map(PlayerModel::getWindowModel).reduce((a, b) -> {
+            throw new IllegalStateException("Too many player instances:");
+        }).get();*/
+
+    }
 
     public void setOtherWindows(List<Integer> idList) {
         int size = idList.size();
@@ -103,7 +127,6 @@ public class MainPane extends Application {
     public void createScene(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setFullScreen(true);
-        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, true);
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
         primaryStage.setX(bounds.getMinX());

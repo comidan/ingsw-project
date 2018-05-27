@@ -22,7 +22,6 @@ public class DraftView extends StackPane {
 
 
         GridPane gridPane = new GridPane();
-        String url = null;
         int position = 0;
         for (Integer i : Id) {
             position++;
