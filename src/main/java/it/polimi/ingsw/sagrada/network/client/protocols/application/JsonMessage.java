@@ -1,5 +1,8 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
+import it.polimi.ingsw.sagrada.game.intercomm.message.DisconnectEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.LoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.MessageEvent;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -69,5 +72,32 @@ public class JsonMessage {
         catch (ParseException exc) {
             return null;
         }
+
+        /*JSONParser parser = new JSONParser();
+        try {
+            JSONObject jsonMsg = (JSONObject)parser.parse(json);
+            JSONObject data;
+            switch ((String)jsonMsg.get("type_cmd")) {
+                case "login":
+                    data = (JSONObject) jsonMsg.get("login");
+                    return new LoginEvent((String)data.get("username"), (String)data.get("auth"));
+                case "disconnect":
+                    data = (JSONObject) jsonMsg.get("disconnect");
+                    return new DisconnectEvent((String)data.get("username"));
+                case "message":
+                    data = (JSONObject) jsonMsg.get("message");
+                    return new MessageEvent((String)data.get("message"));
+                case "choice":
+                    return null;
+                case "settings":  //is settings response useless?
+                    return null;
+                default:
+                    return null;
+            }
+
+        }
+        catch (ParseException exc) {
+            return null;
+        }*/
     }
 }

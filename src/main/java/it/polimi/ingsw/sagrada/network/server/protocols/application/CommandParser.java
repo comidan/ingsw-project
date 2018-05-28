@@ -35,52 +35,92 @@ public class CommandParser {
                     return null;
             }
 
-        }catch (ParseException exc) {
+        }
+        catch (ParseException exc) {
             return null;
         }
     }
 
-    public String crateJSONMessage(String message) {
-        JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("metadata", message);
-        jsonMessage.put("login", "error");
+    public String createJSONCountdown(String time) {
+        JSONObject content = new JSONObject();
+        content.put("time", time);
         JSONObject container = new JSONObject();
-        container.put("response", jsonMessage);
+        container.put("type_msg", "response");
+        container.put("type_cmd", "lobby_time");
+        container.put("time", content);
+        return container.toJSONString();
+    }
+
+    public String createJSONAddLobbyPlayer(String time) {
+        JSONObject content = new JSONObject();
+        content.put("player", time);
+        JSONObject container = new JSONObject();
+        container.put("type_msg", "response");
+        container.put("type_cmd", "lobby_add_player");
+        container.put("player", content);
+        return container.toJSONString();
+    }
+
+    public String createJSONRemoveLobbyPlayer(String time) {
+        JSONObject content = new JSONObject();
+        content.put("player", time);
+        JSONObject container = new JSONObject();
+        container.put("type_msg", "response");
+        container.put("type_cmd", "lobby_remove_player");
+        container.put("player", content);
+        return container.toJSONString();
+    }
+
+    public String crateJSONMessage(String message) {
+        JSONObject content = new JSONObject();
+        content.put("metadata", message);
+        JSONObject container = new JSONObject();
+        container.put("type_msg", "response");
+        container.put("type_cmd", "message");
+        container.put("message", content);
         return container.toJSONString();
     }
 
     public String crateJSONLoginResponse(String token, int lobbyPort) {
-        JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("token", token);
-        jsonMessage.put("lobby_port", lobbyPort+"");
-        jsonMessage.put("login", "successful");
+        JSONObject content = new JSONObject();
+        content.put("token", token);
+        content.put("lobby_port", lobbyPort+"");
+        content.put("login", "successful");
         JSONObject container = new JSONObject();
-        container.put("response", jsonMessage);
+        container.put("type_msg", "response");
+        container.put("type_cmd", "login");
+        container.put("login", content);
         return container.toJSONString();
     }
 
-    public String crateJSONLoginLobbyResponse(int lobbyPort) {
-        JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("heartbeat_port", lobbyPort+"");
-        jsonMessage.put("login", "successful_lobby");
+    public String crateJSONLoginLobbyResponse(int heartbeatPort) {
+        JSONObject content = new JSONObject();
+        content.put("heartbeat_port", heartbeatPort+"");
+        content.put("login", "successful_lobby");
         JSONObject container = new JSONObject();
-        container.put("response", jsonMessage);
+        container.put("type_msg", "response");
+        container.put("type_cmd", "login");
+        container.put("time", content);
         return container.toJSONString();
     }
 
     public String crateJSONLoginResponseRegister() {
-        JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("login", "register");
+        JSONObject content = new JSONObject();
+        content.put("login", "register");
         JSONObject container = new JSONObject();
-        container.put("response", jsonMessage);
+        container.put("type_msg", "response");
+        container.put("type_cmd", "login");
+        container.put("login", content);
         return container.toJSONString();
     }
 
     public String crateJSONLoginResponseError() {
-        JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("login", "error");
+        JSONObject content = new JSONObject();
+        content.put("login", "error");
         JSONObject container = new JSONObject();
-        container.put("response", jsonMessage);
+        container.put("type_msg", "response");
+        container.put("type_cmd", "login");
+        container.put("login", content);
         return container.toJSONString();
     }
 }

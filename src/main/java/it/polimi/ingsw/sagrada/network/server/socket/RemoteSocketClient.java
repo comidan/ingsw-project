@@ -66,17 +66,23 @@ public class RemoteSocketClient implements Client, Runnable {
 
     @Override
     public void setTimer(String time) throws RemoteException {
-
+        String payload = commandParser.createJSONCountdown(time);
+        output.println(payload);
+        output.flush();
     }
 
     @Override
     public void setPlayer(String playerName) throws RemoteException {
-
+        String payload = commandParser.createJSONAddLobbyPlayer(playerName);
+        output.println(payload);
+        output.flush();
     }
 
     @Override
     public void removePlayer(String playerName) throws RemoteException {
-
+        String payload = commandParser.createJSONRemoveLobbyPlayer(playerName);
+        output.println(payload);
+        output.flush();
     }
 
     private void executePayload(String json) throws RemoteException{
