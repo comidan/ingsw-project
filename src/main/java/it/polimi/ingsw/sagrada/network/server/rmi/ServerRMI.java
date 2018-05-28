@@ -1,6 +1,5 @@
 package it.polimi.ingsw.sagrada.network.server.rmi;
 
-import it.polimi.ingsw.sagrada.gui.LobbyGuiViewInterface;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 import it.polimi.ingsw.sagrada.network.server.Server;
@@ -21,6 +20,7 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
     private static final Logger LOGGER = Logger.getLogger(ServerRMI.class.getName());
 
     private LoginManager loginManager;
+    private MatchLobby availableLobby;
 
     public ServerRMI() throws RemoteException {
         try {
@@ -46,19 +46,19 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
                 switch (loginState) {
                     case AUTH_OK:
                         lobby = joinUserLobby(username);
+                        //clientRMI.notifyLobby(lobby.getLobbyIdentifier());
                         System.out.println(username + " correctly logged, migrating client to lobby server");
-                        clientRMI.notifyLobby(lobby.getLobbyIdentifier());
                         return loginState;
                     case AUTH_FAILED_USER_ALREADY_LOGGED:
                         System.out.println(loginState);
                         return loginState;
                     case AUTH_FAILED_USER_NOT_EXIST:
-                        clientRMI.signUp();
+                        //clientRMI.signUp();
                         if (loginManager.signUp(username, hashedPassword)) {
-                            clientRMI.signUp();
+                            //clientRMI.signUp();
                             lobby = joinUserLobby(username);
                             System.out.println(username + " correctly signed up, migrating client to lobby server");
-                            clientRMI.notifyLobby(lobby.getLobbyIdentifier());
+                            //clientRMI.notifyLobby(lobby.getLobbyIdentifier());
                             return LoginState.AUTH_OK;
                         }
                         else {
@@ -75,12 +75,13 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
     }
 
     @Override
-    public void setLobbyGuiView(LobbyGuiViewInterface lobbyGuiView) throws RemoteException {
-
+    public String getMatchLobbyId() throws RemoteException {
+        System.out.println("Sending matchLobby");
+        return availableLobby.getLobbyIdentifier();
     }
 
     private synchronized MatchLobby joinUserLobby(String clientIdToken) throws IOException{
-        MatchLobby availableLobby = lobbyPool.getAvailableLobby();
+        availableLobby = lobbyPool.getAvailableLobby();
         availableLobby.addClient(clientIdToken);
         return availableLobby;
     }

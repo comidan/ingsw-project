@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada.network.client;
 
-import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import it.polimi.ingsw.sagrada.network.client.rmi.RMIClient;
 import it.polimi.ingsw.sagrada.network.client.socket.SocketClient;
 
@@ -13,7 +13,7 @@ public class ClientManager {
         return new SocketClient();
     }
 
-    public static RMIClient getRMIClient(DynamicRouter dynamicRouter) throws RemoteException {
-        return new RMIClient();
+    public static RMIClient getRMIClient(LoginGuiController loginGuiController) throws RemoteException {
+        return new RMIClient(loginGuiController);
     }
 }

@@ -10,4 +10,6 @@ public interface AbstractMatchLobbyRMI extends Remote {
     void addClient(String identifier) throws RemoteException;
 
     boolean joinLobby(String token, ClientRMI clientRMI) throws RemoteException;
+
+    int getHeartbeatPort() throws RemoteException;
 }

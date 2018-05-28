@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.ClientManager;
+import it.polimi.ingsw.sagrada.network.client.rmi.RMIClient;
 import it.polimi.ingsw.sagrada.network.security.Security;
 import javafx.application.Platform;
 
@@ -38,7 +39,7 @@ public class LoginGuiController implements Channel<LoginState, Message> {
                 else {
                     executorService.submit(() -> {
                         try {
-                            ClientManager.getRMIClient(dynamicRouter);
+                            ClientManager.getRMIClient(LoginGuiController.this);
                         } catch (IOException e) {
                             LOGGER.log(Level.SEVERE, "Error creating socket communication");
                         }
@@ -62,7 +63,7 @@ public class LoginGuiController implements Channel<LoginState, Message> {
     }
 
     private void changeScene() {
-        Platform.runLater(() -> {loginGuiView.changeScene();});
+        Platform.runLater(() -> RMIClient.setLobbyView(loginGuiView.changeScene()));
     }
 
     public static DynamicRouter getDynamicRouter() {
@@ -71,6 +72,7 @@ public class LoginGuiController implements Channel<LoginState, Message> {
 
     @Override
     public void dispatch(LoginState message) {
+        System.out.println("Dispatching state");
         switch (message) {
             case AUTH_FAILED_USER_ALREADY_LOGGED: loginGuiView.setErrorText("User already logged"); break;
             case AUTH_OK: changeScene(); break;
@@ -86,7 +88,7 @@ public class LoginGuiController implements Channel<LoginState, Message> {
                     }
                     changeScene();
                 });
-                changeScene(); break;
+                break;
             }
         }
     }

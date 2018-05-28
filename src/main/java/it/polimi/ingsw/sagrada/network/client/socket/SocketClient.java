@@ -4,14 +4,12 @@ import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
-import it.polimi.ingsw.sagrada.gui.LoginGuiView;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.client.protocols.networklink.discoverinternet.DiscoverInternet;
-import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -138,6 +136,21 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         heartbeatProtocolManager.kill();
         executor.shutdown();
         close();
+    }
+
+    @Override
+    public void setTimer(String time) throws RemoteException {
+
+    }
+
+    @Override
+    public void setPlayer(String playerName) throws RemoteException {
+
+    }
+
+    @Override
+    public void removePlayer(String playerName) throws RemoteException {
+
     }
 
     private void login() {

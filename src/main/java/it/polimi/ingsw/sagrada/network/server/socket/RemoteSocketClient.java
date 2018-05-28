@@ -64,6 +64,21 @@ public class RemoteSocketClient implements Client, Runnable {
         executor.shutdown();
     }
 
+    @Override
+    public void setTimer(String time) throws RemoteException {
+
+    }
+
+    @Override
+    public void setPlayer(String playerName) throws RemoteException {
+
+    }
+
+    @Override
+    public void removePlayer(String playerName) throws RemoteException {
+
+    }
+
     private void executePayload(String json) throws RemoteException{
         Message parsedMessage = commandParser.parse(json);
         if(parsedMessage instanceof DisconnectEvent) {

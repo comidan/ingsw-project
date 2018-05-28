@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
+import java.util.logging.Level;
 
 
 public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener, Runnable, AbstractMatchLobbyRMI {
@@ -110,6 +112,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         for(String clientId : clientIds)
             try {
                 clientPool.get(clientId).sendMessage(username + " disconnected");
+                clientPool.get(clientId).removePlayer(username);
             }
             catch (RemoteException exc) {
                 System.out.println("RMI error on " + clientId);
@@ -151,6 +154,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             if (!clientId.equals(event.getSource()))
                 try {
                     clientPool.get(clientId).sendMessage(event.getSource() + " is online");
+                    clientPool.get(clientId).setPlayer(event.getSource());
                 }
                 catch (RemoteException exc) {
                     System.out.println("RMI error on " + clientId);
@@ -170,10 +174,26 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         if(!clientIds.contains(token))
             clientIds.add(token);
         clientPool.put(token, clientRMI);
-        clientRMI.notifyHeartbeatPort(heartbeatPort);
         Function<String, Boolean> disconnect = this::removePlayer;
-        clientRMI.notifyRemoteClientInterface(new RemoteRMIClient(token, disconnect));
+        Client remoteClient = new RemoteRMIClient(token, disconnect);
+        try {
+            Registry registry = LocateRegistry.getRegistry(1099);
+            registry.bind(token, remoteClient);
+            clientRMI.notifyRemoteClientInterface(token);
+        }
+        catch (RemoteException|AlreadyBoundException exc) {
+            exc.printStackTrace();
+        }
+        for(String username : clientIds) {
+            System.out.println("Remote user set");
+            clientPool.get(token).setPlayer(username);
+        }
         return true;
+    }
+
+    @Override
+    public int getHeartbeatPort() throws RemoteException {
+        return heartbeatPort;
     }
 
     @Override
@@ -214,6 +234,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     private class CheckStartGameCondition implements Runnable{
         long elapsedTime;
         int elapsedTimeSecond=0;
+
         @Override
         public void run() {
             while (clientPool.size() != 4 && elapsedTime < timeToWait) {
@@ -222,6 +243,14 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                 if (currentSeconds != elapsedTimeSecond) {
                     elapsedTimeSecond = currentSeconds;
                     System.out.println(elapsedTimeSecond);
+                    for(String username : clientIds)
+                        try {
+                            System.out.println("Remote time set");
+                            clientPool.get(username).setTimer((timeToWait / 1000 - currentSeconds) + "");
+                        }
+                        catch (RemoteException exc) {
+                            exc.printStackTrace();
+                        }
                 }
             }
 

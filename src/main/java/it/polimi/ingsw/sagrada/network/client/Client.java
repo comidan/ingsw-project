@@ -16,4 +16,10 @@ public interface Client extends Remote {
     void close() throws RemoteException;
 
     void disconnect() throws RemoteException;
+
+    void setTimer(String time) throws RemoteException;
+
+    void setPlayer(String playerName) throws RemoteException;
+
+    void removePlayer(String playerName) throws RemoteException;
 }

@@ -2,16 +2,15 @@ package it.polimi.ingsw.sagrada.network.client.rmi;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.gui.LobbyGuiController;
+import it.polimi.ingsw.sagrada.gui.LobbyGuiView;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
-import it.polimi.ingsw.sagrada.gui.LoginGuiView;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI;
-import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
+import javafx.application.Platform;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -24,7 +23,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel<Message, LoginState> {
 
     private CommandParser commandParser;
@@ -36,11 +34,13 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     private static final String ADDRESS = getConfigAddress();
     private Client remoteClient;
     private static final Logger LOGGER = Logger.getLogger(RMIClient.class.getName());
+    private static LobbyGuiView lobbyGuiView;
+    private LoginGuiController loginGuiController;
 
     private AbstractServerRMI server;
 
-    public RMIClient() throws RemoteException {
-
+    public RMIClient(LoginGuiController loginGuiController) throws RemoteException {
+        this.loginGuiController = loginGuiController;
         commandParser = new CommandParser();
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
@@ -68,22 +68,44 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     }
 
     private void login() {
-        LoginState loginSuccessful = null;
+        LoginState loginState = null;
 
-        while (loginSuccessful != LoginState.AUTH_OK) {
+        while (loginState != LoginState.AUTH_OK) {
             try {
                 identifier = LoginGuiController.getUsername();
-                loginSuccessful = server.login(this, identifier, LoginGuiController.getPassword());
-                System.out.println(loginSuccessful);
-                if (loginSuccessful == LoginState.AUTH_OK) {
-                    sendMessage(LoginState.AUTH_OK);
+                System.out.println("Logging in");
+                loginState = server.login(this, identifier, LoginGuiController.getPassword());
+                System.out.println(loginState);
+                if (loginState == LoginState.AUTH_OK) {
+                    loginGuiController.dispatch(loginState); //sendMessage(LoginState.AUTH_OK);
+                    try {
+                        System.out.println("Acquiring lobby");
+                        String lobbyId = server.getMatchLobbyId();
+                        lobby = (AbstractMatchLobbyRMI) Naming.lookup("rmi://" + ADDRESS + "/" + lobbyId);
+                        System.out.println("Lobby acquired");
+                        if (lobby.joinLobby(identifier, this)) {
+                            System.out.println("Lobby joined");
+                            try {
+                                heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, lobby.getHeartbeatPort(), identifier);
+                                System.out.println("Heartbeat started");
+                            } catch (IOException exc) {
+                                System.out.println("RMI server error");
+                                exc.printStackTrace();
+                            }
+                        }
+                        else
+                            System.out.println("Error");
+                    } catch (NotBoundException | MalformedURLException exc) {
+                        System.out.println("RMI Error");
+                    }
                     executeOrders();
                 }
                 else {
-                    sendMessage(loginSuccessful);
+                    loginGuiController.dispatch(loginState); //sendMessage(loginState);
                 }
             } catch (IOException e) {
                 System.out.println("RMI server error");
+                e.printStackTrace();
             }
         }
     }
@@ -132,13 +154,19 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
     }
 
+    public static void setLobbyView(LobbyGuiView lobbyGuiView) {
+        RMIClient.lobbyGuiView = lobbyGuiView;
+    }
+
     @Override
     public void notifyLobby(String lobbyId) throws RemoteException {
         try {
+            System.out.println("Acquiring lobby");
             lobby = (AbstractMatchLobbyRMI) Naming.lookup("rmi://" + ADDRESS + "/" + lobbyId);
-            lobby.addClient(identifier);
-            if (lobby.joinLobby(identifier, this))
+            System.out.println("Lobby acquired");
+            if (lobby.joinLobby(identifier, this)) {
                 System.out.println("Lobby joined");
+            }
             else
                 System.out.println("Error");
         } catch (NotBoundException | MalformedURLException exc) {
@@ -152,17 +180,13 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     }
 
     @Override
-    public void notifyHeartbeatPort(Integer port) throws RemoteException {
+    public void notifyRemoteClientInterface(String id) throws RemoteException {
         try {
-            heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, identifier);
-        } catch (IOException exc) {
-            System.out.println("RMI server error");
+            remoteClient = (Client) Naming.lookup("rmi://" + ADDRESS + "/" + id);
         }
-    }
-
-    @Override
-    public void notifyRemoteClientInterface(Client client) throws RemoteException {
-        this.remoteClient = client;
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
     }
 
     @Override
@@ -183,6 +207,24 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public void disconnect() throws RemoteException {
 
+    }
+
+    @Override
+    public void setTimer(String time) throws RemoteException {
+        System.out.println("Setting time");
+        Platform.runLater(() -> lobbyGuiView.setTimer(time));
+
+    }
+
+    @Override
+    public void setPlayer(String playerName) throws RemoteException {
+        System.out.println("Setting player " + playerName);
+        Platform.runLater(() -> lobbyGuiView.setPlayer(playerName));
+    }
+
+    @Override
+    public void removePlayer(String playerName) {
+        Platform.runLater(() -> lobbyGuiView.removePlayer(playerName));
     }
 
     @Override

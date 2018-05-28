@@ -84,15 +84,17 @@ public class LoginGuiView extends Application {
         window.show();
     }
 
-    public void changeScene() {
+    public LobbyGuiView changeScene() {
         FXMLLoader loaderLobby = new FXMLLoader(getClass().getResource("/templates/MatchLobbyGui.fxml"));
         Parent lobby = null;
         try {
             lobby = loaderLobby.load();
             window = (Stage) loginButton.getScene().getWindow();
             window.setScene(new Scene(lobby, 590, 776));
+            return loaderLobby.getController();
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
 }
