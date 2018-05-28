@@ -16,6 +16,6 @@ public class BeginTurnEvent implements Message {
 
     @Override
     public Class<? extends Message> getType() {
-        return null;
+        return getClass();
     }
 }

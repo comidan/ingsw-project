@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.ClientManager;
 import it.polimi.ingsw.sagrada.network.client.rmi.RMIClient;
+import it.polimi.ingsw.sagrada.network.client.socket.SocketClient;
 import it.polimi.ingsw.sagrada.network.security.Security;
 import javafx.application.Platform;
 
@@ -63,7 +64,11 @@ public class LoginGuiController implements Channel<LoginState, Message> {
     }
 
     private void changeScene() {
-        Platform.runLater(() -> RMIClient.setLobbyView(loginGuiView.changeScene()));
+        Platform.runLater(() -> {
+            LobbyGuiView lobbyGuiView = loginGuiView.changeScene();
+            RMIClient.setLobbyView(lobbyGuiView);
+            SocketClient.setLobbyView(lobbyGuiView);
+        });
     }
 
     public static DynamicRouter getDynamicRouter() {

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.gui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -47,22 +48,22 @@ public class LobbyGuiView {
     }
 
     private void setFirstPlayer(String message) {
-        firstPlayer.setText(message);
+        Platform.runLater(() -> firstPlayer.setText(message));
     }
 
     private void setSecondPlayer(String message) {
-        secondPlayer.setText(message);
+        Platform.runLater(() -> secondPlayer.setText(message));
     }
 
     private void setThirdPlayer(String message) {
-        thirdPlayer.setText(message);
+        Platform.runLater(() -> thirdPlayer.setText(message));
     }
 
     private void setFourthPlayer(String message) {
-        fourthPlayer.setText(message);
+        Platform.runLater(() -> fourthPlayer.setText(message));
     }
 
     public void setTimer(String message) {
-        timer.setText(message);
+        Platform.runLater(() -> timer.setText(message));
     }
 }

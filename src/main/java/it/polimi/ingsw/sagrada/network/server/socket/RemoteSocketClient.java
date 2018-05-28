@@ -69,13 +69,16 @@ public class RemoteSocketClient implements Client, Runnable {
         String payload = commandParser.createJSONCountdown(time);
         output.println(payload);
         output.flush();
+        System.out.println("Sending time...");
     }
 
     @Override
     public void setPlayer(String playerName) throws RemoteException {
         String payload = commandParser.createJSONAddLobbyPlayer(playerName);
+        System.out.println("Sending player data...");
         output.println(payload);
         output.flush();
+        System.out.println("Sent");
     }
 
     @Override
@@ -92,9 +95,6 @@ public class RemoteSocketClient implements Client, Runnable {
         }
         else if(parsedMessage instanceof MessageEvent)
             notifyMessage(((MessageEvent) parsedMessage).getMessage());
-        else {
-
-        }
     }
 
     private void notifyMessage(String message) {

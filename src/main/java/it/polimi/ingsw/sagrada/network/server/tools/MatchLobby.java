@@ -213,6 +213,10 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     LoginManager.sendLoginLobbyResponse(client, heartbeatPort);
                     executor.submit(socketClient);
                     System.out.println(id + " correctly logged on lobby server");
+                    for(String username : clientIds) {
+                        System.out.println("Remote user set");
+                        clientPool.get(id).setPlayer(username);
+                    }
                 }
                 else
                     LoginManager.sendLoginError(client);

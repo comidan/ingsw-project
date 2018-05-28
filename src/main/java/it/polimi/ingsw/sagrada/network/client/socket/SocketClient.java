@@ -3,10 +3,8 @@ package it.polimi.ingsw.sagrada.network.client.socket;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.ErrorEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.HeartbeatInitEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.LobbyLoginEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.RegisterEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.gui.LobbyGuiView;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
@@ -22,6 +20,8 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -45,13 +45,15 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     private int lobbyPort;
     private HeartbeatProtocolManager heartbeatProtocolManager;
     private DynamicRouter dynamicRouter;
+    private static LobbyGuiView lobbyGuiView;
+    private static List<String> playerLobbyListBackup = new ArrayList<>();
 
 
     public SocketClient() throws IOException {
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
-        establishServerConnection();
         dynamicRouter = LoginGuiController.getDynamicRouter();
+        establishServerConnection();
     }
 
     private void establishServerConnection() {
@@ -144,17 +146,24 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
 
     @Override
     public void setTimer(String time) throws RemoteException {
-
+        if(lobbyGuiView != null)
+            lobbyGuiView.setTimer(time);
     }
 
     @Override
     public void setPlayer(String playerName) throws RemoteException {
-
+        System.out.println("Setting playerName " + playerName);
+        System.out.println("Null? : " + (lobbyGuiView == null));
+        if(lobbyGuiView != null)
+            lobbyGuiView.setPlayer(playerName);
+        else
+            playerLobbyListBackup.add(playerName);
     }
 
     @Override
     public void removePlayer(String playerName) throws RemoteException {
-
+        if(lobbyGuiView != null)
+            lobbyGuiView.removePlayer(playerName);
     }
 
     private void login() {
@@ -204,6 +213,18 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         }
     }
 
+    private void executePayload(String json) throws RemoteException{
+        System.out.println("Receiving json...");
+        Message message = JsonMessage.parseJsonData(json);
+        System.out.println(message.getType().getName());
+        if(message instanceof MatchTimeEvent)
+            setTimer(((MatchTimeEvent)message).getTime());
+        else if(message instanceof AddPlayerEvent)
+            setPlayer(((AddPlayerEvent)message).getUsername());
+        else if(message instanceof RemovePlayerEvent)
+            removePlayer(((RemovePlayerEvent)message).getUsername());
+    }
+
     private void initializeLobbyLink(String identifier) throws IOException {
         socket = new Socket(ADDRESS, lobbyPort);
         initializeConnectionStream();
@@ -240,6 +261,15 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         }
     }
 
+    public static void setLobbyView(LobbyGuiView lobbyGuiView) {
+        SocketClient.lobbyGuiView = lobbyGuiView;
+        System.out.println("Setting lobbyGuiView " + (SocketClient.lobbyGuiView != null));
+        for(String username : playerLobbyListBackup)
+            lobbyGuiView.setPlayer(username);
+        playerLobbyListBackup.clear();
+
+    }
+
     private static String getConfigAddress() {
         JSONParser parser = new JSONParser();
         try {
@@ -257,7 +287,10 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     public void run() {
         while (!executor.isShutdown()) {
             try {
-                outVideo.println("Message from server : " + inSocket.readLine());
+                System.out.println("Receiving data...");
+                String json = inSocket.readLine();
+                System.out.println(json);
+                executePayload(json);
             } catch (IOException exc) {
                 fastRecovery();
                 executor.shutdown();

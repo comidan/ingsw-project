@@ -20,6 +20,8 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,6 +38,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     private static final Logger LOGGER = Logger.getLogger(RMIClient.class.getName());
     private static LobbyGuiView lobbyGuiView;
     private LoginGuiController loginGuiController;
+    private static List<String> playerLobbyListBackup = new ArrayList<>();
 
     private AbstractServerRMI server;
 
@@ -156,6 +159,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
     public static void setLobbyView(LobbyGuiView lobbyGuiView) {
         RMIClient.lobbyGuiView = lobbyGuiView;
+        for(String username : playerLobbyListBackup)
+            lobbyGuiView.setPlayer(username);
+        playerLobbyListBackup.clear();
     }
 
     @Override
@@ -212,19 +218,24 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public void setTimer(String time) throws RemoteException {
         System.out.println("Setting time");
-        Platform.runLater(() -> lobbyGuiView.setTimer(time));
+        if(lobbyGuiView != null)
+            lobbyGuiView.setTimer(time);
 
     }
 
     @Override
     public void setPlayer(String playerName) throws RemoteException {
         System.out.println("Setting player " + playerName);
-        Platform.runLater(() -> lobbyGuiView.setPlayer(playerName));
+        if(lobbyGuiView != null)
+            lobbyGuiView.setPlayer(playerName);
+        else
+            playerLobbyListBackup.add(playerName);
     }
 
     @Override
     public void removePlayer(String playerName) {
-        Platform.runLater(() -> lobbyGuiView.removePlayer(playerName));
+        if(lobbyGuiView != null)
+            lobbyGuiView.removePlayer(playerName);
     }
 
     @Override
