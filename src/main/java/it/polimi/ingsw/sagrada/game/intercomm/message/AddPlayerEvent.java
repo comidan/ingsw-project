@@ -2,11 +2,11 @@ package it.polimi.ingsw.sagrada.game.intercomm.message;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 
-public class RemovePlayerEvent implements Message {
+public class AddPlayerEvent implements Message {
 
     private String username;
 
-    public RemovePlayerEvent(String username) {
+    public AddPlayerEvent(String username) {
         this.username = username;
     }
 
@@ -16,6 +16,6 @@ public class RemovePlayerEvent implements Message {
 
     @Override
     public Class<? extends Message> getType() {
-        return getClass();
+        return null;
     }
 }

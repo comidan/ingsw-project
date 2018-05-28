@@ -1,8 +1,7 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
-import it.polimi.ingsw.sagrada.game.intercomm.message.DisconnectEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.LoginEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.MessageEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -51,46 +50,37 @@ public class JsonMessage {
         return container;
     }
 
-    public static Map<String, String> parseJsonData(String json) {
-        try {
-            JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
-            JSONObject jsonLoginData = (JSONObject) jsonObject.get("response");
-            Map<String, String> dataMap = new HashMap<>();
-            dataMap.put("type", "login");
-            dataMap.put("login", (String) jsonLoginData.get("login"));
-            if(dataMap.get("login").equals("successful")) {
-                dataMap.put("token", (String) jsonLoginData.get("token"));
-                dataMap.put("lobby_port", (String) jsonLoginData.get("lobby_port"));
-            }
-            else if(dataMap.get("login").equals("successful_lobby"))
-                dataMap.put("heartbeat_port", (String) jsonLoginData.get("heartbeat_port"));
-            else if(dataMap.get("login").equals("error"))
-                dataMap.put("metadata", (String) jsonLoginData.get("metadata"));
-            return dataMap;
-        }
-        catch (ParseException exc) {
-            return null;
-        }
-
-        /*JSONParser parser = new JSONParser();
+    public static Message parseJsonData(String json) {
+        JSONParser parser = new JSONParser();
         try {
             JSONObject jsonMsg = (JSONObject)parser.parse(json);
             JSONObject data;
             switch ((String)jsonMsg.get("type_cmd")) {
-                case "login":
-                    data = (JSONObject) jsonMsg.get("login");
-                    return new LoginEvent((String)data.get("username"), (String)data.get("auth"));
-                case "disconnect":
-                    data = (JSONObject) jsonMsg.get("disconnect");
-                    return new DisconnectEvent((String)data.get("username"));
+                case "lobby_time":
+                    data = (JSONObject) jsonMsg.get("time");
+                    return new MatchTimeEvent((String)data.get("time"));
+                case "lobby_add_player":
+                    data = (JSONObject) jsonMsg.get("player");
+                    return new AddPlayerEvent((String)data.get("username"));
+                case "lobby_remove_player":
+                    data = (JSONObject) jsonMsg.get("player");
+                    return new RemovePlayerEvent((String)data.get("username"));
                 case "message":
                     data = (JSONObject) jsonMsg.get("message");
-                    return new MessageEvent((String)data.get("message"));
-                case "choice":
-                    return null;
-                case "settings":  //is settings response useless?
-                    return null;
+                    return new MessageEvent((String)data.get("metadata"));
+                case "error":
+                    data = (JSONObject) jsonMsg.get("error");
+                    return new ErrorEvent((String)data.get("error"));
+                case "login_register":
+                    return new RegisterEvent();
+                case "login_heartbeat" :
+                    data = (JSONObject) jsonMsg.get("heartbeat");
+                    return new HeartbeatInitEvent(
+                               Integer.parseInt((String)data.get("heartbeat_port")));
+                case "login" :
+                    data = (JSONObject) jsonMsg.get("login");
+                    return new LobbyLoginEvent((String)data.get("token"),
+                               Integer.parseInt((String)data.get("lobby_port")));
                 default:
                     return null;
             }
@@ -98,6 +88,6 @@ public class JsonMessage {
         }
         catch (ParseException exc) {
             return null;
-        }*/
+        }
     }
 }

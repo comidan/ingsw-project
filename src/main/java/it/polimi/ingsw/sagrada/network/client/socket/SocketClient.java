@@ -3,6 +3,10 @@ package it.polimi.ingsw.sagrada.network.client.socket;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.ErrorEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.HeartbeatInitEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.LobbyLoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.RegisterEvent;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
@@ -164,20 +168,21 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 initializeConnectionStream();
                 outSocket.println(message.toJSONString());
                 String jsonResponse = inSocket.readLine();
-                Map<String, String> dataMap = JsonMessage.parseJsonData(jsonResponse);
-                if (dataMap.get("login").equals("successful")) {
-                    lobbyPort = Integer.parseInt(dataMap.get("lobby_port"));
+                Message response = JsonMessage.parseJsonData(jsonResponse);
+                if (response instanceof LobbyLoginEvent) {
+                    lobbyPort = ((LobbyLoginEvent)response).getLobbyPort();
                     socket.close();
                     sendMessage(LoginState.AUTH_OK);
                     loginSuccessful = true;
                     initializeLobbyLink(username);
-                } else if (dataMap.get("login").equals("register")) {
+                }
+                else if (response instanceof RegisterEvent) {
                     jsonResponse = inSocket.readLine();
-                    dataMap = JsonMessage.parseJsonData(jsonResponse);
-                    if (dataMap.get("login").equals("successful")) {
+                    response = JsonMessage.parseJsonData(jsonResponse);
+                    if (response instanceof LobbyLoginEvent) {
                         outVideo.println("Registering...");
                         outVideo.println("Connecting to lobby");
-                        lobbyPort = Integer.parseInt(dataMap.get("lobby_port"));
+                        lobbyPort = ((LobbyLoginEvent)response).getLobbyPort();
                         socket.close();
                         sendMessage(LoginState.AUTH_OK);
                         outVideo.println("Login successful");
@@ -188,7 +193,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                         outVideo.println("Wrong password");
                         sendMessage(LoginState.AUTH_WRONG_PASSWORD);
                     }
-                } else if (dataMap.get("login").equals("error")) {
+                } else if (response instanceof ErrorEvent) {
                     outVideo.println("User already logged on");
                     sendMessage(LoginState.AUTH_FAILED_USER_ALREADY_LOGGED);
                 }
@@ -205,9 +210,9 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         outSocket.println(JsonMessage.createTokenMessage(identifier).toJSONString());
         System.out.println("Waiting lobby response");
         String jsonResponse = inSocket.readLine();
-        Map<String, String> dataMap = JsonMessage.parseJsonData(jsonResponse);
-        if (dataMap.get("login").equals("successful_lobby"))
-            heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, Integer.parseInt(dataMap.get("heartbeat_port")), identifier);
+        Message response = JsonMessage.parseJsonData(jsonResponse);
+        if (response instanceof HeartbeatInitEvent)
+            heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, ((HeartbeatInitEvent)response).getHeartbeatPort(), identifier);
         else
             outVideo.println("Second level auth");
         executor = Executors.newSingleThreadExecutor();

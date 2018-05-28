@@ -2,17 +2,18 @@ package it.polimi.ingsw.sagrada.game.intercomm.message;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 
-public class RemovePlayerEvent implements Message {
+public class MatchTimeEvent implements Message {
 
-    private String username;
+    private String time;
 
-    public RemovePlayerEvent(String username) {
-        this.username = username;
+    public MatchTimeEvent(String time) {
+        this.time = time;
     }
 
-    public String getUsername() {
-        return username;
+    public String getTime() {
+        return time;
     }
+
 
     @Override
     public Class<? extends Message> getType() {

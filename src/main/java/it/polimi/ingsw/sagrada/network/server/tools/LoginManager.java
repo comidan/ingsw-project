@@ -123,7 +123,7 @@ public class LoginManager {
     public static void sendLoginResponse(Socket clientSocket, String token, int lobbyPort) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(commandParser.crateJSONLoginResponse(token, lobbyPort));
+        output.println(commandParser.createJSONLoginResponse(token, lobbyPort));
         output.flush();
     }
 
