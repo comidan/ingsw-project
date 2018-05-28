@@ -2,12 +2,15 @@ package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.playables.Dice;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 public class JsonMessage {
 
@@ -81,6 +84,26 @@ public class JsonMessage {
                     data = (JSONObject) jsonMsg.get("login");
                     return new LobbyLoginEvent((String)data.get("token"),
                                Integer.parseInt((String)data.get("lobby_port")));
+                case "begin_turn" :
+                    data = (JSONObject) jsonMsg.get("begin_turn");
+                    return new BeginTurnEvent((String)data.get("id_player"));
+                case "window_list" :
+                    data = (JSONObject) jsonMsg.get("window_list");
+                    return new WindowResponse((String)data.get("id_player"),
+                                              Arrays.asList(Integer.parseInt((String)data.get("window_id_1")),
+                                                            Integer.parseInt((String)data.get("window_id_2"))));
+                case "dice_list" :
+                    data = (JSONObject) jsonMsg.get("dice_list");
+                    List<Dice> diceResponse = new ArrayList<>();
+                    JSONArray diceArray = (JSONArray)((JSONObject)data.get("dice_list")).get("dice");
+                    for(int i = 0; i < diceArray.size(); i++) {
+                        Dice dice = new Dice(Integer.parseInt((String)((JSONObject)diceArray.get(i)).get("id")),
+                                            (Color)((JSONObject)diceArray.get(i)).get("color"));
+                        dice.setValue(Integer.parseInt((String)((JSONObject)diceArray.get(i)).get("value")));
+                        diceResponse.add(dice);
+                    }
+                    return new DiceResponse((String)((JSONObject)data.get("dice_list")).get("destination"),
+                                            diceResponse);
                 default:
                     return null;
             }

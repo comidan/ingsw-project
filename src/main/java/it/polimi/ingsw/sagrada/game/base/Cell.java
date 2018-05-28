@@ -16,9 +16,12 @@ public class Cell {
 
 	public Cell(CellRule cellRule) {
 		this.cellRule = cellRule;
+		occupied = false;
 	}
-	public Cell(){
 
+	public Cell(){
+		cellRule = CellRule.builder().build();
+		occupied = false;
 	}
 
 	/**

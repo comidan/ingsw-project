@@ -2,9 +2,11 @@ package it.polimi.ingsw.intercomm;
 
 import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Player;
+import it.polimi.ingsw.sagrada.game.base.WindowManager;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,7 +31,7 @@ public class RouterTest {
     private WindowController windowController = new WindowController();
     private DiceController diceController = new DiceController();
 
-    @Test
+
     public void routerTest() {
         DiceResponse diceResponse;
         DynamicRouter dynamicRouter = new MessageDispatcher();
@@ -40,6 +42,17 @@ public class RouterTest {
         players.add(playerOne);
         players.add(playerTwo);
         GameManager gameManager = new GameManager(players, dynamicRouter);
+        WindowManager windowManager = new WindowManager(gameManager.getDispatchReference(), dynamicRouter);
+        Window window = windowManager.generateWindow(0, WindowSide.FRONT);
+        for(int i = 0; i < 4; i++)
+            for(int j = 0; j < 5; j++)
+                System.out.println("Must be FALSE : " + window.getCellMatrix()[i][j].isOccupied());
+        playerOne.setWindow(window);
+        window = windowManager.generateWindow(0, WindowSide.REAR);
+        for(int i = 0; i < 4; i++)
+            for(int j = 0; j < 5; j++)
+                System.out.println("Must be FALSE : " + window.getCellMatrix()[i][j].isOccupied());
+        playerTwo.setWindow(window);
         dynamicRouter.subscribeChannel(WindowResponse.class, windowController);
         dynamicRouter.subscribeChannel(DiceResponse.class, diceController);
         gameManager.startGame();

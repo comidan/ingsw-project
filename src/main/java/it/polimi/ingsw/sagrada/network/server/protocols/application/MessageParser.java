@@ -18,13 +18,13 @@ public class MessageParser {
         JSONArray diceArray = new JSONArray();
         for(Dice dice:diceResponse.getDiceList()) {
             JSONObject diceM = new JSONObject();
-            diceM.put("dice_id", dice.getId());
+            diceM.put("id", dice.getId());
             diceM.put("value", dice.getValue());
             diceM.put("color", dice.getColor());
             diceArray.add(diceM);
         }
         diceList.put("dice", diceArray);
-        message.put("move_dice", diceList);
+        message.put("dice_list", diceList);
         return message.toJSONString();
     }
 
@@ -42,9 +42,11 @@ public class MessageParser {
 
     public String createJsonBeginTurnEvent(BeginTurnEvent beginTurnEvent) {
         JSONObject message = new JSONObject();
+        JSONObject content = new JSONObject();
+        content.put("id_player", beginTurnEvent.getIdPlayer());
         message.put("type_msg", "response");
         message.put("type_cmd", "begin_turn");
-        message.put("id_player", beginTurnEvent.getIdPlayer());
+        message.put("begin_turn", content);
         return message.toJSONString();
     }
 }

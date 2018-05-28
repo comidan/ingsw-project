@@ -1,5 +1,9 @@
 package it.polimi.ingsw.sagrada.gui;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+
+import java.awt.Color;
+
 public enum Constraint {
     ONE,
     TWO,
@@ -36,6 +40,37 @@ public enum Constraint {
     }
 
     public static String getConstraintFileName(Constraint color, Constraint value) {
-        return getConstraintFileName(color);
+        String partialColorCompositeFileName =  getConstraintFileName(color);
+        String partialValueCompositeFileName = getConstraintFileName(value);
+        String valueConstraint = partialValueCompositeFileName.split("\\.")[0].substring(0, defaultInitName.length());
+        String colorCotraint = partialColorCompositeFileName.split("\\.")[0].substring(0, defaultInitName.length());
+        return defaultInitName+valueConstraint+colorCotraint+".png";
+    }
+
+    public static Constraint getValueConstraint(int value) {
+        switch(value) {
+            case 1 : return Constraint.ONE;
+            case 2 : return Constraint.TWO;
+            case 3 : return Constraint.THREE;
+            case 4 : return Constraint.FOUR;
+            case 5 : return Constraint.FIVE;
+            case 6 : return Constraint.SIX;
+            default : return Constraint.ONE;
+        }
+    }
+
+    public static Constraint getColorConstraint(Color color) {
+        if(color.equals(Colors.RED))
+            return Constraint.RED;
+        if(color.equals(Colors.YELLOW))
+            return Constraint.YELLOW;
+        if(color.equals(Colors.LIGHT_BLUE))
+            return Constraint.BLUE;
+        if(color.equals(Colors.PURPLE))
+            return Constraint.PURPLE;
+        if(color.equals(Colors.GREEN))
+            return Constraint.GREEN;
+        else
+            return Constraint.WHITE;
     }
 }

@@ -236,7 +236,6 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     private void startGame() {
         List<Player> players = new ArrayList<>();
         clientIds.forEach(username -> players.add(new Player(username)));
-
         dynamicRouter = new MessageDispatcher();
         gameDataManager = new GameDataManager(dynamicRouter, clientPool);
         dynamicRouter.subscribeChannel(DiceResponse.class, gameDataManager);
