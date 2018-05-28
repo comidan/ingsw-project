@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.network.client.Client;
 
@@ -37,6 +38,13 @@ public class GameDataManager implements Channel<Message, Message> {
             WindowResponse windowResponse = (WindowResponse)message;
             try {
                 getClient(windowResponse.getPlayerId()).sendResponse(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        } else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT))) {
+            BeginTurnEvent beginTurnEvent = (BeginTurnEvent)message;
+            try {
+                getClient(beginTurnEvent.getIdPlayer()).sendResponse(message);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

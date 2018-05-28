@@ -2,10 +2,7 @@ package it.polimi.ingsw.sagrada.network.server.socket;
 
 import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DisconnectEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.MessageEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.MessageParser;
@@ -111,6 +108,8 @@ public class RemoteSocketClient implements Client, Runnable {
             payload = messageParser.createJsonDiceResponse((DiceResponse)message);
         else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.WINDOW_RESPONSE)))
             payload = messageParser.createJsonWindowResponse((WindowResponse)message);
+        else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT)))
+            payload = messageParser.createJsonBeginTurnEvent((BeginTurnEvent)message);
         else
             payload = "ERROR";
         output.println(payload);
