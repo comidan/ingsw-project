@@ -13,6 +13,8 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.playables.*;
+import it.polimi.ingsw.sagrada.game.rules.ErrorType;
+import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,7 @@ public class GameManager implements Channel<Message, Message> {
     private StateIterator stateIterator = StateIterator.getInstance();
     private PlayerIterator playerIterator;
     private WindowManager windowManager;
+    private RuleManager ruleManager;
     private DynamicRouter dynamicRouter;
 
     private List<Integer> scores = new ArrayList<>();
@@ -52,6 +55,7 @@ public class GameManager implements Channel<Message, Message> {
         cardManager = new CardManager();
         diceManager = new DiceManager(players.size(), function, dynamicRouter);
         windowManager = new WindowManager(function, dynamicRouter);
+        ruleManager = new RuleManager();
         roundTrack = new RoundTrack();
 
         List<String> playersId = new ArrayList<>();
@@ -146,7 +150,10 @@ public class GameManager implements Channel<Message, Message> {
     }
 
     private void setDiceInWindow(String idPlayer, Dice dice, Position position) {
-        idToPlayer(idPlayer).getWindow().setCell(dice, position.getRow(), position.getCol());
+        Window window = idToPlayer(idPlayer).getWindow();
+        window.setCell(dice, position.getRow(), position.getCol());
+        ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
+        System.out.println(errorType);
     }
 
 

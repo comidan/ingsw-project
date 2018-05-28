@@ -14,7 +14,7 @@ public class DraftView extends GridPane {
 
     public DraftView(DiceResponse diceResponse) {
         draft = new ArrayList<>();
-        diceResponse.getDiceList().forEach(dice -> draft.add(new DiceView(dice.getColor(), dice.getValue(), dice.getId())));
+        //diceResponse.getDiceList().forEach(dice -> draft.add(new DiceView(dice.getColor(), dice.getValue(), dice.getId())));
     }
 
     public void setDraftListener(EventHandler eventHandler) {
