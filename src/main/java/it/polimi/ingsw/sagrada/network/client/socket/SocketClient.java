@@ -166,6 +166,16 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             lobbyGuiView.removePlayer(playerName);
     }
 
+    @Override
+    public String getId() throws RemoteException {
+        return username;
+    }
+
+    @Override
+    public void sendResponse(Message message) throws RemoteException {
+
+    }
+
     private void login() {
         try {
             boolean loginSuccessful = false;

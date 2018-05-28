@@ -1,5 +1,7 @@
 package it.polimi.ingsw.sagrada.network.client;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -22,4 +24,8 @@ public interface Client extends Remote {
     void setPlayer(String playerName) throws RemoteException;
 
     void removePlayer(String playerName) throws RemoteException;
+
+    String getId() throws RemoteException;
+
+    void sendResponse(Message message) throws RemoteException;
 }

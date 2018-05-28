@@ -5,12 +5,12 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 
 public class DiceEvent implements Message {
 
-    private int idPlayer;
+    private String idPlayer;
     private int idDice;
     private Position position;
     private String src;
 
-    public DiceEvent(int idPlayer, int idDice, Position position, String src) {
+    public DiceEvent(String idPlayer, int idDice, Position position, String src) {
         this.idPlayer = idPlayer;
         this.idDice = idDice;
         this.position = position;
@@ -25,7 +25,7 @@ public class DiceEvent implements Message {
         return position;
     }
 
-    public int getIdPlayer() {
+    public String getIdPlayer() {
         return idPlayer;
     }
 

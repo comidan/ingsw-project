@@ -1,6 +1,5 @@
-package it.polimi.ingsw.sagrada.gui;
+package it.polimi.ingsw.sagrada.gui.test;
 
-import it.polimi.ingsw.sagrada.game.base.Player;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;

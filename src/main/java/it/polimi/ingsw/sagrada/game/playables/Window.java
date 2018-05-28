@@ -2,7 +2,7 @@ package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
-import it.polimi.ingsw.sagrada.gui.WindowModelInterface;
+import it.polimi.ingsw.sagrada.gui.test.WindowModelInterface;
 
 import java.awt.Color;
 import java.util.List;

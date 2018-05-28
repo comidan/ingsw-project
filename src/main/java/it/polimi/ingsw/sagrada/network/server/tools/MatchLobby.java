@@ -3,7 +3,10 @@ package it.polimi.ingsw.sagrada.network.server.tools;
 import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
@@ -28,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 
@@ -53,6 +57,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     private int heartbeatPort;
     private GameManager gameManager;
     private DynamicRouter dynamicRouter;
+    private GameDataManager gameDataManager;
 
     public MatchLobby(Function<String, Boolean> signOut, String identifier) throws IOException {
         clientPool = new HashMap<>();
@@ -206,7 +211,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     String id = clientIdTokens.remove(tokenIndex);
                     Function<String, Boolean> disconnect = this::removePlayer;
                     Function<String, Boolean> fastRecovery = this::fastRecoveryClientConnection;
-                    RemoteSocketClient socketClient = new RemoteSocketClient(client, id, disconnect, fastRecovery);
+                    Consumer<Message> sendToModel = this::sendToModel;
+                    RemoteSocketClient socketClient = new RemoteSocketClient(client, id, disconnect, fastRecovery, sendToModel);
                     if(!clientIds.contains(id)) //in case of communication loss
                         clientIds.add(id);
                     clientPool.put(id, socketClient);
@@ -231,8 +237,15 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         clientIds.forEach(username -> players.add(new Player(username)));
 
         dynamicRouter = new MessageDispatcher();
+        gameDataManager = new GameDataManager(dynamicRouter, clientPool);
+        dynamicRouter.subscribeChannel(DiceResponse.class, gameDataManager);
+        dynamicRouter.subscribeChannel(WindowResponse.class, gameDataManager);
         gameManager = new GameManager(players, dynamicRouter);
         gameManager.startGame();
+    }
+
+    private void sendToModel(Message message) {
+        dynamicRouter.dispatch(message);
     }
 
     private class CheckStartGameCondition implements Runnable{

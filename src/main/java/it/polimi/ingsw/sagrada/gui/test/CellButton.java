@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.gui;
+package it.polimi.ingsw.sagrada.gui.test;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;

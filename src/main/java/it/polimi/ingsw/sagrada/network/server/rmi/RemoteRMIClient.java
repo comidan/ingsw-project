@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.network.server.rmi;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.network.client.Client;
 
 import java.io.Serializable;
@@ -48,6 +49,16 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
 
     @Override
     public void removePlayer(String playerName) throws RemoteException {
+
+    }
+
+    @Override
+    public String getId() throws RemoteException {
+        return identifier;
+    }
+
+    @Override
+    public void sendResponse(Message message) throws RemoteException {
 
     }
 }

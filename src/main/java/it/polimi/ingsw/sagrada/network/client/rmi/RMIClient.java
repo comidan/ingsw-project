@@ -239,6 +239,16 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     }
 
     @Override
+    public String getId() throws RemoteException {
+        return identifier;
+    }
+
+    @Override
+    public void sendResponse(Message message) throws RemoteException {
+
+    }
+
+    @Override
     public void dispatch(Message message) {
 
     }

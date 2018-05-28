@@ -1,10 +1,14 @@
 package it.polimi.ingsw.sagrada.network.server.socket;
 
+import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.MessageEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
+import it.polimi.ingsw.sagrada.network.server.protocols.application.MessageParser;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -16,6 +20,7 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class RemoteSocketClient implements Client, Runnable {
@@ -24,18 +29,22 @@ public class RemoteSocketClient implements Client, Runnable {
     private BufferedReader input;
     private PrintWriter output;
     private CommandParser commandParser;
+    private MessageParser messageParser;
     private ExecutorService executor;
     private Function disconnect;
     private Function fastRecovery;
+    private Consumer sendToModel;
     private String identifier;
 
-    public RemoteSocketClient(Socket socket, String identifier, Function disconnect, Function fastRecovery) throws IOException {
+    public RemoteSocketClient(Socket socket, String identifier, Function disconnect, Function fastRecovery, Consumer sendToModel) throws IOException {
         this.socket = socket;
         commandParser = new CommandParser();
+        messageParser = new MessageParser();
         executor = Executors.newSingleThreadExecutor();
         this.disconnect = disconnect;
         this.fastRecovery = fastRecovery;
         this.identifier = identifier;
+        this.sendToModel = sendToModel;
         initCoreFunctions();
     }
 
@@ -58,14 +67,14 @@ public class RemoteSocketClient implements Client, Runnable {
     }
 
     @Override
-    public void disconnect() throws RemoteException {
+    public void disconnect() {
         disconnect.apply(identifier);
         close();
         executor.shutdown();
     }
 
     @Override
-    public void setTimer(String time) throws RemoteException {
+    public void setTimer(String time) {
         String payload = commandParser.createJSONCountdown(time);
         output.println(payload);
         output.flush();
@@ -73,7 +82,7 @@ public class RemoteSocketClient implements Client, Runnable {
     }
 
     @Override
-    public void setPlayer(String playerName) throws RemoteException {
+    public void setPlayer(String playerName) {
         String payload = commandParser.createJSONAddLobbyPlayer(playerName);
         System.out.println("Sending player data...");
         output.println(payload);
@@ -82,19 +91,46 @@ public class RemoteSocketClient implements Client, Runnable {
     }
 
     @Override
-    public void removePlayer(String playerName) throws RemoteException {
+    public void removePlayer(String playerName) {
         String payload = commandParser.createJSONRemoveLobbyPlayer(playerName);
         output.println(payload);
         output.flush();
     }
 
-    private void executePayload(String json) throws RemoteException{
+    @Override
+    public String getId() {
+        return identifier;
+    }
+
+    @Override
+    public void sendResponse(Message message) {
+        //manda i messaggi del model al client
+        String messageType = message.getType().getName();
+        String payload;
+        if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.DICE_RESPONSE)))
+            payload = messageParser.createJsonDiceResponse((DiceResponse)message);
+        else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.WINDOW_RESPONSE)))
+            payload = messageParser.createJsonWindowResponse((WindowResponse)message);
+        else
+            payload = "ERROR";
+        output.println(payload);
+        output.flush();
+    }
+
+    private void executePayload(String json) {
         Message parsedMessage = commandParser.parse(json);
         if(parsedMessage instanceof DisconnectEvent) {
             disconnect();
         }
         else if(parsedMessage instanceof MessageEvent)
             notifyMessage(((MessageEvent) parsedMessage).getMessage());
+        else {
+            sendToModel(parsedMessage);
+        }
+    }
+
+    public void sendToModel(Message message) {
+        sendToModel.accept(message);
     }
 
     private void notifyMessage(String message) {

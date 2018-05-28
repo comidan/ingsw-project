@@ -24,7 +24,7 @@ public class DatabaseSQLRemoteConnectionTest {
                 assertEquals(1, Integer.parseInt(set.getString("ID")));*/
 
         try {
-            Database d = Database.initSQLDatabase("root", "", 100, "localhost", 3306, "sagrada");
+            Database d = Database.initSQLDatabase("root", "root", 100, "localhost", 3306, "sagrada");
             ResultSet set = d.executeRawQuery("SELECT Username FROM User");
             assertNotNull(set);
         }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.gui;
+package it.polimi.ingsw.sagrada.gui.test;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

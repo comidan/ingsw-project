@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.gui;
+package it.polimi.ingsw.sagrada.gui.test;
 
 //done for now
 

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DisconnectEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.LoginEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.MessageEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -27,10 +27,10 @@ public class CommandParser {
                 case "message":
                     data = (JSONObject) jsonMsg.get("message");
                     return new MessageEvent((String)data.get("message"));
-                case "choice":
-                    return null;
                 case "settings":  //is settings response useless?
                     return null;
+                case "choice" :
+                    return parseChoice(jsonMsg);
                 default:
                     return null;
             }
@@ -38,6 +38,30 @@ public class CommandParser {
         }
         catch (ParseException exc) {
             return null;
+        }
+    }
+
+    private Message parseChoice(JSONObject message) {
+        switch((String)message.get("type_cmd")) {
+            case "choice_window":
+                JSONObject messageW = (JSONObject)message.get("window");
+                String idPlayerW = (String)messageW.get("id_player");
+                int idWindow = ((Long)messageW.get("window_id")).intValue();
+                WindowSide side = WindowSide.stringtoWindowSide((String)messageW.get("window_side"));
+                return new WindowEvent(idPlayerW, idWindow, side);
+            case "choice_move_dice":
+                JSONObject data = (JSONObject) message.get("move_dice");
+                String idPlayerD = (String)data.get("player_id");
+                int idDice = ((Long)data.get("dice_id")).intValue();
+                String source = (String)data.get("source");
+                JSONObject pos = (JSONObject)data.get("position");
+                int row = ((Long)pos.get("y")).intValue();
+                int col = ((Long)pos.get("x")).intValue();
+                Position position = new Position(row, col);
+                return  new DiceEvent(idPlayerD, idDice, position, source);
+            case "end_turn":
+                return new EndTurnEvent((String)message.get("id_player"));
+            default: return null;
         }
     }
 

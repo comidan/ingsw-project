@@ -1,6 +1,4 @@
-package it.polimi.ingsw.sagrada.gui;
-
-import it.polimi.ingsw.sagrada.game.base.Player;
+package it.polimi.ingsw.sagrada.gui.test;
 
 import java.util.ArrayList;
 import java.util.List;

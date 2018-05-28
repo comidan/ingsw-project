@@ -73,7 +73,7 @@ public class RouterTest {
                 diceResponse.getDiceList().get(3),
                 playerOne.getWindow().getCellMatrix()[1][0].getCurrentDice());
 
-        dynamicRouter.dispatch(new EndTurnEvent(0));
+        dynamicRouter.dispatch(new EndTurnEvent("Mottola"));
     }
 
     private List<Message> messageGenerator(String type) {
@@ -85,13 +85,13 @@ public class RouterTest {
             messages.add(new WindowEvent("Ingconti", ids.get("Ingconti").get(0), WindowSide.REAR));
         } else if(type.equals("dice")) {
             DiceResponse diceResponse = diceController.getDiceResponse();
-            messages.add(new DiceEvent(0, diceResponse.getDiceList().get(0).getId(), new Position(0, 0), "draft"));
-            messages.add(new EndTurnEvent(0));
-            messages.add(new DiceEvent(1, diceResponse.getDiceList().get(1).getId(), new Position(0, 0), "draft"));
-            messages.add(new EndTurnEvent(1));
-            messages.add(new DiceEvent(1, diceResponse.getDiceList().get(2).getId(), new Position(1, 0), "draft"));
-            messages.add(new EndTurnEvent(1));
-            messages.add(new DiceEvent(0, diceResponse.getDiceList().get(3).getId(), new Position(1, 0), "draft"));
+            messages.add(new DiceEvent("Mottola", diceResponse.getDiceList().get(0).getId(), new Position(0, 0), "draft"));
+            messages.add(new EndTurnEvent("Mottola"));
+            messages.add(new DiceEvent("Ingconti", diceResponse.getDiceList().get(1).getId(), new Position(0, 0), "draft"));
+            messages.add(new EndTurnEvent("Ingconti"));
+            messages.add(new DiceEvent("Ingconti", diceResponse.getDiceList().get(2).getId(), new Position(1, 0), "draft"));
+            messages.add(new EndTurnEvent("Ingconti"));
+            messages.add(new DiceEvent("Mottola", diceResponse.getDiceList().get(3).getId(), new Position(1, 0), "draft"));
         }
 
         return messages;
