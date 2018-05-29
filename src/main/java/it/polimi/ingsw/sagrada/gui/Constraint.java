@@ -18,33 +18,34 @@ public enum Constraint {
     PURPLE,
     WHITE;
 
-    private static final String defaultInitName = "Constraint";
+    private static final String defaultConstraintInitName = "Constraint";
+    private static final String defaultDiceInitName = "Dice";
 
     public static String getConstraintFileName(Constraint constraint) {
 
         switch(constraint) {
-            case ONE : return defaultInitName+"1.png";
-            case TWO : return defaultInitName+"2.png";
-            case THREE : return defaultInitName+"3.png";
-            case FOUR : return defaultInitName+"4.png";
-            case FIVE : return defaultInitName+"5.png";
-            case SIX : return defaultInitName+"6.png";
-            case GREEN: return defaultInitName+"G.png";
-            case YELLOW: return defaultInitName+"Y.png";
-            case BLUE: return defaultInitName+"B.png";
-            case PURPLE: return defaultInitName+"P.png";
-            case RED : return defaultInitName+"R.png";
+            case ONE : return defaultConstraintInitName+"1.png";
+            case TWO : return defaultConstraintInitName+"2.png";
+            case THREE : return defaultConstraintInitName+"3.png";
+            case FOUR : return defaultConstraintInitName+"4.png";
+            case FIVE : return defaultConstraintInitName+"5.png";
+            case SIX : return defaultConstraintInitName+"6.png";
+            case GREEN: return defaultConstraintInitName+"G.png";
+            case YELLOW: return defaultConstraintInitName+"Y.png";
+            case BLUE: return defaultConstraintInitName+"B.png";
+            case PURPLE: return defaultConstraintInitName+"P.png";
+            case RED : return defaultConstraintInitName+"R.png";
             case WHITE :
-            default : return defaultInitName+"W.png";
+            default : return defaultConstraintInitName+"W.png";
         }
     }
 
-    public static String getConstraintFileName(Constraint color, Constraint value) {
+    public static String getDiceFileName(Constraint color, Constraint value) {
         String partialColorCompositeFileName =  getConstraintFileName(color);
         String partialValueCompositeFileName = getConstraintFileName(value);
-        String valueConstraint = partialValueCompositeFileName.split("\\.")[0].substring(0, defaultInitName.length());
-        String colorCotraint = partialColorCompositeFileName.split("\\.")[0].substring(0, defaultInitName.length());
-        return defaultInitName+valueConstraint+colorCotraint+".png";
+        String valueConstraint = partialValueCompositeFileName.split("\\.")[0].substring(defaultConstraintInitName.length(), defaultConstraintInitName.length() + 1);
+        String colorConstraint = partialColorCompositeFileName.split("\\.")[0].substring(defaultConstraintInitName.length(), defaultConstraintInitName.length() + 1);
+        return defaultDiceInitName + valueConstraint + colorConstraint + ".png";
     }
 
     public static Constraint getValueConstraint(int value) {

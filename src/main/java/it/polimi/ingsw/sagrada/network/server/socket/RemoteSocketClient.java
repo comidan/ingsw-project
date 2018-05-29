@@ -124,6 +124,7 @@ public class RemoteSocketClient implements Client, Runnable {
         else if(parsedMessage instanceof MessageEvent)
             notifyMessage(((MessageEvent) parsedMessage).getMessage());
         else {
+            System.out.println("Sending to model...");
             sendToModel(parsedMessage);
         }
     }

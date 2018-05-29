@@ -22,7 +22,6 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -233,6 +232,11 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             setPlayer(((AddPlayerEvent)message).getUsername());
         else if(message instanceof RemovePlayerEvent)
             removePlayer(((RemovePlayerEvent)message).getUsername());
+        else if(message instanceof WindowResponse) {
+            outSocket.println(JsonMessage.createWindowResponse(username,
+                    ((WindowResponse) message).getIds().get(0)));
+            outSocket.flush();
+        }
     }
 
     private void initializeLobbyLink(String identifier) throws IOException {

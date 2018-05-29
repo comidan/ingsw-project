@@ -31,7 +31,6 @@ public class RouterTest {
     private WindowController windowController = new WindowController();
     private DiceController diceController = new DiceController();
 
-
     public void routerTest() {
         DiceResponse diceResponse;
         DynamicRouter dynamicRouter = new MessageDispatcher();

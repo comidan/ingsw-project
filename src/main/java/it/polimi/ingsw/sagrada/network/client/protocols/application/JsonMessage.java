@@ -53,11 +53,24 @@ public class JsonMessage {
         return container;
     }
 
+    public static JSONObject createWindowResponse(String username, int windowId) {
+        JSONObject content = new JSONObject();
+        content.put("id_player", username);
+        content.put("window_id", windowId+"");
+        content.put("window_side", "front"); //constant for testing purpose
+        JSONObject container = new JSONObject();
+        container.put("type_msg", "action");
+        container.put("type_cmd", "choice_window");
+        container.put("window", content);
+        return container;
+    }
+
     public static Message parseJsonData(String json) {
         JSONParser parser = new JSONParser();
         try {
             JSONObject jsonMsg = (JSONObject)parser.parse(json);
             JSONObject data;
+            System.out.println("Type : " + (String)jsonMsg.get("type_cmd"));
             switch ((String)jsonMsg.get("type_cmd")) {
                 case "lobby_time":
                     data = (JSONObject) jsonMsg.get("time");
@@ -89,9 +102,10 @@ public class JsonMessage {
                     return new BeginTurnEvent((String)data.get("id_player"));
                 case "window_list" :
                     data = (JSONObject) jsonMsg.get("window_list");
-                    return new WindowResponse((String)data.get("id_player"),
+                    WindowResponse windowResponse =  new WindowResponse((String)data.get("id_player"),
                                               Arrays.asList(Integer.parseInt((String)data.get("window_id_1")),
                                                             Integer.parseInt((String)data.get("window_id_2"))));
+                    return windowResponse;
                 case "dice_list" :
                     data = (JSONObject) jsonMsg.get("dice_list");
                     List<Dice> diceResponse = new ArrayList<>();

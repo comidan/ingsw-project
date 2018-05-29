@@ -7,7 +7,7 @@ import java.io.File;
 
 public class CellView extends ImageView {
 
-    private static final String DICE_IMAGE_ROOT_PATH = "src/main/resources/DiceImages/";
+    private static final String DICE_IMAGE_ROOT_PATH = "src/main/resources/images/DiceImages/";
     private int row;
     private int col;
     private int diceId;
@@ -17,7 +17,7 @@ public class CellView extends ImageView {
         this.row = row;
         this.col = col;
         this.constraint = constraint;
-        setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getConstraintFileName(constraint)).toURI().toString()));
+        setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getConstraintFileName(constraint)).toURI().toString(), 25, 25, true, false));
     }
 
     public int getRow() {

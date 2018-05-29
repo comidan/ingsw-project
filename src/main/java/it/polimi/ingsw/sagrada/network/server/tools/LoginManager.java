@@ -28,7 +28,7 @@ public class LoginManager {
 
     private Database database;
     private static final String DBMS_USERNAME = "root";  //temporary credentials, TO BE CHANGED
-    private static final String DBMS_AUTH = "root";
+    private static final String DBMS_AUTH = "";
     private static final String DB_NAME = "sagrada";
     private static final int DBMS_PORT = 3306;
 

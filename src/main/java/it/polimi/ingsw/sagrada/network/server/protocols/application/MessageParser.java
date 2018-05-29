@@ -18,9 +18,9 @@ public class MessageParser {
         JSONArray diceArray = new JSONArray();
         for(Dice dice:diceResponse.getDiceList()) {
             JSONObject diceM = new JSONObject();
-            diceM.put("id", dice.getId());
-            diceM.put("value", dice.getValue());
-            diceM.put("color", dice.getColor());
+            diceM.put("id", dice.getId()+"");
+            diceM.put("value", dice.getValue()+"");
+            diceM.put("color", dice.getColor().toString());
             diceArray.add(diceM);
         }
         diceList.put("dice", diceArray);
@@ -34,8 +34,8 @@ public class MessageParser {
         message.put("type_cmd", "window_list");
         JSONObject windowList = new JSONObject();
         windowList.put("id_player", windowResponse.getPlayerId());
-        windowList.put("window_id_1", windowResponse.getIds().get(0));
-        windowList.put("window_id_2", windowResponse.getIds().get(1));
+        windowList.put("window_id_1", windowResponse.getIds().get(0)+"");
+        windowList.put("window_id_2", windowResponse.getIds().get(1)+"");
         message.put("window_list", windowList);
         return message.toJSONString();
     }

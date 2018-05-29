@@ -27,10 +27,10 @@ public class CommandParser {
                 case "message":
                     data = (JSONObject) jsonMsg.get("message");
                     return new MessageEvent((String)data.get("message"));
-                case "settings":  //is settings response useless?
-                    return null;
                 case "choice" :
                     return parseChoice(jsonMsg);
+                case "settings":  //is settings response useless?
+                    return null;
                 default:
                     return null;
             }

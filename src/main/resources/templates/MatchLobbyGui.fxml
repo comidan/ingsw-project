@@ -30,22 +30,22 @@
       </Label>
       <ImageView fitWidth="70.0" layoutX="105.0" layoutY="186.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="185.0">
          <image>
-            <Image url="@../images/DiceImages/DiceOneBlue.png" />
+            <Image url="@../images/DiceImages/Dice1B.png" />
          </image>
       </ImageView>
       <ImageView fitWidth="70.0" layoutX="105.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="275.0">
          <image>
-            <Image url="@../images/DiceImages/DiceTwoYellow.png" />
+            <Image url="@../images/DiceImages/Dice2Y.png" />
          </image>
       </ImageView>
       <ImageView fitWidth="70.0" layoutX="300.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="365.0">
          <image>
-            <Image url="@../images/DiceImages/threePurple.png" />
+            <Image url="@../images/DiceImages/Dice3P.png" />
          </image>
       </ImageView>
       <ImageView fitWidth="70.0" layoutX="200.0" layoutY="411.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="455.0">
          <image>
-            <Image url="@../images/DiceImages/DiceFourGreen.png" />
+            <Image url="@../images/DiceImages/Dice4G.png" />
          </image>
       </ImageView>
       <Label fx:id="firstPlayer" layoutX="210.0" layoutY="205.0" text="Waiting player..." AnchorPane.leftAnchor="205.0">
