@@ -50,11 +50,14 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     public void bagToDraft() {
         draftPool.clear();
         Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
+        System.out.println("Printing");
         for (int i = 0; i < diceNumber; i++) {
             Dice dice = bagPicker.next();
             dice.roll();
+            System.out.println(dice.getId());
             draftPool.add(dice);
         }
+        System.out.println("End print");
         sendMessage(new DiceResponse("draft", new ArrayList<>(draftPool)));
     }
 

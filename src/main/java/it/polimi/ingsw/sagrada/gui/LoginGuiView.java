@@ -9,8 +9,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class LoginGuiView extends Application {
@@ -80,7 +84,12 @@ public class LoginGuiView extends Application {
 
         window.setTitle("SagradaClient");
         window.setResizable(false);
-        window.setScene(new Scene(root, 590, 776));
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int width = gd.getDisplayMode().getWidth();
+        int height = gd.getDisplayMode().getHeight();
+        int windowWidth = width * 590 / 1920;
+        int windowHeight = height * 776 / 1080;
+        window.setScene(new Scene(root, windowWidth, windowHeight));
         window.show();
     }
 
@@ -90,7 +99,12 @@ public class LoginGuiView extends Application {
         try {
             lobby = loaderLobby.load();
             window = (Stage) loginButton.getScene().getWindow();
-            window.setScene(new Scene(lobby, 590, 776));
+            GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            int width = gd.getDisplayMode().getWidth();
+            int height = gd.getDisplayMode().getHeight();
+            int windowWidth = width * 590 / 1920;
+            int windowHeight = height * 776 / 1080;
+            window.setScene(new Scene(lobby, windowWidth, windowHeight));
             return loaderLobby.getController();
         } catch (IOException e) {
             e.printStackTrace();

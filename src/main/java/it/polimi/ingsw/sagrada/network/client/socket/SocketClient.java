@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.gui.GameView;
 import it.polimi.ingsw.sagrada.gui.LobbyGuiView;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.client.protocols.networklink.discoverinternet.DiscoverInternet;
+import javafx.application.Platform;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -236,6 +238,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             outSocket.println(JsonMessage.createWindowResponse(username,
                     ((WindowResponse) message).getIds().get(0)));
             outSocket.flush();
+            //Platform.runLater(() -> GameView.startGameGUI());
         }
     }
 

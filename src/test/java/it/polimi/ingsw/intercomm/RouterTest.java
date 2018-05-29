@@ -30,7 +30,7 @@ public class RouterTest {
     private static final String BASE_PATH = "src/main/resources/json/window/";
     private WindowController windowController = new WindowController();
     private DiceController diceController = new DiceController();
-
+    
     public void routerTest() {
         DiceResponse diceResponse;
         DynamicRouter dynamicRouter = new MessageDispatcher();
@@ -43,14 +43,8 @@ public class RouterTest {
         GameManager gameManager = new GameManager(players, dynamicRouter);
         WindowManager windowManager = new WindowManager(gameManager.getDispatchReference(), dynamicRouter);
         Window window = windowManager.generateWindow(0, WindowSide.FRONT);
-        for(int i = 0; i < 4; i++)
-            for(int j = 0; j < 5; j++)
-                System.out.println("Must be FALSE : " + window.getCellMatrix()[i][j].isOccupied());
         playerOne.setWindow(window);
         window = windowManager.generateWindow(0, WindowSide.REAR);
-        for(int i = 0; i < 4; i++)
-            for(int j = 0; j < 5; j++)
-                System.out.println("Must be FALSE : " + window.getCellMatrix()[i][j].isOccupied());
         playerTwo.setWindow(window);
         dynamicRouter.subscribeChannel(WindowResponse.class, windowController);
         dynamicRouter.subscribeChannel(DiceResponse.class, diceController);

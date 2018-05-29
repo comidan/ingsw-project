@@ -29,7 +29,7 @@ public class DiceView extends ImageView{
         this.color = color;
         this.value = value;
         this.id = id;
-        setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)).toURI().toString(), 30, 30, true, false));
+        setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)).toURI().toString(), 50, 50, true, false));
     }
 
     public int getDiceID() {
