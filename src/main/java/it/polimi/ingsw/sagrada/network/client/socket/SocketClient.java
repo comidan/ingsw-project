@@ -238,6 +238,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         else if(message instanceof RemovePlayerEvent)
             removePlayer(((RemovePlayerEvent)message).getUsername());
         else if(message instanceof WindowResponse) {
+            System.out.println("Press key to generate WindowEvent");
             try {
                 inKeyboard.readLine();
             } catch (IOException e) {
@@ -262,7 +263,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             outVideo.println("Second level auth");
         executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
-        executeOrders();
+        //executeOrders();
     }
 
     private void fastRecovery() {
