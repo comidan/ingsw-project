@@ -68,12 +68,18 @@ public class GameView extends Application {
         primaryStage.show();
     }
 
-    public static void startGameGUI(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    public void terminate() {
+        Stage stage = (Stage) borderPane.getScene().getWindow();
+        stage.close();
+    }
+
+    public static GameView startGameGUI(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
         username = players.get(0);
         windows = new HashMap<>();
         GameView.diceResponse = diceResponse;
         launch();
+        return new GameView();
     }
 }
