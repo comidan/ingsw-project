@@ -46,17 +46,17 @@ public class CommandParser {
             case "choice_window":
                 JSONObject messageW = (JSONObject)message.get("window");
                 String idPlayerW = (String)messageW.get("id_player");
-                int idWindow = ((Long)messageW.get("window_id")).intValue();
+                int idWindow = Integer.parseInt((String)messageW.get("window_id"));
                 WindowSide side = WindowSide.stringtoWindowSide((String)messageW.get("window_side"));
                 return new WindowEvent(idPlayerW, idWindow, side);
             case "choice_move_dice":
                 JSONObject data = (JSONObject) message.get("move_dice");
                 String idPlayerD = (String)data.get("player_id");
-                int idDice = ((Long)data.get("dice_id")).intValue();
+                int idDice = Integer.parseInt((String)data.get("dice_id"));
                 String source = (String)data.get("source");
                 JSONObject pos = (JSONObject)data.get("position");
-                int row = ((Long)pos.get("y")).intValue();
-                int col = ((Long)pos.get("x")).intValue();
+                int row = Integer.parseInt((String)pos.get("y"));
+                int col = Integer.parseInt((String)pos.get("x"));
                 Position position = new Position(row, col);
                 return  new DiceEvent(idPlayerD, idDice, position, source);
             case "end_turn":

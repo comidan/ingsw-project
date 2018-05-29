@@ -118,6 +118,7 @@ public class RemoteSocketClient implements Client, Runnable {
 
     private void executePayload(String json) {
         Message parsedMessage = commandParser.parse(json);
+        System.out.println(parsedMessage.getType().getName());
         if(parsedMessage instanceof DisconnectEvent) {
             disconnect();
         }
@@ -156,6 +157,7 @@ public class RemoteSocketClient implements Client, Runnable {
     public void run() {
         while (!executor.isShutdown()) {
             try {
+                System.out.println("Attending client data...");
                 executePayload(input.readLine());
             } catch (IOException exc) {
                 fastRecovery.apply(identifier);

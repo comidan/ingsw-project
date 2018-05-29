@@ -235,9 +235,11 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         else if(message instanceof RemovePlayerEvent)
             removePlayer(((RemovePlayerEvent)message).getUsername());
         else if(message instanceof WindowResponse) {
-            outSocket.println(JsonMessage.createWindowResponse(username,
-                    ((WindowResponse) message).getIds().get(0)));
-            outSocket.flush();
+            System.out.println("Sending window event...");
+            JSONObject jsonWindow = JsonMessage.createWindowResponse(username, ((WindowResponse) message).getIds().get(0));
+            System.out.println(jsonWindow.toJSONString());
+            outSocket.println(jsonWindow.toJSONString());
+            System.out.println("Window event sent...");
             //Platform.runLater(() -> GameView.startGameGUI());
         }
     }

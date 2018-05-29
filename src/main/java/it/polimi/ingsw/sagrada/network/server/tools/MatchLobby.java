@@ -240,7 +240,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         dynamicRouter = new MessageDispatcher();
         gameDataManager = new GameDataManager(dynamicRouter, clientPool);
         dynamicRouter.subscribeChannel(DiceResponse.class, gameDataManager);
-        dynamicRouter.subscribeChannel(WindowEvent.class, gameDataManager);
+        dynamicRouter.subscribeChannel(WindowResponse.class, gameDataManager);
         dynamicRouter.subscribeChannel(BeginTurnEvent.class, gameDataManager);
         gameManager = new GameManager(players, dynamicRouter);
         gameManager.startGame();
@@ -248,6 +248,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     }
 
     private void sendToModel(Message message) {
+        System.out.println(message.getType().getName());
         dynamicRouter.dispatch(message);
     }
 
