@@ -238,6 +238,11 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         else if(message instanceof RemovePlayerEvent)
             removePlayer(((RemovePlayerEvent)message).getUsername());
         else if(message instanceof WindowResponse) {
+            try {
+                inKeyboard.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             JSONObject jsonWindow = JsonMessage.createWindowResponse(username, ((WindowResponse) message).getIds().get(0));
             outSocket.println(jsonWindow.toJSONString());
             //Platform.runLater(() -> GameView.startGameGUI());
@@ -257,7 +262,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             outVideo.println("Second level auth");
         executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
-        //executeOrders();
+        executeOrders();
     }
 
     private void fastRecovery() {

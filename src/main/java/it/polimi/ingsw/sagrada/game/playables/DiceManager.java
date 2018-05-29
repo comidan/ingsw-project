@@ -54,7 +54,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         for (int i = 0; i < diceNumber; i++) {
             Dice dice = bagPicker.next();
             dice.roll();
-            System.out.println(dice.getId());
+            System.out.println(this.toString()+ " - " + dice.getId());
             draftPool.add(dice);
         }
         System.out.println("End print");
