@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainGameGuiTest {
-    
+
+    @Test
     public void testMainGameGui() {
         List<String> players = new ArrayList<>();
         players.add("daniele");

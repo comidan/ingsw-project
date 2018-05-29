@@ -21,11 +21,14 @@ public class DraftView extends GridPane {
     }
 
     private void createGrid() {
-        add(draft.get(0), 0, 0);
-        add(draft.get(1), 1, 0);
-        add(draft.get(2), 2, 0);
-        add(draft.get(3), 0, 1);
-        add(draft.get(4), 0, 2);
+        int counter = 0;
+        for(int i = 0; i < 3; i++)
+            for(int j = 0; j < 3; j++) {
+                if(counter >= draft.size())
+                    return;
+                add(draft.get(counter++), j, i);
+            }
+
 
     }
 
