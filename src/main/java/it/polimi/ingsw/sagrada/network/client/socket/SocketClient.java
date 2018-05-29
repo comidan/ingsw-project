@@ -24,10 +24,13 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.lang.Thread.sleep;
 
 public class SocketClient implements Runnable, Client, Channel<Message, LoginState> {
 
@@ -61,7 +64,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         while (!connect())
             try {
                 System.out.println(ADDRESS + ":" + PORT + " not responding, retrying in 3 seconds...");
-                Thread.sleep(SERVER_WAITING_RESPONSE_TIME);
+                sleep(SERVER_WAITING_RESPONSE_TIME);
             } catch (InterruptedException exc) {
                 Thread.currentThread().interrupt();
             }
@@ -70,7 +73,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
 
     private void initializeConnectionStream() throws IOException {
         inSocket = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        outSocket = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+        outSocket = new PrintWriter(socket.getOutputStream(), true);
     }
 
     private JSONObject createMessage(String userName, String auth) {
@@ -81,7 +84,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         try {
             socket = new Socket(InetAddress.getByName(ADDRESS), PORT);
             inSocket = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            outSocket = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+            outSocket = new PrintWriter(socket.getOutputStream(), true);
             return true;
         } catch (IOException exc) {
             LOGGER.log(Level.SEVERE, exc.getMessage());
@@ -235,11 +238,8 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         else if(message instanceof RemovePlayerEvent)
             removePlayer(((RemovePlayerEvent)message).getUsername());
         else if(message instanceof WindowResponse) {
-            System.out.println("Sending window event...");
             JSONObject jsonWindow = JsonMessage.createWindowResponse(username, ((WindowResponse) message).getIds().get(0));
-            System.out.println(jsonWindow.toJSONString());
             outSocket.println(jsonWindow.toJSONString());
-            System.out.println("Window event sent...");
             //Platform.runLater(() -> GameView.startGameGUI());
         }
     }
@@ -257,7 +257,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             outVideo.println("Second level auth");
         executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
-        executeOrders();
+        //executeOrders();
     }
 
     private void fastRecovery() {
@@ -268,7 +268,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                     || (!DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !DiscoverInternet.checkInternetConnection()))
                 try {
                     System.out.println("Waiting for available connection...");
-                    Thread.sleep(1000);
+                    sleep(1000);
                 }
                 catch (InterruptedException exc) {
                     Thread.currentThread().interrupt();

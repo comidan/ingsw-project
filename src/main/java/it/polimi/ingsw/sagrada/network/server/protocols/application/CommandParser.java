@@ -27,8 +27,12 @@ public class CommandParser {
                 case "message":
                     data = (JSONObject) jsonMsg.get("message");
                     return new MessageEvent((String)data.get("message"));
-                case "choice" :
-                    return parseChoice(jsonMsg);
+                case "choice_window" :
+                    data = (JSONObject) jsonMsg.get("window");
+                    String idPlayerW = (String)data.get("id_player");
+                    int idWindow = Integer.parseInt((String)data.get("window_id"));
+                    WindowSide side = WindowSide.stringtoWindowSide((String)data.get("window_side"));
+                    return new WindowEvent(idPlayerW, idWindow, side);
                 case "settings":  //is settings response useless?
                     return null;
                 default:

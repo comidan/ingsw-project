@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Dice {
 
+    private static final int MAX_VALUE = 6;
     private int value;
     private Color color;
     private int id;
@@ -41,6 +42,6 @@ public class Dice {
     }
 
     public void roll() {
-        value = ThreadLocalRandom.current().nextInt(7);
+        value = ThreadLocalRandom.current().nextInt(1,MAX_VALUE+1);
     }
 }

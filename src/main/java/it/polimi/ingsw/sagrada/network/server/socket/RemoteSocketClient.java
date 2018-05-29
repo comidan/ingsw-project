@@ -47,7 +47,8 @@ public class RemoteSocketClient implements Client, Runnable {
 
     private void initCoreFunctions() throws IOException{
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
+        //output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
+        output = new PrintWriter(socket.getOutputStream(), true);
         executor.submit(this);
     }
 
@@ -55,7 +56,6 @@ public class RemoteSocketClient implements Client, Runnable {
     public void sendMessage(String message) {
         String payload = commandParser.crateJSONMessage(message);
         output.println(payload);
-        output.flush();
     }
 
     @Override
@@ -74,7 +74,6 @@ public class RemoteSocketClient implements Client, Runnable {
     public void setTimer(String time) {
         String payload = commandParser.createJSONCountdown(time);
         output.println(payload);
-        output.flush();
         System.out.println("Sending time...");
     }
 
@@ -83,7 +82,6 @@ public class RemoteSocketClient implements Client, Runnable {
         String payload = commandParser.createJSONAddLobbyPlayer(playerName);
         System.out.println("Sending player data...");
         output.println(payload);
-        output.flush();
         System.out.println("Sent");
     }
 
@@ -91,7 +89,6 @@ public class RemoteSocketClient implements Client, Runnable {
     public void removePlayer(String playerName) {
         String payload = commandParser.createJSONRemoveLobbyPlayer(playerName);
         output.println(payload);
-        output.flush();
     }
 
     @Override
@@ -113,7 +110,6 @@ public class RemoteSocketClient implements Client, Runnable {
         else
             payload = "ERROR";
         output.println(payload);
-        output.flush();
     }
 
     private void executePayload(String json) {
@@ -122,8 +118,9 @@ public class RemoteSocketClient implements Client, Runnable {
         if(parsedMessage instanceof DisconnectEvent) {
             disconnect();
         }
-        else if(parsedMessage instanceof MessageEvent)
+        else if(parsedMessage instanceof MessageEvent){
             notifyMessage(((MessageEvent) parsedMessage).getMessage());
+        }
         else {
             System.out.println("Sending to model...");
             sendToModel(parsedMessage);

@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.base.WindowManager;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import org.json.simple.JSONArray;
@@ -24,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class RouterTest {
     private static final Logger LOGGER = Logger.getLogger(RouterTest.class.getName());
@@ -63,6 +65,12 @@ public class RouterTest {
             dynamicRouter.dispatch(message);
         }
         diceResponse = diceController.getDiceResponse();
+
+        List<Dice> diceMem = new ArrayList<>();
+        for(Dice dice:diceResponse.getDiceList()) {
+            assertFalse(diceMem.contains(dice));
+            diceMem.add(dice);
+        }
 
         assertEquals(
                 diceResponse.getDiceList().get(0),
