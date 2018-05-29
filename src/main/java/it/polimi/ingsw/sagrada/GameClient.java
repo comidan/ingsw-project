@@ -11,7 +11,8 @@ public class GameClient extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception { //path is relative to target because getResource is called
+    public void start(Stage primaryStage) throws Exception {
+        //path is relative to target because getResource is called
 
     }
 }

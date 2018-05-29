@@ -6,12 +6,15 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -20,6 +23,9 @@ import java.io.IOException;
 public class LoginGuiView extends Application {
     @FXML
     private RadioButton socketRadioButton;
+    private double windowHeight;
+    private double windowWidth;
+
     @FXML
     private RadioButton rmiRadiobutton;
     @FXML
@@ -33,6 +39,13 @@ public class LoginGuiView extends Application {
 
     private Stage window;
 
+    public LoginGuiView() {
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int height = gd.getDisplayMode().getHeight();
+        this.windowHeight = height * 0.7;
+        this.windowWidth = windowHeight * 0.76;
+    }
+
     public void addLoginButtonListener(EventHandler<ActionEvent> listener) {
         loginButton.setOnAction(listener);
     }
@@ -44,11 +57,11 @@ public class LoginGuiView extends Application {
     }
 
     public boolean isCredentialCorrect() {
-        return (usernameField.getText().length()!=0 && passwordField.getText().length()!=0);
+        return (usernameField.getText().length() != 0 && passwordField.getText().length() != 0);
     }
 
     public String getSelectedCommunication() {
-        if(socketRadioButton.isSelected()) return "Socket";
+        if (socketRadioButton.isSelected()) return "Socket";
         else return "RMI";
     }
 
@@ -68,7 +81,7 @@ public class LoginGuiView extends Application {
     }
 
     public Stage getWindow() {
-        return (Stage)loginButton.getScene().getWindow();
+        return (Stage) loginButton.getScene().getWindow();
     }
 
     @Override
@@ -81,15 +94,30 @@ public class LoginGuiView extends Application {
         LoginGuiView loginGuiView = loaderLogin.getController();
         new LoginGuiController(loginGuiView);
         loginGuiView.setRadioGroup();
-
         window.setTitle("SagradaClient");
         window.setResizable(false);
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        int width = gd.getDisplayMode().getWidth();
-        int height = gd.getDisplayMode().getHeight();
-        int windowWidth = width * 590 / 1920;
-        int windowHeight = height * 776 / 1080;
-        window.setScene(new Scene(root, windowWidth, windowHeight));
+        Scene scene = new Scene(root, windowWidth, windowHeight);
+        window.setScene(scene);
+        ImageView image = (ImageView) scene.lookup("#background");
+        image.setFitHeight(windowHeight);
+        image.setFitWidth(windowWidth);
+        image.setPreserveRatio(true);
+        AnchorPane anchor = (AnchorPane) scene.lookup("#anchorPane");
+        Label dev = (Label) scene.lookup("#developers");
+        anchor.setBottomAnchor(dev, getHeightPixel(15));
+        dev.setWrapText(true);
+        Button loginButton = (Button) scene.lookup("#loginButton");
+        anchor.setBottomAnchor(loginButton, getHeightPixel(23));
+        PasswordField passwordField = (PasswordField) scene.lookup("#passwordField");
+        anchor.setBottomAnchor(passwordField, getHeightPixel(37));
+        TextField usernameField = (TextField) scene.lookup("#usernameField");
+        anchor.setBottomAnchor(usernameField, getHeightPixel(46));
+        RadioButton socketRadioButton = (RadioButton) scene.lookup("#socketRadioButton");
+        anchor.setBottomAnchor(socketRadioButton, getHeightPixel(31));
+        RadioButton rmiRadiobutton = (RadioButton) scene.lookup("#rmiRadiobutton");
+        anchor.setBottomAnchor(rmiRadiobutton, getHeightPixel(31));
+
+
         window.show();
     }
 
@@ -99,11 +127,6 @@ public class LoginGuiView extends Application {
         try {
             lobby = loaderLobby.load();
             window = (Stage) loginButton.getScene().getWindow();
-            GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-            int width = gd.getDisplayMode().getWidth();
-            int height = gd.getDisplayMode().getHeight();
-            int windowWidth = width * 590 / 1920;
-            int windowHeight = height * 776 / 1080;
             window.setScene(new Scene(lobby, windowWidth, windowHeight));
             return loaderLobby.getController();
         } catch (IOException e) {
@@ -111,4 +134,9 @@ public class LoginGuiView extends Application {
             return null;
         }
     }
+
+    private double getHeightPixel(int perc) {
+        return (perc * windowHeight / 100);
+    }
+
 }

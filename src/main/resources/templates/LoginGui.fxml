@@ -10,47 +10,64 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="786.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.sagrada.gui.LoginGuiView">
-   <children>
-      <ImageView fitWidth="600.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <image>
-            <Image url="@../images/LogInGui.png" />
-         </image>
-      </ImageView>
-      <PasswordField fx:id="passwordField" layoutX="226.0" layoutY="435.0" promptText="Password" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="435.0">
-         <font>
-            <Font name="Century Gothic" size="14.0" />
-         </font>
-      </PasswordField>
-      <Button fx:id="loginButton" layoutX="105.0" layoutY="541.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" style="-fx-background-color: #d57322; -fx-padding: 0;" text="Login" textFill="WHITE" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="545.0">
-         <font>
-            <Font name="Century Gothic" size="22.0" />
-         </font>
-      </Button>
-      <Label layoutX="107.0" layoutY="584.0" text="Developed by: Daniele Comi, Valentina Deda, Valerio Colombo" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="106.0" AnchorPane.topAnchor="585.0">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="usernameField" layoutX="105.0" layoutY="393.0" promptText="Username" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="385.0">
-         <font>
-            <Font name="Century Gothic" size="14.0" />
-         </font>
-      </TextField>
-      <Label fx:id="errorText" alignment="CENTER" layoutX="257.0" layoutY="615.0" prefHeight="27.0" prefWidth="313.0" textFill="#d57322" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
-      <RadioButton fx:id="socketRadioButton" layoutX="105.0" layoutY="491.0" mnemonicParsing="false" text="Socket" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="490.0">
-         <font>
-            <Font name="Century Gothic" size="14.0" />
-         </font>
-      </RadioButton>
-      <RadioButton fx:id="rmiRadiobutton" layoutX="210.0" layoutY="490.0" mnemonicParsing="false" text="RMI" AnchorPane.leftAnchor="210.0" AnchorPane.topAnchor="490.0">
-         <font>
-            <Font name="Century Gothic" size="14.0" />
-         </font>
-      </RadioButton>
-   </children>
+<AnchorPane id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="786.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.polimi.ingsw.sagrada.gui.LoginGuiView">
+    <children>
+        <ImageView id="background" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0"
+                   AnchorPane.topAnchor="0.0">
+            <image>
+                <Image url="@../images/LogInGui.png"/>
+            </image>
+        </ImageView>
+        <PasswordField fx:id="passwordField" layoutX="226.0" layoutY="435.0" promptText="Password"
+                       style="-fx-border-color: #000000;" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="105.0"
+                       AnchorPane.bottomAnchor="230.0">
+            <font>
+                <Font name="Century Gothic" size="14.0"/>
+            </font>
+        </PasswordField>
+        <Button fx:id="loginButton" layoutX="105.0" layoutY="541.0" minHeight="-Infinity" minWidth="-Infinity"
+                mnemonicParsing="false" style="-fx-background-color: #d57322; -fx-padding: 0;" text="Login"
+                textFill="WHITE" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="105.0"
+                AnchorPane.bottomAnchor="150.0">
+            <font>
+                <Font name="Century Gothic" size="22.0"/>
+            </font>
+        </Button>
+        <Label id="developers" layoutX="107.0" layoutY="584.0"
+               text="Developed by: Daniele Comi, Valentina Deda, Valerio Colombo"
+               AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="106.0">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="usernameField" layoutX="105.0" layoutY="393.0" promptText="Username"
+                   style="-fx-border-color: #000000;" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="105.0"
+                   AnchorPane.bottomAnchor="280.0">
+            <font>
+                <Font name="Century Gothic" size="14.0"/>
+            </font>
+        </TextField>
+        <Label fx:id="errorText" alignment="CENTER" layoutX="257.0" layoutY="615.0" prefHeight="27.0" prefWidth="313.0"
+               textFill="#d57322" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="30.0"
+               AnchorPane.rightAnchor="30.0">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
+        <RadioButton fx:id="socketRadioButton" layoutX="105.0" layoutY="491.0" mnemonicParsing="false" text="Socket"
+                     AnchorPane.leftAnchor="105.0" AnchorPane.bottomAnchor="200.0">
+            <font>
+                <Font name="Century Gothic" size="14.0"/>
+            </font>
+        </RadioButton>
+        <RadioButton fx:id="rmiRadiobutton" layoutX="210.0" layoutY="490.0" mnemonicParsing="false" text="RMI"
+                     AnchorPane.leftAnchor="210.0" AnchorPane.bottomAnchor="200.0">
+            <font>
+                <Font name="Century Gothic" size="14.0"/>
+            </font>
+        </RadioButton>
+    </children>
 </AnchorPane>
