@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.network.client.Client;
 
@@ -15,9 +16,13 @@ public class GameDataManager implements Channel<Message, Message> {
     private DynamicRouter dynamicRouter;
     private Map<String, Client> clientMap;
 
-    public GameDataManager(DynamicRouter dynamicRouter, Map<String, Client> clientList) {
+    public GameDataManager(DynamicRouter dynamicRouter, Map<String, Client> clientMap) {
         this.dynamicRouter = dynamicRouter;
-        this.clientMap = clientList;
+        this.clientMap = clientMap;
+
+        dynamicRouter.subscribeChannel(DiceResponse.class, this);
+        dynamicRouter.subscribeChannel(WindowResponse.class, this);
+        dynamicRouter.subscribeChannel(BeginTurnEvent.class, this);
     }
 
     @Override

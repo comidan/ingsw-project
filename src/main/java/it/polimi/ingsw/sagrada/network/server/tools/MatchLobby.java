@@ -239,17 +239,14 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         clientIds.forEach(username -> players.add(new Player(username)));
         dynamicRouter = new MessageDispatcher();
         gameDataManager = new GameDataManager(dynamicRouter, clientPool);
-        dynamicRouter.subscribeChannel(DiceResponse.class, gameDataManager);
-        dynamicRouter.subscribeChannel(WindowResponse.class, gameDataManager);
-        dynamicRouter.subscribeChannel(BeginTurnEvent.class, gameDataManager);
-        System.out.println(players.size());
         gameManager = new GameManager(players, dynamicRouter);
+
         gameManager.startGame();
         System.out.println("Starting game now...");
     }
 
     private void sendToModel(Message message) {
-        System.out.println(message.getType().getName());
+        //System.out.println(message.getType().getName());
         dynamicRouter.dispatch(message);
     }
 

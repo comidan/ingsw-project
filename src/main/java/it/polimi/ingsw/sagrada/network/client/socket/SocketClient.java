@@ -248,6 +248,8 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             outSocket.println(jsonWindow.toJSONString());
             //Platform.runLater(() -> GameView.startGameGUI());
         }
+        else if(message instanceof DiceResponse) System.out.println("DADIIIIIIIIIIIIIIIIIIII");
+        else if(message instanceof BeginTurnEvent) System.out.println("E' IL TUO TURNO");
     }
 
     private void initializeLobbyLink(String identifier) throws IOException {

@@ -105,8 +105,10 @@ public class RemoteSocketClient implements Client, Runnable {
             payload = messageParser.createJsonDiceResponse((DiceResponse)message);
         else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.WINDOW_RESPONSE)))
             payload = messageParser.createJsonWindowResponse((WindowResponse)message);
-        else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT)))
+        else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT))) {
+            System.out.println("Sending BeginTurn");
             payload = messageParser.createJsonBeginTurnEvent((BeginTurnEvent)message);
+        }
         else
             payload = "ERROR";
         output.println(payload);

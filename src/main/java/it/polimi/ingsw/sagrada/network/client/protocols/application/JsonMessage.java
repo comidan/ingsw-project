@@ -101,21 +101,30 @@ public class JsonMessage {
                     data = (JSONObject) jsonMsg.get("begin_turn");
                     return new BeginTurnEvent((String)data.get("id_player"));
                 case "window_list" :
+
                     data = (JSONObject) jsonMsg.get("window_list");
                     WindowResponse windowResponse =  new WindowResponse((String)data.get("id_player"),
                                               Arrays.asList(Integer.parseInt((String)data.get("window_id_1")),
                                                             Integer.parseInt((String)data.get("window_id_2"))));
+
                     return windowResponse;
                 case "dice_list" :
+                    System.out.println("DiceResponse generation");
                     data = (JSONObject) jsonMsg.get("dice_list");
                     List<Dice> diceResponse = new ArrayList<>();
-                    JSONArray diceArray = (JSONArray)((JSONObject)data.get("dice_list")).get("dice");
+                    JSONArray diceArray = (JSONArray)data.get("dice");
+                    System.out.println("So far all good");
                     for(int i = 0; i < diceArray.size(); i++) {
+                        System.out.println("1");
                         Dice dice = new Dice(Integer.parseInt((String)((JSONObject)diceArray.get(i)).get("id")),
                                             (Color)((JSONObject)diceArray.get(i)).get("color"));
+                        System.out.println("2");
                         dice.setValue(Integer.parseInt((String)((JSONObject)diceArray.get(i)).get("value")));
+                        System.out.println("3");
                         diceResponse.add(dice);
+                        System.out.println("4");
                     }
+                    System.out.println("DiceResponse generated");
                     return new DiceResponse((String)((JSONObject)data.get("dice_list")).get("destination"),
                                             diceResponse);
                 default:
