@@ -1,6 +1,8 @@
 package it.polimi.ingsw.sagrada.game.intercomm;
 
-public interface Message {
+import java.io.Serializable;
+
+public interface Message extends Serializable {
     Class<? extends Message> getType();
 }
 
