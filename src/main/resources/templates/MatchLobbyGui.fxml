@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="786.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.sagrada.gui.LobbyGuiView">
+<AnchorPane id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="786.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.sagrada.gui.LobbyGuiView">
    <children>
-      <ImageView fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView id="background" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/MatchLobbyBackground.png" />
          </image>
@@ -18,32 +18,32 @@
             <Font name="System Bold" size="36.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="105.0" layoutY="571.0" text="Game will start in" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="105.0">
+      <Label id="game" alignment="CENTER" layoutX="105.0" layoutY="571.0" text="Game will start in" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="105.0">
          <font>
-            <Font size="40.0" />
+            <Font size="20.0" />
          </font>
       </Label>
-      <Label fx:id="timer" alignment="CENTER" layoutX="255.0" layoutY="638.0" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+      <Label fx:id="timer" alignment="CENTER" layoutX="255.0" layoutY="638.0"  AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
          <font>
-            <Font name="System Bold" size="36.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <ImageView fitWidth="70.0" layoutX="105.0" layoutY="186.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="185.0">
+      <ImageView id="dice1" fitWidth="70.0" layoutX="105.0" layoutY="186.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" >
          <image>
-            <Image url="@../images/DiceImages/Dice1B.png" />
+            <Image  url="@../images/DiceImages/Dice1B.png" />
          </image>
       </ImageView>
-      <ImageView fitWidth="70.0" layoutX="105.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="275.0">
+      <ImageView  id="dice2" fitWidth="70.0" layoutX="105.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" >
          <image>
             <Image url="@../images/DiceImages/Dice2Y.png" />
          </image>
       </ImageView>
-      <ImageView fitWidth="70.0" layoutX="300.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="365.0">
+      <ImageView  id="dice3" fitWidth="70.0" layoutX="300.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" >
          <image>
             <Image url="@../images/DiceImages/Dice3P.png" />
          </image>
       </ImageView>
-      <ImageView fitWidth="70.0" layoutX="200.0" layoutY="411.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="455.0">
+      <ImageView id="dice4" fitWidth="70.0" layoutX="200.0" layoutY="411.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="105.0" >
          <image>
             <Image url="@../images/DiceImages/Dice4G.png" />
          </image>

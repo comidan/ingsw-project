@@ -31,7 +31,7 @@
         <Button fx:id="loginButton" layoutX="105.0" layoutY="541.0" minHeight="-Infinity" minWidth="-Infinity"
                 mnemonicParsing="false" style="-fx-background-color: #d57322; -fx-padding: 0;" text="Login"
                 textFill="WHITE" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="105.0"
-                AnchorPane.bottomAnchor="150.0">
+          >
             <font>
                 <Font name="Century Gothic" size="22.0"/>
             </font>
