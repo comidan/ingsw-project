@@ -13,6 +13,8 @@ import java.util.Properties;
  */
 public abstract class Database
 {
+    public static final int MYSQL_STANDARD_REGISTERED_PORT = 3306;
+
     protected String databaseURL;
     protected String username;
     protected String password;

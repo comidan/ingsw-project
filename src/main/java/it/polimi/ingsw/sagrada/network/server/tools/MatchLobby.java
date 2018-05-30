@@ -5,10 +5,6 @@ import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
-import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
@@ -22,7 +18,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.AlreadyBoundException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -35,7 +30,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.logging.Level;
 
 
 public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener, Runnable, AbstractMatchLobbyRMI {
@@ -208,7 +202,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         while(!lobbyServer.isShutdown()) {
             try {
                 Socket client = serverSocket.accept();
-                int tokenIndex = LoginManager.tokenAuthentication(clientIdTokens, client);
+                int tokenIndex = DataManager.tokenAuthentication(clientIdTokens, client);
                 if(tokenIndex != -1) {
                     String id = clientIdTokens.remove(tokenIndex);
                     Function<String, Boolean> disconnect = this::removePlayer;
@@ -218,7 +212,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     if(!clientIds.contains(id)) //in case of communication loss
                         clientIds.add(id);
                     clientPool.put(id, socketClient);
-                    LoginManager.sendLoginLobbyResponse(client, heartbeatPort);
+                    DataManager.sendLoginLobbyResponse(client, heartbeatPort);
                     executor.submit(socketClient);
                     System.out.println(id + " correctly logged on lobby server");
                     for(String username : clientIds) {
@@ -227,7 +221,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     }
                 }
                 else
-                    LoginManager.sendLoginError(client);
+                    DataManager.sendLoginError(client);
             }
             catch (IOException exc) {
             }

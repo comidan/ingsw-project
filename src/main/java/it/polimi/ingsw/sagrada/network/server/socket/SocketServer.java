@@ -4,7 +4,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.LoginEvent;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.server.Server;
-import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
+import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
 import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
 import it.polimi.ingsw.sagrada.network.server.tools.PortDiscovery;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
@@ -30,11 +30,11 @@ public class SocketServer implements Runnable, Server {
     private ExecutorService executor, cachedExecutor;
     private CommandParser commandParser;
     private PortDiscovery portDiscovery;
-    private LoginManager loginManager;
+    private DataManager dataManager;
 
     public SocketServer() throws InterruptedException, ExecutionException, SQLException, SocketException {
         portDiscovery = new PortDiscovery();
-        loginManager = LoginManager.getLoginManager();
+        dataManager = DataManager.getDataManager();
         Future<Integer> discoveringPort = portDiscovery.obtainAvailablePortOnTCPAsync();
         commandParser = new CommandParser();
         port = discoveringPort.get();
@@ -80,36 +80,36 @@ public class SocketServer implements Runnable, Server {
         return () -> {
             try {
                 int lobbyPort;
-                String action = loginManager.receiveLoginData(clientSocket);
+                String action = dataManager.receiveLoginData(clientSocket);
                 Message requestData = commandParser.parse(action);
                 if (requestData instanceof LoginEvent) {
                     LoginEvent loginEvent = (LoginEvent)requestData;
-                    LoginState loginState = loginManager.authenticate(loginEvent.getUsername(), loginEvent.getPassword());
+                    LoginState loginState = dataManager.authenticate(loginEvent.getUsername(), loginEvent.getPassword());
                     switch (loginState) {
                         case AUTH_OK:
                             lobbyPort = joinUserLobby(loginEvent.getUsername());
-                            LoginManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
+                            DataManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
                             System.out.println(loginEvent.getUsername() + " correctly logged, migrating client to lobby server");
                             clientSocket.close();
                             break;
                         case AUTH_FAILED_USER_ALREADY_LOGGED:
-                            LoginManager.sendLoginError(clientSocket,"User already logged on");
+                            DataManager.sendLoginError(clientSocket,"User already logged on");
                             System.out.println(loginState);
                             break;
                         case AUTH_FAILED_USER_NOT_EXIST:
-                            LoginManager.sendLoginSignup(clientSocket);
-                            if (loginManager.signUp(loginEvent.getUsername(), loginEvent.getPassword())) {
+                            DataManager.sendLoginSignup(clientSocket);
+                            if (dataManager.signUp(loginEvent.getUsername(), loginEvent.getPassword())) {
                                 lobbyPort = joinUserLobby(loginEvent.getUsername());
-                                LoginManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
+                                DataManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
                                 System.out.println(loginEvent.getUsername() + "correctly signed up, migrating client to lobby server");
                                 clientSocket.close();
                             }
                             else {
                                 System.out.println("Wrong password");
-                                LoginManager.sendLoginError(clientSocket);
+                                DataManager.sendLoginError(clientSocket);
                             }
                             break;
-                        default: System.out.println("No correct command was found"); LoginManager.sendLoginError(clientSocket); break;
+                        default: System.out.println("No correct command was found"); DataManager.sendLoginError(clientSocket); break;
                     }
                 }
             }

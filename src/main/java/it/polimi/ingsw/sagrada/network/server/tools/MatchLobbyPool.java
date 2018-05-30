@@ -23,7 +23,7 @@ public class MatchLobbyPool {
                 break;
             }
         if(availableLobby == null) {
-            availableLobby = new MatchLobby(LoginManager.getSignOut(), lobbyPool.size() + "");
+            availableLobby = new MatchLobby(DataManager.getSignOut(), lobbyPool.size() + "");
             lobbyPool.add(availableLobby);
         }
         return availableLobby;

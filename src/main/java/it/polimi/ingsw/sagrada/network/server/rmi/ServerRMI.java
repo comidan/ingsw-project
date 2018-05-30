@@ -3,7 +3,7 @@ package it.polimi.ingsw.sagrada.network.server.rmi;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 import it.polimi.ingsw.sagrada.network.server.Server;
-import it.polimi.ingsw.sagrada.network.server.tools.LoginManager;
+import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
 import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
 
     private static final Logger LOGGER = Logger.getLogger(ServerRMI.class.getName());
 
-    private LoginManager loginManager;
+    private DataManager dataManager;
     private MatchLobby availableLobby;
 
     public ServerRMI() throws RemoteException {
@@ -34,14 +34,14 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
     }
 
     private void initializeCoreFunction() {
-        loginManager = LoginManager.getLoginManager();
+        dataManager = DataManager.getDataManager();
         System.out.println("Server RMI correctly initialized and running");
     }
 
     @Override
     public LoginState login(ClientRMI clientRMI, String username, String hashedPassword) throws RemoteException {
         try {
-                LoginState loginState = loginManager.authenticate(username, hashedPassword);
+                LoginState loginState = dataManager.authenticate(username, hashedPassword);
                 MatchLobby lobby;
                 switch (loginState) {
                     case AUTH_OK:
@@ -54,7 +54,7 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
                         return loginState;
                     case AUTH_FAILED_USER_NOT_EXIST:
                         //clientRMI.signUp();
-                        if (loginManager.signUp(username, hashedPassword)) {
+                        if (dataManager.signUp(username, hashedPassword)) {
                             //clientRMI.signUp();
                             lobby = joinUserLobby(username);
                             System.out.println(username + " correctly signed up, migrating client to lobby server");

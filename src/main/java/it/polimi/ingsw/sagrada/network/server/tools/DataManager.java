@@ -21,21 +21,22 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoginManager {
+public class DataManager {
 
-    private static final Logger LOGGER = Logger.getLogger(LoginManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(DataManager.class.getName());
     private static final Map<String, String> loggedUsers = new HashMap<>();
+    private static final String DATABASE_CONFIG_PATH = "src/main/resources/json/config/database_config.json";
 
     private Database database;
-    private static final String DBMS_USERNAME = "root";  //temporary credentials, TO BE CHANGED
-    private static final String DBMS_AUTH = "";
-    private static final String DB_NAME = "sagrada";
-    private static final int DBMS_PORT = 3306;
+    private static String DBMS_USERNAME = getDbmsUsername();
+    private static String DBMS_AUTH = getDbmsAuth();
+    private static String DB_NAME = getDbName();
+    private static int DBMS_PORT = getDbmsPort();
 
-    private static LoginManager loginManager;
+    private static DataManager dataManager;
 
 
-    private LoginManager()  {
+    private DataManager()  {
 
         try {
             database = Database.initSQLDatabase(DBMS_USERNAME,
@@ -51,10 +52,10 @@ public class LoginManager {
         }
     }
 
-    public static LoginManager getLoginManager() {
-        if(loginManager == null)
-            loginManager = new LoginManager();
-        return loginManager;
+    public static DataManager getDataManager() {
+        if(dataManager == null)
+            dataManager = new DataManager();
+        return dataManager;
     }
 
 
@@ -148,5 +149,61 @@ public class LoginManager {
 
     public static synchronized Function<String, Boolean> getSignOut() {
         return username -> loggedUsers.remove(username) != null;
+    }
+
+    private static String getDbmsUsername() {
+        JSONParser parser = new JSONParser();
+        try {
+
+            Object obj = parser.parse(new FileReader(DATABASE_CONFIG_PATH));
+            JSONObject jsonObject = (JSONObject) obj;
+            return (String) jsonObject.get("dbms_username");
+        }
+        catch (Exception exc) {
+            LOGGER.log(Level.SEVERE, () -> "network config fatal error");
+            return "";
+        }
+    }
+
+    private static String getDbmsAuth() {
+        JSONParser parser = new JSONParser();
+        try {
+
+            Object obj = parser.parse(new FileReader(DATABASE_CONFIG_PATH));
+            JSONObject jsonObject = (JSONObject) obj;
+            return (String) jsonObject.get("dbms_auth");
+        }
+        catch (Exception exc) {
+            LOGGER.log(Level.SEVERE, () -> "network config fatal error");
+            return "";
+        }
+    }
+
+    private static String getDbName() {
+        JSONParser parser = new JSONParser();
+        try {
+
+            Object obj = parser.parse(new FileReader(DATABASE_CONFIG_PATH));
+            JSONObject jsonObject = (JSONObject) obj;
+            return (String) jsonObject.get("db_name");
+        }
+        catch (Exception exc) {
+            LOGGER.log(Level.SEVERE, () -> "network config fatal error");
+            return "";
+        }
+    }
+
+    private static int getDbmsPort() {
+        JSONParser parser = new JSONParser();
+        try {
+
+            Object obj = parser.parse(new FileReader(DATABASE_CONFIG_PATH));
+            JSONObject jsonObject = (JSONObject) obj;
+            return Integer.parseInt((String) jsonObject.get("dbms_port"));
+        }
+        catch (Exception exc) {
+            LOGGER.log(Level.SEVERE, () -> "network config fatal error");
+            return Database.MYSQL_STANDARD_REGISTERED_PORT;
+        }
     }
 }
