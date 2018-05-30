@@ -2,8 +2,6 @@ package it.polimi.ingsw.sagrada.gui;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 
-import java.awt.Color;
-
 public enum Constraint {
     ONE,
     TWO,
@@ -60,12 +58,12 @@ public enum Constraint {
         }
     }
 
-    public static Constraint getColorConstraint(Color color) {
+    public static Constraint getColorConstraint(Colors color) {
         if(color.equals(Colors.RED))
             return Constraint.RED;
         if(color.equals(Colors.YELLOW))
             return Constraint.YELLOW;
-        if(color.equals(Colors.LIGHT_BLUE))
+        if(color.equals(Colors.BLUE))
             return Constraint.BLUE;
         if(color.equals(Colors.PURPLE))
             return Constraint.PURPLE;

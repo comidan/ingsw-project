@@ -1,12 +1,10 @@
 package it.polimi.ingsw.playables;
 
 
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.playables.*;
 import org.junit.Test;
 
-import it.polimi.ingsw.sagrada.game.base.utility.Colors;
-
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class RoundTrackTest {
         assertNotNull(roundTrack);
         roundTrack.addDice(diceList, 2);
         assertEquals(roundTrack.getDiceFromRound(Colors.RED, 2), dice);
-        List<Color> colorList = new ArrayList<>();
+        List<Colors> colorList = new ArrayList<>();
         colorList.add(dice.getColor());
         assertEquals(roundTrack.getAvailableColors(), colorList);
         assertEquals(roundTrack.getAvailableColors(), colorList);

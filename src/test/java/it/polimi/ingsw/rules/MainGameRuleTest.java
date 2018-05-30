@@ -8,8 +8,6 @@ import it.polimi.ingsw.sagrada.game.rules.ErrorType;
 import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import org.junit.Test;
 
-import java.awt.Color;
-
 import static org.junit.Assert.assertSame;
 
 public class MainGameRuleTest {
@@ -51,7 +49,7 @@ public class MainGameRuleTest {
         dicePurple.setValue(4);
         purple.setDice(dicePurple);
         Cell blue = new Cell(cellRule);
-        Dice diceBlue = new Dice(5, Colors.LIGHT_BLUE);
+        Dice diceBlue = new Dice(5, Colors.BLUE);
         diceBlue.setValue(5);
         blue.setDice(diceBlue);
         Cell[][] _cells = {{red, yellow, green, purple, blue},
@@ -88,11 +86,11 @@ public class MainGameRuleTest {
         diceFour.setValue(4);
         ___four.setDice(diceFour);
         Cell ___five = new Cell(cellRule);
-        Dice diceFive = new Dice(5, Color.BLACK);
+        Dice diceFive = new Dice(5, Colors.BLACK);
         diceFive.setValue(5);
         ___five.setDice(diceFive);
         Cell ___six = new Cell(cellRule);
-        Dice diceSix = new Dice(6, Colors.LIGHT_BLUE);
+        Dice diceSix = new Dice(6, Colors.BLUE);
         diceSix.setValue(6);
         ___six.setDice(diceSix);
         Cell[][] cells = {{___five, ___one, ___tnree, ___six, ___six},

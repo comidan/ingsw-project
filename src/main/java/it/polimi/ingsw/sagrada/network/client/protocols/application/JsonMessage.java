@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
@@ -109,24 +110,18 @@ public class JsonMessage {
 
                     return windowResponse;
                 case "dice_list" :
-                    System.out.println("DiceResponse generation");
                     data = (JSONObject) jsonMsg.get("dice_list");
                     List<Dice> diceResponse = new ArrayList<>();
                     JSONArray diceArray = (JSONArray)data.get("dice");
-                    System.out.println("So far all good");
                     for(int i = 0; i < diceArray.size(); i++) {
-                        System.out.println("1");
-                        Dice dice = new Dice(Integer.parseInt((String)((JSONObject)diceArray.get(i)).get("id")),
-                                            (Color)((JSONObject)diceArray.get(i)).get("color"));
-                        System.out.println("2");
-                        dice.setValue(Integer.parseInt((String)((JSONObject)diceArray.get(i)).get("value")));
-                        System.out.println("3");
+                        JSONObject diceJson = ((JSONObject)diceArray.get(i));
+                        Dice dice = new Dice(Integer.parseInt((String)(diceJson.get("id"))),
+                                Colors.stringToColor((String)(diceJson.get("color"))));
+                        dice.setValue(Integer.parseInt((String)(diceJson).get("value")));
                         diceResponse.add(dice);
-                        System.out.println("4");
                     }
                     System.out.println("DiceResponse generated");
-                    return new DiceResponse((String)((JSONObject)data.get("dice_list")).get("destination"),
-                                            diceResponse);
+                    return new DiceResponse((String)(data.get("destination")), diceResponse);
                 default:
                     return null;
             }

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.base.Cell;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -17,7 +17,7 @@ public class ObjectiveRule extends Rule<Cell[][], Integer> {
 	private CardType cardType;
 	private CardType objectiveType;
 	private Function<Cell[][], Integer> function;
-	private List<Color> colorConstraints;
+	private List<Colors> colorConstraints;
 	private List<Integer> valueConstraints;
 
 	/**
@@ -67,7 +67,7 @@ public class ObjectiveRule extends Rule<Cell[][], Integer> {
 		return value;
 	}
 
-	public List<Color> getColorConstraints() {
+	public List<Colors> getColorConstraints() {
 		return colorConstraints;
 	}
 

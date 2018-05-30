@@ -8,7 +8,6 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +33,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         bagPool = new ArrayList<>();
         draftPool = new ArrayList<>();
         int id = 0;
-        for (Color color : Colors.getColorList()) {
+        for (Colors color : Colors.getColorList()) {
             for (int j = 0; j < DICE_PER_COLOR; j++) {
                 bagPool.add(new Dice(id++, color));
             }
@@ -54,7 +53,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         for (int i = 0; i < diceNumber; i++) {
             Dice dice = bagPicker.next();
             dice.roll();
-            System.out.println(this.toString()+ " - " + dice.getId());
+            System.out.println(dice.getId());
             draftPool.add(dice);
         }
         System.out.println("End print");

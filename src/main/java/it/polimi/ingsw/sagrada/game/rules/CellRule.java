@@ -1,8 +1,8 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
-import java.awt.Color;
 import java.util.function.Function;
 
 /**
@@ -11,14 +11,14 @@ import java.util.function.Function;
 public class CellRule extends Rule<Dice, Boolean> {
 
 	private int valueConstraint;
-	private Color colorConstraint;
+	private Colors colorConstraint;
 	private Function<Dice, Boolean> function;
 
 	/**
 	 * @param function - rule checker function
 	 * @param colorConstraint - color constraint
 	 */
-	CellRule(final Function function, Color colorConstraint) {
+	CellRule(final Function function, Colors colorConstraint) {
 		this.function = function;
 		this.colorConstraint = colorConstraint;
 		valueConstraint = 0;
@@ -60,7 +60,7 @@ public class CellRule extends Rule<Dice, Boolean> {
 	/**
 	 * @return color constraint
 	 */
-	public Color getColorConstraint() {
+	public Colors getColorConstraint() {
 		return colorConstraint;
 	}
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
-import java.awt.Color;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,19 +21,19 @@ public class RoundTrack {
     /**
      * @return iterator of current dices on round track
      */
-    public List<Color> getAvailableColors() {
+    public List<Colors> getAvailableColors() {
 
-        List<Color> colorList = new ArrayList<>();
+        List<Colors> colorList = new ArrayList<>();
         for (List<Dice> list:roundDice)
             for (Dice dice : list) {
-                Color color = dice.getColor();
+                Colors color = dice.getColor();
                 if (!colorList.contains(color)) colorList.add(color);
             }
         return colorList;
     }
 
 
-    public Dice getDiceFromRound(Color color, int round) {
+    public Dice getDiceFromRound(Colors color, int round) {
         for (Dice dice : roundDice.get(round)) {
             if (dice.getColor() == color)
                 return dice;

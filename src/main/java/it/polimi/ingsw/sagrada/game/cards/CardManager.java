@@ -11,7 +11,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 
-import java.awt.*;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -128,15 +127,15 @@ public class CardManager {
 	 */
 	public List<ObjectiveCard> dealPrivateObjective(int numPlayer) {
 		List<ObjectiveCard> cards = new ArrayList<>();
-		List<Color> colors = Colors.getColorList();
-		Iterator<Color> picker = new Picker<>(colors).pickerIterator();
+		List<Colors> colors = Colors.getColorList();
+		Iterator<Colors> picker = new Picker<>(colors).pickerIterator();
 
 		if(numPlayer>NUM_MAX_PLAYER) return cards;
 
 		for(int i=0; i<numPlayer; i++) {
 			if(picker.hasNext()) {
 				ObjectiveBuilder objectiveBuilder = ObjectiveRule.builder();
-				Color color = picker.next();
+				Colors color = picker.next();
 				objectiveBuilder.setColorShadeColorObjective(color);
 				cards.add(new ObjectiveCard(i, "Obiettivo "+color.toString(), objectiveBuilder.build()));
 			}

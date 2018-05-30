@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
-import java.awt.*;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -10,11 +11,11 @@ public class Dice {
 
     private static final int MAX_VALUE = 6;
     private int value;
-    private Color color;
+    private Colors color;
     private int id;
 
 
-    public Dice(int id, Color color) {
+    public Dice(int id, Colors color) {
         this.color = color;
         this.id = id;
     }
@@ -22,7 +23,7 @@ public class Dice {
     /**
      * @return dice color
      */
-    public Color getColor() {
+    public Colors getColor() {
         return this.color;
     }
 

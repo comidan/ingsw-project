@@ -5,7 +5,6 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.Constraint;
 import it.polimi.ingsw.sagrada.gui.GameView;
-
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class MainGameGuiTest {
             players.add("test");
             players.add("admin");
             List<Dice> diceList = new ArrayList<>();
-            Dice dice = new Dice(1, Colors.LIGHT_BLUE);
+            Dice dice = new Dice(1, Colors.BLUE);
             dice.setValue(1);
             diceList.add(dice);
             dice = new Dice(2, Colors.RED);

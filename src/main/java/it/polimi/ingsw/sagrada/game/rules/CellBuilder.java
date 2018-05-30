@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
 import it.polimi.ingsw.sagrada.game.base.Builder;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.util.function.Function;
  */
 public class CellBuilder<T extends CellRule> implements Builder {
 
-    private Color colorConstraint;
+    private Colors colorConstraint;
     private Integer valueConstraint;
     private Function<Dice, Boolean> function;
 
@@ -30,7 +31,7 @@ public class CellBuilder<T extends CellRule> implements Builder {
      * @param color - color constraint
      * @return this CellBuilder with an updated color rule
      */
-    public CellBuilder<T> setColorConstraint(final Color color) {
+    public CellBuilder<T> setColorConstraint(final Colors color) {
         function = dice -> color.equals(dice.getColor());
         colorConstraint = color;
         valueConstraint = 0;

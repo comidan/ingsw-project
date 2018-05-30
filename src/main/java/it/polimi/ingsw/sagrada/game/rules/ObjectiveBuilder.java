@@ -6,7 +6,6 @@ import it.polimi.ingsw.sagrada.game.cards.CardType;
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -48,10 +47,10 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	 * @param cell cell from window
 	 * @return dice color if present
 	 */
-	private Color getDiceColor(Cell cell) {
+	private Colors getDiceColor(Cell cell) {
 		Dice dice = cell.getCurrentDice();
 		if(dice == null)
-			return Color.BLACK;
+			return Colors.BLACK;
 		return dice.getColor();
 	}
 
@@ -59,7 +58,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	 * @param color color constraint
      * @return this ObjectiveBuilder with an updated objective rule
 	 */
-	public ObjectiveBuilder<T> setColorShadeColorObjective(Color color) {
+	public ObjectiveBuilder<T> setColorShadeColorObjective(Colors color) {
 		function = cells -> {
 				int score = 0;
 				for(int row = 0; row < cells.length; row++)
@@ -68,7 +67,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 							score += getDiceValue(cells[row][col]);
 				return score;
 		};
-		constraints = new ArrayList<Color>();
+		constraints = new ArrayList<Colors>();
 		constraints.add(color);
 		objectiveType = CardType.OBJECTIVE_COLOR;
 		cardType = CardType.PRIVATE;
@@ -84,8 +83,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 		function = cells -> {
 				int score = 0;
 				int differentDiceByColor = 0;
-				Color diceColor;
-				HashSet<Color> set = new HashSet<>();
+				Colors diceColor;
+				HashSet<Colors> set = new HashSet<>();
 				for (int row = 0; row < cells.length; row++) {
 					for (int col = 0; col < cells[0].length; col++) {
 						if (!cells[row][col].isOccupied())
@@ -118,8 +117,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 
 				int score = 0;
 				int differentDiceByColor = 0;
-				Color diceColor;
-				HashSet<Color> set = new HashSet<>();
+				Colors diceColor;
+				HashSet<Colors> set = new HashSet<>();
 				for (int col = 0; col < cells[0].length; col++) {
 					for (int row = 0; row < cells.length; row++) {
 						if (!cells[row][col].isOccupied())
@@ -249,9 +248,9 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 		function = cells -> {
 
 			int match = 0;
-			HashSet<Color> colorsMatch = new HashSet<>();
-			List<Color> reusable = new ArrayList<>();
-			List<Color> colorList = Colors.getColorList();
+			HashSet<Colors> colorsMatch = new HashSet<>();
+			List<Colors> reusable = new ArrayList<>();
+			List<Colors> colorList = Colors.getColorList();
 			for (int row = 0; row < cells.length; row++) {
 				for (int col = 0; col < cells[0].length; col++) {
 					if (cells[row][col].isOccupied() && !colorsMatch.contains(getDiceColor(cells[row][col])))
@@ -316,12 +315,12 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
      * @param diagonalColorList diagonal to compute
      * @return computed score
      */
-	private int computeDiagonalPartialScore(List<Color> diagonalColorList) {
+	private int computeDiagonalPartialScore(List<Colors> diagonalColorList) {
         int counter = 0;
-        Color diceColor = null;
+        Colors diceColor = null;
         int tmpScore = 0;
         int partialScore = 0;
-        for(Color color : diagonalColorList) {
+        for(Colors color : diagonalColorList) {
             if(diceColor == null) {
                 diceColor = color;
                 tmpScore = 1;
@@ -353,17 +352,17 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 		int colStart = 0;
 		int score = 0;
 		int diagonalCounter = 0;
-		Color diceColor;
+		Colors diceColor;
         int numberOfDiagonals = cells.length + cells[0].length + 1;
 		Function<Integer, List> constructor = ArrayList::new;
-		List<List<Color>> diagonalTrace = initializeEmptyNestedList(numberOfDiagonals, constructor);
+		List<List<Colors>> diagonalTrace = initializeEmptyNestedList(numberOfDiagonals, constructor);
 		while(diagonalCounter < numberOfDiagonals) {
 			for(int row = rowStart, col = colStart; row < cells.length && col < cells[0].length; row++, col++)
 				if (!(row == cells.length - 1 && col == 0) && !(row == 0 && col == cells[0].length - 1)) {
 			        if(cells[row][col].isOccupied())
 					    diceColor = getDiceColor(cells[row][col]);
 			        else
-			            diceColor = Color.BLACK;
+			            diceColor = Colors.BLACK;
 					diagonalTrace.get(diagonalCounter).add(diceColor);
 				}
 
@@ -399,17 +398,17 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 		int colStart = cells.length - 1;
 		int score = 0;
 		int diagonalCounter = 0;
-		Color diceColor;
+		Colors diceColor;
 		int numberOfDiagonals = cells.length + cells[0].length + 1;
 		Function<Integer, List> constructor = ArrayList::new;
-		List<List<Color>> diagonalTrace = initializeEmptyNestedList(numberOfDiagonals, constructor);
+		List<List<Colors>> diagonalTrace = initializeEmptyNestedList(numberOfDiagonals, constructor);
 		while(diagonalCounter < numberOfDiagonals) {
 			for(int row = rowStart, col = colStart; row >= 0 && row < cells.length && col < cells[0].length; row--, col++) {
                 if (!(row == 0 && col == 0) && !(row == cells.length - 1 && col == cells[0].length - 1)) {
                     if(cells[row][col].isOccupied())
                         diceColor = getDiceColor(cells[row][col]);
                     else
-                        diceColor = Color.BLACK;
+                        diceColor = Colors.BLACK;
                     diagonalTrace.get(diagonalCounter).add(diceColor);
                 }
             }

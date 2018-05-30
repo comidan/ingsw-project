@@ -4,7 +4,6 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.gui.test.WindowModelInterface;
 
-import java.awt.Color;
 import java.util.List;
 
 /**
@@ -58,8 +57,8 @@ public class Window implements WindowModelInterface {
         for (int i = 0; i < cellMatrix.length; i++) { //row
             for (int j = 0; j < cellMatrix[0].length; j++) { //column
                 if (cellMatrix[i][j].getCellRule() != null) {
-                    Color c = cellMatrix[i][j].getCellRule().getColorConstraint();
-                    if (c != null) output.append(Colors.colorToString(c));
+                    Colors c = cellMatrix[i][j].getCellRule().getColorConstraint();
+                    if (c != null) output.append(c.toStringSingleLetter());
                     String s = String.valueOf(cellMatrix[i][j].getCellRule().getValueConstraint());
                     if (!s.equals("0")) output.append(s);
                     output.append("|");

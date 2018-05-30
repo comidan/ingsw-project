@@ -14,7 +14,7 @@ public class ObjectiveBuilderTest {
     public void testObjectiveBuilder() {
         ObjectiveRule objectiveRule = ObjectiveRule.builder().build();
         assertNull(objectiveRule);
-        objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.LIGHT_BLUE).build();
+        objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.BLUE).build();
         assertEquals(CardType.PRIVATE, objectiveRule.getType());
         objectiveRule = ObjectiveRule.builder().setDifferentDiceValueByRowsObjective(1).build();
         assertEquals(CardType.PUBLIC, objectiveRule.getType());

@@ -8,7 +8,6 @@ import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import org.junit.Test;
 
-import java.awt.Color;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -39,9 +38,9 @@ public class ObjectiveRuleTest {
         four = new Cell(cellRule);
         four.setDice(new Dice(4, Colors.PURPLE));
         five = new Cell(cellRule);
-        five.setDice(new Dice(5, Colors.LIGHT_BLUE));
+        five.setDice(new Dice(5, Colors.BLUE));
         six = new Cell(cellRule);
-        six.setDice(new Dice(6, Colors.LIGHT_BLUE));
+        six.setDice(new Dice(6, Colors.BLUE));
         cellRule = CellRule.builder().build();
         red = new Cell(cellRule);
         red.setDice(new Dice(1, Colors.RED));
@@ -52,7 +51,7 @@ public class ObjectiveRuleTest {
         purple = new Cell(cellRule);
         purple.setDice(new Dice(1, Colors.PURPLE));
         blue = new Cell(cellRule);
-        blue.setDice(new Dice(1, Colors.LIGHT_BLUE));
+        blue.setDice(new Dice(1, Colors.BLUE));
     }
 
     private synchronized int checkRule(ObjectiveRule objectiveRule, Cell[][] cells) {
@@ -64,7 +63,7 @@ public class ObjectiveRuleTest {
     public void testColorShadeObjective() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
         int diceValue = 1;
-        List<Color> colorList = Colors.getColorList();
+        List<Colors> colorList = Colors.getColorList();
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setColorShadeColorObjective(Colors.RED).build();
         for (int i = 0; i < cells.length; i++)
             for (int j = 0; j < cells[0].length; j++) {
@@ -79,7 +78,7 @@ public class ObjectiveRuleTest {
     @Test
     public void testDifferentColorByRows() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
-        List<Color> colorList = Colors.getColorList();
+        List<Colors> colorList = Colors.getColorList();
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setDifferentDiceColorByRowsObjective(5).build();
         for (int i = 0; i < cells.length; i++)
             for (int j = 0; j < cells[0].length; j++) {
@@ -100,7 +99,7 @@ public class ObjectiveRuleTest {
     @Test
     public void testDifferentColorByCols() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
-        List<Color> colorList = Colors.getColorList();
+        List<Colors> colorList = Colors.getColorList();
         ObjectiveRule objectiveRule = ObjectiveRule.builder().setDifferentDiceColorByColsObjective(5).build();
         for (int i = 0; i < cells[0].length; i++)
             for (int j = 0; j < cells.length; j++) {
@@ -178,7 +177,7 @@ public class ObjectiveRuleTest {
         Cell purple = new Cell(cellRule);
         purple.setDice(new Dice(1, Colors.PURPLE));
         Cell blue = new Cell(cellRule);
-        blue.setDice(new Dice(1, Colors.LIGHT_BLUE));
+        blue.setDice(new Dice(1, Colors.BLUE));
         Cell[][] cells = {{red, yellow, green, purple, blue},
                 {blue, red, yellow, green, purple},
                 {purple, blue, red, yellow, green},
@@ -231,7 +230,7 @@ public class ObjectiveRuleTest {
         Dice dicePurple = new Dice(1, Colors.PURPLE);
         purple.setDice(dicePurple);
         Cell blue = new Cell(cellRule);
-        Dice diceBlue = new Dice(1, Colors.LIGHT_BLUE);
+        Dice diceBlue = new Dice(1, Colors.BLUE);
         blue.setDice(diceBlue);
         Cell[][] cells = {{red, yellow, green, purple, blue},
                 {blue, red, yellow, green, purple},
@@ -282,11 +281,11 @@ public class ObjectiveRuleTest {
         dicePurple.setValue(4);
         four.setDice(dicePurple);
         five = new Cell(cellRule);
-        Dice diceBlue = new Dice(5, Colors.LIGHT_BLUE);
+        Dice diceBlue = new Dice(5, Colors.BLUE);
         diceBlue.setValue(5);
         five.setDice(diceBlue);
         six = new Cell(cellRule);
-        Dice diceBlueTwo = new Dice(6, Colors.LIGHT_BLUE);
+        Dice diceBlueTwo = new Dice(6, Colors.BLUE);
         diceBlueTwo.setValue(6);
         six.setDice(diceBlueTwo);
         Cell[][] cells = {{five, one, three, six, six},

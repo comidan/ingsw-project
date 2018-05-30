@@ -2,9 +2,9 @@ package it.polimi.ingsw.sagrada.game.rules;
 
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
-import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -95,10 +95,10 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 * @param cell cell from window
 	 * @return dice color if present
 	 */
-	private Color getDiceColor(Cell cell) {
+	private Colors getDiceColor(Cell cell) {
 		Dice dice = cell.getCurrentDice();
 		if(dice == null)
-			return Color.BLACK;
+			return Colors.BLACK;
 		return dice.getColor();
 	}
 

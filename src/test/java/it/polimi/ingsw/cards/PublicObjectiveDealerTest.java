@@ -55,7 +55,7 @@ public class PublicObjectiveDealerTest {
         threeG.setDice(DthreeG);
 
         fourL = new Cell(cellRule);
-        DfourL = new Dice(3, Colors.LIGHT_BLUE);
+        DfourL = new Dice(3, Colors.BLUE);
         DfourL.setValue(4);
         fourL.setDice(DfourL);
 
@@ -65,7 +65,7 @@ public class PublicObjectiveDealerTest {
         fiveP.setDice(DfiveP);
 
         sixL = new Cell(cellRule);
-        DsixL = new Dice(5, Colors.LIGHT_BLUE);
+        DsixL = new Dice(5, Colors.BLUE);
         DsixL.setValue(6);
         sixL.setDice(DsixL);
 

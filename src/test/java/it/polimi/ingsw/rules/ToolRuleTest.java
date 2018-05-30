@@ -40,11 +40,11 @@ public class ToolRuleTest {
         diceFour.setValue(4);
         four.setDice(diceFour);
         Cell five = new Cell(cellRule);
-        Dice diceFive = new Dice(5, Color.BLACK);
+        Dice diceFive = new Dice(5, Colors.BLACK);
         diceFive.setValue(5);
         five.setDice(diceFive);
         Cell six = new Cell(cellRule);
-        Dice diceSix = new Dice(6, Colors.LIGHT_BLUE);
+        Dice diceSix = new Dice(6, Colors.BLUE);
         diceSix.setValue(6);
         six.setDice(diceSix);
         Cell[][] cells = {{five, one, three, six, three},
@@ -82,7 +82,7 @@ public class ToolRuleTest {
         diceFour.setValue(4);
         _four.setDice(diceFour);
         Cell _five = new Cell(cellRule);
-        Dice diceFive = new Dice(5, Colors.LIGHT_BLUE);
+        Dice diceFive = new Dice(5, Colors.BLUE);
         diceFive.setValue(5);
         _five.setDice(diceFive);
         CellRule cellRulecolor = CellRule.builder().setColorConstraint(Colors.RED).build();
@@ -124,7 +124,7 @@ public class ToolRuleTest {
         diceFour.setValue(4);
         __four.setDice(diceFour);
         Cell __five = new Cell(cellRule);
-        Dice diceFive = new Dice(5, Colors.LIGHT_BLUE);
+        Dice diceFive = new Dice(5, Colors.BLUE);
         diceFive.setValue(5);
         __five.setDice(diceFive);
         CellRule cellRulecolor = CellRule.builder().setNumberConstraint(6).build();
