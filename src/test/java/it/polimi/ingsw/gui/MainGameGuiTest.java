@@ -44,8 +44,7 @@ public class MainGameGuiTest {
                     {Constraint.BLUE, Constraint.WHITE, Constraint.RED, Constraint.BLUE, Constraint.WHITE},
             };
             GameView.startGameGUI(players, diceResponse, constraints).terminate();
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             exc.printStackTrace();
             fail();
         }
