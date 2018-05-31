@@ -15,6 +15,7 @@ import static org.junit.Assert.fail;
 public class MainGameGuiTest {
 
     public void testMainGameGui() {
+
         try {
             List<String> players = new ArrayList<>();
             players.add("daniele");

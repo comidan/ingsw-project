@@ -1,5 +1,7 @@
 package it.polimi.ingsw.sagrada.gui;
 
+import java.util.List;
+
 public class ClickHandler {
 
     ClickedObject clickedObject;
@@ -26,8 +28,15 @@ public class ClickHandler {
 
     }
 
-    public DiceView clickCallbackCell(){
-        draft.getDraft().remove(clickedObject.getClickedDice());
-        return clickedObject.getClickedDice();
+    public DiceView clickCallbackCell() {
+        if (clickedObject != null) {
+            List<DiceView> draftList = draft.getDraft();
+            for (int i = 0; i < draftList.size(); i++) {
+                if (draftList.get(i) == clickedObject.getClickedDice())
+                    draftList.remove(draftList.get(i));
+            }
+            return clickedObject.getClickedDice();
+        }
+        else return null;
     }
 }

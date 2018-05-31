@@ -28,6 +28,7 @@ public class CellView extends ImageView {
     public void setCellListener(){
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent me) {
+                if(clickHandler.clickCallbackCell()!=null)
                 setImage(clickHandler.clickCallbackCell());
             }
         });
