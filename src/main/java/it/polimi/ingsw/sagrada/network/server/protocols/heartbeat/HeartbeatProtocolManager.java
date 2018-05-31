@@ -62,7 +62,7 @@ public class HeartbeatProtocolManager implements Runnable, Observer<HeartbeatSta
     }
 
     @Override
-    public void update(HeartbeatState heartbeatState, HeartbeatEvent event) {
+    public synchronized void update(HeartbeatState heartbeatState, HeartbeatEvent event) {
         switch (heartbeatState) {
 
             case HOST_OFFLINE: monitoredHosts.remove(event.getSource());

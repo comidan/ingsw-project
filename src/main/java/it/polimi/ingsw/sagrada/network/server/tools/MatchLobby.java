@@ -35,7 +35,7 @@ import java.util.function.Function;
 public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener, Runnable, AbstractMatchLobbyRMI {
 
     private static final int MAX_POOL_SIZE = 4;
-    private long timeToWait = 10000;
+    private static final long TIME_WAIT_UNIT = 10000;
 
     private Map<String, Client> clientPool;
     private List<String> clientIds;
@@ -176,7 +176,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             clientIds.add(token);
         clientPool.put(token, clientRMI);
         Function<String, Boolean> disconnect = this::removePlayer;
-        Client remoteClient = new RemoteRMIClient(token, disconnect);
+        Client remoteClient = new RemoteRMIClient(token, disconnect, clientRMI);
         try {
             Registry registry = LocateRegistry.getRegistry(1099);
             registry.bind(token, remoteClient);
@@ -250,8 +250,10 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
 
         @Override
         public void run() {
-            while (clientPool.size() != 4 && elapsedTime < timeToWait) {
+            long timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size());
+            while (elapsedTime < timeToWait) {
                 elapsedTime = System.currentTimeMillis() - startTime;
+                timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size());
                 int currentSeconds = (int) elapsedTime / 1000;
                 if (currentSeconds != elapsedTimeSecond) {
                     elapsedTimeSecond = currentSeconds;

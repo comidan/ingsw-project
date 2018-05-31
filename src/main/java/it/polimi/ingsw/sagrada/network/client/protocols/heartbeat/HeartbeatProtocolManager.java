@@ -1,6 +1,8 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.heartbeat;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +32,12 @@ public class HeartbeatProtocolManager {
      */
     public void kill() {
         executor.shutdownNow();
+    }
+
+    public static void sendBurstUDP(String address, int port, String payload) throws UnknownHostException {
+        UDPHeartbeatSender udpSender = new UDPHeartbeatSender();
+        for(int i = 0; i < (int) Math.log10(DELAY); i++)
+            udpSender.sendHeartBeat(InetAddress.getByName(address), port, payload);
     }
 
 }

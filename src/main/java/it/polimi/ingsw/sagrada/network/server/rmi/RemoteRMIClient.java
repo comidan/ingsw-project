@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.network.server.rmi;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -12,10 +13,12 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
 
     private String identifier;
     private Function disconnect;
+    private ClientRMI clientRMI;
 
-    public RemoteRMIClient(String identifier, Function disconnect) throws RemoteException{
+    public RemoteRMIClient(String identifier, Function disconnect, ClientRMI clientRMI) throws RemoteException{
         this.identifier = identifier;
         this.disconnect = disconnect;
+        this.clientRMI = clientRMI;
     }
 
     @Override
@@ -59,6 +62,6 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
 
     @Override
     public void sendResponse(Message message) throws RemoteException {
-
+        clientRMI.sendResponse(message);
     }
 }

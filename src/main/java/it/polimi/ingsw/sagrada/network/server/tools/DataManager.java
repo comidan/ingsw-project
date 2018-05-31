@@ -128,10 +128,10 @@ public class DataManager {
         output.flush();
     }
 
-    public static void sendLoginLobbyResponse(Socket clientSocket, int lobbyPort) throws IOException {
+    public static void sendLoginLobbyResponse(Socket clientSocket, int heartbeatPort) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(commandParser.crateJSONLoginLobbyResponse(lobbyPort));
+        output.println(commandParser.crateJSONLoginLobbyResponse(heartbeatPort));
         output.flush();
     }
 

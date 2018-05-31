@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.heartbeat;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
@@ -15,8 +16,10 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     private static final int TIME_INTERVAL = 1000;
     private static final int TIME_LIFE_FRAMES = 30;
     private static final int TIME_LOSS_COMMUNICATION_FRAME = 10;
+    private static final int UDP_VALID_PACKET_SIZE  = 1024;
 
     private DatagramSocket datagramSocket;
+    private int port;
     private ExecutorService executor;
     private String data;
     private String expectedPayload;
@@ -24,7 +27,7 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     private Thread runnableWorkerThread;
     private boolean isDead = false;
 
-    HeartbeatProtocol(DatagramSocket datagramSocket, Observer observer, String expectedPayload) {
+    HeartbeatProtocol(DatagramSocket datagramSocket, Observer observer, String expectedPayload) throws IOException{
         executor = Executors.newSingleThreadExecutor();
         this.datagramSocket = datagramSocket;
         this.observer = observer;
@@ -42,7 +45,7 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
      * @return received heartbeat
      */
     private byte[] receiveHeartbeat() throws IOException{
-        byte[] payload = NetworkUtils.receiveData(datagramSocket);
+        byte[] payload = receiveData(datagramSocket);
         data = new String(payload);
         return payload;
     }
@@ -88,13 +91,13 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     }
 
     private boolean notifyLostComm(int timeElapsed) {
-        HeartbeatEvent event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
+        HeartbeatEvent event = new HeartbeatEvent(expectedPayload, timeElapsed, new Date().getTime());
         notify(HeartbeatState.COMMUNICATION_LOST, event);
         return true;
     }
 
     private boolean notifyDeath(int timeElapsed, Future asynchronousHeartbeat) {
-        HeartbeatEvent event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
+        HeartbeatEvent event = new HeartbeatEvent(expectedPayload, timeElapsed, new Date().getTime());
         notify(HeartbeatState.HOST_OFFLINE, event);
         asynchronousHeartbeat.cancel(true);
         return true;
@@ -111,6 +114,20 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     @Override
     public void notify(HeartbeatState heartbeatState, HeartbeatEvent event) {
         observer.update(heartbeatState, event);
+    }
+
+    /**
+     * @param datagramSocket socket used to receive from sent data
+     * @return received data
+     */
+    static byte[] receiveData(DatagramSocket datagramSocket) throws IOException {
+        byte[] receiveData = new byte[UDP_VALID_PACKET_SIZE];
+        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+        datagramSocket.receive(receivePacket);
+        receiveData = receivePacket.getData();
+        byte[] data = new byte[receivePacket.getLength()];
+        System.arraycopy(receiveData, receivePacket.getOffset(), data, 0, receivePacket.getLength());
+        return data;
     }
 }
 
