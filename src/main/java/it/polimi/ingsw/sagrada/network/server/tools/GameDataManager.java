@@ -4,9 +4,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 
@@ -29,6 +27,8 @@ public class GameDataManager implements Channel<Message, Message> {
         dynamicRouter.subscribeChannel(DiceResponse.class, this);
         dynamicRouter.subscribeChannel(WindowResponse.class, this);
         dynamicRouter.subscribeChannel(BeginTurnEvent.class, this);
+        dynamicRouter.subscribeChannel(PrivateObjectiveResponse.class, this);
+        dynamicRouter.subscribeChannel(PublicObjectiveResponse.class, this);
     }
 
     @Override
@@ -58,6 +58,24 @@ public class GameDataManager implements Channel<Message, Message> {
                 getClient(beginTurnEvent.getIdPlayer()).sendResponse(message);
             } catch (RemoteException e) {
                 LOGGER.log(Level.SEVERE, () -> e.getMessage());
+            }
+        } else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.PRIVATE_OBJECTIVE_RESPONSE))) {
+            PrivateObjectiveResponse privateObjectiveResponse = (PrivateObjectiveResponse)message;
+            try {
+                getClient(privateObjectiveResponse.getIdPlayer()).sendResponse(message);
+            } catch (RemoteException e) {
+                LOGGER.log(Level.SEVERE, () -> e.getMessage());
+            }
+        } else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.PUBLIC_OBJECTIVE_RESPONSE))) {
+            PublicObjectiveResponse publicObjectiveResponse = (PublicObjectiveResponse)message;
+            Iterator itr = clientMap.entrySet().iterator();
+            while(itr.hasNext()) {
+                Map.Entry pair = (Map.Entry)itr.next();
+                try {
+                    ((Client)pair.getValue()).sendResponse(message);
+                } catch (RemoteException e) {
+                    LOGGER.log(Level.SEVERE, () -> e.getMessage());
+                }
             }
         }
     }
