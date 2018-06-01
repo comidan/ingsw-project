@@ -20,7 +20,7 @@ public class HeartbeatTest implements HeartbeatListener {
         int port = 9876;
         String host = System.getProperty("myapplication.ip");
         new HeartbeatProtocolManager(host, port, "identifier");
-        new it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatProtocolManager(this, port);
+        new it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatProtocolManager(this).addHost("identifier", 9876);
         Thread.sleep(5000);
     }
 

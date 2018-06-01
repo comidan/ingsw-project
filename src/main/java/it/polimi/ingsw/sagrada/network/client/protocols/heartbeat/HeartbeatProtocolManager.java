@@ -34,10 +34,4 @@ public class HeartbeatProtocolManager {
         executor.shutdownNow();
     }
 
-    public static void sendBurstUDP(String address, int port, String payload) throws UnknownHostException {
-        UDPHeartbeatSender udpSender = new UDPHeartbeatSender();
-        for(int i = 0; i < (int) Math.log10(DELAY); i++)
-            udpSender.sendHeartBeat(InetAddress.getByName(address), port, payload);
-    }
-
 }

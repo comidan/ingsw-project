@@ -14,6 +14,7 @@ import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatEvent
 import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatListener;
 import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatProtocolManager;
 
+import javax.sound.sampled.Port;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -50,7 +51,6 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     private ServerSocket serverSocket;
     private String identifier;
     private int port;
-    private int heartbeatPort;
     private GameManager gameManager;
     private DynamicRouter dynamicRouter;
     private GameDataManager gameDataManager;
@@ -63,7 +63,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         this.signOut = signOut;
         port = portDiscovery.obtainAvailableTCPPort();
         serverSocket = new ServerSocket(port);
-        heartbeatProtocolManager = new HeartbeatProtocolManager(this, heartbeatPort = portDiscovery.obtainAvailableUDPPort());
+        heartbeatProtocolManager = new HeartbeatProtocolManager(this);
         executor = Executors.newCachedThreadPool();
         lobbyServer = Executors.newSingleThreadExecutor();
         lobbyServer.submit(this);
@@ -181,6 +181,9 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             Registry registry = LocateRegistry.getRegistry(1099);
             registry.bind(token, remoteClient);
             clientRMI.notifyRemoteClientInterface(token);
+            int heartbeatPort = portDiscovery.obtainAvailableUDPPort();
+            clientRMI.notifyHeartbeatPort(heartbeatPort);
+            heartbeatProtocolManager.addHost(token, heartbeatPort);
         }
         catch (RemoteException|AlreadyBoundException exc) {
             exc.printStackTrace();
@@ -190,11 +193,6 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             clientPool.get(token).setPlayer(username);
         }
         return true;
-    }
-
-    @Override
-    public int getHeartbeatPort() throws RemoteException {
-        return heartbeatPort;
     }
 
     @Override
@@ -212,7 +210,9 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     if(!clientIds.contains(id)) //in case of communication loss
                         clientIds.add(id);
                     clientPool.put(id, socketClient);
+                    int heartbeatPort = portDiscovery.obtainAvailableUDPPort();
                     DataManager.sendLoginLobbyResponse(client, heartbeatPort);
+                    heartbeatProtocolManager.addHost(id, heartbeatPort);
                     executor.submit(socketClient);
                     System.out.println(id + " correctly logged on lobby server");
                     for(String username : clientIds) {
@@ -253,7 +253,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             long timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size());
             while (elapsedTime < timeToWait) {
                 elapsedTime = System.currentTimeMillis() - startTime;
-                timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size());
+                timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size() + 1);
                 int currentSeconds = (int) elapsedTime / 1000;
                 if (currentSeconds != elapsedTimeSecond) {
                     elapsedTimeSecond = currentSeconds;

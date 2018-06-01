@@ -10,7 +10,6 @@ import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProto
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI;
-import javafx.application.Platform;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -88,13 +87,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                         System.out.println("Lobby acquired");
                         if (lobby.joinLobby(identifier, this)) {
                             System.out.println("Lobby joined");
-                            try {
-                                heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, lobby.getHeartbeatPort(), identifier);
-                                System.out.println("Heartbeat started");
-                            } catch (IOException exc) {
-                                System.out.println("RMI server error");
-                                exc.printStackTrace();
-                            }
                         }
                         else
                             System.out.println("Error");
@@ -192,6 +184,17 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
         catch (Exception exc) {
             exc.printStackTrace();
+        }
+    }
+
+    @Override
+    public void notifyHeartbeatPort(Integer port) throws RemoteException {
+        try {
+            heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, identifier);
+            System.out.println("Heartbeat started");
+        }
+        catch (IOException exc) {
+            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
         }
     }
 

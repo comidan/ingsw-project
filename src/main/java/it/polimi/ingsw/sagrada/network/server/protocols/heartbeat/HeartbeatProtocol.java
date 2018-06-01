@@ -7,9 +7,6 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-
-import java.util.logging.Logger;
 
 class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, HeartbeatEvent> {
 
@@ -27,18 +24,23 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     private Thread runnableWorkerThread;
     private boolean isDead = false;
 
-    HeartbeatProtocol(DatagramSocket datagramSocket, Observer observer, String expectedPayload) throws IOException{
+    HeartbeatProtocol(int port, Observer observer, String expectedPayload) throws IOException{
         executor = Executors.newSingleThreadExecutor();
-        this.datagramSocket = datagramSocket;
+        this.port = port;
+        datagramSocket = new DatagramSocket(port);
         this.observer = observer;
         this.expectedPayload = expectedPayload;
         runnableWorkerThread = null;
     }
 
-    public void kill() {
+    void kill() {
         executor.shutdownNow();
         isDead = true;
         runnableWorkerThread.interrupt();
+    }
+
+    public int getPort() {
+        return port;
     }
 
     /**
@@ -120,7 +122,7 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
      * @param datagramSocket socket used to receive from sent data
      * @return received data
      */
-    static byte[] receiveData(DatagramSocket datagramSocket) throws IOException {
+    private byte[] receiveData(DatagramSocket datagramSocket) throws IOException {
         byte[] receiveData = new byte[UDP_VALID_PACKET_SIZE];
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
         datagramSocket.receive(receivePacket);

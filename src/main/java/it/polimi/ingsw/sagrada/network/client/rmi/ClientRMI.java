@@ -11,4 +11,6 @@ public interface ClientRMI extends Client{
     void signUp() throws RemoteException;
 
     void notifyRemoteClientInterface(String id) throws RemoteException;
+
+    void notifyHeartbeatPort(Integer port) throws RemoteException;
 }
