@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.gui.LobbyGuiView;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
@@ -29,7 +30,7 @@ import java.util.logging.Logger;
 
 import static java.lang.Thread.sleep;
 
-public class SocketClient implements Runnable, Client, Channel<Message, LoginState> {
+public class SocketClient implements Runnable, ClientBase, Channel<Message, LoginState> {
 
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     private static final int PORT = 49152; //change to dynamic in some elegant way
@@ -116,10 +117,6 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             }
         }
 
-    }
-
-    @Override
-    public void doActions() {
     }
 
     @Override

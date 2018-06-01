@@ -199,11 +199,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     }
 
     @Override
-    public void doActions() {
-
-    }
-
-    @Override
     public void sendMessage(String message) {
         System.out.println(message);
     }

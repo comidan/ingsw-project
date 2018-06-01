@@ -16,7 +16,7 @@ public class MatchLobbyPoolTest {
     public void testMatchLobby() {
         matchLobbyPool = new MatchLobbyPool();
         try {
-            MatchLobby matchLobby = (matchLobbyPool.getAvailableLobby());
+            MatchLobby matchLobby = matchLobbyPool.getAvailableLobby();
             assertNotNull(matchLobby);
             assertFalse(matchLobby.isFull());
             assertTrue(matchLobbyPool.releaseLobby(matchLobby));

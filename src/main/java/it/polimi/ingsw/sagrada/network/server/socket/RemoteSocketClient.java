@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.MessageParser;
 
@@ -20,7 +21,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class RemoteSocketClient implements Client, Runnable {
+public class RemoteSocketClient implements ClientBase, Runnable {
 
     private Socket socket;
     private BufferedReader input;
@@ -56,11 +57,6 @@ public class RemoteSocketClient implements Client, Runnable {
     public void sendMessage(String message) {
         String payload = commandParser.crateJSONMessage(message);
         output.println(payload);
-    }
-
-    @Override
-    public void doActions() {
-
     }
 
     @Override

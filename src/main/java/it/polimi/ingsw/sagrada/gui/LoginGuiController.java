@@ -96,6 +96,7 @@ public class LoginGuiController implements Channel<LoginState, Message> {
                 });
                 break;
             }
+            default: break;
         }
     }
 

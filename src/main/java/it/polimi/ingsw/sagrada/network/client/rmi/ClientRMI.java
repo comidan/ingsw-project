@@ -1,10 +1,10 @@
 package it.polimi.ingsw.sagrada.network.client.rmi;
 
-import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.client.ClientBase;
 
 import java.rmi.RemoteException;
 
-public interface ClientRMI extends Client{
+public interface ClientRMI extends ClientBase {
 
     void notifyLobby(String lobbyId) throws RemoteException;
 

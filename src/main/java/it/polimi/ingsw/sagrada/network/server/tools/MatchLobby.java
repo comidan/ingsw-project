@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
 import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.RemoteRMIClient;
@@ -39,7 +40,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     private static final long TIME_WAIT_UNIT = 10000;
     private static final Logger LOGGER = Logger.getLogger(MatchLobby.class.getName());
 
-    private Map<String, Client> clientPool;
+    private Map<String, ClientBase> clientPool;
     private List<String> clientIds;
     private List<String> clientIdTokens;
     private ExecutorService executor;

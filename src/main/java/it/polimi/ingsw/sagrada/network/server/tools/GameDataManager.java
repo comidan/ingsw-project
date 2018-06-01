@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.client.ClientBase;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -19,9 +20,9 @@ public class GameDataManager implements Channel<Message, Message> {
     private static final Logger LOGGER = Logger.getLogger(GameDataManager.class.getName());
 
     private DynamicRouter dynamicRouter;
-    private Map<String, Client> clientMap;
+    private Map<String, ClientBase> clientMap;
 
-    public GameDataManager(DynamicRouter dynamicRouter, Map<String, Client> clientMap) {
+    public GameDataManager(DynamicRouter dynamicRouter, Map<String, ClientBase> clientMap) {
         this.dynamicRouter = dynamicRouter;
         this.clientMap = clientMap;
 
