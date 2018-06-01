@@ -4,8 +4,7 @@ import it.polimi.ingsw.network.protocols.DiscoverInternetTest;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
-import it.polimi.ingsw.sagrada.gui.Constraint;
-import it.polimi.ingsw.sagrada.gui.GameView;
+import it.polimi.ingsw.sagrada.gui.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ public class MainGameGuiTest {
     private static final Logger LOGGER = Logger.getLogger(MainGameGuiTest.class.getName());
 
     public void testMainGameGui() {
-
         try {
             List<String> players = new ArrayList<>();
             players.add("daniele");
@@ -54,5 +52,6 @@ public class MainGameGuiTest {
             LOGGER.log(Level.SEVERE, () -> exc.getMessage());
             fail();
         }
+
     }
 }

@@ -25,21 +25,30 @@ public class CellView extends ImageView {
         this.clickHandler = ClickHandler.getDiceButtonController(clickedObject);
     }
 
+    public CellView(){
+        ImageView cellImage = new ImageView();
+        cellImage.resize(50,50 );
+    }
+
     public void setCellListener(){
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent me) {
                 if(clickHandler.clickCallbackCell()!=null)
-                setImage(clickHandler.clickCallbackCell());
+                setImageCell(clickHandler.clickCallbackCell());
             }
         });
 
     }
 
-    public void setImage(DiceView diceView){
+    public void setImageCell(DiceView diceView){
 
         Constraint color = diceView.getColor();
         Constraint value = diceView.getValue();
         setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)).toURI().toString(), 60, 60, true, false));
+    }
+
+    public void removeImage(){
+        setImage(null);
     }
 
     public int getRow() {

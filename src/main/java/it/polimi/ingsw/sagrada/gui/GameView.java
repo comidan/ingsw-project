@@ -23,17 +23,16 @@ public class GameView extends Application {
     private DraftView draftView;
     private VBox verticalBox;
     private HBox horizontalBox;
-    private BorderPane borderPane;
     private AnchorPane anchorPane;
     private static String username;
     private static DiceResponse diceResponse;
     private static List<String> players;
     private static Constraint[][] constraints;
     private Button endTurn;
-    private double windowHeight;
-    private double windowWidth;
     private ClickedObject clickedObject;
     private ClickHandler clickHandler;
+    private Resizer resizer;
+    private RoundtrackView roundtrackView;
 
     private void setDicesClickListener() {
         windows.get(username).setWindowDiceListener();
@@ -54,12 +53,11 @@ public class GameView extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.resizer = new Resizer();
         this.clickedObject = new ClickedObject();
+        this.roundtrackView = new RoundtrackView();
         verticalBox = new VBox();
         horizontalBox = new HBox();
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        windowWidth = gd.getDisplayMode().getWidth();
-        windowHeight = gd.getDisplayMode().getHeight();
         anchorPane = new AnchorPane();
         anchorPane.setStyle(
                 "-fx-background-image: url(" +
@@ -67,7 +65,7 @@ public class GameView extends Application {
                         "); " +
                         "-fx-background-size: cover;"
         );
-        anchorPane.resize(windowWidth, windowHeight);
+        anchorPane.resize(resizer.getWindowWidth(), resizer.getWindowHeight());
         clickHandler = ClickHandler.getDiceButtonController(clickedObject);
         draftView = new DraftView(diceResponse, clickedObject);
         clickHandler.setDraft(draftView);
@@ -75,29 +73,29 @@ public class GameView extends Application {
         verticalBox.setSpacing(15);
         for(int i = 1; i < players.size(); i++)
             verticalBox.getChildren().add(windows.get(players.get(i)));
-        anchorPane.setBottomAnchor(verticalBox, getHeightPixel(10));
-        anchorPane.setRightAnchor(verticalBox, getWidthPixel(10));
+        anchorPane.setBottomAnchor(verticalBox, resizer.getHeightPixel(10));
+        anchorPane.setRightAnchor(verticalBox, resizer.getWidthPixel(10));
         anchorPane.getChildren().addAll(verticalBox);
         endTurn = new Button("End turn");
         horizontalBox.getChildren().add(endTurn);
         horizontalBox.setAlignment(Pos.BOTTOM_CENTER);
         horizontalBox.getChildren().add(windows.get(players.get(0)));
-        anchorPane.setBottomAnchor(horizontalBox, getHeightPixel(11));
-        anchorPane.setLeftAnchor(horizontalBox, getWidthPixel(10));
+        anchorPane.setBottomAnchor(horizontalBox, resizer.getHeightPixel(11));
+        anchorPane.setLeftAnchor(horizontalBox, resizer.getWidthPixel(10));
         anchorPane.getChildren().addAll(horizontalBox);
         draftView.setAlignment(Pos.CENTER);
-        anchorPane.setBottomAnchor(draftView, getHeightPixel(50));
-        anchorPane.setRightAnchor(draftView, getWidthPixel(40));
+        anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(50));
+        anchorPane.setRightAnchor(draftView, resizer.getWidthPixel(40));
         anchorPane.getChildren().addAll(draftView);
         setClickables();
-        Scene scene = new Scene(anchorPane, windowWidth, windowHeight);
+        Scene scene = new Scene(anchorPane, resizer.getWindowWidth(), resizer.getWindowHeight());
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 
     public void terminate() {
-        Stage stage = (Stage) borderPane.getScene().getWindow();
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
         stage.close();
     }
 
@@ -111,13 +109,6 @@ public class GameView extends Application {
         return new GameView();
     }
 
-    private double getHeightPixel(int perc) {
-        return (perc * windowHeight / 100);
-    }
-
-    private double getWidthPixel(int perc) {
-        return (perc * windowWidth / 100);
-    }
 
 
 }
