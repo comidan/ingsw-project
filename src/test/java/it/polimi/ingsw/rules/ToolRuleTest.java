@@ -10,7 +10,9 @@ import org.junit.Test;
 
 import java.awt.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 public class ToolRuleTest {
 
@@ -145,4 +147,60 @@ public class ToolRuleTest {
         errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
     }
+
+    @Test
+    public void testMoveOppositeSideDiceFeature() {
+        Dice dice = new Dice(42, Colors.YELLOW);
+        ToolRule toolRule = ToolRule.builder().setMoveOppositeSideDiceFeature().build();
+        DTO dto = new DTO();
+        dto.setDice(dice);
+        for(int i = 1; i < 7; i++) {
+            dice.setValue(i);
+            toolRule.checkRule(dto);
+            assertEquals(dice.getValue(), 7 - i);
+        }
+    }
+
+    @Test
+    public void testAddNewDiceFeature() {
+        CellRule cellRule = CellRule.builder().build();
+        Cell one = new Cell(cellRule);
+        Dice diceOne = new Dice(1, Colors.RED);
+        diceOne.setValue(1);
+        one.setDice(diceOne);
+        Cell two = new Cell(cellRule);
+        Dice diceTwo = new Dice(2, Colors.YELLOW);
+        diceOne.setValue(2);
+        Cell three = new Cell(cellRule);
+        Dice diceThree = new Dice(3, Colors.GREEN);
+        diceThree.setValue(3);
+        Cell four = new Cell(cellRule);
+        Dice diceFour = new Dice(39, Colors.PURPLE);
+        diceFour.setValue(4);
+        Cell five = new Cell(cellRule);
+        Dice diceFive = new Dice(5, Colors.BLACK);
+        diceFive.setValue(5);
+        Cell six = new Cell(cellRule);
+        Dice diceSix = new Dice(6, Colors.BLUE);
+        diceSix.setValue(6);
+        six.setDice(diceSix);
+        Cell[][] cells = {{five, one, three, six, three},
+                          {two, three, four, five, one},
+                          {six, five, two, one, two},
+                          {one, two, five, six, three}};
+        ErrorType errorType = checkRule(cells);
+        assertSame(ErrorType.NO_ERROR, errorType);
+        ToolRule toolRule = ToolRule.builder().setAddNewDiceFeature().build();
+        DTO dto = new DTO();
+        dto.setDice(diceFour);
+        dto.setWindowMatrix(cells);
+        dto.setNewPosition(new Position(1, 2));
+        assertTrue(!four.isOccupied());
+        toolRule.checkRule(dto);
+        errorType = checkRule(cells);
+        assertSame(ErrorType.NO_ERROR, errorType);
+        assertTrue(four.isOccupied());
+    }
+
+
 }

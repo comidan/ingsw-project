@@ -6,5 +6,6 @@ public enum ErrorType {
     NO_ERROR,
     NULL_DATA,
     MAX_DICE_VALUE_EXCEEDED,
-    MATRIX_ERROR
+    MATRIX_ERROR,
+    ERROR
 }

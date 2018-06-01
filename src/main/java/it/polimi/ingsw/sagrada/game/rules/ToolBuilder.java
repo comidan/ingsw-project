@@ -113,4 +113,52 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 		return this;
 	}
 
+	public ToolBuilder setMoveOppositeSideDiceFeature() {
+		function = dto -> {
+			Dice dice = dto.getDice();
+			if(dice == null)
+				return ErrorType.NULL_DATA;
+			dice.setValue(7 - dice.getValue());
+			return ErrorType.NO_ERROR;
+		};
+		return this;
+	}
+
+	public ToolBuilder setRollDiceFeature() {
+		function = dto -> {
+			Dice dice = dto.getDice();
+			if(dice == null)
+				return ErrorType.NULL_DATA;
+			dice.roll();
+			return ErrorType.NO_ERROR;
+		};
+		return this;
+	}
+
+	public ToolBuilder setAddNewDiceFeature() {
+		function = dto -> {
+			int row = dto.getNewPosition().getRow();
+			int col = dto.getNewPosition().getCol();
+			Dice dice = dto.getDice();
+			Cell[][] cells = dto.getWindowMatrix();
+			if(checkIfNull(dice, cells) == ErrorType.NULL_DATA)
+				return ErrorType.NULL_DATA;
+			if(row > cells.length - 1 || col > cells[0].length - 1)
+				return ErrorType.MATRIX_ERROR;
+			if(cells[row][col].isOccupied())
+				return ErrorType.MATRIX_ERROR;
+			if (row < cells.length - 1 && cells[row + 1][col].isOccupied())
+				return ErrorType.ERROR;
+			if (col < cells[row].length - 1 && cells[row][col + 1].isOccupied())
+				return ErrorType.ERROR;
+			if (row - 1 >= 0 && cells[row - 1][col].isOccupied())
+				return ErrorType.ERROR;
+			if (col - 1 >= 0 && cells[row][col - 1].isOccupied())
+				return ErrorType.ERROR;
+			cells[row][col].setDice(dice);
+			return ErrorType.NO_ERROR;
+		};
+		return this;
+	}
+
 }
