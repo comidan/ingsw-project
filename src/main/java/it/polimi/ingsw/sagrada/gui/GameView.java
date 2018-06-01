@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -42,14 +43,21 @@ public class GameView extends Application {
         draftView.setDraftListener();
     }
 
-    private void setEndTurnListener(EventHandler eventHandler) {
-        endTurn.setOnMouseClicked(eventHandler);
+    private void setEndTurnListener() {
+        endTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent me) {
+
+                // signal end of turn to server
+
+            }
+        });
     }
 
 
     public void setClickables(){
         setDicesClickListener();
         setDraftClickListener();
+        setEndTurnListener();
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
