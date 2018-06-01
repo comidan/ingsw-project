@@ -2,18 +2,17 @@ package it.polimi.ingsw.sagrada.gui;
 
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,25 +38,31 @@ public class GameView extends Application {
         windows.get(username).setWindowDiceListener();
     }
 
-    private void setDraftClickListener( ) {
+    public String getUsername(){
+        return username;
+    }
+
+    public void setDraftClickHandler() {
         draftView.setDraftListener();
     }
 
-    private void setEndTurnListener() {
-        endTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+    public void setEndTurnHandler(EventHandler<ActionEvent> endTurnHandler) {
+        endTurn.setOnAction(endTurnHandler);
+      /*  endTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent me) {
 
                 // signal end of turn to server
 
             }
-        });
+        });*/
     }
 
 
     public void setClickables(){
         setDicesClickListener();
-        setDraftClickListener();
-        setEndTurnListener();
+        setDraftClickHandler();
+        //setEndTurnHandler();
     }
     @Override
     public void start(Stage primaryStage) throws Exception {

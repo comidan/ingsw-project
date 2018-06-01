@@ -32,10 +32,14 @@ public class ClickHandler {
         if (clickedObject != null) {
             List<DiceView> draftList = draft.getDraft();
             for (int i = 0; i < draftList.size(); i++) {
-                if (draftList.get(i) == clickedObject.getClickedDice())
+                if (draftList.get(i).equals(clickedObject.getClickedDice()))
+                {
                     draftList.remove(draftList.get(i));
+                    return clickedObject.getClickedDice();
+                }
+
             }
-            return clickedObject.getClickedDice();
+           return null;
         }
         else return null;
     }
