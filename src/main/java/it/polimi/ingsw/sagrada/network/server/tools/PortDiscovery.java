@@ -12,27 +12,30 @@ public class PortDiscovery {
     private static final int MIN_PORT_NUMBER = 49152;
     private static final int MAX_PORT_NUMBER = 65535;
 
+    private static final String DISCOVERY_ERROR = "No available port has been found";
+    private static final String INVALID_INIT_PORT = "Invalid start port:";
+
     private ExecutorService executor = Executors.newCachedThreadPool();
 
     public int obtainAvailablePort() {
         for(int port = MIN_PORT_NUMBER; port <= MAX_PORT_NUMBER; port++)
             if(isPortAvailable(port))
                 return port;
-        throw new RuntimeException("No available port has been found");
+        throw new RuntimeException(DISCOVERY_ERROR);
     }
 
     public int obtainAvailableTCPPort() {
         for(int port = MIN_PORT_NUMBER; port <= MAX_PORT_NUMBER; port++)
             if(isPortAvailableOnTCP(port))
                 return port;
-        throw new RuntimeException("No available port has been found");
+        throw new RuntimeException(DISCOVERY_ERROR);
     }
 
     public int obtainAvailableUDPPort() {
         for(int port = MIN_PORT_NUMBER; port <= MAX_PORT_NUMBER; port++)
             if(isPortAvailableOnUDP(port))
                 return port;
-        throw new RuntimeException("No available port has been found");
+        throw new RuntimeException(DISCOVERY_ERROR);
     }
 
     public Future<Integer> obtainAvailablePortAsync() {
@@ -56,7 +59,7 @@ public class PortDiscovery {
 
     private boolean isPortAvailableOnUDP(int port) {
         if (port < MIN_PORT_NUMBER || port > MAX_PORT_NUMBER) {
-            throw new IllegalArgumentException("Invalid start port: " + port);
+            throw new IllegalArgumentException(INVALID_INIT_PORT + port);
         }
         try(DatagramSocket datagramSocket = new DatagramSocket(port)) {
             datagramSocket.setReuseAddress(true);
@@ -69,7 +72,7 @@ public class PortDiscovery {
 
     private boolean isPortAvailableOnTCP(int port) {
         if (port < MIN_PORT_NUMBER || port > MAX_PORT_NUMBER) {
-            throw new IllegalArgumentException("Invalid start port: " + port);
+            throw new IllegalArgumentException(INVALID_INIT_PORT + port);
         }
         try(ServerSocket serverSocket = new ServerSocket(port)) {
             serverSocket.setReuseAddress(true);

@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
+import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,56 +14,55 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class JsonMessage {
-
+public class JsonMessage implements CommandKeyword {
 
     public static JSONObject createLoginMessage(String username, String authentication) {
 
         JSONObject content = new JSONObject();
-        content.put("username", username);
-        content.put("auth", authentication);
+        content.put(USERNAME, username);
+        content.put(AUTH, authentication);
         JSONObject container = new JSONObject();
-        container.put("type_msg", "action");
-        container.put("type_cmd", "login");
-        container.put("login", content);
+        container.put(MESSAGE_TYPE, ACTION);
+        container.put(COMMAND_TYPE, LOGIN);
+        container.put(LOGIN, content);
         return container;
     }
 
-    public static JSONObject creatDisconnectMessage(String username) {
+    public static JSONObject createDisconnectMessage(String username) {
         JSONObject content = new JSONObject();
-        content.put("username", username);
+        content.put(USERNAME, username);
         JSONObject container = new JSONObject();
-        container.put("type_msg", "action");
-        container.put("type_cmd", "disconnect");
-        container.put("disconnect", content);
+        container.put(MESSAGE_TYPE, ACTION);
+        container.put(COMMAND_TYPE, DISCONNECT);
+        container.put(DISCONNECT, content);
         return container;
     }
 
     public static JSONObject createTokenMessage(String token) {
         JSONObject jsonToken = new JSONObject();
-        jsonToken.put("token", token);
+        jsonToken.put(TOKEN, token);
         return jsonToken;
     }
 
     public static JSONObject createMessage(String message) {
         JSONObject content = new JSONObject();
-        content.put("message", message);
+        content.put(MESSAGE, message);
         JSONObject container = new JSONObject();
-        container.put("type_msg", "action");
-        container.put("type_cmd", "message");
-        container.put("message", content);
+        container.put(MESSAGE_TYPE, ACTION);
+        container.put(COMMAND_TYPE, MESSAGE);
+        container.put(MESSAGE, content);
         return container;
     }
 
     public static JSONObject createWindowResponse(String username, int windowId) {
         JSONObject content = new JSONObject();
-        content.put("id_player", username);
-        content.put("window_id", windowId+"");
-        content.put("window_side", "front"); //constant for testing purpose
+        content.put(PLAYER_ID, username);
+        content.put(WINDOW_ID, windowId+"");
+        content.put("window_side", FRONT); //constant for testing purpose
         JSONObject container = new JSONObject();
-        container.put("type_msg", "action");
-        container.put("type_cmd", "choice_window");
-        container.put("window", content);
+        container.put(MESSAGE_TYPE, ACTION);
+        container.put(COMMAND_TYPE, WINDOW_CHOICE);
+        container.put(WINDOW, content);
         return container;
     }
 
@@ -71,53 +71,53 @@ public class JsonMessage {
         try {
             JSONObject jsonMsg = (JSONObject)parser.parse(json);
             JSONObject data;
-            System.out.println("Type : " + (String)jsonMsg.get("type_cmd"));
-            switch ((String)jsonMsg.get("type_cmd")) {
-                case "lobby_time":
-                    data = (JSONObject) jsonMsg.get("time");
-                    return new MatchTimeEvent((String)data.get("time"));
-                case "lobby_add_player":
-                    data = (JSONObject) jsonMsg.get("player");
-                    return new AddPlayerEvent((String)data.get("username"));
-                case "lobby_remove_player":
-                    data = (JSONObject) jsonMsg.get("player");
-                    return new RemovePlayerEvent((String)data.get("username"));
-                case "message":
-                    data = (JSONObject) jsonMsg.get("message");
-                    return new MessageEvent((String)data.get("metadata"));
-                case "error":
-                    data = (JSONObject) jsonMsg.get("error");
-                    return new ErrorEvent((String)data.get("error"));
+            System.out.println("Type : " + (String)jsonMsg.get(COMMAND_TYPE));
+            switch ((String)jsonMsg.get(COMMAND_TYPE)) {
+                case LOBBY_TIME:
+                    data = (JSONObject) jsonMsg.get(TIME);
+                    return new MatchTimeEvent((String)data.get(TIME));
+                case ADD_PLAYER:
+                    data = (JSONObject) jsonMsg.get(PLAYER);
+                    return new AddPlayerEvent((String)data.get(USERNAME));
+                case REMOVE_PLAYER:
+                    data = (JSONObject) jsonMsg.get(PLAYER);
+                    return new RemovePlayerEvent((String)data.get(USERNAME));
+                case MESSAGE:
+                    data = (JSONObject) jsonMsg.get(MESSAGE);
+                    return new MessageEvent((String)data.get(METADATA));
+                case ERROR:
+                    data = (JSONObject) jsonMsg.get(ERROR);
+                    return new ErrorEvent((String)data.get(ERROR));
                 case "login_register":
                     return new RegisterEvent();
                 case "login_heartbeat" :
-                    data = (JSONObject) jsonMsg.get("heartbeat");
+                    data = (JSONObject) jsonMsg.get(HEARTBEAT);
                     return new HeartbeatInitEvent(
-                               Integer.parseInt((String)data.get("heartbeat_port")));
-                case "login" :
-                    data = (JSONObject) jsonMsg.get("login");
-                    return new LobbyLoginEvent((String)data.get("token"),
-                               Integer.parseInt((String)data.get("lobby_port")));
-                case "begin_turn" :
-                    data = (JSONObject) jsonMsg.get("begin_turn");
-                    return new BeginTurnEvent((String)data.get("id_player"));
-                case "window_list" :
+                               Integer.parseInt((String)data.get(HEARTBEAT_PORT)));
+                case LOGIN :
+                    data = (JSONObject) jsonMsg.get(LOGIN);
+                    return new LobbyLoginEvent((String)data.get(TOKEN),
+                               Integer.parseInt((String)data.get(LOBBY_PORT)));
+                case BEGIN_TURN :
+                    data = (JSONObject) jsonMsg.get(BEGIN_TURN);
+                    return new BeginTurnEvent((String)data.get(PLAYER_ID));
+                case WINDOW_LIST :
 
-                    data = (JSONObject) jsonMsg.get("window_list");
-                    WindowResponse windowResponse =  new WindowResponse((String)data.get("id_player"),
-                                              Arrays.asList(Integer.parseInt((String)data.get("window_id_1")),
-                                                            Integer.parseInt((String)data.get("window_id_2"))));
+                    data = (JSONObject) jsonMsg.get(WINDOW_LIST);
+                    WindowResponse windowResponse =  new WindowResponse((String)data.get(PLAYER_ID),
+                                              Arrays.asList(Integer.parseInt((String)data.get(WINDOW_OPTION_ONE)),
+                                                            Integer.parseInt((String)data.get(WINDOW_OPTION_TWO))));
 
                     return windowResponse;
-                case "dice_list" :
-                    data = (JSONObject) jsonMsg.get("dice_list");
+                case DICE_LIST :
+                    data = (JSONObject) jsonMsg.get(DICE_LIST);
                     List<Dice> diceResponse = new ArrayList<>();
-                    JSONArray diceArray = (JSONArray)data.get("dice");
+                    JSONArray diceArray = (JSONArray)data.get(DICE);
                     for(int i = 0; i < diceArray.size(); i++) {
                         JSONObject diceJson = ((JSONObject)diceArray.get(i));
-                        Dice dice = new Dice(Integer.parseInt((String)(diceJson.get("id"))),
-                                Colors.stringToColor((String)(diceJson.get("color"))));
-                        dice.setValue(Integer.parseInt((String)(diceJson).get("value")));
+                        Dice dice = new Dice(Integer.parseInt((String)(diceJson.get(ID))),
+                                Colors.stringToColor((String)(diceJson.get(COLOR))));
+                        dice.setValue(Integer.parseInt((String)(diceJson).get(VALUE)));
                         diceResponse.add(dice);
                     }
                     System.out.println("DiceResponse generated");

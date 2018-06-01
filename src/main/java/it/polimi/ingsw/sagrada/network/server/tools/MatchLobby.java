@@ -14,7 +14,6 @@ import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatEvent
 import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatListener;
 import it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatProtocolManager;
 
-import javax.sound.sampled.Port;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -33,7 +32,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener, Runnable, AbstractMatchLobbyRMI {
 
@@ -57,6 +55,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     private GameManager gameManager;
     private DynamicRouter dynamicRouter;
     private GameDataManager gameDataManager;
+    private boolean inGame;
 
     public MatchLobby(Function<String, Boolean> signOut, String identifier) throws IOException {
         clientPool = new HashMap<>();
@@ -64,6 +63,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         clientIds = new ArrayList<>();
         clientIdTokens = new ArrayList<>();
         this.signOut = signOut;
+        inGame = false;
         port = portDiscovery.obtainAvailableTCPPort();
         serverSocket = new ServerSocket(port);
         heartbeatProtocolManager = new HeartbeatProtocolManager(this);
@@ -85,6 +85,10 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
 
     public boolean isFull() {
         return clientPool.size() == MAX_POOL_SIZE;
+    }
+
+    public boolean isInGame() {
+        return inGame;
     }
 
     @Override
@@ -214,6 +218,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                         clientIds.add(id);
                     clientPool.put(id, socketClient);
                     int heartbeatPort = portDiscovery.obtainAvailableUDPPort();
+                    System.out.println("UDP HEARTBEAT PORT CHOSEN : " + heartbeatPort);
                     DataManager.sendLoginLobbyResponse(client, heartbeatPort);
                     heartbeatProtocolManager.addHost(id, heartbeatPort);
                     executor.submit(socketClient);
@@ -232,31 +237,36 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     }
 
     private void startGame() {
+        inGame = true;
         List<Player> players = new ArrayList<>();
         clientIds.forEach(username -> players.add(new Player(username)));
         dynamicRouter = new MessageDispatcher();
         gameDataManager = new GameDataManager(dynamicRouter, clientPool);
         gameManager = new GameManager(players, dynamicRouter);
-
         gameManager.startGame();
         System.out.println("Starting game now...");
     }
 
     private void sendToModel(Message message) {
-        //System.out.println(message.getType().getName());
         dynamicRouter.dispatch(message);
     }
 
     private class CheckStartGameCondition implements Runnable{
         long elapsedTime;
         int elapsedTimeSecond=0;
+        long previousTimeToWait;
 
         @Override
         public void run() {
-            long timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size());
+            long timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size() + 1);
+            previousTimeToWait = timeToWait;
             while (elapsedTime < timeToWait) {
                 elapsedTime = System.currentTimeMillis() - startTime;
                 timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size() + 1);
+                if(timeToWait != previousTimeToWait) {
+                    previousTimeToWait = timeToWait;
+                    elapsedTime = 0;
+                }
                 int currentSeconds = (int) elapsedTime / 1000;
                 if (currentSeconds != elapsedTimeSecond) {
                     elapsedTimeSecond = currentSeconds;

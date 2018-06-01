@@ -1,0 +1,49 @@
+package it.polimi.ingsw.sagrada.network;
+
+public interface CommandKeyword {
+
+    String COMMAND_TYPE = "type_cmd";
+    String MESSAGE_TYPE = "type_msg";
+    String RESPONSE = "response";
+    String PLAYER_ID = "id_player";
+    String WINDOW = "window";
+    String WINDOW_ID = "window_id";
+    String WINDOW_SIDE = "window_side";
+    String USERNAME = "username";
+    String AUTH = "auth";
+    String LOGIN = "login";
+    String MESSAGE = "message";
+    String DISCONNECT = "disconnect";
+    String WINDOW_CHOICE = "choice_window";
+    String SETTINGS = "settings";
+    String TOKEN = "token";
+    String MOVE_DICE_CHOICE = "choice_move_dice";
+    String MOVE_DICE = "move_dice";
+    String LOBBY_TIME = "lobby_time";
+    String TIME = "time";
+    String POSITION = "position";
+    String PLAYER = "player";
+    String ADD_PLAYER = "lobby_add_player";
+    String REMOVE_PLAYER = "lobby_remove_player";
+    String HEARTBEAT_PORT = "heartbeat_port";
+    String HEARTBEAT = "heartbeat";
+    String LOBBY_PORT = "lobby_port";
+    String LOBBY = "lobby";
+    String REGISTER = "register";
+    String ERROR = "error";
+    String DICE_ID = "dice_id";
+    String METADATA = "metadata";
+    String DICE = "dice";
+    String DICE_LIST = "dice_list";
+    String ID = "id";
+    String VALUE = "value";
+    String COLOR = "color";
+    String WINDOW_LIST = "window_list";
+    String BEGIN_TURN = "begin_turn";
+    String DESTINATION = "destination";
+    String WINDOW_OPTION_ONE = "window_id_1";
+    String WINDOW_OPTION_TWO = "window_id_2";
+    String FRONT = "front";
+    String REAR = "rear";
+    String ACTION = "action";
+}

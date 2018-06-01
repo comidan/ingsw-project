@@ -4,12 +4,12 @@ import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
+import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class CommandParser {
-
+public class CommandParser implements CommandKeyword {
 
     public synchronized Message parse(String message) {
 
@@ -17,23 +17,23 @@ public class CommandParser {
         try {
             JSONObject jsonMsg = (JSONObject)parser.parse(message);
             JSONObject data;
-            switch ((String)jsonMsg.get("type_cmd")) {
-                case "login":
-                    data = (JSONObject) jsonMsg.get("login");
-                    return new LoginEvent((String)data.get("username"), (String)data.get("auth"));
-                case "disconnect":
-                    data = (JSONObject) jsonMsg.get("disconnect");
-                    return new DisconnectEvent((String)data.get("username"));
-                case "message":
-                    data = (JSONObject) jsonMsg.get("message");
-                    return new MessageEvent((String)data.get("message"));
-                case "choice_window" :
-                    data = (JSONObject) jsonMsg.get("window");
-                    String idPlayerW = (String)data.get("id_player");
-                    int idWindow = Integer.parseInt((String)data.get("window_id"));
-                    WindowSide side = WindowSide.stringtoWindowSide((String)data.get("window_side"));
+            switch ((String)jsonMsg.get(COMMAND_TYPE)) {
+                case LOGIN:
+                    data = (JSONObject) jsonMsg.get(LOGIN);
+                    return new LoginEvent((String)data.get(USERNAME), (String)data.get(AUTH));
+                case DISCONNECT:
+                    data = (JSONObject) jsonMsg.get(DISCONNECT);
+                    return new DisconnectEvent((String)data.get(USERNAME));
+                case MESSAGE:
+                    data = (JSONObject) jsonMsg.get(MESSAGE);
+                    return new MessageEvent((String)data.get(MESSAGE));
+                case WINDOW_CHOICE :
+                    data = (JSONObject) jsonMsg.get(WINDOW);
+                    String idPlayerW = (String)data.get(PLAYER_ID);
+                    int idWindow = Integer.parseInt((String)data.get(WINDOW_ID));
+                    WindowSide side = WindowSide.stringtoWindowSide((String)data.get(WINDOW_SIDE));
                     return new WindowEvent(idPlayerW, idWindow, side);
-                case "settings":  //is settings response useless?
+                case SETTINGS :  //is settings response useless?
                     return null;
                 default:
                     return null;
@@ -46,119 +46,119 @@ public class CommandParser {
     }
 
     private Message parseChoice(JSONObject message) {
-        switch((String)message.get("type_cmd")) {
-            case "choice_window":
-                JSONObject messageW = (JSONObject)message.get("window");
-                String idPlayerW = (String)messageW.get("id_player");
-                int idWindow = Integer.parseInt((String)messageW.get("window_id"));
-                WindowSide side = WindowSide.stringtoWindowSide((String)messageW.get("window_side"));
+        switch((String)message.get(COMMAND_TYPE)) {
+            case WINDOW_CHOICE:
+                JSONObject messageW = (JSONObject)message.get(WINDOW);
+                String idPlayerW = (String)messageW.get(PLAYER_ID);
+                int idWindow = Integer.parseInt((String)messageW.get(WINDOW_ID));
+                WindowSide side = WindowSide.stringtoWindowSide((String)messageW.get(WINDOW_SIDE));
                 return new WindowEvent(idPlayerW, idWindow, side);
-            case "choice_move_dice":
-                JSONObject data = (JSONObject) message.get("move_dice");
-                String idPlayerD = (String)data.get("player_id");
-                int idDice = Integer.parseInt((String)data.get("dice_id"));
+            case MOVE_DICE_CHOICE:
+                JSONObject data = (JSONObject) message.get(MOVE_DICE);
+                String idPlayerD = (String)data.get(PLAYER_ID);
+                int idDice = Integer.parseInt((String)data.get(DICE_ID));
                 String source = (String)data.get("source");
-                JSONObject pos = (JSONObject)data.get("position");
+                JSONObject pos = (JSONObject)data.get(POSITION);
                 int row = Integer.parseInt((String)pos.get("y"));
                 int col = Integer.parseInt((String)pos.get("x"));
                 Position position = new Position(row, col);
                 return  new DiceEvent(idPlayerD, idDice, position, source);
             case "end_turn":
-                return new EndTurnEvent((String)message.get("id_player"));
+                return new EndTurnEvent((String)message.get(PLAYER_ID));
             default: return null;
         }
     }
 
     public String createJSONCountdown(String time) {
         JSONObject content = new JSONObject();
-        content.put("time", time);
+        content.put(TIME, time);
         JSONObject container = new JSONObject();
-        container.put("type_msg", "response");
-        container.put("type_cmd", "lobby_time");
-        container.put("time", content);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, LOBBY_TIME);
+        container.put(TIME, content);
         return container.toJSONString();
     }
 
     public String createJSONAddLobbyPlayer(String time) {
         JSONObject content = new JSONObject();
-        content.put("username", time);
+        content.put(USERNAME, time);
         JSONObject container = new JSONObject();
-        container.put("type_msg", "response");
-        container.put("type_cmd", "lobby_add_player");
-        container.put("player", content);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, ADD_PLAYER);
+        container.put(PLAYER, content);
         return container.toJSONString();
     }
 
     public String createJSONRemoveLobbyPlayer(String time) {
         JSONObject content = new JSONObject();
-        content.put("username", time);
+        content.put(USERNAME, time);
         JSONObject container = new JSONObject();
-        container.put("type_msg", "response");
-        container.put("type_cmd", "lobby_remove_player");
-        container.put("player", content);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, REMOVE_PLAYER);
+        container.put(PLAYER, content);
         return container.toJSONString();
     }
 
     public String crateJSONMessage(String message) {
         JSONObject content = new JSONObject();
-        content.put("metadata", message);
+        content.put(METADATA, message);
         JSONObject container = new JSONObject();
-        container.put("type_msg", "response");
-        container.put("type_cmd", "message");
-        container.put("message", content);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, MESSAGE);
+        container.put(MESSAGE, content);
         return container.toJSONString();
     }
 
     public String createJSONLoginResponse(String token, int lobbyPort) {
         JSONObject content = new JSONObject();
-        content.put("token", token);
-        content.put("lobby_port", lobbyPort+"");
-        content.put("login", "successful");
+        content.put(TOKEN, token);
+        content.put(LOBBY_PORT, lobbyPort+"");
+        content.put(LOGIN, "successful");
         JSONObject container = new JSONObject();
-        container.put("type_msg", "response");
-        container.put("type_cmd", "login");
-        container.put("login", content);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, LOGIN);
+        container.put(LOGIN, content);
         return container.toJSONString();
     }
 
     public String crateJSONLoginLobbyResponse(int heartbeatPort) {
         JSONObject content = new JSONObject();
-        content.put("heartbeat_port", heartbeatPort+"");
-        content.put("login", "successful_lobby");
+        content.put(HEARTBEAT_PORT, heartbeatPort+"");
+        content.put(LOGIN, "successful_lobby");
         JSONObject container = new JSONObject();
-        container.put("type_msg", "response");
-        container.put("type_cmd", "login_heartbeat");
-        container.put("heartbeat", content);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, "login_heartbeat");
+        container.put(HEARTBEAT, content);
         return container.toJSONString();
     }
 
     public String crateJSONLoginResponseRegister() {
         JSONObject content = new JSONObject();
-        content.put("login", "register");
+        content.put(LOGIN, REGISTER);
         JSONObject container = new JSONObject();
-        container.put("type_msg", "response");
-        container.put("type_cmd", "login_register");
-        container.put("login", content);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, "login_register");
+        container.put(LOGIN, content);
         return container.toJSONString();
     }
 
     public String crateJSONLoginResponseError() {
         JSONObject content = new JSONObject();
-        content.put("error", "error");
+        content.put(ERROR, ERROR);
         JSONObject container = new JSONObject();
-        container.put("type_msg", "response");
-        container.put("type_cmd", "error");
-        container.put("error", content);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, ERROR);
+        container.put(ERROR, content);
         return container.toJSONString();
     }
 
     public String crateJSONLoginResponseError(String error) {
         JSONObject content = new JSONObject();
-        content.put("error", error);
+        content.put(ERROR, error);
         JSONObject container = new JSONObject();
-        container.put("type_msg", "response");
-        container.put("type_cmd", "error");
-        container.put("error", content);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, ERROR);
+        container.put(ERROR, content);
         return container.toJSONString();
     }
 }

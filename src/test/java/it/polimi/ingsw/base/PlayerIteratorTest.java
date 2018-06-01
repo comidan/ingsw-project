@@ -11,25 +11,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerIteratorTest {
+
+    private static final String FIRST_USER = "Aldo";
+    private static final String SECOND_USER = "Giovanni";
+    private static final String THIRD_USER = "Giacomo";
+
     private String[][] results = {
-            {"Aldo", "Giovanni", "Giacomo", "Giacomo", "Giovanni", "Aldo"},
-            {"Giovanni", "Giacomo", "Aldo", "Aldo", "Giacomo", "Giovanni"},
-            {"Giacomo", "Aldo", "Giovanni", "Giovanni", "Aldo", "Giacomo"},
-            {"Aldo", "Giovanni", "Giacomo", "Giacomo", "Giovanni", "Aldo"},
-            {"Giovanni", "Giacomo", "Aldo", "Aldo", "Giacomo", "Giovanni"},
-            {"Giacomo", "Aldo", "Giovanni", "Giovanni", "Aldo", "Giacomo"},
-            {"Aldo", "Giovanni", "Giacomo", "Giacomo", "Giovanni", "Aldo"},
-            {"Giovanni", "Giacomo", "Aldo", "Aldo", "Giacomo", "Giovanni"},
-            {"Giacomo", "Aldo", "Giovanni", "Giovanni", "Aldo", "Giacomo"},
-            {"Aldo", "Giovanni", "Giacomo", "Giacomo", "Giovanni", "Aldo"}};
+            {FIRST_USER, SECOND_USER, THIRD_USER, THIRD_USER, SECOND_USER, FIRST_USER},
+            {SECOND_USER, THIRD_USER, FIRST_USER, FIRST_USER, THIRD_USER, SECOND_USER},
+            {THIRD_USER, FIRST_USER, SECOND_USER, SECOND_USER, FIRST_USER, THIRD_USER},
+            {FIRST_USER, SECOND_USER, THIRD_USER, THIRD_USER, SECOND_USER, FIRST_USER},
+            {SECOND_USER, THIRD_USER, FIRST_USER, FIRST_USER, THIRD_USER, SECOND_USER},
+            {THIRD_USER, FIRST_USER, SECOND_USER, SECOND_USER, FIRST_USER, THIRD_USER},
+            {FIRST_USER, SECOND_USER, THIRD_USER, THIRD_USER, SECOND_USER, FIRST_USER},
+            {SECOND_USER, THIRD_USER, FIRST_USER, FIRST_USER, THIRD_USER, SECOND_USER},
+            {THIRD_USER, FIRST_USER, SECOND_USER, SECOND_USER, FIRST_USER, THIRD_USER},
+            {FIRST_USER, SECOND_USER, THIRD_USER, THIRD_USER, SECOND_USER, FIRST_USER}};
 
     @Test
     public void testPlayerIterator() {
         int index = 0;
         List<String> playerList = new ArrayList<>();
-        playerList.add("Aldo");
-        playerList.add("Giovanni");
-        playerList.add("Giacomo");
+        playerList.add(FIRST_USER);
+        playerList.add(SECOND_USER);
+        playerList.add(THIRD_USER);
 
         StateIterator stateIterator = StateIterator.getInstance();
         stateIterator.forceState(StateGameEnum.DEAL_WINDOWS);

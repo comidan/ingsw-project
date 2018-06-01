@@ -18,7 +18,7 @@ public class MatchLobbyPool {
     public MatchLobby getAvailableLobby() throws IOException {
         MatchLobby availableLobby = null;
         for(MatchLobby lobby : lobbyPool)
-            if(!lobby.isFull()) {
+            if(!lobby.isFull() && !lobby.isInGame()) {
                 availableLobby = lobby;
                 break;
             }

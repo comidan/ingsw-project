@@ -139,7 +139,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
 
     @Override
     public void disconnect() throws RemoteException {
-        outSocket.println(JsonMessage.creatDisconnectMessage(username).toJSONString());
+        outSocket.println(JsonMessage.createDisconnectMessage(username).toJSONString());
         heartbeatProtocolManager.kill();
         executor.shutdown();
         close();

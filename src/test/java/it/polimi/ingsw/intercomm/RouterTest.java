@@ -30,6 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class RouterTest {
     private static final Logger LOGGER = Logger.getLogger(RouterTest.class.getName());
     private static final String BASE_PATH = "src/main/resources/json/window/";
+    private static final String FIRST_USER = "Mottola";
+    private static final String SECOND_USER = "ingconti";
+    private static final String DRAFT = "draft";
+
     private WindowController windowController = new WindowController();
     private DiceController diceController = new DiceController();
 
@@ -39,8 +43,8 @@ public class RouterTest {
         DynamicRouter dynamicRouter = new MessageDispatcher();
 
         List<Player> players = new ArrayList<>();
-        Player playerOne = new Player("Mottola");
-        Player playerTwo = new Player("Ingconti");
+        Player playerOne = new Player(FIRST_USER);
+        Player playerTwo = new Player(SECOND_USER);
         players.add(playerOne);
         players.add(playerTwo);
         GameManager gameManager = new GameManager(players, dynamicRouter);
@@ -54,10 +58,10 @@ public class RouterTest {
         }
 
         assertEquals
-                (idWindowToName(windowController.getMessage().get("Mottola").get(0), WindowSide.FRONT),
+                (idWindowToName(windowController.getMessage().get(FIRST_USER).get(0), WindowSide.FRONT),
                         playerOne.getWindow().getName());
         assertEquals
-                (idWindowToName(windowController.getMessage().get("Ingconti").get(0), WindowSide.REAR),
+                (idWindowToName(windowController.getMessage().get(SECOND_USER).get(0), WindowSide.REAR),
                         playerTwo.getWindow().getName());
 
         msgs = messageGenerator("dice");
@@ -85,7 +89,7 @@ public class RouterTest {
                 diceResponse.getDiceList().get(3),
                 playerOne.getWindow().getCellMatrix()[1][0].getCurrentDice());
 
-        dynamicRouter.dispatch(new EndTurnEvent("Mottola"));
+        dynamicRouter.dispatch(new EndTurnEvent( FIRST_USER));
     }
 
     private List<Message> messageGenerator(String type) {
@@ -93,17 +97,17 @@ public class RouterTest {
 
         if(type.equals("window")){
             Map<String, List<Integer>> ids = windowController.getMessage();
-            messages.add(new WindowEvent("Mottola", ids.get("Mottola").get(0), WindowSide.FRONT));
-            messages.add(new WindowEvent("Ingconti", ids.get("Ingconti").get(0), WindowSide.REAR));
+            messages.add(new WindowEvent(FIRST_USER, ids.get(FIRST_USER).get(0), WindowSide.FRONT));
+            messages.add(new WindowEvent(SECOND_USER, ids.get(SECOND_USER).get(0), WindowSide.REAR));
         } else if(type.equals("dice")) {
             DiceResponse diceResponse = diceController.getDiceResponse();
-            messages.add(new DiceEvent("Mottola", diceResponse.getDiceList().get(0).getId(), new Position(0, 0), "draft"));
-            messages.add(new EndTurnEvent("Mottola"));
-            messages.add(new DiceEvent("Ingconti", diceResponse.getDiceList().get(1).getId(), new Position(0, 0), "draft"));
-            messages.add(new EndTurnEvent("Ingconti"));
-            messages.add(new DiceEvent("Ingconti", diceResponse.getDiceList().get(2).getId(), new Position(1, 0), "draft"));
-            messages.add(new EndTurnEvent("Ingconti"));
-            messages.add(new DiceEvent("Mottola", diceResponse.getDiceList().get(3).getId(), new Position(1, 0), "draft"));
+            messages.add(new DiceEvent(FIRST_USER, diceResponse.getDiceList().get(0).getId(), new Position(0, 0), DRAFT));
+            messages.add(new EndTurnEvent(FIRST_USER));
+            messages.add(new DiceEvent(SECOND_USER, diceResponse.getDiceList().get(1).getId(), new Position(0, 0), DRAFT));
+            messages.add(new EndTurnEvent(SECOND_USER));
+            messages.add(new DiceEvent(SECOND_USER, diceResponse.getDiceList().get(2).getId(), new Position(1, 0), DRAFT));
+            messages.add(new EndTurnEvent(SECOND_USER));
+            messages.add(new DiceEvent(FIRST_USER, diceResponse.getDiceList().get(3).getId(), new Position(1, 0), DRAFT));
         }
 
         return messages;
