@@ -18,8 +18,8 @@ public class GameServer {
     private static final Registry registry = getRegistry();
 
     public static void main(String[] args) throws InterruptedException, SQLException, ExecutionException, SocketException, RemoteException {
-        SocketServer socketServer = new SocketServer();
-        ServerRMI serverRMI = new ServerRMI();
+        new SocketServer();
+        new ServerRMI();
     }
 
     private static Registry getRegistry() {

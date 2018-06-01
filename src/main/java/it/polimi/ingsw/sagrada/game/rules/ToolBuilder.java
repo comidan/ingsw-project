@@ -15,10 +15,6 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 
 	private Function<DTO, ErrorType> function;
 
-	public ToolBuilder() {
-
-	}
-
 	@Override
 	public ToolRule build() {
 		if(function == null)

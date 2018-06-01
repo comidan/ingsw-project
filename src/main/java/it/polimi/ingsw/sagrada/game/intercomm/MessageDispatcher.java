@@ -31,13 +31,12 @@ public class MessageDispatcher implements DynamicRouter<Message> {
     public void dispatch(Message content) {
         List<Channel> channels = handlers.get(content.getType());
         if(channels!=null) {
-            //System.out.println("Handler found for "+content.getType());
             for (Channel c : channels) {
                 c.dispatch(content);
             }
         }
         else {
-            logger.log(Level.SEVERE, "Handler not found for "+content.getType());
+            logger.log(Level.SEVERE, () -> "Handler not found for " + content.getType());
         }
     }
 }

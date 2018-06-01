@@ -156,7 +156,7 @@ public class GameManager implements Channel<Message, Message> {
             Window window = player.getWindow();
             window.setCell(dice, position.getRow(), position.getCol());
             ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
-            //System.out.println(errorType);
+            System.out.println(errorType);
         }
     }
 

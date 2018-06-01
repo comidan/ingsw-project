@@ -109,19 +109,19 @@ public class LoginGuiView extends Application {
         image.setPreserveRatio(true);
         AnchorPane anchor = (AnchorPane) scene.lookup("#anchorPane");
         Label dev = (Label) scene.lookup("#developers");
-        anchor.setBottomAnchor(dev, getHeightPixel(15));
+        AnchorPane.setBottomAnchor(dev, getHeightPixel(15));
         dev.setWrapText(true);
-        Button loginButton = (Button) scene.lookup("#loginButton");
-        anchor.setBottomAnchor(loginButton, getHeightPixel(23));
+        loginButton = (Button) scene.lookup("#loginButton");
+        AnchorPane.setBottomAnchor(loginButton, getHeightPixel(23));
         loginButton.setLayoutX(getHeightPixel(15));
-        PasswordField passwordField = (PasswordField) scene.lookup("#passwordField");
-        anchor.setBottomAnchor(passwordField, getHeightPixel(37));
-        TextField usernameField = (TextField) scene.lookup("#usernameField");
-        anchor.setBottomAnchor(usernameField, getHeightPixel(46));
-        RadioButton socketRadioButton = (RadioButton) scene.lookup("#socketRadioButton");
-        anchor.setBottomAnchor(socketRadioButton, getHeightPixel(31));
-        RadioButton rmiRadiobutton = (RadioButton) scene.lookup("#rmiRadiobutton");
-        anchor.setBottomAnchor(rmiRadiobutton, getHeightPixel(31));
+        passwordField = (PasswordField) scene.lookup("#passwordField");
+        AnchorPane.setBottomAnchor(passwordField, getHeightPixel(37));
+        usernameField = (TextField) scene.lookup("#usernameField");
+        AnchorPane.setBottomAnchor(usernameField, getHeightPixel(46));
+        socketRadioButton = (RadioButton) scene.lookup("#socketRadioButton");
+        AnchorPane.setBottomAnchor(socketRadioButton, getHeightPixel(31));
+        rmiRadiobutton = (RadioButton) scene.lookup("#rmiRadiobutton");
+        AnchorPane.setBottomAnchor(rmiRadiobutton, getHeightPixel(31));
 
 
         window.show();
@@ -141,25 +141,25 @@ public class LoginGuiView extends Application {
             AnchorPane anchor = (AnchorPane) scene.lookup("#anchorPane");
             Label gameLabel = (Label) scene.lookup("#game");
             gameLabel.setWrapText(true);
-            anchor.setBottomAnchor(gameLabel, getHeightPixel(13));
+            AnchorPane.setBottomAnchor(gameLabel, getHeightPixel(13));
             ImageView dice1 = (ImageView) scene.lookup("#dice1");
-            anchor.setBottomAnchor(dice1, getHeightPixel(62));
+            AnchorPane.setBottomAnchor(dice1, getHeightPixel(62));
             Label player1 = (Label) scene.lookup("#firstPlayer");
-            anchor.setBottomAnchor(player1, getHeightPixel(65));
+            AnchorPane.setBottomAnchor(player1, getHeightPixel(65));
             ImageView dice2 = (ImageView) scene.lookup("#dice2");
-            anchor.setBottomAnchor(dice2, getHeightPixel(47));
+            AnchorPane.setBottomAnchor(dice2, getHeightPixel(47));
             Label player2 = (Label) scene.lookup("#secondPlayer");
-            anchor.setBottomAnchor(player2, getHeightPixel(50));
+            AnchorPane.setBottomAnchor(player2, getHeightPixel(50));
             ImageView dice3 = (ImageView) scene.lookup("#dice3");
-            anchor.setBottomAnchor(dice3, getHeightPixel(32));
+            AnchorPane.setBottomAnchor(dice3, getHeightPixel(32));
             Label player3 = (Label) scene.lookup("#thirdPlayer");
-            anchor.setBottomAnchor(player3, getHeightPixel(35));
+            AnchorPane.setBottomAnchor(player3, getHeightPixel(35));
             ImageView dice4 = (ImageView) scene.lookup("#dice4");
-            anchor.setBottomAnchor(dice4, getHeightPixel(17));
+            AnchorPane.setBottomAnchor(dice4, getHeightPixel(17));
             Label player4 = (Label) scene.lookup("#fourthPlayer");
-            anchor.setBottomAnchor(player4, getHeightPixel(20));
+            AnchorPane.setBottomAnchor(player4, getHeightPixel(20));
             Label timerLabel = (Label) scene.lookup("#timer");
-            anchor.setBottomAnchor(timerLabel, getHeightPixel(10));
+            AnchorPane.setBottomAnchor(timerLabel, getHeightPixel(10));
             window.setScene(scene);
 
 
