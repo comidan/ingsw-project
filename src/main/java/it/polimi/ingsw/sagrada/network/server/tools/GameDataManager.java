@@ -11,8 +11,13 @@ import it.polimi.ingsw.sagrada.network.client.Client;
 
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GameDataManager implements Channel<Message, Message> {
+
+    private static final Logger LOGGER = Logger.getLogger(GameDataManager.class.getName());
+
     private DynamicRouter dynamicRouter;
     private Map<String, Client> clientMap;
 
@@ -36,7 +41,7 @@ public class GameDataManager implements Channel<Message, Message> {
                 try {
                     ((Client)pair.getValue()).sendResponse(message);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, () -> e.getMessage());
                 }
             }
         } else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.WINDOW_RESPONSE))) {
@@ -44,14 +49,14 @@ public class GameDataManager implements Channel<Message, Message> {
             try {
                 getClient(windowResponse.getPlayerId()).sendResponse(message);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, () -> e.getMessage());
             }
         } else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT))) {
             BeginTurnEvent beginTurnEvent = (BeginTurnEvent)message;
             try {
                 getClient(beginTurnEvent.getIdPlayer()).sendResponse(message);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, () -> e.getMessage());
             }
         }
     }

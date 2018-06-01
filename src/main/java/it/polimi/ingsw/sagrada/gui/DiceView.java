@@ -17,7 +17,7 @@ import java.io.File;
 public class DiceView extends ImageView{
 
     private static final String DICE_IMAGE_ROOT_PATH = "src/main/resources/images/DiceImages/";
-    public ClickHandler clickHandler;
+    private ClickHandler clickHandler;
     private Constraint color;
     private Constraint value;
     private int id;
@@ -40,5 +40,9 @@ public class DiceView extends ImageView{
 
     public int getDiceID() {
         return id;
+    }
+
+    public ClickHandler getClickHandler() {
+        return clickHandler;
     }
 }

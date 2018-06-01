@@ -3,7 +3,7 @@ package it.polimi.ingsw.sagrada.gui;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 public class ClickedObject {
-    DiceView clickedDice;
+    private DiceView clickedDice;
 
     public DiceView getClickedDice() {
         return clickedDice;

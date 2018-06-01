@@ -19,8 +19,13 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoginGuiView extends Application {
+
+    private static final Logger LOGGER = Logger.getLogger(LoginGuiView.class.getName());
+
     @FXML
     private RadioButton socketRadioButton;
     private double windowHeight;
@@ -160,7 +165,7 @@ public class LoginGuiView extends Application {
 
             return loaderLobby.getController();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, () -> e.getMessage());
             return null;
         }
     }

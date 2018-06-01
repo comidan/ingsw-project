@@ -237,9 +237,9 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         else if(message instanceof WindowResponse) {
             System.out.println("Press key to generate WindowEvent");
             try {
-                inKeyboard.readLine();
+                String choice = inKeyboard.readLine();
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, () -> e.getMessage());
             }
             JSONObject jsonWindow = JsonMessage.createWindowResponse(username, ((WindowResponse) message).getIds().get(0));
             outSocket.println(jsonWindow.toJSONString());

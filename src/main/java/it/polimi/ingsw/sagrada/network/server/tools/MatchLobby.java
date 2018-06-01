@@ -31,12 +31,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener, Runnable, AbstractMatchLobbyRMI {
 
     private static final int MAX_POOL_SIZE = 4;
     private static final long TIME_WAIT_UNIT = 10000;
+    private static final Logger LOGGER = Logger.getLogger(MatchLobby.class.getName());
 
     private Map<String, Client> clientPool;
     private List<String> clientIds;
@@ -186,7 +189,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             heartbeatProtocolManager.addHost(token, heartbeatPort);
         }
         catch (RemoteException|AlreadyBoundException exc) {
-            exc.printStackTrace();
+            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
         }
         for(String username : clientIds) {
             System.out.println("Remote user set");
@@ -264,7 +267,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                             clientPool.get(username).setTimer((timeToWait / 1000 - currentSeconds) + "");
                         }
                         catch (RemoteException exc) {
-                            exc.printStackTrace();
+                            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
                         }
                 }
             }

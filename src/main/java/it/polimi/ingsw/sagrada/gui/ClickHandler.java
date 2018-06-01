@@ -4,8 +4,8 @@ import java.util.List;
 
 public class ClickHandler {
 
-    ClickedObject clickedObject;
-    DraftView draft;
+    private ClickedObject clickedObject;
+    private DraftView draft;
     private static ClickHandler clickHandler;
 
     private ClickHandler(ClickedObject clickedObject){

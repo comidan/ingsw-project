@@ -100,7 +100,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                 }
             } catch (IOException e) {
                 System.out.println("RMI server error");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, () -> e.getMessage());
             }
         }
     }
@@ -183,7 +183,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
             remoteClient = (Client) Naming.lookup("rmi://" + ADDRESS + "/" + id);
         }
         catch (Exception exc) {
-            exc.printStackTrace();
+            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
         }
     }
 

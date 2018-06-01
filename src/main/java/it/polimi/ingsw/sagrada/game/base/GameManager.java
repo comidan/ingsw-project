@@ -151,10 +151,13 @@ public class GameManager implements Channel<Message, Message> {
     }
 
     private void setDiceInWindow(String idPlayer, Dice dice, Position position) {
-        Window window = idToPlayer(idPlayer).getWindow();
-        window.setCell(dice, position.getRow(), position.getCol());
-        ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
-        //System.out.println(errorType);
+        Player player = idToPlayer(idPlayer);
+        if(player != null) {
+            Window window = player.getWindow();
+            window.setCell(dice, position.getRow(), position.getCol());
+            ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
+            //System.out.println(errorType);
+        }
     }
 
 

@@ -89,7 +89,8 @@ public class LoginGuiController implements Channel<LoginState, Message> {
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
-                        changeScene();
+                        LOGGER.log(Level.SEVERE, () -> e.getMessage());
+                        Thread.currentThread().interrupt();
                     }
                     changeScene();
                 });

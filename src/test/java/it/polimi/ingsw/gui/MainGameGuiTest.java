@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gui;
 
+import it.polimi.ingsw.network.protocols.DiscoverInternetTest;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
@@ -9,10 +10,14 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.fail;
 
 public class MainGameGuiTest {
+
+    private static final Logger LOGGER = Logger.getLogger(MainGameGuiTest.class.getName());
 
     public void testMainGameGui() {
 
@@ -46,7 +51,7 @@ public class MainGameGuiTest {
             };
             GameView.startGameGUI(players, diceResponse, constraints).terminate();
         } catch (Exception exc) {
-            exc.printStackTrace();
+            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
             fail();
         }
     }
