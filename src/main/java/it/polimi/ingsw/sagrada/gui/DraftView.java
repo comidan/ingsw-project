@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.gui;
 
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 
+import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.event.EventHandler;
@@ -13,11 +14,11 @@ public class DraftView extends GridPane {
 
     private List<DiceView> draft;
 
-    public DraftView(DiceResponse diceResponse, ClickedObject clickedObject) {
+    public DraftView(DiceResponse diceResponse) {
         draft = new ArrayList<>();
         diceResponse.getDiceList().forEach(dice -> draft.add(new DiceView(Constraint.getColorConstraint(dice.getColor()),
                                                             Constraint.getValueConstraint(dice.getValue()),
-                                                            dice.getId(), clickedObject)));
+                                                            dice.getId())));
         createGrid();
     }
 
@@ -33,18 +34,16 @@ public class DraftView extends GridPane {
 
     }
 
-    public void setDraftListener() {
-        draft.forEach(diceView -> diceView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent me) {
-                diceView.getClickHandler().clickCallbackDice(diceView);
-            }
-        })
-
-        );
+    public void removeDiceView(DiceView diceView){
+        for(int i = 0; i<draft.size(); i++){
+            if(draft.get(i).equals((diceView)))
+                draft.remove(diceView);
+        }
     }
 
-    public List<DiceView> getDraft(){
-        return draft;
+    public void setDraftListener(EventHandler<MouseEvent> draftClickHandler) {
+        draft.forEach(diceView -> diceView.setOnMouseClicked(draftClickHandler));
     }
+
 
 }

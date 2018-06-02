@@ -17,17 +17,15 @@ import java.io.File;
 public class DiceView extends ImageView{
 
     private static final String DICE_IMAGE_ROOT_PATH = "src/main/resources/images/DiceImages/";
-    private ClickHandler clickHandler;
     private Constraint color;
     private Constraint value;
     private int id;
 
-    public DiceView(Constraint color, Constraint value, int id, ClickedObject clickedObject) {
+    public DiceView(Constraint color, Constraint value, int id) {
         this.color = color;
         this.value = value;
         this.id = id;
         setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)).toURI().toString(), 50, 50, true, false));
-        this.clickHandler = ClickHandler.getDiceButtonController(clickedObject);
     }
 
     public Constraint getColor() {
@@ -42,7 +40,4 @@ public class DiceView extends ImageView{
         return id;
     }
 
-    public ClickHandler getClickHandler() {
-        return clickHandler;
-    }
 }

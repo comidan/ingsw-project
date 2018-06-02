@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.gui;
+/*package it.polimi.ingsw.sagrada.gui;
 
 import java.util.List;
 
@@ -44,3 +44,4 @@ public class ClickHandler {
         else return null;
     }
 }
+*/

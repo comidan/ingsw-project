@@ -14,15 +14,12 @@ public class CellView extends ImageView {
     private int col;
     private int diceId;
     private Constraint constraint;
-    private ClickHandler clickHandler;
-    private ClickedObject clickedObject; // to initialize!
 
-    public CellView(int row, int col, Constraint constraint, ClickedObject clickedObject) {
+    public CellView(int row, int col, Constraint constraint) {
         this.row = row;
         this.col = col;
         this.constraint = constraint;
         setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getConstraintFileName(constraint)).toURI().toString(), 60, 60, true, false));
-        this.clickHandler = ClickHandler.getDiceButtonController(clickedObject);
     }
 
     public CellView(){
@@ -30,13 +27,8 @@ public class CellView extends ImageView {
         cellImage.resize(50,50 );
     }
 
-    public void setCellListener(){
-        setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent me) {
-                if(clickHandler.clickCallbackCell()!=null)
-                setImageCell(clickHandler.clickCallbackCell());
-            }
-        });
+    public void setCellListener(EventHandler<MouseEvent> cellClickEventHandler){
+        setOnMouseClicked(cellClickEventHandler);
 
     }
 

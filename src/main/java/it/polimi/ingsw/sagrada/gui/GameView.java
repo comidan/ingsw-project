@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,44 +31,31 @@ public class GameView extends Application {
     private static Constraint[][] constraints;
     private Button endTurn;
     private ClickedObject clickedObject;
-    private ClickHandler clickHandler;
     private Resizer resizer;
     private RoundtrackView roundtrackView;
-
-    private void setDicesClickListener() {
-        windows.get(username).setWindowDiceListener();
-    }
 
     public String getUsername(){
         return username;
     }
 
-    public void setDraftClickHandler() {
-        draftView.setDraftListener();
+    public void setCellClickListener(EventHandler<MouseEvent> cellClickEventHandler) {
+        windows.get(username).setWindowDiceListener(cellClickEventHandler);
     }
 
-
-    public void setEndTurnHandler(EventHandler<ActionEvent> endTurnHandler) {
-        endTurn.setOnAction(endTurnHandler);
-      /*  endTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent me) {
-
-                // signal end of turn to server
-
-            }
-        });*/
+    public void setDraftClickHandler(EventHandler<MouseEvent> draftClickHandler) {
+        draftView.setDraftListener(draftClickHandler);
     }
 
-
-    public void setClickables(){
-        setDicesClickListener();
-        setDraftClickHandler();
-        //setEndTurnHandler();
+    public void setEndTurnHandler(EventHandler<ActionEvent> endTurnEventHandler){
+        endTurn.setOnAction(endTurnEventHandler);
     }
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+
+    public DraftView getDraftView() {
+        return draftView;
+    }
+
+    private void initialize(){
         this.resizer = new Resizer();
-        this.clickedObject = new ClickedObject();
         this.roundtrackView = new RoundtrackView();
         verticalBox = new VBox();
         horizontalBox = new HBox();
@@ -79,10 +67,12 @@ public class GameView extends Application {
                         "-fx-background-size: cover;"
         );
         anchorPane.resize(resizer.getWindowWidth(), resizer.getWindowHeight());
-        clickHandler = ClickHandler.getDiceButtonController(clickedObject);
-        draftView = new DraftView(diceResponse, clickedObject);
-        clickHandler.setDraft(draftView);
-        players.forEach(user -> windows.put(user, new WindowView(constraints, clickedObject)));
+        draftView = new DraftView(diceResponse);
+    }
+
+    private void createScene(Stage primaryStage){
+
+        players.forEach(user -> windows.put(user, new WindowView(constraints)));
         verticalBox.setSpacing(15);
         for(int i = 1; i < players.size(); i++)
             verticalBox.getChildren().add(windows.get(players.get(i)));
@@ -100,11 +90,16 @@ public class GameView extends Application {
         anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(50));
         anchorPane.setRightAnchor(draftView, resizer.getWidthPixel(40));
         anchorPane.getChildren().addAll(draftView);
-        setClickables();
         Scene scene = new Scene(anchorPane, resizer.getWindowWidth(), resizer.getWindowHeight());
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
         primaryStage.show();
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        initialize();
+        createScene(primaryStage);
     }
 
     public void terminate() {
@@ -121,6 +116,8 @@ public class GameView extends Application {
         launch();
         return new GameView();
     }
+
+
 
 
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.gui;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 public class WindowView extends GridPane {
@@ -9,12 +10,12 @@ public class WindowView extends GridPane {
     private final Label label;
     private final CellView[][] windowDices;
 
-    public WindowView(Constraint[][] constraints, ClickedObject clickedObject) {
+    public WindowView(Constraint[][] constraints) {
         label = new Label();
         windowDices = new CellView[4][5];
         for (int i = 0; i < constraints.length; i++)
             for (int j = 0; j < constraints[0].length; j++)
-                windowDices[i][j] = new CellView(i, j, constraints[i][j], clickedObject);
+                windowDices[i][j] = new CellView(i, j, constraints[i][j]);
         setGridLinesVisible(true);
         createGrid();
     }
@@ -25,10 +26,10 @@ public class WindowView extends GridPane {
                 add(windowDices[i][j], j, i);
     }
 
-    public void setWindowDiceListener() {
+    public void setWindowDiceListener(EventHandler<MouseEvent> cellClickEventHandler) {
         for (int i = 0; i < windowDices.length; i++)
             for (int j = 0; j < windowDices[0].length; j++)
-                windowDices[i][j].setCellListener();
+                windowDices[i][j].setCellListener(cellClickEventHandler);
 
     }
 }
