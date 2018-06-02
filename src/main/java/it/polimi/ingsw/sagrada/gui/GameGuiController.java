@@ -37,20 +37,23 @@ public class GameGuiController {
         this.gameView.setCellClickListener(event ->
         {
             DiceView diceView = clickedObject.getClickedDice();
-            CellView cellView = (CellView)event.getSource();
-            cellView.setImageCell(diceView);
-            draftView.removeDiceView(diceView);
+            if(diceView !=null) {
+                CellView cellView = (CellView) event.getSource();
+                cellView.setImageCell(diceView);
+                draftView.removeDiceView(diceView);
 
-            String username = this.gameView.getUsername();
-            int idDice = diceView.getDiceID();
-            int row = cellView.getRow();
-            int col = cellView.getCol();
-            Position position = new Position(row, col);
-            DiceEvent diceEvent = new DiceEvent(username, idDice, position, "draft");
-            try {
-                client.sendResponse(diceEvent);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+                String username = this.gameView.getUsername();
+                int idDice = diceView.getDiceID();
+                int row = cellView.getRow();
+                int col = cellView.getCol();
+                Position position = new Position(row, col);
+                DiceEvent diceEvent = new DiceEvent(username, idDice, position, "draft");
+                try {
+                    client.sendResponse(diceEvent);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                clickedObject.setClickedDice(null);
             }
         });
 
