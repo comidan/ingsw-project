@@ -7,7 +7,6 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.gui.LobbyGuiView;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
-import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
@@ -171,7 +170,10 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
 
     @Override
     public void sendResponse(Message message) throws RemoteException {
-
+        if(message instanceof DiceEvent) {
+            JSONObject msg = JsonMessage.createDiceEvent((DiceEvent)message);
+            outSocket.println(msg.toJSONString());
+        }
     }
 
     private void login() {
@@ -238,12 +240,17 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, () -> e.getMessage());
             }
-            JSONObject jsonWindow = JsonMessage.createWindowResponse(username, ((WindowResponse) message).getIds().get(0));
+            JSONObject jsonWindow = JsonMessage.createWindowEvent(username, ((WindowResponse) message).getIds().get(0));
             outSocket.println(jsonWindow.toJSONString());
             //Platform.runLater(() -> GameView.startGameGUI());
         }
-        else if(message instanceof DiceResponse) System.out.println("DADIIIIIIIIIIIIIIIIIIII");
-        else if(message instanceof BeginTurnEvent) System.out.println("E' IL TUO TURNO");
+        else if(message instanceof DiceResponse) {
+            //update GUI
+            System.out.println("DADIIIIIIIIIIIIIIIIIIII");
+        }
+        else if(message instanceof BeginTurnEvent) {
+            System.out.println("E' IL TUO TURNO");
+        }
     }
 
     private void initializeLobbyLink(String identifier) throws IOException {

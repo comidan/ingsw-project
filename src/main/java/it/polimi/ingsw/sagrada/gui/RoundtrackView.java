@@ -25,7 +25,5 @@ public class RoundtrackView extends GridPane {
             this.add(cell, currentRound, i);
 
         }
-
     }
-
 }
