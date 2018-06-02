@@ -13,13 +13,13 @@ public interface WindowModelInterface {
         String url;
         switch (id) {
             case 1:
-                url = "images/kaleidoscopic.jpg";
+                url = "images/window_images/window1.jpg";
                 break;
             case 2:
-                url = "images/firmitas.jpg";
+                url = "images/window_images/window2.jpg";
                 break;
             case 3:
-                url = "images/fractaldrops.jpg";
+                url = "images/window_images/window3.jpg";
                 break;
             case 4:
                 url = "images/ripple.jpg";
