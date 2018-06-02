@@ -30,7 +30,6 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
     private static final int WINDOWS_PER_CARD = 2;
     private static final int NUM_OF_WINDOWS = 12;
 
-
     private Iterator<Integer> picker;
     private static final Logger logger = Logger.getAnonymousLogger();
     private JSONArray windowsArray;

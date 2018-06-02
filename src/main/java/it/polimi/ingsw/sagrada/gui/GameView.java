@@ -13,7 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +32,7 @@ public class GameView extends Application {
     private ClickedObject clickedObject;
     private Resizer resizer;
     private RoundtrackView roundtrackView;
+    private static GameView gameView = null;
 
     public String getUsername(){
         return username;
@@ -100,6 +100,7 @@ public class GameView extends Application {
     public void start(Stage primaryStage) throws Exception {
         initialize();
         createScene(primaryStage);
+        gameView = this;
     }
 
     public void terminate() {
@@ -107,18 +108,27 @@ public class GameView extends Application {
         stage.close();
     }
 
-    public static GameView startGameGUI(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    private static void startGameGUI(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
         username = players.get(0);
         windows = new HashMap<>();
         GameView.diceResponse = diceResponse;
-        launch();
-        return new GameView();
+        launch(GameView.class);
     }
 
-
-
-
-
+    public synchronized static GameView getInstance(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+        if (gameView == null) {
+            new Thread(() -> startGameGUI(players, diceResponse, constraints)).start();
+            while (gameView == null)
+                try {
+                System.out.println("Test");
+                    Thread.sleep(100);
+                } catch (InterruptedException exc) {
+                    exc.printStackTrace();
+                    continue;
+                }
+        }
+        return gameView;
+    }
 }

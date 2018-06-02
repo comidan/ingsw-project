@@ -1,12 +1,14 @@
 package it.polimi.ingsw.gui;
 
-import it.polimi.ingsw.network.protocols.DiscoverInternetTest;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.*;
+import it.polimi.ingsw.sagrada.network.client.Client;
 import org.junit.Test;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,6 +19,7 @@ import static org.junit.Assert.fail;
 public class MainGameGuiTest {
 
     private static final Logger LOGGER = Logger.getLogger(MainGameGuiTest.class.getName());
+    private GameView gameView;
 
     public void testMainGameGui() {
         try {
@@ -47,8 +50,31 @@ public class MainGameGuiTest {
                     {Constraint.WHITE, Constraint.YELLOW, Constraint.BLUE, Constraint.GREEN, Constraint.RED},
                     {Constraint.BLUE, Constraint.WHITE, Constraint.RED, Constraint.BLUE, Constraint.WHITE},
             };
-            GameView.startGameGUI(players, diceResponse, constraints).terminate();
+            GameView gameView = GameView.getInstance(players, diceResponse, constraints);
+            GameGuiController gameGuiController = new GameGuiController(gameView, new Client() {
+                @Override
+                public void sendMessage(String message) throws RemoteException {
+
+                }
+
+                @Override
+                public void disconnect() throws RemoteException {
+
+                }
+
+                @Override
+                public void sendResponse(Message message) throws RemoteException {
+                    System.out.println(message);
+                }
+
+                @Override
+                public String getId() throws RemoteException {
+                    return null;
+                }
+            });
+            while(true);
         } catch (Exception exc) {
+            exc.printStackTrace();
             LOGGER.log(Level.SEVERE, () -> exc.getMessage());
             fail();
         }
