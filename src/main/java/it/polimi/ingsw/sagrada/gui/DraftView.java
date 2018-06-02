@@ -35,11 +35,13 @@ public class DraftView extends GridPane {
     }
 
     public void removeDiceView(DiceView diceView){
-        for(int i = 0; i<draft.size(); i++){
-            if(draft.get(i).equals((diceView)))
-                draft.remove(diceView);
-        }
+
+        draft.remove(diceView);
+        this.getChildren().removeAll(diceView);
+
     }
+
+
 
     public void setDraftListener(EventHandler<MouseEvent> draftClickHandler) {
         draft.forEach(diceView -> diceView.setOnMouseClicked(draftClickHandler));

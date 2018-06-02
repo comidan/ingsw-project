@@ -33,6 +33,7 @@ public class GameView extends Application {
     private Resizer resizer;
     private RoundtrackView roundtrackView;
     private static GameView gameView = null;
+    private CardBoard cardBoard;
 
     public String getUsername(){
         return username;
@@ -40,6 +41,10 @@ public class GameView extends Application {
 
     public void setCellClickListener(EventHandler<MouseEvent> cellClickEventHandler) {
         windows.get(username).setWindowDiceListener(cellClickEventHandler);
+    }
+
+    public void setToolClickHandler(EventHandler<MouseEvent> toolClickHandler){
+        cardBoard.setToolClickHandler(toolClickHandler);
     }
 
     public void setDraftClickHandler(EventHandler<MouseEvent> draftClickHandler) {
@@ -55,6 +60,7 @@ public class GameView extends Application {
     }
 
     private void initialize(){
+        this.cardBoard = new CardBoard();
         this.resizer = new Resizer();
         this.roundtrackView = new RoundtrackView();
         verticalBox = new VBox();
@@ -90,6 +96,9 @@ public class GameView extends Application {
         anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(50));
         anchorPane.setRightAnchor(draftView, resizer.getWidthPixel(40));
         anchorPane.getChildren().addAll(draftView);
+        anchorPane.setBottomAnchor(cardBoard, resizer.getHeightPixel(20));
+        anchorPane.setRightAnchor(cardBoard, resizer.getWidthPixel(32));
+        anchorPane.getChildren().addAll(cardBoard);
         Scene scene = new Scene(anchorPane, resizer.getWindowWidth(), resizer.getWindowHeight());
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);

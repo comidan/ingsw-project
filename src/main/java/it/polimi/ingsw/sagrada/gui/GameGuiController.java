@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.gui;
 
+import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent;
@@ -36,11 +37,12 @@ public class GameGuiController {
         this.gameView.setCellClickListener(event ->
         {
             DiceView diceView = clickedObject.getClickedDice();
+            CellView cellView = (CellView)event.getSource();
+            cellView.setImageCell(diceView);
             draftView.removeDiceView(diceView);
 
             String username = this.gameView.getUsername();
             int idDice = diceView.getDiceID();
-            CellView cellView = (CellView) event.getSource();
             int row = cellView.getRow();
             int col = cellView.getCol();
             Position position = new Position(row, col);
@@ -51,5 +53,12 @@ public class GameGuiController {
                 e.printStackTrace();
             }
         });
+
+        this.gameView.setToolClickHandler(event ->{
+            ToolCardView toolCardView = (ToolCardView) event.getSource();
+            //client.sendResponse(ToolEvent(toolCardView.getToolId()));
+
+        });
+
     }
 }
