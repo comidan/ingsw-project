@@ -109,7 +109,7 @@ public class GameView extends Application {
         anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(60));
         anchorPane.setRightAnchor(draftView, resizer.getWidthPixel(40));
         anchorPane.getChildren().addAll(draftView);
-        anchorPane.setBottomAnchor(cardBoard, resizer.getHeightPixel(20));
+        anchorPane.setBottomAnchor(cardBoard, resizer.getHeightPixel(18));
         anchorPane.setRightAnchor(cardBoard, resizer.getWidthPixel(32));
         anchorPane.getChildren().addAll(cardBoard);
         anchorPane.setTopAnchor(roundtrackView, resizer.getHeightPixel(17));
