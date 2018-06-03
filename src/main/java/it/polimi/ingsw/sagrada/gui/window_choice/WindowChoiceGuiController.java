@@ -11,18 +11,26 @@ public class WindowChoiceGuiController {
     private static final Logger LOGGER = Logger.getLogger(WindowChoiceGuiController.class.getName());
     private WindowChoiceGuiView view;
     private ClientBase client;
+    private boolean choosed;
 
     public WindowChoiceGuiController(WindowChoiceGuiView view, ClientBase client) {
+        this.choosed = false;
         this.view = view;
         this.client = client;
         this.view.setWindowCellListener(event -> {
-            WindowImage windowImage = (WindowImage)event.getSource();
-            try {
-                this.view.setTitleMessage("Wait other players");
-                client.sendResponse(new WindowEvent(client.getId(), windowImage.getWindowId(), windowImage.getSide()));
-            } catch (RemoteException e) {
-                LOGGER.log(Level.SEVERE, "error sending window event to server");
+            if(!choosed) {
+                WindowImage windowImage = (WindowImage)event.getSource();
+                this.view.setNotificationMessage("Window selected, wait for the other players");
+                try {
+                    client.sendResponse(new WindowEvent(client.getId(), windowImage.getWindowId(), windowImage.getSide()));
+                } catch (RemoteException e) {
+                    LOGGER.log(Level.SEVERE, "error sending window event to server");
+                }
             }
+            else {
+                this.view.setNotificationMessage("Window already selected, wait for the other players");
+            }
+            choosed = true;
         });
     }
 }

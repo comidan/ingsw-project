@@ -142,12 +142,11 @@ public class GameView extends Application {
         launch(GameView.class);
     }
 
-    public synchronized static GameView getInstance(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    public static GameView getInstance(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
         if (gameView == null) {
             new Thread(() -> startGameGUI(players, diceResponse, constraints)).start();
             while (gameView == null)
                 try {
-                System.out.println("Test");
                     Thread.sleep(100);
                 } catch (InterruptedException exc) {
                     exc.printStackTrace();

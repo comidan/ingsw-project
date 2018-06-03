@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -24,33 +25,41 @@ public class WindowChoiceGuiView extends Application {
 
     private double windowHeight;
     private double windowWidth;
+    private static WindowResponse windowResponse;
+    private static WindowChoiceGuiView instance;
 
     private AnchorPane anchorPane;
     private Label title;
+    private Label notification;
     private List<WindowImage> imageViewList;
 
     public void setWindowCellListener(EventHandler<MouseEvent> handler) {
         imageViewList.forEach(img -> img.setOnMouseClicked(handler));
     }
 
-    public WindowChoiceGuiView(WindowResponse windowResponse) {
-        imageViewList = new ArrayList<>();
-
-        windowResponse.getIds().forEach(id -> {
-            String path = BASE_PATH+id.toString();
-            imageViewList.add(new WindowImage(
-                    new File(path+"Front.jpg").toURI().toString(),
-                    id, WindowSide.FRONT));
-            imageViewList.add(new WindowImage(
-                    new File(path+"Rear.jpg").toURI().toString(),
-                    id, WindowSide.REAR));
-        });
+    private static void startGameGui(WindowResponse windowResponse) {
+        WindowChoiceGuiView.windowResponse = windowResponse;
         launch(WindowChoiceGuiView.class);
+    }
+
+    public static WindowChoiceGuiView getInstance(WindowResponse windowResponse) {
+        if (instance == null) {
+            new Thread(() -> startGameGui(windowResponse)).start();
+            while (instance == null)
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException exc) {
+                    exc.printStackTrace();
+                    continue;
+                }
+        }
+        return instance;
     }
 
     @Override
     public void start(Stage primaryStage) {
         initialize();
+        instance = this;
         primaryStage.setTitle("Window chooser");
         primaryStage.setResizable(false);
 
@@ -63,10 +72,16 @@ public class WindowChoiceGuiView extends Application {
         AnchorPane.setBottomAnchor(imageViewList.get(3), getHeightPixel(10));
         AnchorPane.setRightAnchor(imageViewList.get(3), getWidthPixel(10));
         imageViewList.forEach(img -> anchorPane.getChildren().add(img));
+        
         AnchorPane.setTopAnchor(title, getHeightPixel(13));
         AnchorPane.setLeftAnchor(title, getWidthPixel(20));
         AnchorPane.setRightAnchor(title, getWidthPixel(20));
         anchorPane.getChildren().add(title);
+        
+        AnchorPane.setTopAnchor(notification, getHeightPixel(20));
+        AnchorPane.setLeftAnchor(notification, getWidthPixel(20));
+        AnchorPane.setRightAnchor(notification, getWidthPixel(20));
+        anchorPane.getChildren().add(notification);
 
         Scene scene = new Scene(anchorPane, windowWidth, windowHeight);
         primaryStage.setScene(scene);
@@ -74,6 +89,8 @@ public class WindowChoiceGuiView extends Application {
     }
 
     private void initialize() {
+        imageViewList = new ArrayList<>();
+
         anchorPane = new AnchorPane();
         anchorPane.setStyle(
                 "-fx-background-image: url(" +
@@ -85,6 +102,16 @@ public class WindowChoiceGuiView extends Application {
         windowHeight = gd.getDisplayMode().getHeight()*0.8;
         windowWidth = windowHeight*0.76;
         anchorPane.resize(windowWidth, windowHeight);
+
+        windowResponse.getIds().forEach(id -> {
+            String path = BASE_PATH+id.toString();
+            imageViewList.add(new WindowImage(
+                    new File(path+"Front.jpg").toURI().toString(),
+                    id, WindowSide.FRONT));
+            imageViewList.add(new WindowImage(
+                    new File(path+"Rear.jpg").toURI().toString(),
+                    id, WindowSide.REAR));
+        });
 
         imageViewList.forEach(img -> {
             img.setPreserveRatio(true);
@@ -99,6 +126,13 @@ public class WindowChoiceGuiView extends Application {
         title.setStyle("-fx-background-color: #d57322;" +
                 "-fx-border-color: #000000"
         );
+
+        notification = new Label();
+        notification.setAlignment(Pos.CENTER);
+        notification.setTextFill(Color.web("#000000"));
+        notification.setFont(Font.font("System", FontWeight.BOLD, 24*gd.getDisplayMode().getHeight()/1080));
+        notification.setTextAlignment(TextAlignment.CENTER);
+        notification.setWrapText(true);
     }
 
     private double getHeightPixel(int perc) {
@@ -109,7 +143,7 @@ public class WindowChoiceGuiView extends Application {
         return (windowWidth*perc)/100;
     }
 
-    public void setTitleMessage(String message) {
-        title.setText(message);
+    public void setNotificationMessage(String message) {
+        notification.setText(message);
     }
 }

@@ -123,7 +123,6 @@ public class LoginGuiView extends Application {
         rmiRadiobutton = (RadioButton) scene.lookup("#rmiRadiobutton");
         AnchorPane.setBottomAnchor(rmiRadiobutton, getHeightPixel(31));
 
-
         window.show();
     }
 
