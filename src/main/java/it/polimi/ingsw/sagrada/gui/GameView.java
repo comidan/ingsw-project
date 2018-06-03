@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -35,6 +36,7 @@ public class GameView extends Application {
     private RoundtrackView roundtrackView;
     private static GameView gameView = null;
     private CardBoard cardBoard;
+    private GridPane tokenGrid;
 
     public String getUsername(){
         return username;
@@ -71,6 +73,25 @@ public class GameView extends Application {
     public void setRoundtrackImage(List<DiceView> diceViews, int currentround){
         this.roundtrackView.setImage(diceViews, currentround);
     }
+
+    public void setToken(int tokenNumber){
+        tokenGrid = new GridPane();
+        for(int i = 0; i<tokenNumber; i++){
+            tokenGrid.add(new TokenView(), i, 1);
+        }
+
+        anchorPane.setBottomAnchor(tokenGrid, resizer.getHeightPixel(47));
+        anchorPane.setLeftAnchor(tokenGrid, resizer.getWidthPixel(10));
+        anchorPane.getChildren().addAll(tokenGrid);
+
+    }
+
+
+    public void removeToken(int number){
+        tokenGrid.getChildren().remove(0, number);
+    }
+
+
 
     private void initialize(){
         this.cardBoard = new CardBoard();

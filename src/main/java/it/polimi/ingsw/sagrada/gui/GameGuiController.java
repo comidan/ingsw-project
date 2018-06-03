@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.network.client.Client;
+import javafx.application.Platform;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -64,13 +65,24 @@ public class GameGuiController {
 
         this.gameView.setToolClickHandler(event ->{
             ToolCardView toolCardView = (ToolCardView) event.getSource();
+            int tokenNumber;
+            if(toolCardView.getTokenNumber() == 0)
+                tokenNumber = 1;
+            else tokenNumber = 2;
+            gameView.removeToken(tokenNumber);
+            toolCardView.addToken();
             //client.sendResponse(ToolEvent(toolCardView.getToolId()));
 
         });
-
         setRoundTrackClick();
 
-
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                setToken(3);
+                    }
+                }
+            );
     }
 
 
@@ -85,4 +97,9 @@ public class GameGuiController {
 
         this.gameView.setRoundtrackImage(diceViewList, roundNumber);
     }
+
+    public void setToken(int tokenNumber){
+        this.gameView.setToken(tokenNumber);
+    }
+
 }
