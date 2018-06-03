@@ -65,7 +65,7 @@ public class LoginGuiController implements Channel<LoginState, Message> {
 
     private void changeScene() {
         Platform.runLater(() -> {
-            LobbyGuiView lobbyGuiView = loginGuiView.changeScene();
+            LobbyGuiView lobbyGuiView = GUIManager.initLobbyGuiView(loginGuiView.getWindow());
             RMIClient.setLobbyView(lobbyGuiView);
             SocketClient.setLobbyView(lobbyGuiView);
         });

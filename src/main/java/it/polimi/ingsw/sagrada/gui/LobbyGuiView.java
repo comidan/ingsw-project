@@ -2,12 +2,24 @@ package it.polimi.ingsw.sagrada.gui;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LobbyGuiView {
+
+    private static final Logger LOGGER = Logger.getLogger(LobbyGuiView.class.getName());
+
     @FXML
     private Label firstPlayer;
     @FXML
@@ -65,5 +77,49 @@ public class LobbyGuiView {
 
     public void setTimer(String message) {
         Platform.runLater(() -> timer.setText(message));
+    }
+
+    public static LobbyGuiView init(Stage stage) {
+        try {
+            FXMLLoader loaderLobby = new FXMLLoader(LobbyGuiView.class.getResource("/templates/MatchLobbyGui.fxml"));
+            Parent lobby = loaderLobby.load();
+            Scene scene = new Scene(lobby, GUIManager.getWindowWidth(), GUIManager.getWindowHeight());
+            ImageView image = (ImageView) scene.lookup("#background");
+            image.setFitHeight(GUIManager.getWindowHeight());
+            image.setFitWidth(GUIManager.getWindowWidth());
+            image.setPreserveRatio(true);
+            AnchorPane anchor = (AnchorPane) scene.lookup("#anchorPane");
+            Label gameLabel = (Label) scene.lookup("#game");
+            gameLabel.setWrapText(true);
+            AnchorPane.setBottomAnchor(gameLabel, getHeightPixel(13));
+            ImageView dice1 = (ImageView) scene.lookup("#dice1");
+            AnchorPane.setBottomAnchor(dice1, getHeightPixel(62));
+            Label player1 = (Label) scene.lookup("#firstPlayer");
+            AnchorPane.setBottomAnchor(player1, getHeightPixel(65));
+            ImageView dice2 = (ImageView) scene.lookup("#dice2");
+            AnchorPane.setBottomAnchor(dice2, getHeightPixel(47));
+            Label player2 = (Label) scene.lookup("#secondPlayer");
+            AnchorPane.setBottomAnchor(player2, getHeightPixel(50));
+            ImageView dice3 = (ImageView) scene.lookup("#dice3");
+            AnchorPane.setBottomAnchor(dice3, getHeightPixel(32));
+            Label player3 = (Label) scene.lookup("#thirdPlayer");
+            AnchorPane.setBottomAnchor(player3, getHeightPixel(35));
+            ImageView dice4 = (ImageView) scene.lookup("#dice4");
+            AnchorPane.setBottomAnchor(dice4, getHeightPixel(17));
+            Label player4 = (Label) scene.lookup("#fourthPlayer");
+            AnchorPane.setBottomAnchor(player4, getHeightPixel(20));
+            Label timerLabel = (Label) scene.lookup("#timer");
+            AnchorPane.setBottomAnchor(timerLabel, getHeightPixel(10));
+            stage.setScene(scene);
+            return loaderLobby.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, () -> e.getMessage());
+            return null;
+        }
+    }
+
+    private static double getHeightPixel(int perc) {
+        return (perc * GUIManager.getWindowHeight() / 100);
     }
 }
