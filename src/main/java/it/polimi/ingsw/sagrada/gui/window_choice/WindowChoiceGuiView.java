@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.gui.window_choice;
 
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
+import it.polimi.ingsw.sagrada.gui.GUIManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -64,24 +65,25 @@ public class WindowChoiceGuiView extends Application {
         primaryStage.setTitle("Window chooser");
         primaryStage.setResizable(false);
 
-        AnchorPane.setTopAnchor(imageViewList.get(0), getHeightPixel(35));
-        AnchorPane.setTopAnchor(imageViewList.get(1), getHeightPixel(35));
-        AnchorPane.setLeftAnchor(imageViewList.get(0), getWidthPixel(10));
-        AnchorPane.setRightAnchor(imageViewList.get(1), getWidthPixel(10));
-        AnchorPane.setBottomAnchor(imageViewList.get(2), getHeightPixel(10));
-        AnchorPane.setLeftAnchor(imageViewList.get(2), getWidthPixel(10));
-        AnchorPane.setBottomAnchor(imageViewList.get(3), getHeightPixel(10));
-        AnchorPane.setRightAnchor(imageViewList.get(3), getWidthPixel(10));
+        //Window
+        AnchorPane.setTopAnchor(imageViewList.get(0), GUIManager.getHeightPixel(35));
+        AnchorPane.setTopAnchor(imageViewList.get(1), GUIManager.getHeightPixel(35));
+        AnchorPane.setLeftAnchor(imageViewList.get(0), GUIManager.getWidthPixel(10));
+        AnchorPane.setRightAnchor(imageViewList.get(1), GUIManager.getWidthPixel(10));
+        AnchorPane.setBottomAnchor(imageViewList.get(2), GUIManager.getHeightPixel(10));
+        AnchorPane.setLeftAnchor(imageViewList.get(2), GUIManager.getWidthPixel(10));
+        AnchorPane.setBottomAnchor(imageViewList.get(3), GUIManager.getHeightPixel(10));
+        AnchorPane.setRightAnchor(imageViewList.get(3), GUIManager.getWidthPixel(10));
         imageViewList.forEach(img -> anchorPane.getChildren().add(img));
-        
-        AnchorPane.setTopAnchor(title, getHeightPixel(13));
-        AnchorPane.setLeftAnchor(title, getWidthPixel(20));
-        AnchorPane.setRightAnchor(title, getWidthPixel(20));
+        //Title
+        AnchorPane.setTopAnchor(title, GUIManager.getHeightPixel(13));
+        AnchorPane.setLeftAnchor(title, GUIManager.getWidthPixel(20));
+        AnchorPane.setRightAnchor(title, GUIManager.getWidthPixel(20));
         anchorPane.getChildren().add(title);
-        
-        AnchorPane.setTopAnchor(notification, getHeightPixel(20));
-        AnchorPane.setLeftAnchor(notification, getWidthPixel(20));
-        AnchorPane.setRightAnchor(notification, getWidthPixel(20));
+        //Notification
+        AnchorPane.setTopAnchor(notification, GUIManager.getHeightPixel(20));
+        AnchorPane.setLeftAnchor(notification, GUIManager.getWidthPixel(20));
+        AnchorPane.setRightAnchor(notification, GUIManager.getWidthPixel(20));
         anchorPane.getChildren().add(notification);
 
         Scene scene = new Scene(anchorPane, windowWidth, windowHeight);
@@ -92,6 +94,7 @@ public class WindowChoiceGuiView extends Application {
     private void initialize() {
         imageViewList = new ArrayList<>();
 
+        //GUI styling
         anchorPane = new AnchorPane();
         anchorPane.setStyle(
                 "-fx-background-image: url(" +
@@ -99,11 +102,11 @@ public class WindowChoiceGuiView extends Application {
                         "); " +
                         "-fx-background-size: cover;"
         );
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        windowHeight = gd.getDisplayMode().getHeight()*0.8;
-        windowWidth = windowHeight*0.76;
+        windowHeight = GUIManager.getWindowHeight();
+        windowWidth = GUIManager.getWindowWidth();
         anchorPane.resize(windowWidth, windowHeight);
 
+        //window upload
         windowResponse.getIds().forEach(id -> {
             String path = BASE_PATH+id.toString();
             imageViewList.add(new WindowImage(
@@ -114,34 +117,28 @@ public class WindowChoiceGuiView extends Application {
                     id, WindowSide.REAR));
         });
 
+        //Window styling
         imageViewList.forEach(img -> {
             img.setPreserveRatio(true);
-            img.setFitWidth(getWidthPixel(40));
+            img.setFitWidth(GUIManager.getWidthPixel(40));
         });
 
+        //Title styling
         title = new Label();
         title.setText("Choose a window");
         title.setAlignment(Pos.CENTER);
         title.setTextFill(Color.web("#FFFFFF"));
-        title.setFont(Font.font("System", FontWeight.BOLD, 36*gd.getDisplayMode().getHeight()/1080));
+        title.setFont(Font.font("System", FontWeight.BOLD, 36*GUIManager.getScreenHeight()/1080));
         title.setStyle("-fx-background-color: #d57322;" +
                 "-fx-border-color: #000000"
         );
-
+        //Notification styling
         notification = new Label();
         notification.setAlignment(Pos.CENTER);
         notification.setTextFill(Color.web("#000000"));
-        notification.setFont(Font.font("System", FontWeight.BOLD, 24*gd.getDisplayMode().getHeight()/1080));
+        notification.setFont(Font.font("System", FontWeight.BOLD, 24*GUIManager.getScreenHeight()/1080));
         notification.setTextAlignment(TextAlignment.CENTER);
         notification.setWrapText(true);
-    }
-
-    private double getHeightPixel(int perc) {
-        return (windowHeight*perc)/100;
-    }
-
-    private double getWidthPixel(int perc) {
-        return (windowWidth*perc)/100;
     }
 
     public void setNotificationMessage(String message) {

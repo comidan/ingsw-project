@@ -10,9 +10,8 @@ import java.awt.GraphicsEnvironment;
 import java.util.List;
 
 public class GUIManager {
-
-    private double windowHeight;
-    private double windowWidth;
+    private static final double RATIO = 0.76;
+    private static final double RELATIVE_DIMENSION = 0.8;
     private static final GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
     public static LobbyGuiView initLobbyGuiView(Stage stage) {
@@ -27,11 +26,28 @@ public class GUIManager {
         return GameView.getInstance(players, diceResponse, constraints);
     }
 
-    static double getWindowHeight() {
-        return gd.getDisplayMode().getHeight() * 0.7;
+    public static double getWindowHeight() {
+        return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION;
     }
 
-     static double getWindowWidth() {
-        return gd.getDisplayMode().getHeight() * 0.7 * 0.76;
+    public static double getWindowWidth() {
+        return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION * RATIO;
     }
+
+    public static double getScreenHeight() {
+        return gd.getDisplayMode().getHeight();
+    }
+
+    public static double getScreenWidth() {
+        return gd.getDisplayMode().getWidth();
+    }
+
+    public static double getHeightPixel(int perc) {
+        return (perc * getWindowHeight() / 100);
+    }
+
+    public static double getWidthPixel(int perc) {
+        return (perc * getWindowWidth() / 100);
+    }
+
 }
