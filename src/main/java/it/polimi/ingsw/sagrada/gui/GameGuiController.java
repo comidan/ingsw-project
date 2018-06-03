@@ -4,20 +4,25 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent;
+import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.network.client.Client;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameGuiController {
 
     private GameView gameView;
     private ClickedObject clickedObject;
     private DraftView draftView;
+    private RoundtrackView roundtrackView;
 
     public GameGuiController(GameView gameView, Client client) {
         this.clickedObject = new ClickedObject();
         this.gameView = gameView;
         this.draftView = this.gameView.getDraftView();
+        this.roundtrackView = this.gameView.getRoundtrackView();
         this.gameView.setEndTurnHandler(event -> {
             EndTurnEvent endTurnEvent = new EndTurnEvent(this.gameView.getUsername());
             try {
@@ -63,5 +68,21 @@ public class GameGuiController {
 
         });
 
+        setRoundTrackClick();
+
+
+    }
+
+
+    private void setRoundTrackClick(){
+        this.gameView.setRoundtrackClickHandler(event -> {
+            DiceView clickedDice = (DiceView) event.getSource();
+            clickedObject.setClickedDice(clickedDice);
+        });
+    }
+
+    private void addDiceRoundtrack(List<DiceView> diceViewList, int roundNumber){
+
+        this.gameView.setRoundtrackImage(diceViewList, roundNumber);
     }
 }

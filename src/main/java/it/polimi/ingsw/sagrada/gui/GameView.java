@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,10 @@ public class GameView extends Application {
         windows.get(username).setWindowDiceListener(cellClickEventHandler);
     }
 
+    public void setRoundtrackClickHandler(EventHandler<MouseEvent> diceClickHandler){
+        roundtrackView.setClickHandler(diceClickHandler);
+    }
+
     public void setToolClickHandler(EventHandler<MouseEvent> toolClickHandler){
         cardBoard.setToolClickHandler(toolClickHandler);
     }
@@ -57,6 +62,14 @@ public class GameView extends Application {
 
     public DraftView getDraftView() {
         return draftView;
+    }
+
+    public RoundtrackView getRoundtrackView(){
+        return this.roundtrackView;
+    }
+
+    public void setRoundtrackImage(List<DiceView> diceViews, int currentround){
+        this.roundtrackView.setImage(diceViews, currentround);
     }
 
     private void initialize(){
@@ -83,7 +96,7 @@ public class GameView extends Application {
         for(int i = 1; i < players.size(); i++)
             verticalBox.getChildren().add(windows.get(players.get(i)));
         anchorPane.setBottomAnchor(verticalBox, resizer.getHeightPixel(10));
-        anchorPane.setRightAnchor(verticalBox, resizer.getWidthPixel(10));
+        anchorPane.setRightAnchor(verticalBox, resizer.getWidthPixel(1));
         anchorPane.getChildren().addAll(verticalBox);
         endTurn = new Button("End turn");
         horizontalBox.getChildren().add(endTurn);
@@ -93,12 +106,15 @@ public class GameView extends Application {
         anchorPane.setLeftAnchor(horizontalBox, resizer.getWidthPixel(10));
         anchorPane.getChildren().addAll(horizontalBox);
         draftView.setAlignment(Pos.CENTER);
-        anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(50));
+        anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(60));
         anchorPane.setRightAnchor(draftView, resizer.getWidthPixel(40));
         anchorPane.getChildren().addAll(draftView);
         anchorPane.setBottomAnchor(cardBoard, resizer.getHeightPixel(20));
         anchorPane.setRightAnchor(cardBoard, resizer.getWidthPixel(32));
         anchorPane.getChildren().addAll(cardBoard);
+        anchorPane.setTopAnchor(roundtrackView, resizer.getHeightPixel(17));
+        anchorPane.setLeftAnchor(roundtrackView, resizer.getWidthPixel(68));
+        anchorPane.getChildren().add(roundtrackView);
         Scene scene = new Scene(anchorPane, resizer.getWindowWidth(), resizer.getWindowHeight());
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
@@ -140,4 +156,8 @@ public class GameView extends Application {
         }
         return gameView;
     }
+
+
+
+
 }
