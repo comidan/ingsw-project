@@ -30,6 +30,5 @@ public class WindowView extends GridPane {
         for (int i = 0; i < windowDices.length; i++)
             for (int j = 0; j < windowDices[0].length; j++)
                 windowDices[i][j].setCellListener(cellClickEventHandler);
-
     }
 }

@@ -72,4 +72,36 @@ public enum Constraint {
         else
             return Constraint.WHITE;
     }
+
+    @Override
+    public String toString() {
+        switch (this) {
+            case ONE:
+                return "1";
+            case TWO:
+                return "2";
+            case THREE:
+                return "3";
+            case FOUR:
+                return "4";
+            case FIVE:
+                return "5";
+            case SIX:
+                return "6";
+            case GREEN:
+                return "G";
+            case YELLOW:
+                return "Y";
+            case BLUE:
+                return "B";
+            case PURPLE:
+                return "P";
+            case RED:
+                return "R";
+            case WHITE:
+                return "W";
+            default:
+                return "NOPE";
+        }
+    }
 }
