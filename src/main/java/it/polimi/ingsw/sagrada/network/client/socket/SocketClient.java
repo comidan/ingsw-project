@@ -231,11 +231,13 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         }
     }
 
-    private void executePayload(String json) throws RemoteException{
+    private void executePayload(String json) throws RemoteException, IOException{
         System.out.println("Receiving json...");
         Message message = JsonMessage.parseJsonData(json);
         System.out.println(message.getType().getName());
-        if(message instanceof MatchTimeEvent)
+        if (message instanceof HeartbeatInitEvent)
+            heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, ((HeartbeatInitEvent)message).getHeartbeatPort(), username);
+        else if(message instanceof MatchTimeEvent)
             setTimer(((MatchTimeEvent)message).getTime());
         else if(message instanceof AddPlayerEvent)
             setPlayer(((AddPlayerEvent)message).getUsername());
@@ -260,6 +262,8 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         System.out.println("Waiting lobby response");
         String jsonResponse = inSocket.readLine();
         Message response = JsonMessage.parseJsonData(jsonResponse);
+        System.out.println(jsonResponse);
+        System.out.println(response.getType());
         if (response instanceof HeartbeatInitEvent)
             heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, ((HeartbeatInitEvent)response).getHeartbeatPort(), identifier);
         else

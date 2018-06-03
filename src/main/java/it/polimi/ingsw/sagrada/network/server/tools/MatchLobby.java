@@ -217,9 +217,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     RemoteSocketClient socketClient = new RemoteSocketClient(client, id, disconnect, fastRecovery, sendToModel);
                     if(!clientIds.contains(id)) //in case of communication loss
                         clientIds.add(id);
-                    clientPool.put(id, socketClient);
                     int heartbeatPort = portDiscovery.obtainAvailableUDPPort();
-                    System.out.println("UDP HEARTBEAT PORT CHOSEN : " + heartbeatPort);
                     DataManager.sendLoginLobbyResponse(client, heartbeatPort);
                     heartbeatProtocolManager.addHost(id, heartbeatPort);
                     executor.submit(socketClient);
@@ -228,6 +226,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                         System.out.println("Remote user set");
                         clientPool.get(id).setPlayer(username);
                     }
+                    clientPool.put(id, socketClient);
                 }
                 else
                     DataManager.sendLoginError(client);

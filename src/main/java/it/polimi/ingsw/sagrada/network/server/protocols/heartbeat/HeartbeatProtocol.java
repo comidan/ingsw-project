@@ -77,7 +77,6 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
                     }
                 }
                 timeElapsed += TIME_INTERVAL;
-                System.out.println("Waiting response of " + expectedPayload + " after " + timeElapsed + " seconds");
                 if (timeElapsed > TIME_LOSS_COMMUNICATION_FRAME * TIME_INTERVAL && !lossCommAlreadyNotified)
                     lossCommAlreadyNotified = notifyLostComm(timeElapsed);
 
