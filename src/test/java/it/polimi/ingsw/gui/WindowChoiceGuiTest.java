@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class WindowChoiceGuiTest {
-    @Test
     public void testGui() {
         List<Integer> ids = new ArrayList<>();
         ids.add(0);
