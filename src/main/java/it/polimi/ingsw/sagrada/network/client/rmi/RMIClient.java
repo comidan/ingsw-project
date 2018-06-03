@@ -247,7 +247,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public void sendResponse(Message message) throws RemoteException {
         if(message instanceof WindowResponse) {
-            new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message), this);
+            new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), this);
         }
     }
 

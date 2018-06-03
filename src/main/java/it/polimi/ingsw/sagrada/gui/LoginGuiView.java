@@ -45,10 +45,8 @@ public class LoginGuiView extends Application {
     private Stage window;
 
     public LoginGuiView() {
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        int height = gd.getDisplayMode().getHeight();
-        this.windowHeight = height * 0.7;
-        this.windowWidth = windowHeight * 0.76;
+        windowWidth = GUIManager.getWindowWidth();
+        windowHeight = GUIManager.getWindowHeight();
     }
 
     public void addLoginButtonListener(EventHandler<ActionEvent> listener) {

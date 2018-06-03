@@ -244,7 +244,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         else if(message instanceof RemovePlayerEvent)
             removePlayer(((RemovePlayerEvent)message).getUsername());
         else if(message instanceof WindowResponse) {
-            new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message), this);
+            new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), this);
         }
         else if(message instanceof DiceResponse) {
             //update GUI

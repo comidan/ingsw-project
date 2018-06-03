@@ -39,14 +39,14 @@ public class WindowChoiceGuiView extends Application {
         imageViewList.forEach(img -> img.setOnMouseClicked(handler));
     }
 
-    private static void startGameGui(WindowResponse windowResponse) {
+    private static void startGameGui(WindowResponse windowResponse, Stage stage) {
         WindowChoiceGuiView.windowResponse = windowResponse;
-        new WindowChoiceGuiView().start(new Stage());
+        new WindowChoiceGuiView().start(stage);
     }
 
-    public static WindowChoiceGuiView getInstance(WindowResponse windowResponse) {
+    public static WindowChoiceGuiView getInstance(WindowResponse windowResponse, Stage stage) {
         if (instance == null) {
-            Platform.runLater(() -> startGameGui(windowResponse));
+            Platform.runLater(() -> startGameGui(windowResponse, stage));
             while (instance == null)
                 try {
                     Thread.sleep(100);
@@ -104,6 +104,7 @@ public class WindowChoiceGuiView extends Application {
         );
         windowHeight = GUIManager.getWindowHeight();
         windowWidth = GUIManager.getWindowWidth();
+
         anchorPane.resize(windowWidth, windowHeight);
 
         //window upload
@@ -120,7 +121,7 @@ public class WindowChoiceGuiView extends Application {
         //Window styling
         imageViewList.forEach(img -> {
             img.setPreserveRatio(true);
-            img.setFitWidth(GUIManager.getWidthPixel(40));
+            img.setFitWidth(GUIManager.getWidthPixel(35));
         });
 
         //Title styling

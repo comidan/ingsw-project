@@ -128,4 +128,8 @@ public class LobbyGuiView {
     public void closeWindow() {
         stage.hide();
     }
+
+    public Stage getStage() {
+        return (Stage) timer.getScene().getWindow();
+    }
 }

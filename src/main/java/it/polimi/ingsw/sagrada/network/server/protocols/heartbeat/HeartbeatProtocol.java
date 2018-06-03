@@ -47,7 +47,6 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
      * @return received heartbeat
      */
     private byte[] receiveHeartbeat() throws IOException {
-        System.out.println("Waiting response from " + expectedPayload);
         byte[] payload = receiveData(datagramSocket);
         data = new String(payload);
         return payload;
@@ -112,7 +111,6 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
             notify(HeartbeatState.HOST_ONLINE, event);
         else
             notify(HeartbeatState.HEARTBEAT_RECEIVED, event);
-        System.out.println("Received heartbeat from " + expectedPayload);
     }
 
     @Override

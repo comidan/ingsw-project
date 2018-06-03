@@ -18,8 +18,8 @@ public class GUIManager {
         return LobbyGuiView.init(stage);
     }
 
-    public static WindowChoiceGuiView initWindowChoiceGuiView(WindowResponse windowResponse) {
-        return WindowChoiceGuiView.getInstance(windowResponse);
+    public static WindowChoiceGuiView initWindowChoiceGuiView(WindowResponse windowResponse, Stage stage) {
+        return WindowChoiceGuiView.getInstance(windowResponse, stage);
     }
 
     public static GameView initGameView(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {

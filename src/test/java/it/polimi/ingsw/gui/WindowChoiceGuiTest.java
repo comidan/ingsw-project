@@ -3,6 +3,7 @@ package it.polimi.ingsw.gui;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiView;
+import javafx.stage.Stage;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class WindowChoiceGuiTest {
         ids.add(0);
         ids.add(1);
         WindowResponse windowResponse = new WindowResponse("Gianni", ids);
-        WindowChoiceGuiView windowChoiceGuiView = WindowChoiceGuiView.getInstance(windowResponse);
+        WindowChoiceGuiView windowChoiceGuiView = WindowChoiceGuiView.getInstance(windowResponse, new Stage());
         new WindowChoiceGuiController(windowChoiceGuiView, null);
         Scanner scanner = new Scanner(System.in);
         scanner.nextInt();
