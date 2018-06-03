@@ -42,14 +42,14 @@ public class CardBoard extends GridPane {
         id = 0;
         for (int i = 1; i < 4; i++) {
 
-            if(usedToolId.size()==0) {
-                id = 6 + rand.nextInt(4);
+            if(usedObjId.size()==0) {
+                id = rand.nextInt(9) + 1;
             }
             else{
-                while(usedToolId.contains(id))
-                    id = 6 + rand.nextInt(4);
+                while(usedObjId.contains(id))
+                    id = rand.nextInt(9) + 1;
             }
-            usedToolId.add(id);
+            usedObjId.add(id);
             ObjectiveCardView objectiveCardView = new ObjectiveCardView(id);
             this.add(objectiveCardView, i, 2);
             objectiveCardViewList.add(objectiveCardView);
