@@ -46,7 +46,8 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     /**
      * @return received heartbeat
      */
-    private byte[] receiveHeartbeat() throws IOException{
+    private byte[] receiveHeartbeat() throws IOException {
+        System.out.println("Waiting response from " + expectedPayload);
         byte[] payload = receiveData(datagramSocket);
         data = new String(payload);
         return payload;
@@ -58,7 +59,7 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     @Override
     public void run() {
         Future asynchronousHeartbeat = executor.submit(this::receiveHeartbeat);
-        boolean lossCommsAlreadyNotified = false;
+        boolean lossCommAlreadyNotified = false;
         int timeElapsed = 0;
         HeartbeatEvent event;
         runnableWorkerThread = Thread.currentThread();
@@ -76,15 +77,16 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
                     }
                 }
                 timeElapsed += TIME_INTERVAL;
-                if (timeElapsed > TIME_LOSS_COMMUNICATION_FRAME * TIME_INTERVAL && !lossCommsAlreadyNotified)
-                    lossCommsAlreadyNotified = notifyLostComm(timeElapsed);
+                System.out.println("Waiting response of " + expectedPayload + " after " + timeElapsed + " seconds");
+                if (timeElapsed > TIME_LOSS_COMMUNICATION_FRAME * TIME_INTERVAL && !lossCommAlreadyNotified)
+                    lossCommAlreadyNotified = notifyLostComm(timeElapsed);
 
                 if (timeElapsed > TIME_LIFE_FRAMES * TIME_INTERVAL)
                     isDead = notifyDeath(timeElapsed, asynchronousHeartbeat);
             }
             if(!isDead && data.equals(expectedPayload)) {
-                notifyHeartbeat(lossCommsAlreadyNotified, timeElapsed);
-                lossCommsAlreadyNotified = false;
+                notifyHeartbeat(lossCommAlreadyNotified, timeElapsed);
+                lossCommAlreadyNotified = false;
                 timeElapsed = 0;
             }
             asynchronousHeartbeat = executor.submit(this::receiveHeartbeat);
@@ -105,12 +107,13 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
         return true;
     }
 
-    private void notifyHeartbeat(boolean lossCommsAlreadyNotified, int timeElapsed) {
+    private void notifyHeartbeat(boolean lossCommAlreadyNotified, int timeElapsed) {
         HeartbeatEvent event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
-        if (lossCommsAlreadyNotified)
+        if (lossCommAlreadyNotified)
             notify(HeartbeatState.HOST_ONLINE, event);
         else
             notify(HeartbeatState.HEARTBEAT_RECEIVED, event);
+        System.out.println("Received heartbeat from " + expectedPayload);
     }
 
     @Override

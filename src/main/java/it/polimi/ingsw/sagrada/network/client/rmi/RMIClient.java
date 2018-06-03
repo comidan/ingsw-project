@@ -2,8 +2,11 @@ package it.polimi.ingsw.sagrada.network.client.rmi;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
+import it.polimi.ingsw.sagrada.gui.GUIManager;
 import it.polimi.ingsw.sagrada.gui.LobbyGuiView;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
+import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
@@ -243,7 +246,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
     @Override
     public void sendResponse(Message message) throws RemoteException {
-
+        if(message instanceof WindowResponse) {
+            new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message), this);
+        }
     }
 
     @Override

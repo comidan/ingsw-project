@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.gui.window_choice;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -39,12 +40,12 @@ public class WindowChoiceGuiView extends Application {
 
     private static void startGameGui(WindowResponse windowResponse) {
         WindowChoiceGuiView.windowResponse = windowResponse;
-        launch(WindowChoiceGuiView.class);
+        new WindowChoiceGuiView().start(new Stage());
     }
 
     public static WindowChoiceGuiView getInstance(WindowResponse windowResponse) {
         if (instance == null) {
-            new Thread(() -> startGameGui(windowResponse)).start();
+            Platform.runLater(() -> startGameGui(windowResponse));
             while (instance == null)
                 try {
                     Thread.sleep(100);

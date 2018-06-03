@@ -33,7 +33,7 @@ public class ConstraintGenerator {
     public Constraint[][] getConstraintMatrix(int id, WindowSide side) {
         JSONObject card = (JSONObject) windowsArray.get(id);
         JSONArray windows = (JSONArray) card.get("windows");
-        JSONObject specificWindow = (JSONObject) windows.get(WindowSide.sidetoInt(side));
+        JSONObject specificWindow = (JSONObject) windows.get(WindowSide.sideToInt(side));
         return getMatrix((JSONArray)specificWindow.get("cells"));
     }
     

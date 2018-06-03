@@ -54,11 +54,11 @@ public class JsonMessage implements CommandKeyword {
         return container;
     }
 
-    public static JSONObject createWindowEvent(String username, int windowId) {
+    public static JSONObject createWindowEvent(String username, int windowId, String side) {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, username);
         content.put(WINDOW_ID, windowId+"");
-        content.put("window_side", FRONT); //constant for testing purpose
+        content.put("window_side", side); //constant for testing purpose
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, ACTION);
         container.put(COMMAND_TYPE, WINDOW_CHOICE);

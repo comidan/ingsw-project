@@ -94,7 +94,6 @@ public class RemoteSocketClient implements ClientBase, Runnable {
 
     @Override
     public void sendResponse(Message message) {
-        //manda i messaggi del model al client
         String messageType = message.getType().getName();
         String payload;
         if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.DICE_RESPONSE)))

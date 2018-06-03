@@ -122,7 +122,7 @@ public class RouterTest {
 
             JSONObject card = (JSONObject)windows.get(idWindow);
             JSONArray wnds = (JSONArray)card.get("windows");
-            JSONObject wnd = (JSONObject)wnds.get(WindowSide.sidetoInt(windowSide));
+            JSONObject wnd = (JSONObject)wnds.get(WindowSide.sideToInt(windowSide));
             return (String)wnd.get("name");
 
         } catch (ParseException e) {

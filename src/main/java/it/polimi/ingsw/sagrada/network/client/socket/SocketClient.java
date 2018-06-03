@@ -4,8 +4,11 @@ import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.playables.WindowSide;
+import it.polimi.ingsw.sagrada.gui.GUIManager;
 import it.polimi.ingsw.sagrada.gui.LobbyGuiView;
 import it.polimi.ingsw.sagrada.gui.LoginGuiController;
+import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
@@ -174,6 +177,11 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
             JSONObject msg = JsonMessage.createDiceEvent((DiceEvent)message);
             outSocket.println(msg.toJSONString());
         }
+        else if(message instanceof WindowEvent) {
+            JSONObject jsonWindow = JsonMessage.createWindowEvent(username, ((WindowEvent) message).getIdWindow(),
+                                    WindowSide.sideToString(((WindowEvent)message).getWindowSide()));
+            outSocket.println(jsonWindow.toJSONString());
+        }
     }
 
     private void login() {
@@ -234,15 +242,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         else if(message instanceof RemovePlayerEvent)
             removePlayer(((RemovePlayerEvent)message).getUsername());
         else if(message instanceof WindowResponse) {
-            System.out.println("Press key to generate WindowEvent");
-            try {
-                String choice = inKeyboard.readLine();
-            } catch (IOException e) {
-                LOGGER.log(Level.SEVERE, () -> e.getMessage());
-            }
-            JSONObject jsonWindow = JsonMessage.createWindowEvent(username, ((WindowResponse) message).getIds().get(0));
-            outSocket.println(jsonWindow.toJSONString());
-            //Platform.runLater(() -> GameView.startGameGUI());
+            new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message), this);
         }
         else if(message instanceof DiceResponse) {
             //update GUI

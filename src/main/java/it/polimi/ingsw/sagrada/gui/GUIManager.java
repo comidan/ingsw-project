@@ -9,21 +9,21 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.util.List;
 
-class GUIManager {
+public class GUIManager {
 
     private double windowHeight;
     private double windowWidth;
     private static final GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
-    static LobbyGuiView initLobbyGuiView(Stage stage) {
+    public static LobbyGuiView initLobbyGuiView(Stage stage) {
         return LobbyGuiView.init(stage);
     }
 
-    static WindowChoiceGuiView initWindowChoiceGuiView(WindowResponse windowResponse) {
+    public static WindowChoiceGuiView initWindowChoiceGuiView(WindowResponse windowResponse) {
         return WindowChoiceGuiView.getInstance(windowResponse);
     }
 
-    static GameView initGameView(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    public static GameView initGameView(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
         return GameView.getInstance(players, diceResponse, constraints);
     }
 

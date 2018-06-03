@@ -38,6 +38,6 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
 
     @Override
     public void sendResponse(Message message) throws RemoteException {
-        clientRMI.sendResponse(message);
+        clientRMI.sendResponse(message); //CHIAMARE I CORRISPETTIVI METODI DA ClientRMI NON COSI'
     }
 }

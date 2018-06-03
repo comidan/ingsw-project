@@ -31,7 +31,7 @@ public class CommandParser implements CommandKeyword {
                     data = (JSONObject) jsonMsg.get(WINDOW);
                     String idPlayerW = (String)data.get(PLAYER_ID);
                     int idWindow = Integer.parseInt((String)data.get(WINDOW_ID));
-                    WindowSide side = WindowSide.stringtoWindowSide((String)data.get(WINDOW_SIDE));
+                    WindowSide side = WindowSide.stringToWindowSide((String)data.get(WINDOW_SIDE));
                     return new WindowEvent(idPlayerW, idWindow, side);
                 case SETTINGS :  //is settings response useless?
                     return null;
@@ -51,7 +51,7 @@ public class CommandParser implements CommandKeyword {
                 JSONObject messageW = (JSONObject)message.get(WINDOW);
                 String idPlayerW = (String)messageW.get(PLAYER_ID);
                 int idWindow = Integer.parseInt((String)messageW.get(WINDOW_ID));
-                WindowSide side = WindowSide.stringtoWindowSide((String)messageW.get(WINDOW_SIDE));
+                WindowSide side = WindowSide.stringToWindowSide((String)messageW.get(WINDOW_SIDE));
                 return new WindowEvent(idPlayerW, idWindow, side);
             case MOVE_DICE_CHOICE:
                 JSONObject data = (JSONObject) message.get(MOVE_DICE);

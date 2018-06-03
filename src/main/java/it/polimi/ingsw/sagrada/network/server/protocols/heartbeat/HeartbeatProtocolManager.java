@@ -31,6 +31,7 @@ public class HeartbeatProtocolManager implements Observer<HeartbeatState, Heartb
         try {
             if (monitoredHosts.get(hostId) == null) {
                 HeartbeatProtocol heartbeatProtocol = new HeartbeatProtocol(port, this, hostId);
+                System.out.println("Adding " + hostId + " on " + port);
                 monitoredHosts.put(hostId, heartbeatProtocol);
                 executor.submit(heartbeatProtocol);
                 listener.onAcquiredCommunication(new HeartbeatEvent(hostId, 0, new Date().getTime()));

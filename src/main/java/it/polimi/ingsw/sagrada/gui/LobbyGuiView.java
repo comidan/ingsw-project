@@ -32,6 +32,7 @@ public class LobbyGuiView {
     private Label timer;
 
     private List<String> playerShown = new ArrayList<>();
+    private static Stage stage;
 
     public void setPlayer(String username) {
         System.out.println("Setting player");
@@ -110,6 +111,7 @@ public class LobbyGuiView {
             AnchorPane.setBottomAnchor(player4, getHeightPixel(20));
             Label timerLabel = (Label) scene.lookup("#timer");
             AnchorPane.setBottomAnchor(timerLabel, getHeightPixel(10));
+            LobbyGuiView.stage = stage;
             stage.setScene(scene);
             return loaderLobby.getController();
         } catch (IOException e) {
@@ -121,5 +123,9 @@ public class LobbyGuiView {
 
     private static double getHeightPixel(int perc) {
         return (perc * GUIManager.getWindowHeight() / 100);
+    }
+
+    public void closeWindow() {
+        stage.hide();
     }
 }

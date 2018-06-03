@@ -69,7 +69,7 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         JSONObject card = (JSONObject) windowsArray.get(id);
 
         JSONArray windows = (JSONArray) card.get("windows");
-        JSONObject specificWindow = (JSONObject) windows.get(WindowSide.sidetoInt(side));
+        JSONObject specificWindow = (JSONObject) windows.get(WindowSide.sideToInt(side));
         String name = (String) specificWindow.get("name");
         int numTokens = ((Long) specificWindow.get("token")).intValue();
         List<Token> tokens = new ArrayList<>();
