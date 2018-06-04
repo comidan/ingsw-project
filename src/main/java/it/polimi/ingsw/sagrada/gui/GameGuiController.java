@@ -92,6 +92,14 @@ public class GameGuiController {
         gameView.notifyEndTurn();
     }
 
+    private void setDraftListener() {
+        this.gameView.setDraftClickHandler(event ->
+        {
+            DiceView diceView = (DiceView) event.getSource();
+            clickedObject.setClickedDice(diceView);
+            System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
+        });
+    }
 
     private void setRoundTrackClick(){
         this.gameView.setRoundtrackClickHandler(event -> {
@@ -116,7 +124,11 @@ public class GameGuiController {
     }
 
     public void setDraft(DiceResponse diceResponse) {
-        Platform.runLater(() -> gameView.setDraft(diceResponse));
+        Platform.runLater(() -> {
+            gameView.setDraft(diceResponse);
+            setDraftListener();
+        });
+
     }
 
     public void notifyTurn() {
