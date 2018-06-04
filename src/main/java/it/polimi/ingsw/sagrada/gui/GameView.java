@@ -31,7 +31,7 @@ public class GameView extends Application {
     private static String username;
     private static DiceResponse diceResponse;
     private static List<String> players;
-    private static Constraint[][] constraints;
+    private static List<Constraint[][]> constraints;
     private Button endTurn;
     private ClickedObject clickedObject;
     private Resizer resizer;
@@ -123,10 +123,11 @@ public class GameView extends Application {
 
     private void createScene(Stage primaryStage){
 
-        players.forEach(user -> windows.put(user, new WindowView(constraints)));
+        players.forEach(user -> windows.put(user, new WindowView(constraints.get(players.indexOf(user)))));
         verticalBox.setSpacing(15);
-        for(int i = 1; i < players.size(); i++)
-            verticalBox.getChildren().add(windows.get(players.get(i)));
+        for(int i = 0; i < players.size(); i++)
+            if(!players.get(i).equals(username))
+                verticalBox.getChildren().add(windows.get(players.get(i)));
         anchorPane.setBottomAnchor(verticalBox, resizer.getHeightPixel(10));
         anchorPane.setRightAnchor(verticalBox, resizer.getWidthPixel(1));
         anchorPane.getChildren().addAll(verticalBox);
@@ -168,7 +169,8 @@ public class GameView extends Application {
     }
 
     private static void startGameGUI(String username, Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
-        GameView.constraints = constraints;
+        GameView.constraints = new ArrayList<>();
+        GameView.constraints.add(constraints);// constraints;
         GameView.players = players;
         GameView.username = username;
         windows = new HashMap<>();
@@ -176,7 +178,7 @@ public class GameView extends Application {
         new GameView().start(stage);
     }
 
-    private static void startGameGUI(String username, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    private static void startGameGUI(String username, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
         GameView.username = username;
@@ -185,7 +187,7 @@ public class GameView extends Application {
         GameView.launch(GameView.class);
     }
 
-    public static GameView getInstance(String username, Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    /*public static GameView getInstance(String username, Stage stage, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
         if (gameView == null) {
            Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
             while (gameView == null)
@@ -197,9 +199,23 @@ public class GameView extends Application {
                 }
         }
         return gameView;
+    }*/
+
+    public static GameView getInstance(String username, Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+        if (gameView == null) {
+            Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
+            while (gameView == null)
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException exc) {
+                    Thread.currentThread().interrupt();
+                    return gameView;
+                }
+        }
+        return gameView;
     }
 
-    public static GameView getInstance(String username, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    public static GameView getInstance(String username, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
         if (gameView == null) {
             new Thread(() -> startGameGUI(username, players, diceResponse, constraints)).start(); //)Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
             while (gameView == null)

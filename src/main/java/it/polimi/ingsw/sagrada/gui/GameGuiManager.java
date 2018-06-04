@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GameGuiController {
+public class GameGuiManager {
 
-    private static final Logger LOGGER = Logger.getLogger(GameGuiController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(GameGuiManager.class.getName());
 
     private GameView gameView;
     private ClickedObject clickedObject;
@@ -23,7 +23,7 @@ public class GameGuiController {
     private RoundtrackView roundtrackView;
     private CellView lastMove;
 
-    public GameGuiController(GameView gameView, Client client) {
+    public GameGuiManager(GameView gameView, Client client) {
         this.clickedObject = new ClickedObject();
         this.gameView = gameView;
         this.draftView = this.gameView.getDraftView();

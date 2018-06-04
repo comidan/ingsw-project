@@ -45,14 +45,14 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     private String username;
     private HeartbeatProtocolManager heartbeatProtocolManager;
     private Client remoteClient;
-    private LoginGuiController loginGuiController;
+    private LoginGuiManager loginGuiManager;
     private AbstractServerRMI server;
     private static List<String> playerList;
     private WindowChoiceGuiController windowChoiceGuiController;
-    private GameGuiController gameGuiController;
+    private GameGuiManager gameGuiManager;
 
-    public RMIClient(LoginGuiController loginGuiController) throws RemoteException {
-        this.loginGuiController = loginGuiController;
+    public RMIClient(LoginGuiManager loginGuiManager) throws RemoteException {
+        this.loginGuiManager = loginGuiManager;
         commandParser = new CommandParser();
         establishServerConnection();
     }
@@ -82,12 +82,12 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
         while (loginState != LoginState.AUTH_OK) {
             try {
-                username = LoginGuiController.getUsername();
+                username = LoginGuiManager.getUsername();
                 System.out.println("Logging in");
-                loginState = server.login(this, username, LoginGuiController.getPassword());
+                loginState = server.login(this, username, LoginGuiManager.getPassword());
                 System.out.println(loginState);
                 if (loginState == LoginState.AUTH_OK) {
-                    loginGuiController.dispatch(loginState); //sendMessage(LoginState.AUTH_OK);
+                    loginGuiManager.dispatch(loginState); //sendMessage(LoginState.AUTH_OK);
                     try {
                         System.out.println("Acquiring lobby");
                         String lobbyId = server.getMatchLobbyId();
@@ -104,7 +104,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                     executeOrders();
                 }
                 else {
-                    loginGuiController.dispatch(loginState); //sendMessage(loginState);
+                    loginGuiManager.dispatch(loginState); //sendMessage(loginState);
                 }
             } catch (IOException e) {
                 System.out.println("RMI server error");
@@ -257,30 +257,30 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
         else if(message instanceof DiceResponse) {
             ConstraintGenerator constraintGenerator = new ConstraintGenerator();
-            if(gameGuiController == null)
-                gameGuiController = new GameGuiController(GameView.getInstance( username,
+            if(gameGuiManager == null)
+                gameGuiManager = new GameGuiManager(GameView.getInstance( username,
                                                                                 windowChoiceGuiController.getStage(),
                                                                                 playerList,
                                                                                 (DiceResponse)message,
                                                                                 constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
                                                                                                                         windowChoiceGuiController.getWindowSide())), this);
             else
-                gameGuiController.setDraft((DiceResponse) message);
+                gameGuiManager.setDraft((DiceResponse) message);
         }
         else if(message instanceof BeginTurnEvent) {
             ConstraintGenerator constraintGenerator = new ConstraintGenerator();
-            if(gameGuiController == null)
-                gameGuiController = new GameGuiController(GameView.getInstance(username,
+            if(gameGuiManager == null)
+                gameGuiManager = new GameGuiManager(GameView.getInstance(username,
                                                                                windowChoiceGuiController.getStage(),
                                                                                playerList,
                                                                                (DiceResponse)message,
                                                                                 constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
                                                                                                                         windowChoiceGuiController.getWindowSide())), this);
 
-            gameGuiController.notifyTurn();
+            gameGuiManager.notifyTurn();
         }
         else if(message instanceof RuleResponse)
-            gameGuiController.notifyMoveResponse((RuleResponse) message);
+            gameGuiManager.notifyMoveResponse((RuleResponse) message);
     }
 
     @Override
@@ -290,6 +290,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
     @Override
     public void sendMessage(LoginState message) {
-        LoginGuiController.getDynamicRouter().dispatch(message);
+        LoginGuiManager.getDynamicRouter().dispatch(message);
     }
 }

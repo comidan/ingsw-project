@@ -17,13 +17,13 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoginGuiController implements Channel<LoginState, Message> {
+public class LoginGuiManager implements Channel<LoginState, Message> {
     private static final Logger LOGGER = Logger.getLogger(LoginGuiView.class.getName());
     private ExecutorService executorService = Executors.newCachedThreadPool();
     private static LoginGuiView loginGuiView;
     private static final DynamicRouter dynamicRouter= new MessageDispatcher();
 
-    public LoginGuiController(LoginGuiView loginGuiView) {
+    public LoginGuiManager(LoginGuiView loginGuiView) {
         dynamicRouter.subscribeChannel(LoginState.class, this);
         this.loginGuiView = loginGuiView;
         this.loginGuiView.addLoginButtonListener( event -> {
@@ -40,7 +40,7 @@ public class LoginGuiController implements Channel<LoginState, Message> {
                 else {
                     executorService.submit(() -> {
                         try {
-                            ClientManager.getRMIClient(LoginGuiController.this);
+                            ClientManager.getRMIClient(LoginGuiManager.this);
                         } catch (IOException e) {
                             LOGGER.log(Level.SEVERE, "Error creating socket communication");
                         }

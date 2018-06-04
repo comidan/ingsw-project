@@ -4,10 +4,9 @@ import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
+import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.gui.*;
 import it.polimi.ingsw.sagrada.network.client.Client;
-import javafx.stage.Stage;
-import org.junit.Test;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -46,14 +45,13 @@ public class MainGameGuiTest {
             dice.setValue(5);
             diceList.add(dice);
             DiceResponse diceResponse = new DiceResponse("draft", diceList);
-            Constraint[][] constraints = new Constraint[][]{
-                    {Constraint.WHITE, Constraint.PURPLE, Constraint.RED, Constraint.BLUE, Constraint.YELLOW},
-                    {Constraint.GREEN, Constraint.WHITE, Constraint.PURPLE, Constraint.YELLOW, Constraint.GREEN},
-                    {Constraint.WHITE, Constraint.YELLOW, Constraint.BLUE, Constraint.GREEN, Constraint.RED},
-                    {Constraint.BLUE, Constraint.WHITE, Constraint.RED, Constraint.BLUE, Constraint.WHITE},
-            };
+            List<Constraint[][]> constraints = new ArrayList<>();
+            ConstraintGenerator constraintGenerator = new ConstraintGenerator();
+            constraints.add(constraintGenerator.getConstraintMatrix(1, WindowSide.FRONT));
+            constraints.add(constraintGenerator.getConstraintMatrix(2, WindowSide.FRONT));
+            constraints.add(constraintGenerator.getConstraintMatrix(3, WindowSide.FRONT));
             GameView gameView = GameView.getInstance("test", players, diceResponse, constraints);
-            GameGuiController gameGuiController = new GameGuiController(gameView, new Client() {
+            GameGuiManager gameGuiManager = new GameGuiManager(gameView, new Client() {
                 @Override
                 public void sendMessage(String message) throws RemoteException {
 

@@ -53,13 +53,13 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
     private static List<String> playerLobbyListBackup = new ArrayList<>();
     private static List<String> playerList;
     private WindowChoiceGuiController windowChoiceGuiController;
-    private GameGuiController gameGuiController;
+    private GameGuiManager gameGuiManager;
 
 
     public SocketClient() throws IOException {
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
-        dynamicRouter = LoginGuiController.getDynamicRouter();
+        dynamicRouter = LoginGuiManager.getDynamicRouter();
         establishServerConnection();
     }
 
@@ -197,8 +197,8 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
 
             while (!loginSuccessful) {
                 outVideo.println("Connected to " + ADDRESS + ":" + PORT + "\nThis is the first login firewall : \n");
-                username = LoginGuiController.getUsername();
-                JSONObject message = createMessage(username, LoginGuiController.getPassword());
+                username = LoginGuiManager.getUsername();
+                JSONObject message = createMessage(username, LoginGuiManager.getPassword());
                 initializeConnectionStream();
                 outSocket.println(message.toJSONString());
                 String jsonResponse = inSocket.readLine();
@@ -255,20 +255,20 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         }
         else if(message instanceof DiceResponse) {
             ConstraintGenerator constraintGenerator = new ConstraintGenerator();
-            if(gameGuiController == null)
-                gameGuiController = new GameGuiController(GameView.getInstance(username,
+            if(gameGuiManager == null)
+                gameGuiManager = new GameGuiManager(GameView.getInstance(username,
                                                                                windowChoiceGuiController.getStage(),
                                                                                playerList,
                                                                                (DiceResponse)message,
                                                                                constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
                                                                                                                        windowChoiceGuiController.getWindowSide())), this);
             else
-                gameGuiController.setDraft((DiceResponse) message);
+                gameGuiManager.setDraft((DiceResponse) message);
         }
         else if(message instanceof BeginTurnEvent) {
             ConstraintGenerator constraintGenerator = new ConstraintGenerator();
-            if(gameGuiController == null)
-                gameGuiController = new GameGuiController(GameView.getInstance(username,
+            if(gameGuiManager == null)
+                gameGuiManager = new GameGuiManager(GameView.getInstance(username,
                                                                                windowChoiceGuiController.getStage(),
                                                                                playerList,
                                                                                (DiceResponse)message,
@@ -276,10 +276,10 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
                                                                                                                        windowChoiceGuiController.getWindowSide())), this);
 
             System.out.println("New round notified");
-            gameGuiController.notifyTurn();
+            gameGuiManager.notifyTurn();
         }
-        else if(message instanceof RuleResponse)
-            gameGuiController.notifyMoveResponse((RuleResponse) message);
+        /*else if(message instanceof RuleResponse)
+            gameGuiManager.notifyMoveResponse((RuleResponse) message);*/
     }
 
     private void initializeLobbyLink(String identifier) throws IOException {
@@ -365,6 +365,6 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
 
     @Override
     public void sendMessage(LoginState message) {
-        LoginGuiController.getDynamicRouter().dispatch(message);
+        LoginGuiManager.getDynamicRouter().dispatch(message);
     }
 }

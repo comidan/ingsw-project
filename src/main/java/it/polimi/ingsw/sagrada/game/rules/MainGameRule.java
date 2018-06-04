@@ -31,6 +31,9 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		for (int row = 0; row < cells.length; row++)
 			for (int col = 0; col < cells[0].length; col++)
 				if (cells[row][col].isOccupied()) {
+					error = checkDicePositioningRule(cells, row, col);
+					if(error != ErrorType.NO_ERROR)
+						return error;
 					error = checkCurrentCellRule(cells, row, col);
 					if(error != ErrorType.NO_ERROR)
 						return error;
@@ -56,6 +59,41 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 			return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
 		else
 			return ErrorType.NO_ERROR;
+	}
+
+	private ErrorType checkDicePositioningRule(Cell[][] cells, int row, int col) {
+
+		ErrorType errorType1 = checkConsecutiveDicePositioning(cells, row, col);
+		ErrorType errorType2 = checkDiagonalDicePositioning(cells, row, col);
+		if(errorType1 != ErrorType.NO_ERROR && errorType2 != ErrorType.NO_ERROR)
+			return ErrorType.MATRIX_ERROR;
+		return ErrorType.NO_ERROR;
+	}
+
+	private ErrorType checkDiagonalDicePositioning(Cell[][] cells, int row, int col) {
+		if (row < cells.length - 1 && col < cells[row].length - 1 && cells[row + 1][col + 1].isOccupied())
+			return ErrorType.NO_ERROR;
+		if (row < cells.length - 1 && col > 0 && cells[row + 1][col - 1].isOccupied())
+			return ErrorType.NO_ERROR;
+		if (row > 0 && col < cells[row].length - 1 && cells[row - 1][col + 1].isOccupied())
+			return ErrorType.NO_ERROR;
+		if (row > 0 && col > 0 && cells[row - 1][col - 1].isOccupied())
+			return ErrorType.NO_ERROR;
+		return ErrorType.MATRIX_ERROR;
+	}
+
+	private ErrorType checkConsecutiveDicePositioning(Cell[][] cells, int row, int col) {
+		if(row == 0 || col == 0 || row == cells.length - 1 || col == cells[0].length - 1)
+			return ErrorType.NO_ERROR;
+		if (row < cells.length - 1 && cells[row + 1][col].isOccupied())
+			return ErrorType.NO_ERROR;
+		if (col < cells[row].length - 1 && cells[row][col + 1].isOccupied())
+			return ErrorType.NO_ERROR;
+		if (row - 1 >= 0 && cells[row - 1][col].isOccupied())
+			return ErrorType.NO_ERROR;
+		if (col - 1 >= 0 && cells[row][col - 1].isOccupied())
+			return ErrorType.NO_ERROR;
+		return ErrorType.MATRIX_ERROR;
 	}
 
 	/**

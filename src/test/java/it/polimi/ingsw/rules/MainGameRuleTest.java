@@ -125,4 +125,17 @@ public class MainGameRuleTest {
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED, errorType);
     }
+
+    @Test
+    public void testValidateWindowConsecutiveDice() throws RuntimeException {
+        Cell[][] cells = new Cell[4][5];
+        for (int i = 0; i < cells.length; i++)
+            for (int j = 0; j < cells[i].length; j++)
+                cells[i][j] = new Cell(CellRule.builder().setColorConstraint(Colors.RED).build());
+        Dice dice = new Dice(1, Colors.RED);
+        dice.setValue(1);
+        cells[2][2].setDice(dice);
+        ErrorType errorType = checkRule(cells);
+        assertSame(ErrorType.MATRIX_ERROR, errorType);
+    }
 }
