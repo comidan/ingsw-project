@@ -56,7 +56,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
     private GameGuiController gameGuiController;
 
 
-    public SocketClient() throws IOException {
+    public SocketClient(String username) throws IOException {
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
         dynamicRouter = LoginGuiController.getDynamicRouter();
@@ -256,7 +256,8 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         else if(message instanceof DiceResponse) {
             ConstraintGenerator constraintGenerator = new ConstraintGenerator();
             if(gameGuiController == null)
-                gameGuiController = new GameGuiController(GameView.getInstance(windowChoiceGuiController.getStage(),
+                gameGuiController = new GameGuiController(GameView.getInstance(username,
+                                                                               windowChoiceGuiController.getStage(),
                                                                                playerList,
                                                                                (DiceResponse)message,
                                                                                constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
@@ -267,7 +268,8 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         else if(message instanceof BeginTurnEvent) {
             ConstraintGenerator constraintGenerator = new ConstraintGenerator();
             if(gameGuiController == null)
-                gameGuiController = new GameGuiController(GameView.getInstance(windowChoiceGuiController.getStage(),
+                gameGuiController = new GameGuiController(GameView.getInstance(username,
+                                                                               windowChoiceGuiController.getStage(),
                                                                                playerList,
                                                                                (DiceResponse)message,
                                                                                constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),

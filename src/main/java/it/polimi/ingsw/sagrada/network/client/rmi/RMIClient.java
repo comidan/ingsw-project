@@ -42,7 +42,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
     private CommandParser commandParser;
     private AbstractMatchLobbyRMI lobby;
-    private String identifier;
+    private String username;
     private HeartbeatProtocolManager heartbeatProtocolManager;
     private Client remoteClient;
     private LoginGuiController loginGuiController;
@@ -82,9 +82,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
         while (loginState != LoginState.AUTH_OK) {
             try {
-                identifier = LoginGuiController.getUsername();
+                username = LoginGuiController.getUsername();
                 System.out.println("Logging in");
-                loginState = server.login(this, identifier, LoginGuiController.getPassword());
+                loginState = server.login(this, username, LoginGuiController.getPassword());
                 System.out.println(loginState);
                 if (loginState == LoginState.AUTH_OK) {
                     loginGuiController.dispatch(loginState); //sendMessage(LoginState.AUTH_OK);
@@ -93,7 +93,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                         String lobbyId = server.getMatchLobbyId();
                         lobby = (AbstractMatchLobbyRMI) Naming.lookup(PROTOCOL + ADDRESS + "/" + lobbyId);
                         System.out.println("Lobby acquired");
-                        if (lobby.joinLobby(identifier, this)) {
+                        if (lobby.joinLobby(username, this)) {
                             System.out.println("Lobby joined");
                         }
                         else
@@ -171,7 +171,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
             System.out.println("Acquiring lobby");
             lobby = (AbstractMatchLobbyRMI) Naming.lookup(PROTOCOL + ADDRESS + "/" + lobbyId);
             System.out.println("Lobby acquired");
-            if (lobby.joinLobby(identifier, this)) {
+            if (lobby.joinLobby(username, this)) {
                 System.out.println("Lobby joined");
             }
             else
@@ -199,7 +199,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public void notifyHeartbeatPort(Integer port) throws RemoteException {
         try {
-            heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, identifier);
+            heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, username);
             System.out.println("Heartbeat started");
         }
         catch (IOException exc) {
@@ -247,7 +247,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
     @Override
     public String getId() throws RemoteException {
-        return identifier;
+        return username;
     }
 
     @Override
@@ -258,22 +258,24 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         else if(message instanceof DiceResponse) {
             ConstraintGenerator constraintGenerator = new ConstraintGenerator();
             if(gameGuiController == null)
-                gameGuiController = new GameGuiController(GameView.getInstance(windowChoiceGuiController.getStage(),
-                        playerList,
-                        (DiceResponse)message,
-                        constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
-                                windowChoiceGuiController.getWindowSide())), this);
+                gameGuiController = new GameGuiController(GameView.getInstance( username,
+                                                                                windowChoiceGuiController.getStage(),
+                                                                                playerList,
+                                                                                (DiceResponse)message,
+                                                                                constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
+                                                                                                                        windowChoiceGuiController.getWindowSide())), this);
             else
                 gameGuiController.setDraft((DiceResponse) message);
         }
         else if(message instanceof BeginTurnEvent) {
             ConstraintGenerator constraintGenerator = new ConstraintGenerator();
             if(gameGuiController == null)
-                gameGuiController = new GameGuiController(GameView.getInstance(windowChoiceGuiController.getStage(),
-                        playerList,
-                        (DiceResponse)message,
-                        constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
-                                windowChoiceGuiController.getWindowSide())), this);
+                gameGuiController = new GameGuiController(GameView.getInstance(username,
+                                                                               windowChoiceGuiController.getStage(),
+                                                                               playerList,
+                                                                               (DiceResponse)message,
+                                                                                constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
+                                                                                                                        windowChoiceGuiController.getWindowSide())), this);
 
             gameGuiController.notifyTurn();
         }

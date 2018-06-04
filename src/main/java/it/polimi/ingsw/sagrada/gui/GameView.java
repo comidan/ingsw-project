@@ -166,18 +166,18 @@ public class GameView extends Application {
         stage.close();
     }
 
-    private static void startGameGUI(Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    private static void startGameGUI(String username, Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
-        username = players.get(0);
+        GameView.username = username;
         windows = new HashMap<>();
         GameView.diceResponse = diceResponse;
         new GameView().start(stage);
     }
 
-    public static GameView getInstance(Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    public static GameView getInstance(String username, Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
         if (gameView == null) {
-           Platform.runLater(() -> startGameGUI(stage, players, diceResponse, constraints));
+           Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
             while (gameView == null)
                 try {
                     Thread.sleep(100);
