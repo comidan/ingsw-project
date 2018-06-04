@@ -46,21 +46,23 @@ public class GameGuiController {
             DiceView diceView = clickedObject.getClickedDice();
             if(diceView !=null) {
                 CellView cellView = (CellView) event.getSource();
-                cellView.setImageCell(diceView);
-                draftView.removeDiceView(diceView);
+                if (!cellView.isOccupied()) {
+                    cellView.setImageCell(diceView);
+                    draftView.removeDiceView(diceView);
 
-                String username = this.gameView.getUsername();
-                int idDice = diceView.getDiceID();
-                int row = cellView.getRow();
-                int col = cellView.getCol();
-                Position position = new Position(row, col);
-                DiceEvent diceEvent = new DiceEvent(username, idDice, position, "draft");
-                try {
-                    client.sendResponse(diceEvent);
-                } catch (RemoteException e) {
-                    LOGGER.log(Level.SEVERE, e::getMessage);
+                    String username = this.gameView.getUsername();
+                    int idDice = diceView.getDiceID();
+                    int row = cellView.getRow();
+                    int col = cellView.getCol();
+                    Position position = new Position(row, col);
+                    DiceEvent diceEvent = new DiceEvent(username, idDice, position, "draft");
+                    try {
+                        client.sendResponse(diceEvent);
+                    } catch (RemoteException e) {
+                        LOGGER.log(Level.SEVERE, e::getMessage);
+                    }
+                    clickedObject.setClickedDice(null);
                 }
-                clickedObject.setClickedDice(null);
             }
         });
 
@@ -88,13 +90,19 @@ public class GameGuiController {
         });
     }
 
-    private void addDiceRoundtrack(List<DiceView> diceViewList, int roundNumber){
 
+    //method to call this on server demand must be created
+    private void addDiceRoundtrack(List<DiceView> diceViewList, int roundNumber){
         this.gameView.setRoundtrackImage(diceViewList, roundNumber);
     }
 
     public void setToken(int tokenNumber){
         this.gameView.setToken(tokenNumber);
+    }
+
+    //method to call this on server demand must be created
+    public void removeMistakenDice(int row, int col){
+        this.gameView.removeMistakenDice(row, col);
     }
 
 }

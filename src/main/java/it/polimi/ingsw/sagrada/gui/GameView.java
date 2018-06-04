@@ -85,6 +85,14 @@ public class GameView extends Application {
 
     }
 
+    public void setPrivateObjective(){
+        cardBoard.setPrivateObjective();
+    }
+
+    public void removeMistakenDice(int row, int col){
+        windows.get(username).removeMistakenDice(row, col);
+    }
+
 
     public void removeToken(int number){
         tokenGrid.getChildren().remove(0, number);
@@ -126,10 +134,11 @@ public class GameView extends Application {
         anchorPane.setLeftAnchor(horizontalBox, resizer.getWidthPixel(10));
         anchorPane.getChildren().addAll(horizontalBox);
         draftView.setAlignment(Pos.CENTER);
-        anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(60));
+        anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(70));
         anchorPane.setRightAnchor(draftView, resizer.getWidthPixel(40));
         anchorPane.getChildren().addAll(draftView);
-        anchorPane.setBottomAnchor(cardBoard, resizer.getHeightPixel(18));
+        setPrivateObjective();
+        anchorPane.setBottomAnchor(cardBoard, resizer.getHeightPixel(7));
         anchorPane.setRightAnchor(cardBoard, resizer.getWidthPixel(32));
         anchorPane.getChildren().addAll(cardBoard);
         anchorPane.setTopAnchor(roundtrackView, resizer.getHeightPixel(17));

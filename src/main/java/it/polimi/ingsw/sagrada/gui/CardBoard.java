@@ -16,8 +16,10 @@ public class CardBoard extends GridPane {
     Resizer resizer;
     private List<Integer> usedToolId;
     private List<Integer> usedObjId;
+    private List<Integer> usedPrivId;
 
     public CardBoard() {
+        usedPrivId = new ArrayList<>();
         usedToolId = new ArrayList<>();
         usedObjId = new ArrayList<>();
         toolCardViewList = new ArrayList<>();
@@ -67,9 +69,18 @@ public class CardBoard extends GridPane {
 
 
         public void setPrivateObjective(){
-
             Random rand = new Random();
-            PrivateObjectiveView privateObjectiveView = new PrivateObjectiveView(rand.nextInt(5)+1);
+            int id = 0;
+            if(usedPrivId.size()==0) {
+                id = rand.nextInt(5) + 1;
+            }
+            else{
+                while(usedPrivId.contains(id))
+                    id = rand.nextInt(5) + 1;
+            }
+            usedPrivId.add(id);
+            PrivateObjectiveView privateObjectiveView = new PrivateObjectiveView(id);
+            this.add(privateObjectiveView, 2, 3);
 
         }
 

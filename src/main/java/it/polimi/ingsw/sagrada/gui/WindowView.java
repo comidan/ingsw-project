@@ -31,4 +31,9 @@ public class WindowView extends GridPane {
             for (int j = 0; j < windowDices[0].length; j++)
                 windowDices[i][j].setCellListener(cellClickEventHandler);
     }
+
+
+    public void removeMistakenDice(int row, int col){
+        windowDices[row][col].removeMistakenDice();
+    }
 }
