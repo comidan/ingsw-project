@@ -41,7 +41,7 @@ public class RouterTest {
     public void routerTest() {
         DiceResponse diceResponse;
         DynamicRouter dynamicRouter = new MessageDispatcher();
-
+        List<Dice> draft = new ArrayList<>();
         List<Player> players = new ArrayList<>();
         Player playerOne = new Player(FIRST_USER);
         Player playerTwo = new Player(SECOND_USER);
@@ -63,6 +63,7 @@ public class RouterTest {
         assertEquals
                 (idWindowToName(windowController.getMessage().get(SECOND_USER).get(0), WindowSide.REAR),
                         playerTwo.getWindow().getName());
+        draft.addAll(diceController.getDiceResponse().getDiceList());
 
         msgs = messageGenerator("dice");
         for(Message message:msgs) {
@@ -77,16 +78,16 @@ public class RouterTest {
         }
 
         assertEquals(
-                diceResponse.getDiceList().get(0),
+                draft.get(0),
                 playerOne.getWindow().getCellMatrix()[0][0].getCurrentDice());
         assertEquals(
-                diceResponse.getDiceList().get(1),
+                draft.get(1),
                 playerTwo.getWindow().getCellMatrix()[0][0].getCurrentDice());
         assertEquals(
-                diceResponse.getDiceList().get(2),
+                draft.get(2),
                 playerTwo.getWindow().getCellMatrix()[1][0].getCurrentDice());
         assertEquals(
-                diceResponse.getDiceList().get(3),
+                draft.get(3),
                 playerOne.getWindow().getCellMatrix()[1][0].getCurrentDice());
 
         dynamicRouter.dispatch(new EndTurnEvent( FIRST_USER));
