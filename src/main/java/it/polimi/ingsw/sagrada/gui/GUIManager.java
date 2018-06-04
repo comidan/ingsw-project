@@ -12,6 +12,8 @@ import java.util.List;
 public class GUIManager {
     private static final double RATIO = 0.76;
     private static final double RELATIVE_DIMENSION = 0.8;
+    public static final double MAIN_TITLE = 36;
+    public static final double TITLE_2 = 24;
     private static final GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
     public static LobbyGuiView initLobbyGuiView(Stage stage) {
@@ -50,4 +52,7 @@ public class GUIManager {
         return (perc * getWindowWidth() / 100);
     }
 
+    public static double getResizedFont(double dim) {
+        return dim*getScreenHeight()/1080;
+    }
 }

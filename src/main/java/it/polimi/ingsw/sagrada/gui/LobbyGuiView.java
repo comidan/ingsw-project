@@ -123,10 +123,6 @@ public class LobbyGuiView {
         return (perc * GUIManager.getWindowHeight() / 100);
     }
 
-    public void closeWindow() {
-        stage.hide();
-    }
-
     public Stage getStage() {
         return (Stage) timer.getScene().getWindow();
     }

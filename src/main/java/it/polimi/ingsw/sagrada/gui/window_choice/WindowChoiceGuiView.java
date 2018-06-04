@@ -17,7 +17,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +120,7 @@ public class WindowChoiceGuiView extends Application {
         //Window styling
         imageViewList.forEach(img -> {
             img.setPreserveRatio(true);
-            img.setFitWidth(GUIManager.getWidthPixel(35));
+            img.setFitWidth(GUIManager.getWidthPixel(38));
         });
 
         //Title styling
@@ -129,15 +128,16 @@ public class WindowChoiceGuiView extends Application {
         title.setText("Choose a window");
         title.setAlignment(Pos.CENTER);
         title.setTextFill(Color.web("#FFFFFF"));
-        title.setFont(Font.font("System", FontWeight.BOLD, 36*GUIManager.getScreenHeight()/1080));
+        title.setFont(Font.font("System", FontWeight.BOLD, GUIManager.getResizedFont(GUIManager.MAIN_TITLE)));
         title.setStyle("-fx-background-color: #d57322;" +
                 "-fx-border-color: #000000"
         );
+
         //Notification styling
         notification = new Label();
         notification.setAlignment(Pos.CENTER);
         notification.setTextFill(Color.web("#000000"));
-        notification.setFont(Font.font("System", FontWeight.BOLD, 24*GUIManager.getScreenHeight()/1080));
+        notification.setFont(Font.font("System", FontWeight.BOLD, GUIManager.getResizedFont(GUIManager.TITLE_2)));
         notification.setTextAlignment(TextAlignment.CENTER);
         notification.setWrapText(true);
     }
