@@ -116,7 +116,7 @@ public class GameGuiController {
     }
 
     public void setDraft(DiceResponse diceResponse) {
-        gameView.setDraft(diceResponse);
+        Platform.runLater(() -> gameView.setDraft(diceResponse));
     }
 
     public void notifyTurn() {
@@ -124,8 +124,10 @@ public class GameGuiController {
     }
 
     public void notifyMoveResponse(RuleResponse ruleResponse) {
-        if(!ruleResponse.isMoveValid())
-            lastMove.removeMistakenDice();
+        Platform.runLater(() -> {
+            if(!ruleResponse.isMoveValid())
+                lastMove.removeMistakenDice();
+        });
 
     }
 }

@@ -187,7 +187,7 @@ public class GameView extends Application {
 
     public static GameView getInstance(String username, Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
         if (gameView == null) {
-           new Thread(() -> startGameGUI(username, stage, players, diceResponse, constraints)).start(); //)Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
+           Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
             while (gameView == null)
                 try {
                     Thread.sleep(100);

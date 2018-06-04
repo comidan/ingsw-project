@@ -139,7 +139,9 @@ public class GameManager implements Channel<Message, Message> {
 
     private void notifyNextPlayer() {
         if(playerIterator.hasNext()) {
-            sendMessage(new BeginTurnEvent(playerIterator.next()));
+            BeginTurnEvent beginTurnEvent = new BeginTurnEvent(playerIterator.next());
+            sendMessage(beginTurnEvent);
+            System.out.println("Begin turn sent to " + beginTurnEvent.getIdPlayer());
         }
         else {
             roundTrack.addDice(diceManager.putDiceRoundTrack(), stateIterator.getRoundNumber());

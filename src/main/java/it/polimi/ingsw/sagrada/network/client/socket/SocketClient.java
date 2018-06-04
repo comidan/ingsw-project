@@ -275,6 +275,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
                                                                                constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
                                                                                                                        windowChoiceGuiController.getWindowSide())), this);
 
+            System.out.println("New round notified");
             gameGuiController.notifyTurn();
         }
         else if(message instanceof RuleResponse)
