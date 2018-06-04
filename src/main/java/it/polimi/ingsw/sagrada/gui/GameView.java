@@ -147,7 +147,7 @@ public class GameView extends Application {
         components = new ArrayList<>();
         components.add(draftView);
         components.add(endTurn);
-        components.add(windows.get(players.get(0)));
+        components.add(windows.get(username));
         Scene scene = new Scene(anchorPane, resizer.getWindowWidth(), resizer.getWindowHeight());
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
@@ -201,6 +201,7 @@ public class GameView extends Application {
 
     public void notifyTurn() {
         components.forEach(node -> node.setDisable(false));
+
     }
 
     public void notifyEndTurn() {

@@ -36,4 +36,10 @@ public class WindowView extends GridPane {
     public void removeMistakenDice(int row, int col){
         windowDices[row][col].removeMistakenDice();
     }
+
+    void setClickDisabled(boolean isDisabled) {
+        for (int i = 0; i < windowDices.length; i++)
+            for (int j = 0; j < windowDices[0].length; j++)
+                windowDices[i][j].setDisable(isDisabled);
+    }
 }

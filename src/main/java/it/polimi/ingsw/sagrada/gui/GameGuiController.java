@@ -44,13 +44,16 @@ public class GameGuiController {
         {
             DiceView diceView = (DiceView) event.getSource();
             clickedObject.setClickedDice(diceView);
+            System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
         });
 
         this.gameView.setCellClickListener(event ->
         {
             DiceView diceView = clickedObject.getClickedDice();
+            System.out.println(diceView == null);
             if(diceView !=null) {
                 CellView cellView = (CellView) event.getSource();
+                System.out.println(cellView.isOccupied());
                 if (!cellView.isOccupied()) {
                     lastMove = cellView;
                     cellView.setImageCell(diceView);

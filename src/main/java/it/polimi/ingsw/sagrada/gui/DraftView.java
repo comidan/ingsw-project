@@ -10,11 +10,11 @@ import javafx.event.EventHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DraftView extends GridPane {
+class DraftView extends GridPane {
 
     private List<DiceView> draft;
 
-    public DraftView(DiceResponse diceResponse) {
+    DraftView(DiceResponse diceResponse) {
         draft = new ArrayList<>();
         diceResponse.getDiceList().forEach(dice -> draft.add(new DiceView(Constraint.getColorConstraint(dice.getColor()),
                                                             Constraint.getValueConstraint(dice.getValue()),
@@ -34,14 +34,16 @@ public class DraftView extends GridPane {
 
     }
 
-    public void removeDiceView(DiceView diceView){
+    void removeDiceView(DiceView diceView){
 
         draft.remove(diceView);
         this.getChildren().removeAll(diceView);
 
     }
 
-    public void setDraftListener(EventHandler<MouseEvent> draftClickHandler) {
+    void setDraftListener(EventHandler<MouseEvent> draftClickHandler) {
         draft.forEach(diceView -> diceView.setOnMouseClicked(draftClickHandler));
     }
+
+
 }
