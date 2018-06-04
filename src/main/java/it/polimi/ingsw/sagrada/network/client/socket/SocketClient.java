@@ -271,6 +271,8 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
 
             gameGuiController.notifyTurn();
         }
+        else if(message instanceof RuleResponse)
+            gameGuiController.notifyMoveResponse((RuleResponse) message);
     }
 
     private void initializeLobbyLink(String identifier) throws IOException {

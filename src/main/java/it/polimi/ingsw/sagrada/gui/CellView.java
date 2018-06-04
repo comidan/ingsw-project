@@ -15,13 +15,15 @@ public class CellView extends ImageView {
     private int diceId;
     private Constraint constraint;
     private boolean occupied;
+    private Image cellConstraint;
 
     public CellView(int row, int col, Constraint constraint) {
         this.row = row;
         this.col = col;
         this.constraint = constraint;
         this.occupied = false;
-        setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getConstraintFileName(constraint)).toURI().toString(), 60, 60, true, false));
+        cellConstraint = new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getConstraintFileName(constraint)).toURI().toString(), 60, 60, true, false);
+        setImage(cellConstraint);
     }
 
     public CellView(){
@@ -35,10 +37,10 @@ public class CellView extends ImageView {
     }
 
     public void removeMistakenDice(){
-        this.setImageCell(null);
+        setImage(cellConstraint);
     }
 
-    public void setImageCell(DiceView diceView){
+    public void setImageCell(DiceView diceView) {
                 Constraint color = diceView.getColor();
                 Constraint value = diceView.getValue();
                 setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)).toURI().toString(), 60, 60, true, false));

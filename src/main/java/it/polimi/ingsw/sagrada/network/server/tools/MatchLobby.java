@@ -194,7 +194,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             heartbeatProtocolManager.addHost(token, heartbeatPort);
         }
         catch (RemoteException|AlreadyBoundException exc) {
-            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
+            LOGGER.log(Level.SEVERE, exc::getMessage);
         }
         for(String username : clientIds) {
             System.out.println("Remote user set");

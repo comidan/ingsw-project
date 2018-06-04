@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
 import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.RuleResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
@@ -49,6 +50,17 @@ public class MessageParser implements CommandKeyword {
         message.put(MESSAGE_TYPE, RESPONSE);
         message.put(COMMAND_TYPE, BEGIN_TURN);
         message.put(BEGIN_TURN, content);
+        return message.toJSONString();
+    }
+
+    public String createJsonRuleResponse(RuleResponse ruleResponse) {
+        JSONObject message = new JSONObject();
+        JSONObject content = new JSONObject();
+        content.put(PLAYER_ID, ruleResponse.getPlayerId());
+        content.put(VALID_MOVE, ruleResponse.isMoveValid()+"");
+        message.put(MESSAGE_TYPE, RESPONSE);
+        message.put(COMMAND_TYPE, RULE_RESPONSE);
+        message.put(RULE_RESPONSE, content);
         return message.toJSONString();
     }
 }

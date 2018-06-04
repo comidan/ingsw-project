@@ -13,7 +13,8 @@ public enum EventTypeEnum {
     WINDOW_RESPONSE,
     NUM_PLAYER_CHANGE,
     PRIVATE_OBJECTIVE_RESPONSE,
-    PUBLIC_OBJECTIVE_RESPONSE;
+    PUBLIC_OBJECTIVE_RESPONSE,
+    RULE_RESPONSE;
 
     public static String toString(EventTypeEnum eventTypeEnum) {
         Logger logger = Logger.getLogger(EventTypeEnum.class.getName());
@@ -27,6 +28,7 @@ public enum EventTypeEnum {
             case WINDOW_RESPONSE: return "it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse";
             case PRIVATE_OBJECTIVE_RESPONSE: return "it.polimi.ingsw.sagrada.game.intercomm.message.PrivateObjectiveResponse";
             case PUBLIC_OBJECTIVE_RESPONSE: return "it.polimi.ingsw.sagrada.game.intercomm.message.PublicObjectiveResponse";
+            case RULE_RESPONSE: return "it.polimi.ingsw.sagrada.game.intercomm.message.RuleResponse";
             default: logger.log(Level.SEVERE, "Wrong type of Event");
         }
         return null;

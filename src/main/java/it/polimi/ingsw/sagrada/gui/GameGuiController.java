@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.RuleResponse;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
 
@@ -20,6 +21,7 @@ public class GameGuiController {
     private ClickedObject clickedObject;
     private DraftView draftView;
     private RoundtrackView roundtrackView;
+    private CellView lastMove;
 
     public GameGuiController(GameView gameView, Client client) {
         this.clickedObject = new ClickedObject();
@@ -49,6 +51,7 @@ public class GameGuiController {
             if(diceView !=null) {
                 CellView cellView = (CellView) event.getSource();
                 if (!cellView.isOccupied()) {
+                    lastMove = cellView;
                     cellView.setImageCell(diceView);
                     draftView.removeDiceView(diceView);
 
@@ -113,5 +116,11 @@ public class GameGuiController {
 
     public void notifyTurn() {
         gameView.notifyTurn();
+    }
+
+    public void notifyMoveResponse(RuleResponse ruleResponse) {
+        if(!ruleResponse.isMoveValid())
+            lastMove.removeMistakenDice();
+
     }
 }

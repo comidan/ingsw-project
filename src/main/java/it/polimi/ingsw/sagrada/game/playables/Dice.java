@@ -43,6 +43,6 @@ public class Dice {
     }
 
     public void roll() {
-        value = ThreadLocalRandom.current().nextInt(1,MAX_VALUE+1);
+        value = ThreadLocalRandom.current().nextInt(1,MAX_VALUE + 1);
     }
 }

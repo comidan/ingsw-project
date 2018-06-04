@@ -8,10 +8,7 @@ import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
-import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.*;
 import it.polimi.ingsw.sagrada.game.rules.ErrorType;
 import it.polimi.ingsw.sagrada.game.rules.RuleManager;
@@ -156,7 +153,7 @@ public class GameManager implements Channel<Message, Message> {
             Window window = player.getWindow();
             window.setCell(dice, position.getRow(), position.getCol());
             ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
-            System.out.println(errorType);
+            sendMessage(new RuleResponse(idPlayer, errorType == ErrorType.NO_ERROR));
         }
     }
 

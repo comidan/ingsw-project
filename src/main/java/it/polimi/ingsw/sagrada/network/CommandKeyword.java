@@ -46,4 +46,7 @@ public interface CommandKeyword {
     String FRONT = "front";
     String REAR = "rear";
     String ACTION = "action";
+    String END_TURN = "end_turn";
+    String RULE_RESPONSE = "rule_response";
+    String VALID_MOVE = "valid_move";
 }

@@ -29,6 +29,7 @@ public class GameDataManager implements Channel<Message, Message> {
         dynamicRouter.subscribeChannel(BeginTurnEvent.class, this);
         dynamicRouter.subscribeChannel(PrivateObjectiveResponse.class, this);
         dynamicRouter.subscribeChannel(PublicObjectiveResponse.class, this);
+        dynamicRouter.subscribeChannel(RuleResponse.class, this);
     }
 
     @Override
@@ -42,31 +43,35 @@ public class GameDataManager implements Channel<Message, Message> {
                 try {
                     ((Client)pair.getValue()).sendResponse(message);
                 } catch (RemoteException e) {
-                    LOGGER.log(Level.SEVERE, () -> e.getMessage());
+                    LOGGER.log(Level.SEVERE, e::getMessage);
                 }
             }
-        } else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.WINDOW_RESPONSE))) {
+        }
+        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.WINDOW_RESPONSE))) {
             WindowResponse windowResponse = (WindowResponse)message;
             try {
                 getClient(windowResponse.getPlayerId()).sendResponse(message);
             } catch (RemoteException e) {
-                LOGGER.log(Level.SEVERE, () -> e.getMessage());
+                LOGGER.log(Level.SEVERE, e::getMessage);
             }
-        } else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT))) {
+        }
+        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT))) {
             BeginTurnEvent beginTurnEvent = (BeginTurnEvent)message;
             try {
                 getClient(beginTurnEvent.getIdPlayer()).sendResponse(message);
             } catch (RemoteException e) {
-                LOGGER.log(Level.SEVERE, () -> e.getMessage());
+                LOGGER.log(Level.SEVERE, e::getMessage);
             }
-        } else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.PRIVATE_OBJECTIVE_RESPONSE))) {
+        }
+        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.PRIVATE_OBJECTIVE_RESPONSE))) {
             PrivateObjectiveResponse privateObjectiveResponse = (PrivateObjectiveResponse)message;
             try {
                 getClient(privateObjectiveResponse.getIdPlayer()).sendResponse(message);
             } catch (RemoteException e) {
-                LOGGER.log(Level.SEVERE, () -> e.getMessage());
+                LOGGER.log(Level.SEVERE, e::getMessage);
             }
-        } else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.PUBLIC_OBJECTIVE_RESPONSE))) {
+        }
+        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.PUBLIC_OBJECTIVE_RESPONSE))) {
             PublicObjectiveResponse publicObjectiveResponse = (PublicObjectiveResponse)message;
             Iterator itr = clientMap.entrySet().iterator();
             while(itr.hasNext()) {
@@ -74,8 +79,16 @@ public class GameDataManager implements Channel<Message, Message> {
                 try {
                     ((Client)pair.getValue()).sendResponse(message);
                 } catch (RemoteException e) {
-                    LOGGER.log(Level.SEVERE, () -> e.getMessage());
+                    LOGGER.log(Level.SEVERE, e::getMessage);
                 }
+            }
+        }
+        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.RULE_RESPONSE))) {
+            RuleResponse ruleResponse = (RuleResponse)message;
+            try {
+                getClient(ruleResponse.getPlayerId()).sendResponse(message);
+            } catch (RemoteException e) {
+                LOGGER.log(Level.SEVERE, e::getMessage);
             }
         }
     }

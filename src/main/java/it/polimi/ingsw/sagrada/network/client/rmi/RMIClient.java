@@ -2,10 +2,11 @@ package it.polimi.ingsw.sagrada.network.client.rmi;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.RuleResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
-import it.polimi.ingsw.sagrada.gui.GUIManager;
-import it.polimi.ingsw.sagrada.gui.LobbyGuiView;
-import it.polimi.ingsw.sagrada.gui.LoginGuiController;
+import it.polimi.ingsw.sagrada.gui.*;
 import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
@@ -46,6 +47,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     private Client remoteClient;
     private LoginGuiController loginGuiController;
     private AbstractServerRMI server;
+    private static List<String> playerList;
+    private WindowChoiceGuiController windowChoiceGuiController;
+    private GameGuiController gameGuiController;
 
     public RMIClient(LoginGuiController loginGuiController) throws RemoteException {
         this.loginGuiController = loginGuiController;
@@ -157,6 +161,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         RMIClient.lobbyGuiView = lobbyGuiView;
         for(String username : playerLobbyListBackup)
             lobbyGuiView.setPlayer(username);
+        playerList = new ArrayList<>(playerLobbyListBackup);
         playerLobbyListBackup.clear();
     }
 
@@ -248,8 +253,32 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public void sendResponse(Message message) throws RemoteException {
         if(message instanceof WindowResponse) {
-            new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), this);
+            windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), this);
         }
+        else if(message instanceof DiceResponse) {
+            ConstraintGenerator constraintGenerator = new ConstraintGenerator();
+            if(gameGuiController == null)
+                gameGuiController = new GameGuiController(GameView.getInstance(windowChoiceGuiController.getStage(),
+                        playerList,
+                        (DiceResponse)message,
+                        constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
+                                windowChoiceGuiController.getWindowSide())), this);
+            else
+                gameGuiController.setDraft((DiceResponse) message);
+        }
+        else if(message instanceof BeginTurnEvent) {
+            ConstraintGenerator constraintGenerator = new ConstraintGenerator();
+            if(gameGuiController == null)
+                gameGuiController = new GameGuiController(GameView.getInstance(windowChoiceGuiController.getStage(),
+                        playerList,
+                        (DiceResponse)message,
+                        constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
+                                windowChoiceGuiController.getWindowSide())), this);
+
+            gameGuiController.notifyTurn();
+        }
+        else if(message instanceof RuleResponse)
+            gameGuiController.notifyMoveResponse((RuleResponse) message);
     }
 
     @Override

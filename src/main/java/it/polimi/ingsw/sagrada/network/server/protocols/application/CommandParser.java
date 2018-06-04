@@ -33,6 +33,18 @@ public class CommandParser implements CommandKeyword {
                     int idWindow = Integer.parseInt((String)data.get(WINDOW_ID));
                     WindowSide side = WindowSide.stringToWindowSide((String)data.get(WINDOW_SIDE));
                     return new WindowEvent(idPlayerW, idWindow, side);
+                case MOVE_DICE_CHOICE:
+                    data = (JSONObject) jsonMsg.get(MOVE_DICE);
+                    String idPlayerD = (String)data.get(PLAYER_ID);
+                    int idDice = Integer.parseInt((String)data.get(DICE_ID));
+                    String source = (String)data.get("source");
+                    JSONObject pos = (JSONObject)data.get(POSITION);
+                    int row = Integer.parseInt((String)pos.get("y"));
+                    int col = Integer.parseInt((String)pos.get("x"));
+                    Position position = new Position(row, col);
+                    return new DiceEvent(idPlayerD, idDice, position, source);
+                case END_TURN:
+                    return new EndTurnEvent((String)jsonMsg.get(PLAYER_ID));
                 case SETTINGS :  //is settings response useless?
                     return null;
                 default:

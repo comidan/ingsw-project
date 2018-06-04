@@ -3,7 +3,6 @@ package it.polimi.ingsw.sagrada.network.server.socket;
 import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
-import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.MessageParser;
@@ -12,10 +11,7 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -48,7 +44,6 @@ public class RemoteSocketClient implements ClientBase, Runnable {
 
     private void initCoreFunctions() throws IOException{
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        //output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
         output = new PrintWriter(socket.getOutputStream(), true);
         executor.submit(this);
     }
@@ -100,10 +95,10 @@ public class RemoteSocketClient implements ClientBase, Runnable {
             payload = messageParser.createJsonDiceResponse((DiceResponse)message);
         else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.WINDOW_RESPONSE)))
             payload = messageParser.createJsonWindowResponse((WindowResponse)message);
-        else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT))) {
-            System.out.println("Sending BeginTurn");
+        else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT)))
             payload = messageParser.createJsonBeginTurnEvent((BeginTurnEvent)message);
-        }
+        else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.RULE_RESPONSE)))
+            payload = messageParser.createJsonRuleResponse((RuleResponse)message);
         else
             payload = "ERROR";
         output.println(payload);
