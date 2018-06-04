@@ -38,6 +38,8 @@ public class CellView extends ImageView {
 
     public void removeMistakenDice(){
         setImage(cellConstraint);
+        occupied = false;
+
     }
 
     public void setImageCell(DiceView diceView) {

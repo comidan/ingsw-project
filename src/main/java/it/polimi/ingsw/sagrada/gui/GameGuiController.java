@@ -137,8 +137,10 @@ public class GameGuiController {
 
     public void notifyMoveResponse(RuleResponse ruleResponse) {
         Platform.runLater(() -> {
-            if(!ruleResponse.isMoveValid())
+            if(!ruleResponse.isMoveValid()) {
+                System.out.println("Removing Dice");
                 lastMove.removeMistakenDice();
+            }
         });
 
     }

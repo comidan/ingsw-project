@@ -67,6 +67,10 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         return null;
     }
 
+    public List<Dice> getDraft() {
+        return draftPool;
+    }
+
     public List<Dice> putDiceRoundTrack() {
         return new ArrayList<>(draftPool);
     }
