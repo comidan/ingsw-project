@@ -185,6 +185,10 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
                                     WindowSide.sideToString(((WindowEvent)message).getWindowSide()));
             outSocket.println(jsonWindow.toJSONString());
         }
+        else if(message instanceof EndTurnEvent) {
+            JSONObject jsonEnd = JsonMessage.createEndTurnEvent((EndTurnEvent)message);
+            outSocket.println(jsonEnd.toJSONString());
+        }
     }
 
     private void login() {

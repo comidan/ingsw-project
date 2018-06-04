@@ -82,6 +82,14 @@ public class JsonMessage implements CommandKeyword {
         return container;
     }
 
+    public static JSONObject createEndTurnEvent(EndTurnEvent endTurnEvent) {
+        JSONObject content = new JSONObject();
+        content.put(MESSAGE_TYPE, ACTION);
+        content.put(COMMAND_TYPE, END_TURN);
+        content.put(PLAYER_ID, endTurnEvent.getIdPlayer());
+        return content;
+    }
+
     public static Message parseJsonData(String json) {
         JSONParser parser = new JSONParser();
         try {
