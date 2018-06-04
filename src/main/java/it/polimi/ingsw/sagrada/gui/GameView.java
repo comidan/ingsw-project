@@ -14,7 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -170,8 +169,8 @@ public class GameView extends Application {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException exc) {
-                    exc.printStackTrace();
-                    continue;
+                    Thread.currentThread().interrupt();
+                    return gameView;
                 }
         }
         return gameView;

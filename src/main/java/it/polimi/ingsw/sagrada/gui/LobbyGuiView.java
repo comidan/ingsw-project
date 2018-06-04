@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 public class LobbyGuiView {
 
     private static final Logger LOGGER = Logger.getLogger(LobbyGuiView.class.getName());
+    private static final String WAITING_PLAYER = "Waiting player...";
 
     @FXML
     private Label firstPlayer;
@@ -35,10 +36,8 @@ public class LobbyGuiView {
     private static Stage stage;
 
     public void setPlayer(String username) {
-        System.out.println("Setting player");
         playerShown.add(username);
         int position = playerShown.indexOf(username);
-        System.out.println(position);
         switch (position) {
             case 0 : setFirstPlayer(username); break;
             case 1 : setSecondPlayer(username); break;
@@ -52,10 +51,10 @@ public class LobbyGuiView {
         int position = playerShown.indexOf(username);
         playerShown.remove(position);
         switch (position) {
-            case 0 : setFirstPlayer("Waiting player..."); break;
-            case 1 : setSecondPlayer("Waiting player..."); break;
-            case 2 : setThirdPlayer("Waiting player..."); break;
-            case 3:  setFourthPlayer("Waiting player..."); break;
+            case 0 : setFirstPlayer(WAITING_PLAYER); break;
+            case 1 : setSecondPlayer(WAITING_PLAYER); break;
+            case 2 : setThirdPlayer(WAITING_PLAYER); break;
+            case 3:  setFourthPlayer(WAITING_PLAYER); break;
             default: break;
         }
     }
@@ -115,8 +114,7 @@ public class LobbyGuiView {
             stage.setScene(scene);
             return loaderLobby.getController();
         } catch (IOException e) {
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, () -> e.getMessage());
+            LOGGER.log(Level.SEVERE, e::getMessage);
             return null;
         }
     }

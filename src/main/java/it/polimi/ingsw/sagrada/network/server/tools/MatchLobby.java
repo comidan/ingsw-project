@@ -124,7 +124,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                 clientPool.get(clientId).removePlayer(username);
             }
             catch (RemoteException exc) {
-                System.out.println("RMI error on " + clientId);
+                LOGGER.log(Level.SEVERE, exc::getMessage);
             }
         return true;
     }
@@ -143,7 +143,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                 clientPool.get(clientId).sendMessage(event.getSource() + " is offline");
             }
             catch (RemoteException exc) {
-                System.out.println("RMI error on " + clientId);
+                LOGGER.log(Level.SEVERE, exc::getMessage);
             }
     }
 
@@ -166,7 +166,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     clientPool.get(clientId).setPlayer(event.getSource());
                 }
                 catch (RemoteException exc) {
-                    System.out.println("RMI error on " + clientId);
+                    LOGGER.log(Level.SEVERE, exc::getMessage);
                 }
         }
     }
@@ -232,7 +232,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     DataManager.sendLoginError(client);
             }
             catch (IOException exc) {
-                exc.printStackTrace();
+                LOGGER.log(Level.SEVERE, exc::getMessage);
             }
         }
     }
@@ -278,7 +278,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                             clientPool.get(username).setTimer((timeToWait / 1000 - currentSeconds) + "");
                         }
                         catch (RemoteException exc) {
-                            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
+                            LOGGER.log(Level.SEVERE, exc::getMessage);
                         }
                 }
             }

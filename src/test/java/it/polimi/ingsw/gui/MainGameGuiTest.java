@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,10 +73,10 @@ public class MainGameGuiTest {
                     return null;
                 }
             });
-            while(true);
+            Scanner scanner = new Scanner(System.in);
+            scanner.nextInt();
         } catch (Exception exc) {
-            exc.printStackTrace();
-            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
+            LOGGER.log(Level.SEVERE, exc::getMessage);
             fail();
         }
 

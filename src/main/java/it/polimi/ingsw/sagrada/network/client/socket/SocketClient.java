@@ -37,6 +37,8 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     private static final int PORT = 49152; //change to dynamic in some elegant way
     private static final String ADDRESS = getConfigAddress(); //just for now, next will be obtained in far smarter way
+    private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
+    private static final String NETWORK_CONFIG_PATH = "src/main/resources/json/config/network_config.json";
 
     private Socket socket;
     private BufferedReader inSocket;

@@ -10,7 +10,6 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,13 +19,16 @@ class AdvancedEncryptionStandard {
     private static final String KEY_STORE_PATH = "src/main/resources/json/security/KeyStore.json";
     private static final String KEY = getKey(); // WARNING : PLEASE FIND A MORE SECURE WAY
     private static final String INIT_VECTOR = getInitializationVector();
+    private static final String ENCODING = "UTF-8";
+    private static final String AES_CIPHER_CONFIG = "AES/CBC/PKCS5PADDING";
+    private static final String ENCRYPTION_ALGORITHM = "AES";
 
     private static String encrypt(String value) {
         try {
-            IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes("UTF-8"));
-            SecretKeySpec sKeySpec = new SecretKeySpec(KEY.getBytes("UTF-8"), "AES");
+            IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(ENCODING));
+            SecretKeySpec sKeySpec = new SecretKeySpec(KEY.getBytes(ENCODING), ENCRYPTION_ALGORITHM);
 
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            Cipher cipher = Cipher.getInstance(AES_CIPHER_CONFIG);
             cipher.init(Cipher.ENCRYPT_MODE, sKeySpec, iv);
 
             byte[] encrypted = cipher.doFinal(value.getBytes());
@@ -34,7 +36,7 @@ class AdvancedEncryptionStandard {
             return Base64.encodeBase64String(encrypted);
         }
         catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, () -> "AES encryption fatal error");
+            LOGGER.log(Level.SEVERE, ex::getMessage);
         }
 
         return null;
@@ -42,10 +44,10 @@ class AdvancedEncryptionStandard {
 
     private static String decrypt(String encrypted) {
         try {
-            IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes("UTF-8"));
-            SecretKeySpec sKeySpec = new SecretKeySpec(KEY.getBytes("UTF-8"), "AES");
+            IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(ENCODING));
+            SecretKeySpec sKeySpec = new SecretKeySpec(KEY.getBytes(ENCODING), ENCRYPTION_ALGORITHM);
 
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            Cipher cipher = Cipher.getInstance(AES_CIPHER_CONFIG);
             cipher.init(Cipher.DECRYPT_MODE, sKeySpec, iv);
 
             byte[] original = cipher.doFinal(Base64.decodeBase64(encrypted));
@@ -53,7 +55,7 @@ class AdvancedEncryptionStandard {
             return new String(original);
         }
         catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, () -> "AES encryption fatal error");
+            LOGGER.log(Level.SEVERE, ex::getMessage);
         }
 
         return null;
@@ -67,16 +69,6 @@ class AdvancedEncryptionStandard {
         return decrypt(encryptedData);
     }
 
-    /**
-     * @deprecated
-     */
-    private static String generateInitializationVector() {
-        String stringDate = new Date().getTime()+"";
-        StringBuilder reverse = new StringBuilder();
-        for(int index = stringDate.length() - 1; index >= 0; index--)
-            reverse.append(stringDate.charAt(index));
-        return Security.generateMD5Hash(reverse.toString()).substring(0, 16);
-    }
 
     private static String getKey() {
         JSONParser parser = new JSONParser();
@@ -87,7 +79,7 @@ class AdvancedEncryptionStandard {
             return (String) jsonObject.get("key");
         }
         catch (IOException|ParseException exc) {
-            LOGGER.log(Level.SEVERE, () -> "AES KEYSTORE fatal error");
+            LOGGER.log(Level.SEVERE, exc::getMessage);
             return "";
         }
     }
@@ -102,7 +94,7 @@ class AdvancedEncryptionStandard {
             return (String) jsonObject.get("initialization_vector");
         }
         catch (IOException|ParseException exc) {
-            LOGGER.log(Level.SEVERE, () -> "AES KEYSTORE fatal error");
+            LOGGER.log(Level.SEVERE, exc::getMessage);
             return "";
         }
     }

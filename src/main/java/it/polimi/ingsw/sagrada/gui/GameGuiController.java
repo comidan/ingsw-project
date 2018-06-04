@@ -1,18 +1,19 @@
 package it.polimi.ingsw.sagrada.gui;
 
-import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent;
-import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GameGuiController {
+
+    private static final Logger LOGGER = Logger.getLogger(GameGuiController.class.getName());
 
     private GameView gameView;
     private ClickedObject clickedObject;
@@ -29,7 +30,7 @@ public class GameGuiController {
             try {
                 client.sendResponse(endTurnEvent);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, e::getMessage);
             }
 
         });
@@ -57,13 +58,13 @@ public class GameGuiController {
                 try {
                     client.sendResponse(diceEvent);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e::getMessage);
                 }
                 clickedObject.setClickedDice(null);
             }
         });
 
-        this.gameView.setToolClickHandler(event ->{
+        this.gameView.setToolClickHandler(event -> {
             ToolCardView toolCardView = (ToolCardView) event.getSource();
             int tokenNumber;
             if(toolCardView.getTokenNumber() == 0)
@@ -76,13 +77,7 @@ public class GameGuiController {
         });
         setRoundTrackClick();
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                setToken(3);
-                    }
-                }
-            );
+        Platform.runLater(() -> setToken(3));
     }
 
 

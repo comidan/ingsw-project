@@ -24,37 +24,38 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel<Message, LoginState> {
 
+    private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
+    private static final String NETWORK_CONFIG_PATH = "src/main/resources/json/config/network_config.json";
+    private static final Logger LOGGER = Logger.getLogger(RMIClient.class.getName());
+    private static final String ADDRESS = getConfigAddress();
+    private static final String PROTOCOL = "rmi://";
+
+    private static List<String> playerLobbyListBackup = new ArrayList<>();
+    private static LobbyGuiView lobbyGuiView;
+
     private CommandParser commandParser;
-    private BufferedReader inKeyboard;
-    private PrintWriter outVideo;
     private AbstractMatchLobbyRMI lobby;
     private String identifier;
     private HeartbeatProtocolManager heartbeatProtocolManager;
-    private static final String ADDRESS = getConfigAddress();
     private Client remoteClient;
-    private static final Logger LOGGER = Logger.getLogger(RMIClient.class.getName());
-    private static LobbyGuiView lobbyGuiView;
     private LoginGuiController loginGuiController;
-    private static List<String> playerLobbyListBackup = new ArrayList<>();
-
     private AbstractServerRMI server;
 
     public RMIClient(LoginGuiController loginGuiController) throws RemoteException {
         this.loginGuiController = loginGuiController;
         commandParser = new CommandParser();
-        inKeyboard = new BufferedReader(new InputStreamReader(System.in));
-        outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
         establishServerConnection();
     }
 
     private boolean connect() {
         try {
-            server = (AbstractServerRMI) Naming.lookup("rmi://" + ADDRESS + "/ServerRMI");
+            server = (AbstractServerRMI) Naming.lookup(PROTOCOL + ADDRESS + "/ServerRMI");
             return true;
         } catch (RemoteException | NotBoundException | MalformedURLException exc) {
             return false;
@@ -86,7 +87,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                     try {
                         System.out.println("Acquiring lobby");
                         String lobbyId = server.getMatchLobbyId();
-                        lobby = (AbstractMatchLobbyRMI) Naming.lookup("rmi://" + ADDRESS + "/" + lobbyId);
+                        lobby = (AbstractMatchLobbyRMI) Naming.lookup(PROTOCOL + ADDRESS + "/" + lobbyId);
                         System.out.println("Lobby acquired");
                         if (lobby.joinLobby(identifier, this)) {
                             System.out.println("Lobby joined");
@@ -112,9 +113,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         int choice;
         while (true) {
             System.out.println("Choose what you wanna do :\n1. Disconnect from server\n2. Send message to server");
-            try {
-                choice = Integer.parseInt(inKeyboard.readLine());
-            } catch (NumberFormatException | IOException exc) {
+            try(Scanner scanner = new Scanner(System.in)) {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException exc) {
                 continue;
             }
             switch (choice) {
@@ -125,8 +126,8 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                     return;
                 case 2:
                     System.out.println("Write your message");
-                    try {
-                        remoteClient.sendMessage(inKeyboard.readLine());
+                    try(Scanner scanner = new Scanner(System.in)) {
+                        remoteClient.sendMessage(scanner.nextLine());
                     } catch (IOException exc) {
                         continue;
                     }
@@ -163,7 +164,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     public void notifyLobby(String lobbyId) throws RemoteException {
         try {
             System.out.println("Acquiring lobby");
-            lobby = (AbstractMatchLobbyRMI) Naming.lookup("rmi://" + ADDRESS + "/" + lobbyId);
+            lobby = (AbstractMatchLobbyRMI) Naming.lookup(PROTOCOL + ADDRESS + "/" + lobbyId);
             System.out.println("Lobby acquired");
             if (lobby.joinLobby(identifier, this)) {
                 System.out.println("Lobby joined");
@@ -183,7 +184,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public void notifyRemoteClientInterface(String id) throws RemoteException {
         try {
-            remoteClient = (Client) Naming.lookup("rmi://" + ADDRESS + "/" + id);
+            remoteClient = (Client) Naming.lookup(PROTOCOL + ADDRESS + "/" + id);
         }
         catch (Exception exc) {
             LOGGER.log(Level.SEVERE, () -> exc.getMessage());
@@ -197,7 +198,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
             System.out.println("Heartbeat started");
         }
         catch (IOException exc) {
-            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
+            LOGGER.log(Level.SEVERE, exc::getMessage);
         }
     }
 

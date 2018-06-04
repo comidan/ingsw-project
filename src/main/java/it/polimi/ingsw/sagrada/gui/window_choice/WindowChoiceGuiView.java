@@ -51,8 +51,8 @@ public class WindowChoiceGuiView extends Application {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException exc) {
-                    exc.printStackTrace();
-                    continue;
+                    Thread.currentThread().interrupt();
+                    return instance;
                 }
         }
         return instance;
