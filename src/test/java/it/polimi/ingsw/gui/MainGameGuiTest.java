@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.*;
 import it.polimi.ingsw.sagrada.network.client.Client;
+import javafx.stage.Stage;
 import org.junit.Test;
 
 import java.rmi.RemoteException;
@@ -51,7 +52,7 @@ public class MainGameGuiTest {
                     {Constraint.WHITE, Constraint.YELLOW, Constraint.BLUE, Constraint.GREEN, Constraint.RED},
                     {Constraint.BLUE, Constraint.WHITE, Constraint.RED, Constraint.BLUE, Constraint.WHITE},
             };
-            GameView gameView = GameView.getInstance(players, diceResponse, constraints);
+            GameView gameView = GameView.getInstance(new Stage(), players, diceResponse, constraints);
             GameGuiController gameGuiController = new GameGuiController(gameView, new Client() {
                 @Override
                 public void sendMessage(String message) throws RemoteException {

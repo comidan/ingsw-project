@@ -2,9 +2,11 @@ package it.polimi.ingsw.sagrada.gui;
 
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -14,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,7 @@ public class GameView extends Application {
     private static GameView gameView = null;
     private CardBoard cardBoard;
     private GridPane tokenGrid;
+    private List<Node> components;
 
     public String getUsername(){
         return username;
@@ -114,7 +118,6 @@ public class GameView extends Application {
                         "-fx-background-size: cover;"
         );
         anchorPane.resize(resizer.getWindowWidth(), resizer.getWindowHeight());
-        draftView = new DraftView(diceResponse);
     }
 
     private void createScene(Stage primaryStage){
@@ -133,10 +136,7 @@ public class GameView extends Application {
         anchorPane.setBottomAnchor(horizontalBox, resizer.getHeightPixel(11));
         anchorPane.setLeftAnchor(horizontalBox, resizer.getWidthPixel(10));
         anchorPane.getChildren().addAll(horizontalBox);
-        draftView.setAlignment(Pos.CENTER);
-        anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(70));
-        anchorPane.setRightAnchor(draftView, resizer.getWidthPixel(40));
-        anchorPane.getChildren().addAll(draftView);
+        setDraft(diceResponse);
         setPrivateObjective();
         anchorPane.setBottomAnchor(cardBoard, resizer.getHeightPixel(7));
         anchorPane.setRightAnchor(cardBoard, resizer.getWidthPixel(32));
@@ -144,6 +144,10 @@ public class GameView extends Application {
         anchorPane.setTopAnchor(roundtrackView, resizer.getHeightPixel(17));
         anchorPane.setLeftAnchor(roundtrackView, resizer.getWidthPixel(68));
         anchorPane.getChildren().add(roundtrackView);
+        components = new ArrayList<>();
+        components.add(draftView);
+        components.add(endTurn);
+        components.add(windows.get(players.get(0)));
         Scene scene = new Scene(anchorPane, resizer.getWindowWidth(), resizer.getWindowHeight());
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
@@ -151,7 +155,7 @@ public class GameView extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         initialize();
         createScene(primaryStage);
         gameView = this;
@@ -162,18 +166,18 @@ public class GameView extends Application {
         stage.close();
     }
 
-    private static void startGameGUI(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    private static void startGameGUI(Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
         username = players.get(0);
         windows = new HashMap<>();
         GameView.diceResponse = diceResponse;
-        launch(GameView.class);
+        new GameView().start(stage);
     }
 
-    public static GameView getInstance(List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    public static GameView getInstance(Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
         if (gameView == null) {
-            new Thread(() -> startGameGUI(players, diceResponse, constraints)).start();
+           Platform.runLater(() -> startGameGUI(stage, players, diceResponse, constraints));
             while (gameView == null)
                 try {
                     Thread.sleep(100);
@@ -185,7 +189,21 @@ public class GameView extends Application {
         return gameView;
     }
 
+    public void setDraft(DiceResponse diceResponse) {
+        if(draftView != null)
+            anchorPane.getChildren().removeAll(draftView);
+        draftView = new DraftView(diceResponse);
+        draftView.setAlignment(Pos.CENTER);
+        anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(70));
+        anchorPane.setRightAnchor(draftView, resizer.getWidthPixel(40));
+        anchorPane.getChildren().addAll(draftView);
+    }
 
+    public void notifyTurn() {
+        components.forEach(node -> node.setDisable(false));
+    }
 
-
+    public void notifyEndTurn() {
+        components.forEach(node -> node.setDisable(true));
+    }
 }

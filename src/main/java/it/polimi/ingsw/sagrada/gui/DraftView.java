@@ -41,11 +41,7 @@ public class DraftView extends GridPane {
 
     }
 
-
-
     public void setDraftListener(EventHandler<MouseEvent> draftClickHandler) {
         draft.forEach(diceView -> diceView.setOnMouseClicked(draftClickHandler));
     }
-
-
 }

@@ -5,9 +5,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
-import it.polimi.ingsw.sagrada.gui.GUIManager;
-import it.polimi.ingsw.sagrada.gui.LobbyGuiView;
-import it.polimi.ingsw.sagrada.gui.LoginGuiController;
+import it.polimi.ingsw.sagrada.gui.*;
 import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
@@ -53,6 +51,9 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
     private DynamicRouter dynamicRouter;
     private static LobbyGuiView lobbyGuiView;
     private static List<String> playerLobbyListBackup = new ArrayList<>();
+    private static List<String> playerList;
+    private WindowChoiceGuiController windowChoiceGuiController;
+    private GameGuiController gameGuiController;
 
 
     public SocketClient() throws IOException {
@@ -246,14 +247,29 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         else if(message instanceof RemovePlayerEvent)
             removePlayer(((RemovePlayerEvent)message).getUsername());
         else if(message instanceof WindowResponse) {
-            new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), this);
+            windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), this);
         }
         else if(message instanceof DiceResponse) {
-            //update GUI
-            System.out.println("DADIIIIIIIIIIIIIIIIIIII");
+            ConstraintGenerator constraintGenerator = new ConstraintGenerator();
+            if(gameGuiController == null)
+                gameGuiController = new GameGuiController(GameView.getInstance(windowChoiceGuiController.getStage(),
+                                                                               playerList,
+                                                                               (DiceResponse)message,
+                                                                               constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
+                                                                                                                       windowChoiceGuiController.getWindowSide())), this);
+            else
+                gameGuiController.setDraft((DiceResponse) message);
         }
         else if(message instanceof BeginTurnEvent) {
-            System.out.println("E' IL TUO TURNO");
+            ConstraintGenerator constraintGenerator = new ConstraintGenerator();
+            if(gameGuiController == null)
+                gameGuiController = new GameGuiController(GameView.getInstance(windowChoiceGuiController.getStage(),
+                                                                               playerList,
+                                                                               (DiceResponse)message,
+                                                                               constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
+                                                                                                                       windowChoiceGuiController.getWindowSide())), this);
+
+            gameGuiController.notifyTurn();
         }
     }
 
@@ -300,6 +316,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         System.out.println("Setting lobbyGuiView " + (SocketClient.lobbyGuiView != null));
         for(String username : playerLobbyListBackup)
             lobbyGuiView.setPlayer(username);
+        playerList = new ArrayList<>(playerLobbyListBackup);
         playerLobbyListBackup.clear();
 
     }

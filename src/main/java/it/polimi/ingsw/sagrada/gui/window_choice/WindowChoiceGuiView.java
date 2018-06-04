@@ -145,4 +145,8 @@ public class WindowChoiceGuiView extends Application {
     public void setNotificationMessage(String message) {
         notification.setText(message);
     }
+
+    public Stage getStage() {
+        return (Stage) anchorPane.getScene().getWindow();
+    }
 }

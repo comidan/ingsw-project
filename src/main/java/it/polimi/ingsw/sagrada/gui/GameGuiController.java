@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.gui;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
@@ -29,6 +30,7 @@ public class GameGuiController {
             EndTurnEvent endTurnEvent = new EndTurnEvent(this.gameView.getUsername());
             try {
                 client.sendResponse(endTurnEvent);
+                gameView.notifyEndTurn();
             } catch (RemoteException e) {
                 LOGGER.log(Level.SEVERE, e::getMessage);
             }
@@ -78,8 +80,8 @@ public class GameGuiController {
 
         });
         setRoundTrackClick();
-
         Platform.runLater(() -> setToken(3));
+        gameView.notifyEndTurn();
     }
 
 
@@ -105,4 +107,11 @@ public class GameGuiController {
         this.gameView.removeMistakenDice(row, col);
     }
 
+    public void setDraft(DiceResponse diceResponse) {
+        gameView.setDraft(diceResponse);
+    }
+
+    public void notifyTurn() {
+        gameView.notifyTurn();
+    }
 }
