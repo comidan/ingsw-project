@@ -56,7 +56,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
     private GameGuiController gameGuiController;
 
 
-    public SocketClient(String username) throws IOException {
+    public SocketClient() throws IOException {
         inKeyboard = new BufferedReader(new InputStreamReader(System.in));
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
         dynamicRouter = LoginGuiController.getDynamicRouter();
