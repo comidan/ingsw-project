@@ -33,6 +33,7 @@ public class GameGuiController {
             try {
                 client.sendResponse(endTurnEvent);
                 gameView.notifyEndTurn();
+                System.out.println("Notified end turn");
             } catch (RemoteException e) {
                 LOGGER.log(Level.SEVERE, e::getMessage);
             }
@@ -63,6 +64,7 @@ public class GameGuiController {
                     DiceEvent diceEvent = new DiceEvent(username, idDice, position, "draft");
                     try {
                         client.sendResponse(diceEvent);
+                        System.out.println("Notified dice move");
                     } catch (RemoteException e) {
                         LOGGER.log(Level.SEVERE, e::getMessage);
                     }

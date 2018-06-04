@@ -69,11 +69,11 @@ public class JsonMessage implements CommandKeyword {
     public static JSONObject createDiceEvent(DiceEvent diceEvent) {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, diceEvent.getIdPlayer());
-        content.put(DICE_ID, diceEvent.getIdDice());
+        content.put(DICE_ID, diceEvent.getIdDice()+"");
         content.put("source", diceEvent.getSrc());
         JSONObject position = new JSONObject();
-        position.put("y", diceEvent.getPosition().getRow());
-        position.put("x", diceEvent.getPosition().getCol());
+        position.put("y", diceEvent.getPosition().getRow()+"");
+        position.put("x", diceEvent.getPosition().getCol()+"");
         content.put(POSITION, position);
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, ACTION);

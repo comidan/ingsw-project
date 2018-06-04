@@ -105,6 +105,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     }
 
     private void executePayload(String json) {
+        System.out.println("Receiving : " + json);
         Message parsedMessage = commandParser.parse(json);
         System.out.println(parsedMessage.getType().getName());
         if(parsedMessage instanceof DisconnectEvent) {
@@ -115,6 +116,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
         }
         else {
             System.out.println("Sending to model...");
+            System.out.println(parsedMessage);
             sendToModel(parsedMessage);
         }
     }
