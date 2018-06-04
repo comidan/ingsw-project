@@ -52,7 +52,7 @@ public class MainGameGuiTest {
                     {Constraint.WHITE, Constraint.YELLOW, Constraint.BLUE, Constraint.GREEN, Constraint.RED},
                     {Constraint.BLUE, Constraint.WHITE, Constraint.RED, Constraint.BLUE, Constraint.WHITE},
             };
-            GameView gameView = GameView.getInstance("test", new Stage(), players, diceResponse, constraints);
+            GameView gameView = GameView.getInstance("test", players, diceResponse, constraints);
             GameGuiController gameGuiController = new GameGuiController(gameView, new Client() {
                 @Override
                 public void sendMessage(String message) throws RemoteException {

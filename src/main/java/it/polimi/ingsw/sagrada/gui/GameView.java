@@ -59,6 +59,7 @@ public class GameView extends Application {
 
     public void setDraftClickHandler(EventHandler<MouseEvent> draftClickHandler) {
         draftView.setDraftListener(draftClickHandler);
+        System.out.println("Draft click handler set");
     }
 
     public void setEndTurnHandler(EventHandler<ActionEvent> endTurnEventHandler){
@@ -132,7 +133,7 @@ public class GameView extends Application {
         endTurn = new Button("End turn");
         horizontalBox.getChildren().add(endTurn);
         horizontalBox.setAlignment(Pos.BOTTOM_CENTER);
-        horizontalBox.getChildren().add(windows.get(players.get(0)));
+        horizontalBox.getChildren().add(windows.get(username));
         anchorPane.setBottomAnchor(horizontalBox, resizer.getHeightPixel(11));
         anchorPane.setLeftAnchor(horizontalBox, resizer.getWidthPixel(10));
         anchorPane.getChildren().addAll(horizontalBox);
@@ -175,9 +176,32 @@ public class GameView extends Application {
         new GameView().start(stage);
     }
 
+    private static void startGameGUI(String username, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+        GameView.constraints = constraints;
+        GameView.players = players;
+        GameView.username = username;
+        windows = new HashMap<>();
+        GameView.diceResponse = diceResponse;
+        GameView.launch(GameView.class);
+    }
+
     public static GameView getInstance(String username, Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
         if (gameView == null) {
-           Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
+           new Thread(() -> startGameGUI(username, stage, players, diceResponse, constraints)).start(); //)Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
+            while (gameView == null)
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException exc) {
+                    Thread.currentThread().interrupt();
+                    return gameView;
+                }
+        }
+        return gameView;
+    }
+
+    public static GameView getInstance(String username, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+        if (gameView == null) {
+            new Thread(() -> startGameGUI(username, players, diceResponse, constraints)).start(); //)Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
             while (gameView == null)
                 try {
                     Thread.sleep(100);
