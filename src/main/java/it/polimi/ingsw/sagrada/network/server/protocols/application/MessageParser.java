@@ -1,13 +1,13 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
-import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.RuleResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
+import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import java.util.List;
 
 public class MessageParser implements CommandKeyword {
 
@@ -62,5 +62,22 @@ public class MessageParser implements CommandKeyword {
         message.put(COMMAND_TYPE, RULE_RESPONSE);
         message.put(RULE_RESPONSE, content);
         return message.toJSONString();
+    }
+
+    public String createOpponentWindowsResponse(OpponentWindowResponse opponentWindowResponse) {
+        List<String> players = opponentWindowResponse.getPlayers();
+        JSONArray windows = new JSONArray();
+        for(String player : players) {
+            JSONObject window = new JSONObject();
+            window.put(WINDOW_ID, opponentWindowResponse.getPlayerWindowId(player)+"");
+            window.put(WINDOW_SIDE, WindowSide.sideToString(opponentWindowResponse.getPlayerWindowSide(player)));
+            window.put(PLAYER_ID, player);
+            windows.add(window);
+        }
+        JSONObject container = new JSONObject();
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, OPPONENT_WINDOW_LIST);
+        container.put(OPPONENT_WINDOW_LIST, windows);
+        return container.toJSONString();
     }
 }

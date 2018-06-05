@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
+import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -58,7 +59,7 @@ public class JsonMessage implements CommandKeyword {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, username);
         content.put(WINDOW_ID, windowId+"");
-        content.put("window_side", side); //constant for testing purpose
+        content.put("window_side", side);
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, ACTION);
         container.put(COMMAND_TYPE, WINDOW_CHOICE);
@@ -146,6 +147,18 @@ public class JsonMessage implements CommandKeyword {
                     }
                     System.out.println("DiceResponse generated");
                     return new DiceResponse((String)(data.get("destination")), diceResponse);
+                case OPPONENT_WINDOW_LIST:
+                    JSONArray array = (JSONArray) jsonMsg.get(OPPONENT_WINDOW_LIST);
+                    List<Integer> windowIds = new ArrayList<>();
+                    List<WindowSide> windowSides = new ArrayList<>();
+                    List<String> players = new ArrayList<>();
+                    for(int i = 0; i < array.size(); i++) {
+                        JSONObject windowJson = ((JSONObject) array.get(i));
+                        players.add((String) windowJson.get(PLAYER_ID));
+                        windowIds.add(Integer.parseInt((String) windowJson.get(WINDOW_ID)));
+                        windowSides.add(WindowSide.stringToWindowSide((String) windowJson.get(WINDOW_SIDE)));
+                    }
+                    return new OpponentWindowResponse(players, windowIds, windowSides);
                 default:
                     return null;
             }

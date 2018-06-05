@@ -78,7 +78,7 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         }
         Cell[][] cells = createCellMatrix((JSONArray) specificWindow.get("cells"));
 
-        return new Window(name, cells, tokens);
+        return new Window(name, cells, tokens, id, side);
     }
 
     private Cell[][] createCellMatrix(JSONArray cells) {

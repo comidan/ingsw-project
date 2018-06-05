@@ -14,12 +14,16 @@ public class Window implements WindowModelInterface {
     private String name;
     private Cell[][] cellMatrix;
     private List<Token> tokens;
+    private int id;
+    private WindowSide side;
 
 
-    public Window(String name, Cell[][] cellMatrix, List<Token> tokens) {
+    public Window(String name, Cell[][] cellMatrix, List<Token> tokens, int id, WindowSide side) {
         this.name = name;
         this.cellMatrix = cellMatrix;
         this.tokens = tokens;
+        this.id = id;
+        this.side = side;
     }
 
     /**
@@ -47,6 +51,14 @@ public class Window implements WindowModelInterface {
 
     public String getName() {
         return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public WindowSide getSide() {
+        return side;
     }
 
     public String toString() {

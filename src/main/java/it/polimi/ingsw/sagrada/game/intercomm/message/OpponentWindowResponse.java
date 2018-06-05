@@ -14,6 +14,7 @@ public class OpponentWindowResponse implements Message {
 
     public OpponentWindowResponse(List<String> players, List<Integer> windows, List<WindowSide> sides) {
         this.windows = new HashMap<>();
+        this.players = players;
         players.forEach(player -> this.windows.put(player,  new Pair<Integer, WindowSide>(windows.get(players.indexOf(player)), sides.get(player.indexOf(player)))));
     }
 
@@ -21,6 +22,10 @@ public class OpponentWindowResponse implements Message {
     @Override
     public Class<? extends Message> getType() {
         return getClass();
+    }
+
+    public List<String> getPlayers() {
+        return players;
     }
 
     public Integer getPlayerWindowId(String username) {

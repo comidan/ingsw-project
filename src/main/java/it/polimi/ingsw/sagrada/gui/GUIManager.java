@@ -24,7 +24,7 @@ public class GUIManager {
         return WindowChoiceGuiView.getInstance(windowResponse, stage);
     }
 
-    public static GameView initGameView(String username, Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
+    public static GameView initGameView(String username, Stage stage, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
         return GameView.getInstance(username, stage, players, diceResponse, constraints);
     }
 

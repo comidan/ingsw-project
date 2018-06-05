@@ -152,7 +152,7 @@ public class GameView extends Application {
         components.add(windows.get(username));
         Scene scene = new Scene(anchorPane, resizer.getWindowWidth(), resizer.getWindowHeight());
         primaryStage.setScene(scene);
-        primaryStage.setFullScreen(true);
+        //primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 
@@ -168,9 +168,8 @@ public class GameView extends Application {
         stage.close();
     }
 
-    private static void startGameGUI(String username, Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
-        GameView.constraints = new ArrayList<>();
-        GameView.constraints.add(constraints);// constraints;
+    private static void startGameGUI(String username, Stage stage, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
+        GameView.constraints = constraints;
         GameView.players = players;
         GameView.username = username;
         windows = new HashMap<>();
@@ -187,7 +186,7 @@ public class GameView extends Application {
         GameView.launch(GameView.class);
     }
 
-    /*public static GameView getInstance(String username, Stage stage, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
+    public static GameView getInstance(String username, Stage stage, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
         if (gameView == null) {
            Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
             while (gameView == null)
@@ -199,21 +198,8 @@ public class GameView extends Application {
                 }
         }
         return gameView;
-    }*/
-
-    public static GameView getInstance(String username, Stage stage, List<String> players, DiceResponse diceResponse, Constraint[][] constraints) {
-        if (gameView == null) {
-            Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
-            while (gameView == null)
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException exc) {
-                    Thread.currentThread().interrupt();
-                    return gameView;
-                }
-        }
-        return gameView;
     }
+
 
     public static GameView getInstance(String username, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
         if (gameView == null) {

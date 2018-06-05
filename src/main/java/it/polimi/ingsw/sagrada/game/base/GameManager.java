@@ -125,7 +125,17 @@ public class GameManager implements Channel<Message, Message> {
             if(p.isConnected() && p.getWindow()==null) dealt = false;
         }
 
-        if(dealt) startRound();
+        if(dealt) {
+            System.out.println("Initializing opponents window message");
+            List<Integer> windowsId = new ArrayList<>();
+            List<WindowSide> sides = new ArrayList<>();
+            List<String> usernames = new ArrayList<>();
+            players.forEach(p -> windowsId.add(p.getWindow().getId()));
+            players.forEach(p -> sides.add(player.getWindow().getSide()));
+            players.forEach(p -> usernames.add(p.getId()));
+            sendMessage(new OpponentWindowResponse(usernames, windowsId, sides));
+            startRound();
+        }
     }
 
     private void startRound() {

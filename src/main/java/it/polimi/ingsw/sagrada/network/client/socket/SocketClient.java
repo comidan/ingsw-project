@@ -51,9 +51,10 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
     private DynamicRouter dynamicRouter;
     private static LobbyGuiView lobbyGuiView;
     private static List<String> playerLobbyListBackup = new ArrayList<>();
-    private static List<String> playerList;
+    private static List<String> playerList = new ArrayList<>();
     private WindowChoiceGuiController windowChoiceGuiController;
     private GameGuiManager gameGuiManager;
+    private WindowGameManager windowGameManager;
 
 
     public SocketClient() throws IOException {
@@ -157,8 +158,10 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
     public void setPlayer(String playerName) throws RemoteException {
         System.out.println("Setting playerName " + playerName);
         System.out.println("Null? : " + (lobbyGuiView == null));
-        if(lobbyGuiView != null)
+        if(lobbyGuiView != null) {
             lobbyGuiView.setPlayer(playerName);
+            playerList.add(playerName);
+        }
         else
             playerLobbyListBackup.add(playerName);
     }
@@ -253,27 +256,35 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         else if(message instanceof WindowResponse) {
             windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), this);
         }
+        else if(message instanceof OpponentWindowResponse) {
+            if(windowGameManager == null)
+                windowGameManager = new WindowGameManager();
+            OpponentWindowResponse windows = (OpponentWindowResponse) message;
+            List<String> players = windows.getPlayers();
+            for(String player : players)
+                windowGameManager.addWindow(windows.getPlayerWindowId(player), windows.getPlayerWindowSide(player));
+        }
         else if(message instanceof DiceResponse) {
-            ConstraintGenerator constraintGenerator = new ConstraintGenerator();
-            if(gameGuiManager == null)
+            if(gameGuiManager == null) {
+                windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
                 gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                                                                               windowChoiceGuiController.getStage(),
-                                                                               playerList,
-                                                                               (DiceResponse)message,
-                                                                               constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
-                                                                                                                       windowChoiceGuiController.getWindowSide())), this);
+                                                                        windowChoiceGuiController.getStage(),
+                                                                        playerList,
+                                                                        (DiceResponse) message,
+                                                                        windowGameManager.getWindows()), this);
+            }
             else
                 gameGuiManager.setDraft((DiceResponse) message);
         }
         else if(message instanceof BeginTurnEvent) {
-            ConstraintGenerator constraintGenerator = new ConstraintGenerator();
-            if(gameGuiManager == null)
+            if(gameGuiManager == null) {
+                windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
                 gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                                                                               windowChoiceGuiController.getStage(),
-                                                                               playerList,
-                                                                               (DiceResponse)message,
-                                                                               constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
-                                                                                                                       windowChoiceGuiController.getWindowSide())), this);
+                                                                        windowChoiceGuiController.getStage(),
+                                                                        playerList,
+                                                                        (DiceResponse) message,
+                                                                        windowGameManager.getWindows()), this);
+            }
 
             System.out.println("New round notified");
             gameGuiManager.notifyTurn();
@@ -325,7 +336,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         System.out.println("Setting lobbyGuiView " + (SocketClient.lobbyGuiView != null));
         for(String username : playerLobbyListBackup)
             lobbyGuiView.setPlayer(username);
-        playerList = new ArrayList<>(playerLobbyListBackup);
+        playerList.addAll(playerLobbyListBackup);
         playerLobbyListBackup.clear();
 
     }

@@ -2,10 +2,7 @@ package it.polimi.ingsw.sagrada.network.client.rmi;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.RuleResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.gui.*;
 import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
@@ -50,6 +47,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     private static List<String> playerList;
     private WindowChoiceGuiController windowChoiceGuiController;
     private GameGuiManager gameGuiManager;
+    private WindowGameManager windowGameManager;
 
     public RMIClient(LoginGuiManager loginGuiManager) throws RemoteException {
         this.loginGuiManager = loginGuiManager;
@@ -255,28 +253,37 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         if(message instanceof WindowResponse) {
             windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), this);
         }
+        else if(message instanceof OpponentWindowResponse) {
+            if(windowGameManager == null)
+                windowGameManager = new WindowGameManager();
+            OpponentWindowResponse windows = (OpponentWindowResponse) message;
+            List<String> players = windows.getPlayers();
+            for(String player : players)
+                windowGameManager.addWindow(windows.getPlayerWindowId(player), windows.getPlayerWindowSide(player));
+        }
         else if(message instanceof DiceResponse) {
-            ConstraintGenerator constraintGenerator = new ConstraintGenerator();
-            if(gameGuiManager == null)
-                gameGuiManager = new GameGuiManager(GameView.getInstance( username,
-                                                                                windowChoiceGuiController.getStage(),
-                                                                                playerList,
-                                                                                (DiceResponse)message,
-                                                                                constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
-                                                                                                                        windowChoiceGuiController.getWindowSide())), this);
+            if(gameGuiManager == null) {
+                windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
+                gameGuiManager = new GameGuiManager(GameView.getInstance(username,
+                                                                        windowChoiceGuiController.getStage(),
+                                                                        playerList,
+                                                                        (DiceResponse) message,
+                                                                        windowGameManager.getWindows()), this);
+            }
             else
                 gameGuiManager.setDraft((DiceResponse) message);
         }
         else if(message instanceof BeginTurnEvent) {
-            ConstraintGenerator constraintGenerator = new ConstraintGenerator();
-            if(gameGuiManager == null)
+            if(gameGuiManager == null) {
+                windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
                 gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                                                                               windowChoiceGuiController.getStage(),
-                                                                               playerList,
-                                                                               (DiceResponse)message,
-                                                                                constraintGenerator.getConstraintMatrix(windowChoiceGuiController.getWindowId(),
-                                                                                                                        windowChoiceGuiController.getWindowSide())), this);
+                                                                        windowChoiceGuiController.getStage(),
+                                                                        playerList,
+                                                                        (DiceResponse) message,
+                                                                        windowGameManager.getWindows()), this);
+            }
 
+            System.out.println("New round notified");
             gameGuiManager.notifyTurn();
         }
         else if(message instanceof RuleResponse)
