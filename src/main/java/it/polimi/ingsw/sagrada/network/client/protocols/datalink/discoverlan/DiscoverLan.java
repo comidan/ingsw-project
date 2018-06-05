@@ -60,7 +60,7 @@ public class DiscoverLan {
     public boolean isDirectlyAttachedAndReachable(InetAddress address) {
         int checkedAddr = addrBytesToInt(address.getAddress());
         try {
-            if (!address.isReachable(1000))
+            if (!address.isReachable(3000))
                 return false;
         } catch (IOException ex) {
             System.err.println("Failed to check reachability: " + ex.getLocalizedMessage());
