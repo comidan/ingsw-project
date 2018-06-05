@@ -31,7 +31,7 @@ public class GameDataManager implements Channel<Message, Message> {
         dynamicRouter.subscribeChannel(PublicObjectiveResponse.class, this);
         dynamicRouter.subscribeChannel(OpponentWindowResponse.class, this);
         dynamicRouter.subscribeChannel(OpponentDiceMoveResponse.class, this);
-        //dynamicRouter.subscribeChannel(RuleResponse.class, this);
+        dynamicRouter.subscribeChannel(RuleResponse.class, this);
     }
 
     @Override
@@ -114,14 +114,14 @@ public class GameDataManager implements Channel<Message, Message> {
                 }
             }
         }
-        /*else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.RULE_RESPONSE))) {
+        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.RULE_RESPONSE))) {
             RuleResponse ruleResponse = (RuleResponse)message;
             try {
                 getClient(ruleResponse.getPlayerId()).sendResponse(message);
             } catch (RemoteException e) {
                 LOGGER.log(Level.SEVERE, e::getMessage);
             }
-        }*/
+        }
     }
 
     @Override
