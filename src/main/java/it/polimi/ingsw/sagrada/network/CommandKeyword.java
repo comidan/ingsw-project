@@ -51,4 +51,7 @@ public interface CommandKeyword {
     String VALID_MOVE = "valid_move";
     String OPPONENT_WINDOW_LIST = "opponent_window_list";
     String OPPONENT_DICE_RESPONSE = "opponent_dice_response";
+    String DRAFT = "draft";
+    String ROUND_TRACK = "roundtrack";
+    String NEW_ROUND = "newround";
 }

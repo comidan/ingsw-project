@@ -171,6 +171,9 @@ public class JsonMessage implements CommandKeyword {
                 case RULE_RESPONSE:
                     JSONObject ruleResponse = (JSONObject)jsonMsg.get(RULE_RESPONSE);
                     return new RuleResponse((String)ruleResponse.get(PLAYER_ID), Boolean.parseBoolean((String)ruleResponse.get(VALID_MOVE)));
+                case NEW_ROUND:
+                    JSONObject newRoundResponse = (JSONObject)jsonMsg.get(NEW_ROUND);
+                    return new NewTurnResponse(Integer.parseInt((String) newRoundResponse.get(NEW_ROUND)));
                 default:
                     return null;
             }

@@ -103,6 +103,8 @@ public class RemoteSocketClient implements ClientBase, Runnable {
             payload = messageParser.createOpponentWindowsResponse((OpponentWindowResponse) message);
         else if((message instanceof OpponentDiceMoveResponse))
             payload = messageParser.createOpponentDiceResponse((OpponentDiceMoveResponse)message);
+        else if(message instanceof NewTurnResponse)
+            payload = messageParser.createJsonNewRoundResponse((NewTurnResponse) message);
         else
             payload = "ERROR";
         output.println(payload);

@@ -142,6 +142,7 @@ public class GameManager implements Channel<Message, Message> {
         if(stateIterator.next()==StateGameEnum.TURN) {
             System.out.println(stateIterator.getRoundNumber() + " turn started");
             diceManager.bagToDraft();
+            sendMessage(new NewTurnResponse(stateIterator.getRoundNumber()));
             notifyNextPlayer();
         }
         else scoreState();

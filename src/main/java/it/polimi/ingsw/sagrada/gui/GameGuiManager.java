@@ -2,10 +2,12 @@ package it.polimi.ingsw.sagrada.gui;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +21,7 @@ public class GameGuiManager {
     private DraftView draftView;
     private RoundtrackView roundtrackView;
     private CellView lastMove;
+    private int currentRound;
 
     public GameGuiManager(GameView gameView, Client client) {
         this.clickedObject = new ClickedObject();
@@ -119,12 +122,27 @@ public class GameGuiManager {
         this.gameView.removeMistakenDice(row, col);
     }
 
-    public void setDraft(DiceResponse diceResponse) {
+    private void setDraft(DiceResponse diceResponse) {
         Platform.runLater(() -> {
             gameView.setDraft(diceResponse);
             setDraftListener();
         });
+    }
 
+    public void setDiceList(DiceResponse diceResponse) {
+        if(diceResponse.getDst().equals(CommandKeyword.DRAFT))
+            setDraft(diceResponse);
+        else if(diceResponse.getDst().equals(CommandKeyword.ROUND_TRACK))
+            setRoundTrack(diceResponse);
+    }
+
+    private void setRoundTrack(DiceResponse diceResponse) {
+        Platform.runLater(() -> {
+            List<DiceView> diceViews = new ArrayList<>();
+            diceResponse.getDiceList().forEach(dice -> diceViews.add(new DiceView(Constraint.getColorConstraint(dice.getColor()), Constraint.getValueConstraint(dice.getValue()), dice.getId())));
+            gameView.setRoundtrackImage(diceViews, currentRound);
+            setDraftListener();
+        });
     }
 
     public void notifyTurn() {
@@ -144,5 +162,9 @@ public class GameGuiManager {
         gameView.setOpponentWindow(opponentDiceMoveResponse.getIdPlayer(),
                                    opponentDiceMoveResponse.getDice(),
                                    opponentDiceMoveResponse.getPosition());
+    }
+
+    public void setRound(int round) {
+        currentRound = round;
     }
 }

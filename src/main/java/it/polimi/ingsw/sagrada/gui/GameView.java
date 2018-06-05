@@ -76,8 +76,8 @@ public class GameView extends Application {
         return this.roundtrackView;
     }
 
-    public void setRoundtrackImage(List<DiceView> diceViews, int currentround){
-        this.roundtrackView.setImage(diceViews, currentround);
+    public void setRoundtrackImage(List<DiceView> diceViews, int currentRound){
+        this.roundtrackView.setImage(diceViews, currentRound);
     }
 
     public void setToken(int tokenNumber){

@@ -98,4 +98,14 @@ public class MessageParser implements CommandKeyword {
         container.put(DICE, content);
         return container.toJSONString();
     }
+
+    public String createJsonNewRoundResponse(NewTurnResponse newTurnResponse) {
+        JSONObject content = new JSONObject();
+        content.put(NEW_ROUND, newTurnResponse.getRound()+"");
+        JSONObject container = new JSONObject();
+        container.put(COMMAND_TYPE, NEW_ROUND);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(NEW_ROUND, content);
+        return container.toJSONString();
+    }
 }

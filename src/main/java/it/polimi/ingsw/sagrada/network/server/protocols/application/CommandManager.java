@@ -67,7 +67,7 @@ public class CommandManager {
                         windowGameManager.getWindows()), socketClient);
             }
             else
-                gameGuiManager.setDraft((DiceResponse) message);
+                gameGuiManager.setDiceList((DiceResponse) message);
         }
         else if(message instanceof BeginTurnEvent) {
             if(gameGuiManager == null) {
@@ -88,6 +88,8 @@ public class CommandManager {
         }
         else if(message instanceof RuleResponse)
             gameGuiManager.notifyMoveResponse((RuleResponse) message);
+        else if(message instanceof NewTurnResponse)
+            gameGuiManager.setRound(((NewTurnResponse)message).getRound());
     }
 
     public String createPayload(Message message) {
