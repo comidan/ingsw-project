@@ -168,6 +168,9 @@ public class JsonMessage implements CommandKeyword {
                     JSONObject pos = (JSONObject)dice.get(POSITION);
                     Position position = new Position(Integer.parseInt((String)pos.get("y")), Integer.parseInt((String)pos.get("x")));
                     return new OpponentDiceMoveResponse(idPlayer, diceOpponent, position);
+                case RULE_RESPONSE:
+                    JSONObject ruleResponse = (JSONObject)jsonMsg.get(RULE_RESPONSE);
+                    return new RuleResponse((String)ruleResponse.get(PLAYER_ID), Boolean.parseBoolean((String)ruleResponse.get(VALID_MOVE)));
                 default:
                     return null;
             }

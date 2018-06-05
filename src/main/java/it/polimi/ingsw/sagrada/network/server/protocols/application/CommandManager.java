@@ -86,8 +86,8 @@ public class CommandManager {
             System.out.println("Opponent Dice:     " +((OpponentDiceMoveResponse) message).getDice().getValue());
             gameGuiManager.setOpponentDiceResponse((OpponentDiceMoveResponse)message);
         }
-        /*else if(message instanceof RuleResponse)
-            gameGuiManager.notifyMoveResponse((RuleResponse) message);*/
+        else if(message instanceof RuleResponse)
+            gameGuiManager.notifyMoveResponse((RuleResponse) message);
     }
 
     public String createPayload(Message message) {

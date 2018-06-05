@@ -139,7 +139,6 @@ public class GameGuiManager {
                 lastMove.removeMistakenDice();
             }
         });
-
     }
 
     public void setOpponentDiceResponse(OpponentDiceMoveResponse opponentDiceMoveResponse) {
