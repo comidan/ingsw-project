@@ -80,4 +80,21 @@ public class MessageParser implements CommandKeyword {
         container.put(OPPONENT_WINDOW_LIST, windows);
         return container.toJSONString();
     }
+
+    public String createOpponentDiceResponse(OpponentDiceMoveResponse opponentDiceMoveResponse) {
+        JSONObject content = new JSONObject();
+        content.put(PLAYER_ID, opponentDiceMoveResponse.getIdPlayer());
+        content.put(DICE_ID, opponentDiceMoveResponse.getDice().getId()+"");
+        content.put(VALUE, opponentDiceMoveResponse.getDice().getValue()+"");
+        content.put(COLOR, opponentDiceMoveResponse.getDice().getColor().toString());
+        JSONObject position = new JSONObject();
+        position.put("x", opponentDiceMoveResponse.getPosition().getCol()+"");
+        position.put("y", opponentDiceMoveResponse.getPosition().getRow()+"");
+        content.put(POSITION, position);
+        JSONObject container = new JSONObject();
+        container.put(COMMAND_TYPE, OPPONENT_DICE_RESPONSE);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(DICE, content);
+        return container.toJSONString();
+    }
 }

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.sagrada.gui;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
+import it.polimi.ingsw.sagrada.game.playables.Dice;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -232,5 +234,9 @@ public class GameView extends Application {
 
     public void notifyEndTurn() {
         components.forEach(node -> node.setDisable(true));
+    }
+
+    public void setOpponentWindow(String username, Dice dice, Position position) {
+        windows.get(username).setDice(dice, position);
     }
 }

@@ -50,4 +50,5 @@ public interface CommandKeyword {
     String RULE_RESPONSE = "rule_response";
     String VALID_MOVE = "valid_move";
     String OPPONENT_WINDOW_LIST = "opponent_window_list";
+    String OPPONENT_DICE_RESPONSE = "opponent_dice_response";
 }

@@ -82,6 +82,9 @@ public class CommandManager {
             System.out.println("New round notified");
             gameGuiManager.notifyTurn();
         }
+        else if(message instanceof OpponentDiceMoveResponse) {
+            gameGuiManager.setOpponentDiceResponse((OpponentDiceMoveResponse)message);
+        }
         /*else if(message instanceof RuleResponse)
             gameGuiManager.notifyMoveResponse((RuleResponse) message);*/
     }

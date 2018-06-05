@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
@@ -159,6 +160,13 @@ public class JsonMessage implements CommandKeyword {
                         windowSides.add(WindowSide.stringToWindowSide((String) windowJson.get(WINDOW_SIDE)));
                     }
                     return new OpponentWindowResponse(players, windowIds, windowSides);
+                case OPPONENT_DICE_RESPONSE:
+                    JSONObject dice = (JSONObject)jsonMsg.get(DICE);
+                    String idPlayer = (String)dice.get(PLAYER_ID);
+                    Dice diceOpponent = new Dice(Integer.parseInt((String)dice.get(DICE_ID)), Colors.stringToColor((String)dice.get(COLOR)));
+                    JSONObject pos = (JSONObject)dice.get(POSITION);
+                    Position position = new Position(Integer.parseInt((String)pos.get("y")), Integer.parseInt((String)pos.get("x")));
+                    return new OpponentDiceMoveResponse(idPlayer, diceOpponent, position);
                 default:
                     return null;
             }

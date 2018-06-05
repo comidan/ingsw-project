@@ -1,10 +1,7 @@
 package it.polimi.ingsw.sagrada.gui;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
 
@@ -143,5 +140,11 @@ public class GameGuiManager {
             }
         });
 
+    }
+
+    public void setOpponentDiceResponse(OpponentDiceMoveResponse opponentDiceMoveResponse) {
+        gameView.setOpponentWindow(opponentDiceMoveResponse.getIdPlayer(),
+                                   opponentDiceMoveResponse.getDice(),
+                                   opponentDiceMoveResponse.getPosition());
     }
 }
