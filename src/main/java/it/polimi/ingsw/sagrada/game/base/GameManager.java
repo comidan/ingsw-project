@@ -162,13 +162,19 @@ public class GameManager implements Channel<Message, Message> {
     private void setDiceInWindow(String idPlayer, Dice dice, Position position) {
         Player player = idToPlayer(idPlayer);
         if(player != null) {
-            System.out.println("Model dice: "+dice.getValue());
             Window window = player.getWindow();
             window.setCell(dice, position.getRow(), position.getCol());
             ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
+            if(errorType == ErrorType.NO_ERROR) {
+                sendMessage(new OpponentDiceMoveResponse(idPlayer, dice, position));
+                sendMessage(new DiceResponse("draft", diceManager.getDraft()));
+            }
+            else {
+                //revert model to the previous move
+                diceManager.revert();
+                window.resetCell(position.getRow(), position.getCol());
 
-            sendMessage(new OpponentDiceMoveResponse(idPlayer, dice, position));
-            sendMessage(new DiceResponse("draft", diceManager.getDraft()));
+            }
             sendMessage(new RuleResponse(idPlayer, errorType == ErrorType.NO_ERROR));
         }
     }

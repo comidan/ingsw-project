@@ -39,10 +39,14 @@ public class Window implements WindowModelInterface {
      * @param y    - window y-position
      * @return
      */
-    public boolean setCell(Dice dice, int x, int y) {
-        if (cellMatrix[x][y].isOccupied()) return false;
-        cellMatrix[x][y].setDice(dice);
+    public boolean setCell(Dice dice, int y, int x) {
+        if (cellMatrix[y][x].isOccupied()) return false;
+        cellMatrix[y][x].setDice(dice);
         return true;
+    }
+
+    public void resetCell(int y, int x) {
+        cellMatrix[y][x].removeCurrentDice();
     }
 
     public int getTokenNumber() {
