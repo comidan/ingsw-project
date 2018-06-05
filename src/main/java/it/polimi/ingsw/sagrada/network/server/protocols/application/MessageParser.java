@@ -85,6 +85,7 @@ public class MessageParser implements CommandKeyword {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, opponentDiceMoveResponse.getIdPlayer());
         content.put(DICE_ID, opponentDiceMoveResponse.getDice().getId()+"");
+        System.out.println("Dice pre message: "+opponentDiceMoveResponse.getDice().getValue());
         content.put(VALUE, opponentDiceMoveResponse.getDice().getValue()+"");
         content.put(COLOR, opponentDiceMoveResponse.getDice().getColor().toString());
         JSONObject position = new JSONObject();

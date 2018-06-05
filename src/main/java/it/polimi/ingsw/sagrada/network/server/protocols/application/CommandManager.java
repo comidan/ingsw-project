@@ -83,6 +83,7 @@ public class CommandManager {
             gameGuiManager.notifyTurn();
         }
         else if(message instanceof OpponentDiceMoveResponse) {
+            System.out.println("Opponent Dice:     " +((OpponentDiceMoveResponse) message).getDice().getValue());
             gameGuiManager.setOpponentDiceResponse((OpponentDiceMoveResponse)message);
         }
         /*else if(message instanceof RuleResponse)

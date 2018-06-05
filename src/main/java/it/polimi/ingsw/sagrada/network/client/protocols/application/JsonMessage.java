@@ -164,6 +164,7 @@ public class JsonMessage implements CommandKeyword {
                     JSONObject dice = (JSONObject)jsonMsg.get(DICE);
                     String idPlayer = (String)dice.get(PLAYER_ID);
                     Dice diceOpponent = new Dice(Integer.parseInt((String)dice.get(DICE_ID)), Colors.stringToColor((String)dice.get(COLOR)));
+                    diceOpponent.setValue(Integer.parseInt((String)dice.get(VALUE)));
                     JSONObject pos = (JSONObject)dice.get(POSITION);
                     Position position = new Position(Integer.parseInt((String)pos.get("y")), Integer.parseInt((String)pos.get("x")));
                     return new OpponentDiceMoveResponse(idPlayer, diceOpponent, position);
