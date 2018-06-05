@@ -54,7 +54,6 @@ public class GameGuiManager {
                 if (!cellView.isOccupied()) {
                     lastMove = cellView;
                     cellView.setImageCell(diceView);
-                    draftView.removeDiceView(diceView);
 
                     String username = this.gameView.getUsername();
                     int idDice = diceView.getDiceID();
