@@ -271,7 +271,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                                                                         windowGameManager.getWindows()), this);
             }
             else
-                gameGuiManager.setDraft((DiceResponse) message);
+                gameGuiManager.setDiceList((DiceResponse) message);
         }
         else if(message instanceof BeginTurnEvent) {
             if(gameGuiManager == null) {
