@@ -12,6 +12,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.*;
 import it.polimi.ingsw.sagrada.game.rules.ErrorType;
 import it.polimi.ingsw.sagrada.game.rules.RuleManager;
+import it.polimi.ingsw.sagrada.network.CommandKeyword;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,7 +156,9 @@ public class GameManager implements Channel<Message, Message> {
             System.out.println("Begin turn sent to " + beginTurnEvent.getIdPlayer());
         }
         else {
-            roundTrack.addDice(diceManager.putDiceRoundTrack(), stateIterator.getRoundNumber());
+            List<Dice> diceToRoundTrack = diceManager.putDiceRoundTrack();
+            roundTrack.addDice(diceToRoundTrack, stateIterator.getRoundNumber());
+            sendMessage(new DiceResponse(CommandKeyword.ROUND_TRACK, diceToRoundTrack));
             startRound();
         }
     }

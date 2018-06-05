@@ -11,7 +11,7 @@ import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.client.protocols.networklink.discoverinternet.DiscoverInternet;
-import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandManager;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 

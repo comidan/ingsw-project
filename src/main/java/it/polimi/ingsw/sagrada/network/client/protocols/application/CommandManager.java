@@ -1,4 +1,4 @@
-package it.polimi.ingsw.sagrada.network.server.protocols.application;
+package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
@@ -6,7 +6,6 @@ import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.gui.*;
 import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
-import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.socket.SocketClient;
 import org.json.simple.JSONObject;
 

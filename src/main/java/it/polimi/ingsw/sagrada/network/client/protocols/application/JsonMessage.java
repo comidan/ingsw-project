@@ -146,8 +146,7 @@ public class JsonMessage implements CommandKeyword {
                         dice.setValue(Integer.parseInt((String)(diceJson).get(VALUE)));
                         diceResponse.add(dice);
                     }
-                    System.out.println("DiceResponse generated");
-                    return new DiceResponse((String)(data.get("destination")), diceResponse);
+                    return new DiceResponse((String)(data.get(DESTINATION)), diceResponse);
                 case OPPONENT_WINDOW_LIST:
                     JSONArray array = (JSONArray) jsonMsg.get(OPPONENT_WINDOW_LIST);
                     List<Integer> windowIds = new ArrayList<>();

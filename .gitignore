@@ -68,3 +68,6 @@ buildNumber.properties
 \.idea/sonarlint/issuestore/2/5/
 
 \.idea/sonarlint/issuestore/
+
+src/main/resources/json/config/database_config.json
+src/main/resources/json/config/network_config.json
