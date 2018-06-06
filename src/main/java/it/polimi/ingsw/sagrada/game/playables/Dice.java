@@ -2,12 +2,13 @@ package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 
+import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
  */
-public class Dice {
+public class Dice implements Serializable {
 
     private static final int MAX_VALUE = 6;
     private int value;

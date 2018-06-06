@@ -26,9 +26,10 @@ public class WindowChoiceGuiController {
                 WindowImage windowImage = (WindowImage)event.getSource();
                 this.view.setNotificationMessage("Window selected, wait for the other players");
                 try {
-                    client.sendResponse(new WindowEvent(client.getId(), windowImage.getWindowId(), windowImage.getSide()));
+                    client.sendRemoteMessage(new WindowEvent(client.getId(), windowImage.getWindowId(), windowImage.getSide()));
                     windowId = windowImage.getWindowId();
                     windowSide = windowImage.getSide();
+                    System.out.println("Window player " + client.getId() + " : " + windowImage.getSide() + " " + windowImage.getWindowId());
                 } catch (RemoteException e) {
                     LOGGER.log(Level.SEVERE, "error sending window event to server");
                 }

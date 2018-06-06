@@ -100,6 +100,11 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
     }
 
     @Override
+    public void sendRemoteMessage(Message message) throws RemoteException {
+        outSocket.println(commandManager.createPayload(message));
+    }
+
+    @Override
     public void close() {
         try {
             socket.close();
@@ -140,7 +145,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
 
     @Override
     public void sendResponse(Message message) throws RemoteException {
-        outSocket.println(commandManager.createPayload(message));
+        //outSocket.println(commandManager.createPayload(message));
     }
 
     private void login() {

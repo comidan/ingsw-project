@@ -31,7 +31,7 @@ public class GameGuiManager {
         this.gameView.setEndTurnHandler(event -> {
             EndTurnEvent endTurnEvent = new EndTurnEvent(this.gameView.getUsername());
             try {
-                client.sendResponse(endTurnEvent);
+                client.sendRemoteMessage(endTurnEvent);
                 gameView.notifyEndTurn();
                 System.out.println("Notified end turn");
             } catch (RemoteException e) {
@@ -65,7 +65,7 @@ public class GameGuiManager {
                     Position position = new Position(row, col);
                     DiceEvent diceEvent = new DiceEvent(username, idDice, position, "draft");
                     try {
-                        client.sendResponse(diceEvent);
+                        client.sendRemoteMessage(diceEvent);
                         System.out.println("Notified dice move");
                     } catch (RemoteException e) {
                         LOGGER.log(Level.SEVERE, e::getMessage);

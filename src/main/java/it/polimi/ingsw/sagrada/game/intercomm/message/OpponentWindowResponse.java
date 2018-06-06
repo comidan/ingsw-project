@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.game.intercomm.message;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class OpponentWindowResponse implements Message {
         return windows.get(username).getSecondEntry();
     }
 
-    private class Pair<T, U> {
+    private class Pair<T, U> implements Serializable {
         private final T t;
         private final U u;
 

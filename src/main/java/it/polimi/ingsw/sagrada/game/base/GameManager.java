@@ -122,6 +122,7 @@ public class GameManager implements Channel<Message, Message> {
         boolean dealt = true;
 
         player.setWindow(window);
+        System.out.println("Window player " + player.getId() + " : " + window.getName() + " " + window.getId());
         for(Player p:players) {
             if(p.isConnected() && p.getWindow()==null) dealt = false;
         }

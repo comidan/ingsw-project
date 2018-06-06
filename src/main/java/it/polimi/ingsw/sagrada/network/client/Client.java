@@ -9,6 +9,8 @@ public interface Client extends Remote {
 
     void sendMessage(String message) throws RemoteException;
 
+    void sendRemoteMessage(Message message) throws RemoteException;
+
     void disconnect() throws RemoteException;
 
     void sendResponse(Message message) throws RemoteException;

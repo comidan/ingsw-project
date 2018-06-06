@@ -58,6 +58,11 @@ public class MainGameGuiTest {
                 }
 
                 @Override
+                public void sendRemoteMessage(Message message) throws RemoteException {
+
+                }
+
+                @Override
                 public void disconnect() throws RemoteException {
 
                 }

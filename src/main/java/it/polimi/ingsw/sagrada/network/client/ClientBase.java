@@ -6,6 +6,8 @@ public interface ClientBase extends Client {
 
     void setTimer(String time) throws RemoteException;
 
+    void startHeartbeat(int port) throws RemoteException;
+
     void setPlayer(String playerName) throws RemoteException;
 
     void removePlayer(String playerName) throws RemoteException;

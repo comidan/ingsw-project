@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -55,6 +56,11 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     }
 
     @Override
+    public void sendRemoteMessage(Message message) throws RemoteException {
+
+    }
+
+    @Override
     public void disconnect() {
         disconnect.apply(identifier);
         close();
@@ -66,6 +72,11 @@ public class RemoteSocketClient implements ClientBase, Runnable {
         String payload = commandParser.createJSONCountdown(time);
         output.println(payload);
         System.out.println("Sending time...");
+    }
+
+    @Override
+    public void startHeartbeat(int port) throws RemoteException {
+
     }
 
     @Override
@@ -154,7 +165,6 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     public void run() {
         while (!executor.isShutdown()) {
             try {
-                System.out.println("Attending client data...");
                 executePayload(input.readLine());
             } catch (IOException exc) {
                 fastRecovery.apply(identifier);

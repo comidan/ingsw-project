@@ -184,7 +184,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             clientIds.add(token);
         clientPool.put(token, clientRMI);
         Function<String, Boolean> disconnect = this::removePlayer;
-        Client remoteClient = new RemoteRMIClient(token, disconnect, clientRMI);
+        Consumer<Message> sendToModel = this::sendToModel;
+        Client remoteClient = new RemoteRMIClient(token, disconnect, clientRMI, sendToModel);
         try {
             Registry registry = LocateRegistry.getRegistry(1099);
             registry.bind(token, remoteClient);

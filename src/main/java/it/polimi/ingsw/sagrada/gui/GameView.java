@@ -35,7 +35,6 @@ public class GameView extends Application {
     private static List<String> players;
     private static List<Constraint[][]> constraints;
     private Button endTurn;
-    private ClickedObject clickedObject;
     private Resizer resizer;
     private RoundtrackView roundtrackView;
     private static GameView gameView = null;
@@ -47,36 +46,35 @@ public class GameView extends Application {
         return username;
     }
 
-    public void setCellClickListener(EventHandler<MouseEvent> cellClickEventHandler) {
+    void setCellClickListener(EventHandler<MouseEvent> cellClickEventHandler) {
         windows.get(username).setWindowDiceListener(cellClickEventHandler);
     }
 
-    public void setRoundtrackClickHandler(EventHandler<MouseEvent> diceClickHandler){
+    void setRoundtrackClickHandler(EventHandler<MouseEvent> diceClickHandler){
         roundtrackView.setClickHandler(diceClickHandler);
     }
 
-    public void setToolClickHandler(EventHandler<MouseEvent> toolClickHandler){
+    void setToolClickHandler(EventHandler<MouseEvent> toolClickHandler){
         cardBoard.setToolClickHandler(toolClickHandler);
     }
 
-    public void setDraftClickHandler(EventHandler<MouseEvent> draftClickHandler) {
+    void setDraftClickHandler(EventHandler<MouseEvent> draftClickHandler) {
         draftView.setDraftListener(draftClickHandler);
-        System.out.println("Draft click handler set");
     }
 
-    public void setEndTurnHandler(EventHandler<ActionEvent> endTurnEventHandler){
+    void setEndTurnHandler(EventHandler<ActionEvent> endTurnEventHandler){
         endTurn.setOnAction(endTurnEventHandler);
     }
 
-    public DraftView getDraftView() {
+    DraftView getDraftView() {
         return draftView;
     }
 
-    public RoundtrackView getRoundtrackView(){
+    RoundtrackView getRoundtrackView(){
         return this.roundtrackView;
     }
 
-    public void setRoundtrackImage(List<DiceView> diceViews, int currentRound){
+    void setRoundtrackImage(List<DiceView> diceViews, int currentRound){
         this.roundtrackView.setImage(diceViews, currentRound);
     }
 
@@ -92,16 +90,16 @@ public class GameView extends Application {
 
     }
 
-    public void setPrivateObjective(){
+    void setPrivateObjective(){
         cardBoard.setPrivateObjective();
     }
 
-    public void removeMistakenDice(int row, int col){
+    void removeMistakenDice(int row, int col){
         windows.get(username).removeMistakenDice(row, col);
     }
 
 
-    public void removeToken(int number){
+    void removeToken(int number){
         tokenGrid.getChildren().remove(0, number);
     }
 
@@ -154,7 +152,7 @@ public class GameView extends Application {
         components.add(windows.get(username));
         Scene scene = new Scene(anchorPane, resizer.getWindowWidth(), resizer.getWindowHeight());
         primaryStage.setScene(scene);
-        primaryStage.setFullScreen(true);
+        //primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 
@@ -227,16 +225,16 @@ public class GameView extends Application {
         anchorPane.getChildren().addAll(draftView);
     }
 
-    public void notifyTurn() {
+    void notifyTurn() {
         components.forEach(node -> node.setDisable(false));
 
     }
 
-    public void notifyEndTurn() {
+    void notifyEndTurn() {
         components.forEach(node -> node.setDisable(true));
     }
 
-    public void setOpponentWindow(String username, Dice dice, Position position) {
+    void setOpponentWindow(String username, Dice dice, Position position) {
         windows.get(username).setDice(dice, position);
     }
 }

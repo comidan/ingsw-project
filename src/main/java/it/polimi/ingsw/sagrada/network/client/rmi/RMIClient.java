@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.gui.*;
 import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandManager;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
@@ -48,6 +49,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     private WindowChoiceGuiController windowChoiceGuiController;
     private GameGuiManager gameGuiManager;
     private WindowGameManager windowGameManager;
+    private CommandManager commandManager;
 
     public RMIClient(LoginGuiManager loginGuiManager) throws RemoteException {
         this.loginGuiManager = loginGuiManager;
@@ -93,6 +95,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                         System.out.println("Lobby acquired");
                         if (lobby.joinLobby(username, this)) {
                             System.out.println("Lobby joined");
+                            commandManager = new CommandManager(this, username);
                         }
                         else
                             System.out.println("Error");
@@ -211,6 +214,11 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     }
 
     @Override
+    public void sendRemoteMessage(Message message) throws RemoteException {
+        remoteClient.sendRemoteMessage(message);
+    }
+
+    @Override
     public void close() {
 
     }
@@ -225,6 +233,11 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         System.out.println("Setting time");
         if(lobbyGuiView != null)
             lobbyGuiView.setTimer(time);
+
+    }
+
+    @Override
+    public void startHeartbeat(int port) throws RemoteException {
 
     }
 
@@ -265,10 +278,10 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
             if(gameGuiManager == null) {
                 windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
                 gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                                                                        windowChoiceGuiController.getStage(),
-                                                                        playerList,
-                                                                        (DiceResponse) message,
-                                                                        windowGameManager.getWindows()), this);
+                        windowChoiceGuiController.getStage(),
+                        playerList,
+                        (DiceResponse) message,
+                        windowGameManager.getWindows()), this);
             }
             else
                 gameGuiManager.setDiceList((DiceResponse) message);
@@ -277,17 +290,23 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
             if(gameGuiManager == null) {
                 windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
                 gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                                                                        windowChoiceGuiController.getStage(),
-                                                                        playerList,
-                                                                        (DiceResponse) message,
-                                                                        windowGameManager.getWindows()), this);
+                        windowChoiceGuiController.getStage(),
+                        playerList,
+                        (DiceResponse) message,
+                        windowGameManager.getWindows()), this);
             }
 
             System.out.println("New round notified");
             gameGuiManager.notifyTurn();
         }
+        else if(message instanceof OpponentDiceMoveResponse) {
+            System.out.println("Opponent Dice:     " +((OpponentDiceMoveResponse) message).getDice().getValue());
+            gameGuiManager.setOpponentDiceResponse((OpponentDiceMoveResponse)message);
+        }
         else if(message instanceof RuleResponse)
             gameGuiManager.notifyMoveResponse((RuleResponse) message);
+        else if(message instanceof NewTurnResponse)
+            gameGuiManager.setRound(((NewTurnResponse)message).getRound());
     }
 
     @Override
