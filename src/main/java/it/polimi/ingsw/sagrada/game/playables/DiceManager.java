@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     private List<Dice> draftPool;
     private List<Dice> bagPool;
-    private List<Dice> partialDraftPoolBackup;
+    private Dice diceDraftBackup;
     private static final int DICE_PER_COLOR = 18;
     private int diceNumber;
     private int numberOfPlayers; // missing method to fetch this value, temporary value for testing
@@ -30,7 +30,6 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     public DiceManager(int numberOfPlayers, Consumer<Message> dispatchGameManager, DynamicRouter dynamicRouter) {
         bagPool = new ArrayList<>();
         draftPool = new ArrayList<>();
-        partialDraftPoolBackup = new ArrayList<>();
         int id = 0;
         for (Colors color : Colors.getColorList()) {
             for (int j = 0; j < DICE_PER_COLOR; j++) {
@@ -46,7 +45,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     }
 
     public void bagToDraft() {
-        partialDraftPoolBackup.clear();
+        diceDraftBackup = null;
         draftPool.clear();
         Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
         System.out.println("Printing");
@@ -64,7 +63,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         for (Dice dice : draftPool) {
             if (dice.getId() == idDice) {
                 draftPool.remove(dice);
-                partialDraftPoolBackup.add(dice);
+                diceDraftBackup = dice;
                 return dice;
             }
         }
@@ -72,8 +71,8 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     }
 
     public void revert() {
-        draftPool.addAll(partialDraftPoolBackup);
-        partialDraftPoolBackup.clear();
+        draftPool.add(diceDraftBackup);
+        diceDraftBackup = null;
     }
 
     public List<Dice> getDraft() {
