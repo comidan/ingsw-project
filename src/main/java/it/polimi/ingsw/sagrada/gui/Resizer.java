@@ -8,9 +8,9 @@ public class Resizer {
     private double windowWidth;
 
     Resizer(){
-    GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-    this.windowWidth = gd.getDisplayMode().getWidth();
-    this.windowHeight = gd.getDisplayMode().getHeight();
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        this.windowWidth = gd.getDisplayMode().getWidth();
+        this.windowHeight = gd.getDisplayMode().getHeight();
     }
 
     public double getHeightPixel(int perc) {

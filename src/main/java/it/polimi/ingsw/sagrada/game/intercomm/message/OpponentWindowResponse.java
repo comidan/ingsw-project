@@ -37,7 +37,7 @@ public class OpponentWindowResponse implements Message {
         return windows.get(username).getSecondEntry();
     }
 
-    private class Pair<T, U> implements Serializable {
+    private static class Pair<T, U> implements Serializable {
         private final T t;
         private final U u;
 

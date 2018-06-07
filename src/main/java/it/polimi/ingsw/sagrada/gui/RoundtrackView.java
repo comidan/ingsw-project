@@ -14,7 +14,7 @@ public class RoundtrackView extends GridPane {
     private Resizer resizer;
     private ArrayList<ArrayList<CellView>> cellViewList;
 
-    public RoundtrackView(){
+    RoundtrackView(){
         this.resizer = new Resizer();
         this.cellViewList = new ArrayList<>();
         this.resize(resizer.getWidthPixel(30), resizer.getHeightPixel(20));
@@ -24,7 +24,7 @@ public class RoundtrackView extends GridPane {
         }
     }
 
-    public void setImage(List<DiceView> diceView, int currentRound){
+    void setImage(List<DiceView> diceView, int currentRound){
          for(int i = 0; i< diceView.size(); i++){
             CellView cell = new CellView();
             cellViewList.get(currentRound).add(cell);
@@ -34,7 +34,7 @@ public class RoundtrackView extends GridPane {
         }
     }
 
-    public void setClickHandler(EventHandler<MouseEvent> clickHandler){
+    void setClickHandler(EventHandler<MouseEvent> clickHandler){
         for(int i = 0; i<cellViewList.size(); i++){
             for (int j = 0; j<cellViewList.get(i).size(); j++){
                 cellViewList.get(i).get(j).setOnMouseClicked(clickHandler);

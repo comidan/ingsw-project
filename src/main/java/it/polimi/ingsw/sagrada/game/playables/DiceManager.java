@@ -1,7 +1,6 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
-import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.utility.Picker;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 
 public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     private List<Dice> draftPool;
