@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -16,6 +17,7 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
     private Function disconnect;
     private ClientRMI clientRMI;
     private Consumer<Message> sendToModel;
+    private Future<Message> a;
 
     public RemoteRMIClient(String identifier, Function disconnect, ClientRMI clientRMI, Consumer<Message> sendToModel) throws RemoteException{
         this.identifier = identifier;
@@ -31,7 +33,7 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
 
     @Override
     public void sendRemoteMessage(Message message) throws RemoteException {
-        sendToModel.accept(message);
+        new Thread(() -> sendToModel.accept(message)).start();
     }
 
     @Override

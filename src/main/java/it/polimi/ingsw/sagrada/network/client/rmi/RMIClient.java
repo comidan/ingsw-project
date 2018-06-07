@@ -193,7 +193,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
             remoteClient = (Client) Naming.lookup(PROTOCOL + ADDRESS + "/" + id);
         }
         catch (Exception exc) {
-            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
+            LOGGER.log(Level.SEVERE, exc::getMessage);
         }
     }
 
