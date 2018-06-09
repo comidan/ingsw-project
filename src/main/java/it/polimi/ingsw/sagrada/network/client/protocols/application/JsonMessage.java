@@ -2,6 +2,8 @@ package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
+import it.polimi.ingsw.sagrada.game.intercomm.ActionMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.ActionVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
@@ -16,7 +18,17 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class JsonMessage implements CommandKeyword {
+public class JsonMessage implements CommandKeyword, ActionMessageVisitor {
+
+    private String username;
+
+    public JsonMessage(String username) {
+        this.username = username;
+    }
+
+    public String getMessage(ActionVisitor actionVisitor) {
+        return actionVisitor.accept(this);
+    }
 
     public static JSONObject createLoginMessage(String username, String authentication) {
 
@@ -181,5 +193,25 @@ public class JsonMessage implements CommandKeyword {
         catch (ParseException exc) {
             return null;
         }
+    }
+
+    @Override
+    public String visit(DiceEvent diceEvent) {
+        return createDiceEvent(diceEvent).toJSONString();
+    }
+
+    @Override
+    public String visit(WindowEvent windowEvent) {
+        return createWindowEvent(username, windowEvent.getIdWindow(), WindowSide.sideToString(windowEvent.getWindowSide())).toJSONString();
+    }
+
+    @Override
+    public String visit(EndTurnEvent endTurnEvent) {
+        return createEndTurnEvent(endTurnEvent).toJSONString();
+    }
+
+    @Override
+    public String visit(Message message) {
+        return CommandKeyword.ERROR;
     }
 }

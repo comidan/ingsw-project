@@ -36,7 +36,7 @@ public class GameDataManager implements Channel<Message, Message> {
     }
 
     @Override
-    public void dispatch(Message message) {
+    public void dispatch(Message message) { //add visitor pattern here
         String msgType = message.getType().getName();
 
         if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.DICE_RESPONSE))) {

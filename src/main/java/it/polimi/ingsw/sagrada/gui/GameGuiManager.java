@@ -26,69 +26,63 @@ public class GameGuiManager {
     public GameGuiManager(GameView gameView, Client client) {
         this.clickedObject = new ClickedObject();
         this.gameView = gameView;
-        this.draftView = this.gameView.getDraftView();
-        this.roundtrackView = this.gameView.getRoundtrackView();
-        this.gameView.setEndTurnHandler(event -> {
-            EndTurnEvent endTurnEvent = new EndTurnEvent(this.gameView.getUsername());
-            try {
-                client.sendRemoteMessage(endTurnEvent);
-                gameView.notifyEndTurn();
-                System.out.println("Notified end turn");
-            } catch (RemoteException e) {
-                LOGGER.log(Level.SEVERE, e::getMessage);
-            }
-
-        });
-
-        this.gameView.setDraftClickHandler(event ->
-        {
-            DiceView diceView = (DiceView) event.getSource();
-            clickedObject.setClickedDice(diceView);
-            System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
-        });
-
-        this.gameView.setCellClickListener(event ->
-        {
-            DiceView diceView = clickedObject.getClickedDice();
-            System.out.println(diceView == null);
-            if(diceView !=null) {
-                CellView cellView = (CellView) event.getSource();
-                System.out.println(cellView.isOccupied());
-                if (!cellView.isOccupied()) {
-                    lastMove = cellView;
-                    cellView.setImageCell(diceView);
-
-                    String username = this.gameView.getUsername();
-                    int idDice = diceView.getDiceID();
-                    int row = cellView.getRow();
-                    int col = cellView.getCol();
-                    Position position = new Position(row, col);
-                    DiceEvent diceEvent = new DiceEvent(username, idDice, position, "draft");
-                    try {
-                        client.sendRemoteMessage(diceEvent);
-                        System.out.println("Notified dice move");
-                    } catch (RemoteException e) {
-                        LOGGER.log(Level.SEVERE, e::getMessage);
-                    }
-                    clickedObject.setClickedDice(null);
+        Platform.runLater(() -> {
+            this.draftView = this.gameView.getDraftView();
+            this.roundtrackView = this.gameView.getRoundtrackView();
+            this.gameView.setEndTurnHandler(event -> {
+                EndTurnEvent endTurnEvent = new EndTurnEvent(this.gameView.getUsername());
+                try {
+                    client.sendRemoteMessage(endTurnEvent);
+                    gameView.notifyEndTurn();
+                    System.out.println("Notified end turn");
+                } catch (RemoteException e) {
+                    LOGGER.log(Level.SEVERE, e::getMessage);
                 }
-            }
-        });
 
-        this.gameView.setToolClickHandler(event -> {
-            ToolCardView toolCardView = (ToolCardView) event.getSource();
-            int tokenNumber;
-            if(toolCardView.getTokenNumber() == 0)
-                tokenNumber = 1;
-            else tokenNumber = 2;
-            gameView.removeToken(tokenNumber);
-            toolCardView.addToken();
-            //client.sendResponse(ToolEvent(toolCardView.getToolId()));
+            });
 
+            this.gameView.setCellClickListener(event ->
+            {
+                DiceView diceView = clickedObject.getClickedDice();
+                System.out.println(diceView == null);
+                if(diceView !=null) {
+                    CellView cellView = (CellView) event.getSource();
+                    System.out.println(cellView.isOccupied());
+                    if (!cellView.isOccupied()) {
+                        lastMove = cellView;
+                        cellView.setImageCell(diceView);
+
+                        String username = this.gameView.getUsername();
+                        int idDice = diceView.getDiceID();
+                        int row = cellView.getRow();
+                        int col = cellView.getCol();
+                        Position position = new Position(row, col);
+                        DiceEvent diceEvent = new DiceEvent(username, idDice, position, "draft");
+                        try {
+                            client.sendRemoteMessage(diceEvent);
+                            System.out.println("Notified dice move");
+                        } catch (RemoteException e) {
+                            LOGGER.log(Level.SEVERE, e::getMessage);
+                        }
+                        clickedObject.setClickedDice(null);
+                    }
+                }
+            });
+
+            this.gameView.setToolClickHandler(event -> {
+                ToolCardView toolCardView = (ToolCardView) event.getSource();
+                int tokenNumber;
+                if(toolCardView.getTokenNumber() == 0)
+                    tokenNumber = 1;
+                else tokenNumber = 2;
+                gameView.removeToken(tokenNumber);
+                toolCardView.addToken();
+                //client.sendResponse(ToolEvent(toolCardView.getToolId()));
+
+            });
+            setRoundTrackClick();
+            setToken(3);
         });
-        setRoundTrackClick();
-        Platform.runLater(() -> setToken(3));
-        gameView.notifyEndTurn();
     }
 
     private void setDraftListener() {
@@ -146,7 +140,11 @@ public class GameGuiManager {
     }
 
     public void notifyTurn() {
-        gameView.notifyTurn();
+        Platform.runLater(gameView::notifyTurn);
+    }
+
+    public void notifyEndTurn() {
+        Platform.runLater(gameView::notifyEndTurn);
     }
 
     public void notifyMoveResponse(RuleResponse ruleResponse) {

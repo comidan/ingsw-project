@@ -31,7 +31,6 @@ public class GameView extends Application {
     private HBox horizontalBox;
     private AnchorPane anchorPane;
     private static String username;
-    private static DiceResponse diceResponse;
     private static List<String> players;
     private static List<Constraint[][]> constraints;
     private Button endTurn;
@@ -138,7 +137,6 @@ public class GameView extends Application {
         anchorPane.setBottomAnchor(horizontalBox, resizer.getHeightPixel(11));
         anchorPane.setLeftAnchor(horizontalBox, resizer.getWidthPixel(10));
         anchorPane.getChildren().addAll(horizontalBox);
-        setDraft(diceResponse);
         setPrivateObjective();
         anchorPane.setBottomAnchor(cardBoard, resizer.getHeightPixel(7));
         anchorPane.setRightAnchor(cardBoard, resizer.getWidthPixel(32));
@@ -147,7 +145,6 @@ public class GameView extends Application {
         anchorPane.setLeftAnchor(roundtrackView, resizer.getWidthPixel(68));
         anchorPane.getChildren().add(roundtrackView);
         components = new ArrayList<>();
-        components.add(draftView);
         components.add(endTurn);
         components.add(windows.get(username));
         Scene scene = new Scene(anchorPane, resizer.getWindowWidth(), resizer.getWindowHeight());
@@ -168,27 +165,25 @@ public class GameView extends Application {
         stage.close();
     }
 
-    private static void startGameGUI(String username, Stage stage, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
+    private static void startGameGUI(String username, Stage stage, List<String> players, List<Constraint[][]> constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
         GameView.username = username;
         windows = new HashMap<>();
-        GameView.diceResponse = diceResponse;
         new GameView().start(stage);
     }
 
-    private static void startGameGUI(String username, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
+    private static void startGameGUI(String username, List<String> players, List<Constraint[][]> constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
         GameView.username = username;
         windows = new HashMap<>();
-        GameView.diceResponse = diceResponse;
         GameView.launch(GameView.class);
     }
 
-    public static GameView getInstance(String username, Stage stage, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
+    public static GameView getInstance(String username, Stage stage, List<String> players, List<Constraint[][]> constraints) {
         if (gameView == null) {
-           Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
+           Platform.runLater(() -> startGameGUI(username, stage, players, constraints));
             while (gameView == null)
                 try {
                     Thread.sleep(100);
@@ -201,9 +196,9 @@ public class GameView extends Application {
     }
 
 
-    public static GameView getInstance(String username, List<String> players, DiceResponse diceResponse, List<Constraint[][]> constraints) {
+    public static GameView getInstance(String username, List<String> players, List<Constraint[][]> constraints) {
         if (gameView == null) {
-            new Thread(() -> startGameGUI(username, players, diceResponse, constraints)).start(); //)Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
+            new Thread(() -> startGameGUI(username, players, constraints)).start(); //)Platform.runLater(() -> startGameGUI(username, stage, players, diceResponse, constraints));
             while (gameView == null)
                 try {
                     Thread.sleep(100);
@@ -223,6 +218,7 @@ public class GameView extends Application {
         anchorPane.setBottomAnchor(draftView, resizer.getHeightPixel(70));
         anchorPane.setRightAnchor(draftView, resizer.getWidthPixel(40));
         anchorPane.getChildren().addAll(draftView);
+        components.add(draftView);
     }
 
     void notifyTurn() {

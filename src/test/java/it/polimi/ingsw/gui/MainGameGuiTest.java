@@ -50,7 +50,8 @@ public class MainGameGuiTest {
             constraints.add(constraintGenerator.getConstraintMatrix(1, WindowSide.FRONT));
             constraints.add(constraintGenerator.getConstraintMatrix(2, WindowSide.FRONT));
             constraints.add(constraintGenerator.getConstraintMatrix(3, WindowSide.FRONT));
-            GameView gameView = GameView.getInstance("test", players, diceResponse, constraints);
+            GameView gameView = GameView.getInstance("test", players, constraints);
+            gameView.setDraft(diceResponse);
             GameGuiManager gameGuiManager = new GameGuiManager(gameView, new Client() {
                 @Override
                 public void startHeartbeat(int port) throws RemoteException {

@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
+import it.polimi.ingsw.sagrada.network.CommandKeyword;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,7 +55,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
             draftPool.add(dice);
         }
         System.out.println("End print");
-        sendMessage(new DiceResponse("draft", new ArrayList<>(draftPool)));
+        sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }
 
     private Dice getDiceDraft(int idDice) {

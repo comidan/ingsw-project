@@ -1,22 +1,24 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
+import it.polimi.ingsw.sagrada.game.intercomm.ActionVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
-import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.gui.*;
 import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
-import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import it.polimi.ingsw.sagrada.network.client.Client;
-import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import javafx.application.Platform;
-import org.json.simple.JSONObject;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class CommandManager {
+public class CommandManager implements MessageVisitor {
+
+    private static final CommandManager commandManager = new CommandManager();
+    private static final Logger LOGGER = Logger.getLogger(CommandManager.class.getName());
 
     private static Client client;
     private static WindowChoiceGuiController windowChoiceGuiController;
@@ -27,6 +29,8 @@ public class CommandManager {
     private static List<String> playerLobbyListBackup = new ArrayList<>();
     private static String username;
 
+    private CommandManager() {}
+
     public static void setLobbyGuiView(LobbyGuiView lobbyGuiView) {
         CommandManager.lobbyGuiView = lobbyGuiView;
     }
@@ -36,125 +40,18 @@ public class CommandManager {
         CommandManager.client = client;
     }
 
-    public static void executePayload(String json) throws RemoteException, IOException {
-        System.out.println("Receiving json...");
+    public static void executePayload(String json) {
         Message message = JsonMessage.parseJsonData(json);
-        System.out.println(message.getType().getName());
-        if (message instanceof HeartbeatInitEvent)
-            client.startHeartbeat(((HeartbeatInitEvent)message).getHeartbeatPort());
-        else if(message instanceof MatchTimeEvent)
-            setTimer(((MatchTimeEvent)message).getTime());
-        else if(message instanceof AddPlayerEvent)
-            setPlayer(((AddPlayerEvent)message).getUsername());
-        else if(message instanceof RemovePlayerEvent)
-            removePlayer(((RemovePlayerEvent)message).getUsername());
-        else if(message instanceof WindowResponse) {
-            windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), client);
-        }
-        else if(message instanceof OpponentWindowResponse) {
-            if(windowGameManager == null)
-                windowGameManager = new WindowGameManager();
-            OpponentWindowResponse windows = (OpponentWindowResponse) message;
-            List<String> players = windows.getPlayers();
-            for(String player : players)
-                windowGameManager.addWindow(windows.getPlayerWindowId(player), windows.getPlayerWindowSide(player));
-        }
-        else if(message instanceof DiceResponse) {
-            if(gameGuiManager == null) {
-                windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
-                gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                        windowChoiceGuiController.getStage(),
-                        playerList,
-                        (DiceResponse) message,
-                        windowGameManager.getWindows()), client);
-            }
-            else
-                gameGuiManager.setDiceList((DiceResponse) message);
-        }
-        else if(message instanceof BeginTurnEvent) {
-            if(gameGuiManager == null) {
-                windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
-                gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                        windowChoiceGuiController.getStage(),
-                        playerList,
-                        (DiceResponse) message,
-                        windowGameManager.getWindows()), client);
-            }
-
-            System.out.println("New round notified");
-            gameGuiManager.notifyTurn();
-        }
-        else if(message instanceof OpponentDiceMoveResponse) {
-            System.out.println("Opponent Dice:     " +((OpponentDiceMoveResponse) message).getDice().getValue());
-            gameGuiManager.setOpponentDiceResponse((OpponentDiceMoveResponse)message);
-        }
-        else if(message instanceof RuleResponse)
-            gameGuiManager.notifyMoveResponse((RuleResponse) message);
-        else if(message instanceof NewTurnResponse)
-            gameGuiManager.setRound(((NewTurnResponse)message).getRound());
+        message.accept(commandManager);
     }
 
-    public static void executePayload(Message message) throws RemoteException {
-        if(message instanceof WindowResponse) {
-            windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), client);
-        }
-        else if(message instanceof OpponentWindowResponse) {
-            if(windowGameManager == null)
-                windowGameManager = new WindowGameManager();
-            OpponentWindowResponse windows = (OpponentWindowResponse) message;
-            List<String> players = windows.getPlayers();
-            for(String player : players)
-                windowGameManager.addWindow(windows.getPlayerWindowId(player), windows.getPlayerWindowSide(player));
-        }
-        else if(message instanceof DiceResponse) {
-            if(gameGuiManager == null) {
-                windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
-                gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                                                    windowChoiceGuiController.getStage(),
-                                                    playerList,
-                                                    (DiceResponse) message,
-                                                    windowGameManager.getWindows()), client);
-            }
-            else
-                gameGuiManager.setDiceList((DiceResponse) message);
-        }
-        else if(message instanceof BeginTurnEvent) {
-            if(gameGuiManager == null) {
-                windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
-                gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                                                    windowChoiceGuiController.getStage(),
-                                                    playerList,
-                                                    (DiceResponse) message,
-                                                    windowGameManager.getWindows()), client);
-            }
-
-            System.out.println("New round notified");
-            gameGuiManager.notifyTurn();
-        }
-        else if(message instanceof OpponentDiceMoveResponse) {
-            System.out.println("Opponent Dice:     " +((OpponentDiceMoveResponse) message).getDice().getValue());
-            gameGuiManager.setOpponentDiceResponse((OpponentDiceMoveResponse)message);
-        }
-        else if(message instanceof RuleResponse)
-            gameGuiManager.notifyMoveResponse((RuleResponse) message);
-        else if(message instanceof NewTurnResponse)
-            gameGuiManager.setRound(((NewTurnResponse)message).getRound());
+    public static void executePayload(Message message) {
+        message.accept(commandManager);
     }
 
     public static String createPayload(Message message) {
-        JSONObject jsonObject = null;
-        if(message instanceof DiceEvent)
-            jsonObject = JsonMessage.createDiceEvent((DiceEvent)message);
-        else if(message instanceof WindowEvent)
-            jsonObject = JsonMessage.createWindowEvent(username,
-                                                      ((WindowEvent) message).getIdWindow(),
-                                                       WindowSide.sideToString(((WindowEvent)message).getWindowSide()));
-        else if(message instanceof EndTurnEvent)
-            jsonObject = JsonMessage.createEndTurnEvent((EndTurnEvent)message);
-        if(jsonObject == null)
-            return CommandKeyword.ERROR;
-        else
-            return jsonObject.toJSONString();
+        JsonMessage jsonMessage = new JsonMessage(username);
+        return jsonMessage.getMessage((ActionVisitor) message);
     }
 
     public static void setPlayer(String playerName) {
@@ -180,5 +77,89 @@ public class CommandManager {
             if(lobbyGuiView != null)
                 lobbyGuiView.removePlayer(playerName);
         });
+    }
+
+    @Override
+    public void visit(Message message) {
+        LOGGER.log(Level.INFO, message.getType().getName());
+    }
+
+    @Override
+    public void visit(AddPlayerEvent addPlayerEvent) {
+        setPlayer(addPlayerEvent.getUsername());
+    }
+
+    @Override
+    public void visit(BeginTurnEvent beginTurnEvent) {
+        if(gameGuiManager == null) {
+            windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
+            gameGuiManager = new GameGuiManager(GameView.getInstance(username,
+                    windowChoiceGuiController.getStage(),
+                    playerList,
+                    windowGameManager.getWindows()), client);
+        }
+        gameGuiManager.notifyTurn();
+    }
+
+    @Override
+    public void visit(MatchTimeEvent matchTimeEvent) {
+        setTimer(matchTimeEvent.getTime());
+    }
+
+    @Override
+    public void visit(HeartbeatInitEvent heartbeatInitEvent) {
+        try {
+            client.startHeartbeat(heartbeatInitEvent.getHeartbeatPort());
+        }
+        catch (RemoteException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+        }
+    }
+
+    @Override
+    public void visit(RemovePlayerEvent removePlayerEvent) {
+        removePlayer(removePlayerEvent.getUsername());
+    }
+
+    @Override
+    public void visit(WindowResponse windowResponse) {
+        windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView(windowResponse, lobbyGuiView.getStage()), client);
+    }
+
+    @Override
+    public void visit(OpponentWindowResponse opponentWindowResponse) {
+        if(windowGameManager == null)
+            windowGameManager = new WindowGameManager();
+        List<String> players = opponentWindowResponse.getPlayers();
+        for(String player : players)
+            windowGameManager.addWindow(opponentWindowResponse.getPlayerWindowId(player), opponentWindowResponse.getPlayerWindowSide(player));
+    }
+
+    @Override
+    public void visit(DiceResponse diceResponse) {
+        if(gameGuiManager == null) {
+            windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
+            gameGuiManager = new GameGuiManager(GameView.getInstance(username,
+                                                                    windowChoiceGuiController.getStage(),
+                                                                    playerList,
+                                                                    windowGameManager.getWindows()), client);
+            gameGuiManager.notifyEndTurn();
+        }
+        gameGuiManager.setDiceList(diceResponse);
+    }
+
+    @Override
+    public void visit(OpponentDiceMoveResponse opponentDiceMoveResponse) {
+        gameGuiManager.setOpponentDiceResponse(opponentDiceMoveResponse);
+    }
+
+    @Override
+    public void visit(RuleResponse ruleResponse) {
+        gameGuiManager.notifyMoveResponse(ruleResponse);
+    }
+
+    @Override
+    public void visit(NewTurnResponse newTurnResponse) {
+        gameGuiManager.setRound(newTurnResponse.getRound());
     }
 }
