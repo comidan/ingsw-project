@@ -7,6 +7,10 @@ import java.rmi.RemoteException;
 
 public interface Client extends Remote {
 
+    void startHeartbeat(int port) throws RemoteException;
+
+    void close() throws RemoteException;
+
     void sendMessage(String message) throws RemoteException;
 
     void sendRemoteMessage(Message message) throws RemoteException;

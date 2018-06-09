@@ -2,14 +2,11 @@ package it.polimi.ingsw.sagrada.network.client.rmi;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.gui.*;
-import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandManager;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
-import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI;
 import org.json.simple.JSONObject;
@@ -21,8 +18,6 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,25 +30,13 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     private static final String ADDRESS = getConfigAddress();
     private static final String PROTOCOL = "rmi://";
 
-    private static List<String> playerLobbyListBackup = new ArrayList<>();
-    private static LobbyGuiView lobbyGuiView;
-
-    private CommandParser commandParser;
     private AbstractMatchLobbyRMI lobby;
     private String username;
     private HeartbeatProtocolManager heartbeatProtocolManager;
     private Client remoteClient;
-    private LoginGuiManager loginGuiManager;
     private AbstractServerRMI server;
-    private static List<String> playerList;
-    private WindowChoiceGuiController windowChoiceGuiController;
-    private GameGuiManager gameGuiManager;
-    private WindowGameManager windowGameManager;
-    private CommandManager commandManager;
 
-    public RMIClient(LoginGuiManager loginGuiManager) throws RemoteException {
-        this.loginGuiManager = loginGuiManager;
-        commandParser = new CommandParser();
+    public RMIClient() throws RemoteException {
         establishServerConnection();
     }
 
@@ -87,29 +70,26 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                 loginState = server.login(this, username, LoginGuiManager.getPassword());
                 System.out.println(loginState);
                 if (loginState == LoginState.AUTH_OK) {
-                    loginGuiManager.dispatch(loginState); //sendMessage(LoginState.AUTH_OK);
+                    sendMessage(loginState); //sendMessage(LoginState.AUTH_OK);
                     try {
                         System.out.println("Acquiring lobby");
                         String lobbyId = server.getMatchLobbyId();
                         lobby = (AbstractMatchLobbyRMI) Naming.lookup(PROTOCOL + ADDRESS + "/" + lobbyId);
                         System.out.println("Lobby acquired");
                         if (lobby.joinLobby(username, this)) {
+                            CommandManager.setClientData(username, this);
                             System.out.println("Lobby joined");
-                            commandManager = new CommandManager(this, username);
                         }
                         else
                             System.out.println("Error");
                     } catch (NotBoundException | MalformedURLException exc) {
-                        System.out.println("RMI Error");
+                        LOGGER.log(Level.SEVERE, exc::getMessage);
                     }
-                    executeOrders();
                 }
-                else {
-                    loginGuiManager.dispatch(loginState); //sendMessage(loginState);
-                }
+                else
+                    sendMessage(loginState);
             } catch (IOException e) {
-                System.out.println("RMI server error");
-                LOGGER.log(Level.SEVERE, () -> e.getMessage());
+                LOGGER.log(Level.SEVERE, e::getMessage);
             }
         }
     }
@@ -141,7 +121,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                     System.out.println("No actions available for " + choice);
             }
         }
-
     }
 
     private static String getConfigAddress() {
@@ -156,14 +135,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
             LOGGER.log(Level.SEVERE, () -> "network config fatal error");
             return "";
         }
-    }
-
-    public static void setLobbyView(LobbyGuiView lobbyGuiView) {
-        RMIClient.lobbyGuiView = lobbyGuiView;
-        for(String username : playerLobbyListBackup)
-            lobbyGuiView.setPlayer(username);
-        playerList = new ArrayList<>(playerLobbyListBackup);
-        playerLobbyListBackup.clear();
     }
 
     @Override
@@ -231,8 +202,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public void setTimer(String time) throws RemoteException {
         System.out.println("Setting time");
-        if(lobbyGuiView != null)
-            lobbyGuiView.setTimer(time);
+        /*if(lobbyGuiView != null)
+            lobbyGuiView.setTimer(time);*/
+        CommandManager.setTimer(time);
 
     }
 
@@ -244,16 +216,16 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public void setPlayer(String playerName) throws RemoteException {
         System.out.println("Setting player " + playerName);
-        if(lobbyGuiView != null)
+        /*if(lobbyGuiView != null)
             lobbyGuiView.setPlayer(playerName);
         else
-            playerLobbyListBackup.add(playerName);
+            playerLobbyListBackup.add(playerName);*/
+        CommandManager.setPlayer(playerName);
     }
 
     @Override
     public void removePlayer(String playerName) {
-        if(lobbyGuiView != null)
-            lobbyGuiView.removePlayer(playerName);
+        CommandManager.removePlayer(playerName);
     }
 
     @Override
@@ -263,50 +235,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
     @Override
     public void sendResponse(Message message) throws RemoteException {
-        if(message instanceof WindowResponse) {
-            windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), this);
-        }
-        else if(message instanceof OpponentWindowResponse) {
-            if(windowGameManager == null)
-                windowGameManager = new WindowGameManager();
-            OpponentWindowResponse windows = (OpponentWindowResponse) message;
-            List<String> players = windows.getPlayers();
-            for(String player : players)
-                windowGameManager.addWindow(windows.getPlayerWindowId(player), windows.getPlayerWindowSide(player));
-        }
-        else if(message instanceof DiceResponse) {
-            if(gameGuiManager == null) {
-                windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
-                gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                        windowChoiceGuiController.getStage(),
-                        playerList,
-                        (DiceResponse) message,
-                        windowGameManager.getWindows()), this);
-            }
-            else
-                gameGuiManager.setDiceList((DiceResponse) message);
-        }
-        else if(message instanceof BeginTurnEvent) {
-            if(gameGuiManager == null) {
-                windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
-                gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                        windowChoiceGuiController.getStage(),
-                        playerList,
-                        (DiceResponse) message,
-                        windowGameManager.getWindows()), this);
-            }
-
-            System.out.println("New round notified");
-            gameGuiManager.notifyTurn();
-        }
-        else if(message instanceof OpponentDiceMoveResponse) {
-            System.out.println("Opponent Dice:     " +((OpponentDiceMoveResponse) message).getDice().getValue());
-            gameGuiManager.setOpponentDiceResponse((OpponentDiceMoveResponse)message);
-        }
-        else if(message instanceof RuleResponse)
-            gameGuiManager.notifyMoveResponse((RuleResponse) message);
-        else if(message instanceof NewTurnResponse)
-            gameGuiManager.setRound(((NewTurnResponse)message).getRound());
+        CommandManager.executePayload(message);
     }
 
     @Override

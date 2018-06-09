@@ -53,6 +53,16 @@ public class MainGameGuiTest {
             GameView gameView = GameView.getInstance("test", players, diceResponse, constraints);
             GameGuiManager gameGuiManager = new GameGuiManager(gameView, new Client() {
                 @Override
+                public void startHeartbeat(int port) throws RemoteException {
+
+                }
+
+                @Override
+                public void close() throws RemoteException {
+
+                }
+
+                @Override
                 public void sendMessage(String message) throws RemoteException {
 
                 }

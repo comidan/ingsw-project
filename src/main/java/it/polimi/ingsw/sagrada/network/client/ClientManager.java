@@ -1,6 +1,5 @@
 package it.polimi.ingsw.sagrada.network.client;
 
-import it.polimi.ingsw.sagrada.gui.LoginGuiManager;
 import it.polimi.ingsw.sagrada.network.client.rmi.RMIClient;
 import it.polimi.ingsw.sagrada.network.client.socket.SocketClient;
 
@@ -13,7 +12,7 @@ public class ClientManager {
         return new SocketClient();
     }
 
-    public static RMIClient getRMIClient(LoginGuiManager loginGuiManager) throws RemoteException {
-        return new RMIClient(loginGuiManager);
+    public static RMIClient getRMIClient() throws RemoteException {
+        return new RMIClient();
     }
 }

@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.gui.*;
 import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
+import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import javafx.application.Platform;
 import org.json.simple.JSONObject;
@@ -17,33 +18,36 @@ import java.util.List;
 
 public class CommandManager {
 
-    private ClientBase client;
-    private WindowChoiceGuiController windowChoiceGuiController;
-    private GameGuiManager gameGuiManager;
-    private WindowGameManager windowGameManager;
+    private static Client client;
+    private static WindowChoiceGuiController windowChoiceGuiController;
+    private static GameGuiManager gameGuiManager;
+    private static WindowGameManager windowGameManager;
     private static LobbyGuiView lobbyGuiView;
     private static List<String> playerList = new ArrayList<>();
     private static List<String> playerLobbyListBackup = new ArrayList<>();
-    private GameView gameView;
-    private String username;
+    private static String username;
 
-    public CommandManager(ClientBase client, String username) {
-        this.client = client;
-        this.username = username;
+    public static void setLobbyGuiView(LobbyGuiView lobbyGuiView) {
+        CommandManager.lobbyGuiView = lobbyGuiView;
     }
 
-    public void executePayload(String json) throws RemoteException, IOException {
+    public static void setClientData(String username, Client client) {
+        CommandManager.username = username;
+        CommandManager.client = client;
+    }
+
+    public static void executePayload(String json) throws RemoteException, IOException {
         System.out.println("Receiving json...");
         Message message = JsonMessage.parseJsonData(json);
         System.out.println(message.getType().getName());
         if (message instanceof HeartbeatInitEvent)
             client.startHeartbeat(((HeartbeatInitEvent)message).getHeartbeatPort());
         else if(message instanceof MatchTimeEvent)
-            client.setTimer(((MatchTimeEvent)message).getTime());
+            setTimer(((MatchTimeEvent)message).getTime());
         else if(message instanceof AddPlayerEvent)
-            client.setPlayer(((AddPlayerEvent)message).getUsername());
+            setPlayer(((AddPlayerEvent)message).getUsername());
         else if(message instanceof RemovePlayerEvent)
-            client.removePlayer(((RemovePlayerEvent)message).getUsername());
+            removePlayer(((RemovePlayerEvent)message).getUsername());
         else if(message instanceof WindowResponse) {
             windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), client);
         }
@@ -90,7 +94,7 @@ public class CommandManager {
             gameGuiManager.setRound(((NewTurnResponse)message).getRound());
     }
 
-    public void executePayload(Message message) throws RemoteException {
+    public static void executePayload(Message message) throws RemoteException {
         if(message instanceof WindowResponse) {
             windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView((WindowResponse)message, lobbyGuiView.getStage()), client);
         }
@@ -137,7 +141,7 @@ public class CommandManager {
             gameGuiManager.setRound(((NewTurnResponse)message).getRound());
     }
 
-    public String createPayload(Message message) {
+    public static String createPayload(Message message) {
         JSONObject jsonObject = null;
         if(message instanceof DiceEvent)
             jsonObject = JsonMessage.createDiceEvent((DiceEvent)message);
@@ -153,19 +157,7 @@ public class CommandManager {
             return jsonObject.toJSONString();
     }
 
-    private static void setLobbyGuiView(LobbyGuiView lobbyGuiView) {
-        CommandManager.lobbyGuiView = lobbyGuiView;
-    }
-
-    public static void setLobbyView(LobbyGuiView lobbyGuiView) {
-        setLobbyGuiView(lobbyGuiView);
-        for(String username : playerLobbyListBackup)
-            lobbyGuiView.setPlayer(username);
-        playerList.addAll(playerLobbyListBackup);
-        playerLobbyListBackup.clear();
-    }
-
-    public void setPlayer(String playerName) {
+    public static void setPlayer(String playerName) {
         Platform.runLater(() -> {
             if(lobbyGuiView != null) {
                 lobbyGuiView.setPlayer(playerName);
@@ -176,18 +168,17 @@ public class CommandManager {
         });
     }
 
-    public void setTimer(String time) {
+    public static void setTimer(String time) {
         Platform.runLater(() -> {
             if(lobbyGuiView != null)
                 lobbyGuiView.setTimer(time);
         });
     }
 
-    public void removePlayer(String playerName) {
+    public static void removePlayer(String playerName) {
         Platform.runLater(() -> {
             if(lobbyGuiView != null)
                 lobbyGuiView.removePlayer(playerName);
         });
-
     }
 }

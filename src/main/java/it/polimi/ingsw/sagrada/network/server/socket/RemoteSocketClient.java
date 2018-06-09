@@ -57,7 +57,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
 
     @Override
     public void sendRemoteMessage(Message message) throws RemoteException {
-
+        throw new UnsupportedOperationException("Method not supported");
     }
 
     @Override

@@ -6,7 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.gui.*;
 import it.polimi.ingsw.sagrada.network.LoginState;
-import it.polimi.ingsw.sagrada.network.client.ClientBase;
+import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 import static java.lang.Thread.sleep;
 
-public class SocketClient implements Runnable, ClientBase, Channel<Message, LoginState> {
+public class SocketClient implements Runnable, Client, Channel<Message, LoginState> {
 
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     private static final int PORT = 49152; //change to dynamic in some elegant way
@@ -44,7 +44,6 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
     private int lobbyPort;
     private HeartbeatProtocolManager heartbeatProtocolManager;
     private DynamicRouter dynamicRouter;
-    private CommandManager commandManager;
 
 
     public SocketClient() throws IOException {
@@ -101,7 +100,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
 
     @Override
     public void sendRemoteMessage(Message message) throws RemoteException {
-        outSocket.println(commandManager.createPayload(message));
+        outSocket.println(CommandManager.createPayload(message));
     }
 
     @Override
@@ -120,22 +119,6 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         heartbeatProtocolManager.kill();
         executor.shutdown();
         close();
-    }
-
-    @Override
-    public void setTimer(String time) throws RemoteException {
-        commandManager.setTimer(time);
-    }
-
-    @Override
-    public void setPlayer(String playerName) throws RemoteException {
-        commandManager.setPlayer(playerName);
-
-    }
-
-    @Override
-    public void removePlayer(String playerName) throws RemoteException {
-        commandManager.removePlayer(playerName);
     }
 
     @Override
@@ -165,7 +148,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
                     socket.close();
                     sendMessage(LoginState.AUTH_OK);
                     loginSuccessful = true;
-                    commandManager = new CommandManager(this, username);
+                    CommandManager.setClientData(username, this);
                     initializeLobbyLink(username);
                 }
                 else if (response instanceof RegisterEvent) {
@@ -179,7 +162,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
                         sendMessage(LoginState.AUTH_OK);
                         outVideo.println("Login successful");
                         loginSuccessful = true;
-                        commandManager = new CommandManager(this, username);
+                        CommandManager.setClientData(username, this);
                         initializeLobbyLink(username);
                     }
                     else {
@@ -226,10 +209,6 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         }
     }
 
-    public static void setLobbyView(LobbyGuiView lobbyGuiView) {
-        CommandManager.setLobbyView(lobbyGuiView);
-    }
-
     private static String getConfigAddress() {
         JSONParser parser = new JSONParser();
         try {
@@ -247,7 +226,7 @@ public class SocketClient implements Runnable, ClientBase, Channel<Message, Logi
         while (!executor.isShutdown()) {
             try {
                 String json = inSocket.readLine();
-                commandManager.executePayload(json);
+                CommandManager.executePayload(json);
             } catch (IOException exc) {
                 fastRecovery();
                 executor.shutdown();
