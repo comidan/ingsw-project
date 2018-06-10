@@ -6,7 +6,7 @@ public interface CommandKeyword {
     String MESSAGE_TYPE = "type_msg";
     String RESPONSE = "response";
     String PLAYER_ID = "id_player";
-    String WINDOW = "window";
+    String WINDOW = "windows";
     String WINDOW_ID = "window_id";
     String WINDOW_SIDE = "window_side";
     String USERNAME = "username";

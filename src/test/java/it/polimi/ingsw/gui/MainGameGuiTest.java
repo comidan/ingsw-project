@@ -2,13 +2,15 @@ package it.polimi.ingsw.gui;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
-import it.polimi.ingsw.sagrada.gui.*;
+import it.polimi.ingsw.sagrada.gui.game.GameGuiAdapter;
+import it.polimi.ingsw.sagrada.gui.game.GameView;
+import it.polimi.ingsw.sagrada.gui.utils.Constraint;
+import it.polimi.ingsw.sagrada.gui.utils.ConstraintGenerator;
 import it.polimi.ingsw.sagrada.network.client.Client;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -52,39 +54,39 @@ public class MainGameGuiTest {
             constraints.add(constraintGenerator.getConstraintMatrix(3, WindowSide.FRONT));
             GameView gameView = GameView.getInstance("test", players, constraints);
             gameView.setDraft(diceResponse);
-            GameGuiManager gameGuiManager = new GameGuiManager(gameView, new Client() {
+            GameGuiAdapter gameGuiAdapter = new GameGuiAdapter(gameView, new Client() {
                 @Override
-                public void startHeartbeat(int port) throws RemoteException {
+                public void startHeartbeat(int port) {
 
                 }
 
                 @Override
-                public void close() throws RemoteException {
+                public void close() {
 
                 }
 
                 @Override
-                public void sendMessage(String message) throws RemoteException {
+                public void sendMessage(String message) {
 
                 }
 
                 @Override
-                public void sendRemoteMessage(Message message) throws RemoteException {
+                public void sendRemoteMessage(Message message) {
 
                 }
 
                 @Override
-                public void disconnect() throws RemoteException {
+                public void disconnect() {
 
                 }
 
                 @Override
-                public void sendResponse(Message message) throws RemoteException {
+                public void sendResponse(Message message) {
                     System.out.println(message);
                 }
 
                 @Override
-                public String getId() throws RemoteException {
+                public String getId() {
                     return null;
                 }
             });

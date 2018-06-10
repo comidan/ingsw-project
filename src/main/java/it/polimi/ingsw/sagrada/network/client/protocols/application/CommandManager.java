@@ -1,11 +1,28 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
-import it.polimi.ingsw.sagrada.game.intercomm.ActionVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.MessageVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.message.*;
-import it.polimi.ingsw.sagrada.gui.*;
-import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
+import it.polimi.ingsw.sagrada.gui.game.GameGuiAdapter;
+import it.polimi.ingsw.sagrada.gui.game.GameView;
+import it.polimi.ingsw.sagrada.gui.lobby.LobbyGuiView;
+import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
+import it.polimi.ingsw.sagrada.gui.windows.WindowChoiceGuiController;
+import it.polimi.ingsw.sagrada.gui.windows.WindowGameManager;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
 
@@ -22,7 +39,7 @@ public class CommandManager implements MessageVisitor {
 
     private static Client client;
     private static WindowChoiceGuiController windowChoiceGuiController;
-    private static GameGuiManager gameGuiManager;
+    private static GameGuiAdapter gameGuiAdapter;
     private static WindowGameManager windowGameManager;
     private static LobbyGuiView lobbyGuiView;
     private static List<String> playerList = new ArrayList<>();
@@ -94,17 +111,17 @@ public class CommandManager implements MessageVisitor {
 
     @Override
     public void visit(BeginTurnEvent beginTurnEvent) {
-        if(gameGuiManager == null) {
+        if (gameGuiAdapter == null) {
             windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
-            gameGuiManager = new GameGuiManager(GameView.getInstance(username,
+            gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
                                                                     windowChoiceGuiController.getStage(),
                                                                     playerList,
                                                                     windowGameManager.getWindows()), client);
-            gameGuiManager.setToolCards(toolCardResponse.getIds());
-            gameGuiManager.setPublicObjectives(publicObjectiveResponse.getIdObjective());
-            gameGuiManager.setPrivateObjective(privateObjectiveResponse.getIdObjective());
+            gameGuiAdapter.setToolCards(toolCardResponse.getIds());
+            gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
+            gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
         }
-        gameGuiManager.notifyTurn();
+        gameGuiAdapter.notifyTurn();
     }
 
     @Override
@@ -143,54 +160,54 @@ public class CommandManager implements MessageVisitor {
 
     @Override
     public void visit(DiceResponse diceResponse) {
-        if(gameGuiManager == null) {
+        if (gameGuiAdapter == null) {
             windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
-            gameGuiManager = new GameGuiManager(GameView.getInstance(username,
+            gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
                                                                     windowChoiceGuiController.getStage(),
                                                                     playerList,
                                                                     windowGameManager.getWindows()), client);
-            gameGuiManager.setToolCards(toolCardResponse.getIds());
-            gameGuiManager.setPublicObjectives(publicObjectiveResponse.getIdObjective());
-            gameGuiManager.setPrivateObjective(privateObjectiveResponse.getIdObjective());
-            gameGuiManager.notifyEndTurn();
+            gameGuiAdapter.setToolCards(toolCardResponse.getIds());
+            gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
+            gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
+            gameGuiAdapter.notifyEndTurn();
         }
-        gameGuiManager.setDiceList(diceResponse);
+        gameGuiAdapter.setDiceList(diceResponse);
     }
 
     @Override
     public void visit(OpponentDiceMoveResponse opponentDiceMoveResponse) {
-        gameGuiManager.setOpponentDiceResponse(opponentDiceMoveResponse);
+        gameGuiAdapter.setOpponentDiceResponse(opponentDiceMoveResponse);
     }
 
     @Override
     public void visit(RuleResponse ruleResponse) {
-        gameGuiManager.notifyMoveResponse(ruleResponse);
+        gameGuiAdapter.notifyMoveResponse(ruleResponse);
     }
 
     @Override
     public void visit(NewTurnResponse newTurnResponse) {
-        gameGuiManager.setRound(newTurnResponse.getRound());
+        gameGuiAdapter.setRound(newTurnResponse.getRound());
     }
 
     @Override
     public void visit(PrivateObjectiveResponse privateObjectiveResponse) {
 
         this.privateObjectiveResponse = privateObjectiveResponse;
-        if(gameGuiManager != null)
-            gameGuiManager.setPrivateObjective(privateObjectiveResponse.getIdObjective());
+        if (gameGuiAdapter != null)
+            gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
     }
 
     @Override
     public void visit(PublicObjectiveResponse publicObjectiveResponse) {
         this.publicObjectiveResponse = publicObjectiveResponse;
-        if(gameGuiManager != null)
-            gameGuiManager.setPublicObjectives(publicObjectiveResponse.getIdObjective());
+        if (gameGuiAdapter != null)
+            gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
     }
 
     @Override
     public void visit(ToolCardResponse toolCardResponse) {
         this.toolCardResponse = toolCardResponse;
-        if(gameGuiManager != null)
-            gameGuiManager.setToolCards(toolCardResponse.getIds());
+        if (gameGuiAdapter != null)
+            gameGuiAdapter.setToolCards(toolCardResponse.getIds());
     }
 }

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
+import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
-import it.polimi.ingsw.sagrada.game.base.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class ObjectiveRule extends Rule<Cell[][], Integer> {
 	}
 
 	/**
-	 * @param cells - window to be rule-checked
+     * @param cells - windows to be rule-checked
 	 * @return total score
 	 */
 

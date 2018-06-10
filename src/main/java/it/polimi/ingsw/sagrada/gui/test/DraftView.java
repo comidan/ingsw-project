@@ -13,7 +13,7 @@ public class DraftView extends StackPane {
 
     DiceModel diceModel;
 
-    DraftView() {
+    public DraftView() {
         this.diceModel = new DiceModel();
     }
 

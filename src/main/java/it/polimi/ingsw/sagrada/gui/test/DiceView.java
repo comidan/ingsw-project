@@ -1,7 +1,7 @@
 package it.polimi.ingsw.sagrada.gui.test;
 
 
-import it.polimi.ingsw.sagrada.gui.Constraint;
+import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;

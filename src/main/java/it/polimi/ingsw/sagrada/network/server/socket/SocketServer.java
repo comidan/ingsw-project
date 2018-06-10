@@ -1,19 +1,18 @@
 package it.polimi.ingsw.sagrada.network.server.socket;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.LoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.server.Server;
+import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
 import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
 import it.polimi.ingsw.sagrada.network.server.tools.PortDiscovery;
-import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.sql.SQLException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,7 +31,7 @@ public class SocketServer implements Runnable, Server {
     private PortDiscovery portDiscovery;
     private DataManager dataManager;
 
-    public SocketServer() throws InterruptedException, ExecutionException, SQLException, SocketException {
+    public SocketServer() throws InterruptedException, ExecutionException, SocketException {
         portDiscovery = new PortDiscovery();
         dataManager = DataManager.getDataManager();
         Future<Integer> discoveringPort = portDiscovery.obtainAvailablePortOnTCPAsync();

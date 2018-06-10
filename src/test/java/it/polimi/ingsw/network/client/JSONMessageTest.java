@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.sagrada.game.intercomm.message.ErrorEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.HeartbeatInitEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.LobbyLoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.LobbyLoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.util.ErrorEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import org.junit.Test;

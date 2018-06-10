@@ -1,7 +1,7 @@
 package it.polimi.ingsw.sagrada.network;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 
 public enum LoginState implements Message {
     AUTH_OK,

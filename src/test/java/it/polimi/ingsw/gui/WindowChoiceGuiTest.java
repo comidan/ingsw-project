@@ -1,10 +1,9 @@
 package it.polimi.ingsw.gui;
 
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
-import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiController;
-import it.polimi.ingsw.sagrada.gui.window_choice.WindowChoiceGuiView;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
+import it.polimi.ingsw.sagrada.gui.windows.WindowChoiceGuiController;
+import it.polimi.ingsw.sagrada.gui.windows.WindowChoiceGuiView;
 import javafx.stage.Stage;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;

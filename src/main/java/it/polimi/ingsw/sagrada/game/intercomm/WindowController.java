@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada.game.intercomm;
 
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
 
 import java.util.HashMap;
 import java.util.List;

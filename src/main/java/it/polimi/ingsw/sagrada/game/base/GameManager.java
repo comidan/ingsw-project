@@ -1,14 +1,29 @@
 package it.polimi.ingsw.sagrada.game.base;
 
-import it.polimi.ingsw.sagrada.game.base.state.*;
+import it.polimi.ingsw.sagrada.game.base.state.PlayerIterator;
+import it.polimi.ingsw.sagrada.game.base.state.StateGameEnum;
+import it.polimi.ingsw.sagrada.game.base.state.StateIterator;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.cards.CardManager;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
-
 import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
-import it.polimi.ingsw.sagrada.game.intercomm.*;
-import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.playables.*;
 import it.polimi.ingsw.sagrada.game.rules.ErrorType;
 import it.polimi.ingsw.sagrada.game.rules.RuleManager;
@@ -135,7 +150,7 @@ public class GameManager implements Channel<Message, Message> {
         }
 
         if(dealt) {
-            System.out.println("Initializing opponents window message");
+            System.out.println("Initializing opponents windows message");
             List<Integer> windowsId = new ArrayList<>();
             List<WindowSide> sides = new ArrayList<>();
             List<String> usernames = new ArrayList<>();

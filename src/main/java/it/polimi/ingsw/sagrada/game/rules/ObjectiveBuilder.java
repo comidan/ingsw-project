@@ -1,9 +1,9 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
 import it.polimi.ingsw.sagrada.game.base.Builder;
+import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.cards.CardType;
-import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
 	/**
-	 * @param cell cell from window
+     * @param cell cell from windows
 	 * @return dice value if present
 	 */
 	private int getDiceValue(Cell cell) {
@@ -44,7 +44,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
 	/**
-	 * @param cell cell from window
+     * @param cell cell from windows
 	 * @return dice color if present
 	 */
 	private Colors getDiceColor(Cell cell) {
@@ -344,7 +344,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
     }
 
     /**
-     * @param cells window matrix
+     * @param cells windows matrix
      * @return total diagonals score
      */
 	private int getDiagonalColorScore(Cell[][] cells) {
@@ -390,7 +390,7 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
     /**
-     * @param cells window matrix
+     * @param cells windows matrix
      * @return total anti diagonals score
      */
 	private int getAntiDiagonalColorScore(Cell[][] cells) {

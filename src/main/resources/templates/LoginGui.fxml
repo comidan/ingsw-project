@@ -13,7 +13,7 @@
 <AnchorPane id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="786.0"
             prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.polimi.ingsw.sagrada.gui.LoginGuiView">
+            fx:controller="it.polimi.ingsw.sagrada.gui.login.LoginGuiView">
     <children>
         <ImageView id="background" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0"
                    AnchorPane.topAnchor="0.0">

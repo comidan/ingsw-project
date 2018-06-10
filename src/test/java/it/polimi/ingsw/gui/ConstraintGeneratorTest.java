@@ -1,11 +1,11 @@
 package it.polimi.ingsw.gui;
 
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
-import it.polimi.ingsw.sagrada.gui.Constraint;
-import it.polimi.ingsw.sagrada.gui.ConstraintGenerator;
-
-import static org.junit.Assert.*;
+import it.polimi.ingsw.sagrada.gui.utils.Constraint;
+import it.polimi.ingsw.sagrada.gui.utils.ConstraintGenerator;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class ConstraintGeneratorTest {
     Constraint[][] c = {

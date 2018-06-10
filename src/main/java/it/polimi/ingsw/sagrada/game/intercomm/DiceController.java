@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada.game.intercomm;
 
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 
 public class DiceController implements Channel<DiceResponse, Message> {
     private DiceResponse diceResponse;

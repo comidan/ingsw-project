@@ -1,18 +1,18 @@
 package it.polimi.ingsw.sagrada.network.server.socket;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.ResponseVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.DisconnectEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.MessageParser;
 
 import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -56,7 +56,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     }
 
     @Override
-    public void sendRemoteMessage(Message message) throws RemoteException {
+    public void sendRemoteMessage(Message message) {
         throw new UnsupportedOperationException("Method not supported");
     }
 
@@ -75,7 +75,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     }
 
     @Override
-    public void startHeartbeat(int port) throws RemoteException {
+    public void startHeartbeat(int port) {
 
     }
 

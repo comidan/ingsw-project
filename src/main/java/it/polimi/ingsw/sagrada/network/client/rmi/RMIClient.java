@@ -2,7 +2,7 @@ package it.polimi.ingsw.sagrada.network.client.rmi;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.gui.*;
+import it.polimi.ingsw.sagrada.gui.login.LoginGuiAdapter;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandManager;
@@ -12,7 +12,8 @@ import it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -65,9 +66,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
         while (loginState != LoginState.AUTH_OK) {
             try {
-                username = LoginGuiManager.getUsername();
+                username = LoginGuiAdapter.getUsername();
                 System.out.println("Logging in");
-                loginState = server.login(this, username, LoginGuiManager.getPassword());
+                loginState = server.login(this, username, LoginGuiAdapter.getPassword());
                 System.out.println(loginState);
                 if (loginState == LoginState.AUTH_OK) {
                     sendMessage(loginState); //sendMessage(LoginState.AUTH_OK);
@@ -154,12 +155,12 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     }
 
     @Override
-    public void signUp() throws RemoteException {
+    public void signUp() {
         System.out.println("Signing up");
     }
 
     @Override
-    public void notifyRemoteClientInterface(String id) throws RemoteException {
+    public void notifyRemoteClientInterface(String id) {
         try {
             remoteClient = (Client) Naming.lookup(PROTOCOL + ADDRESS + "/" + id);
         }
@@ -169,7 +170,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     }
 
     @Override
-    public void notifyHeartbeatPort(Integer port) throws RemoteException {
+    public void notifyHeartbeatPort(Integer port) {
         try {
             heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, username);
             System.out.println("Heartbeat started");
@@ -195,12 +196,12 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     }
 
     @Override
-    public void disconnect() throws RemoteException {
+    public void disconnect() {
 
     }
 
     @Override
-    public void setTimer(String time) throws RemoteException {
+    public void setTimer(String time) {
         System.out.println("Setting time");
         /*if(lobbyGuiView != null)
             lobbyGuiView.setTimer(time);*/
@@ -209,12 +210,12 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     }
 
     @Override
-    public void startHeartbeat(int port) throws RemoteException {
+    public void startHeartbeat(int port) {
 
     }
 
     @Override
-    public void setPlayer(String playerName) throws RemoteException {
+    public void setPlayer(String playerName) {
         System.out.println("Setting player " + playerName);
         /*if(lobbyGuiView != null)
             lobbyGuiView.setPlayer(playerName);
@@ -229,12 +230,12 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     }
 
     @Override
-    public String getId() throws RemoteException {
+    public String getId() {
         return username;
     }
 
     @Override
-    public void sendResponse(Message message) throws RemoteException {
+    public void sendResponse(Message message) {
         CommandManager.executePayload(message);
     }
 
@@ -245,6 +246,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
     @Override
     public void sendMessage(LoginState message) {
-        LoginGuiManager.getDynamicRouter().dispatch(message);
+        LoginGuiAdapter.getDynamicRouter().dispatch(message);
     }
 }

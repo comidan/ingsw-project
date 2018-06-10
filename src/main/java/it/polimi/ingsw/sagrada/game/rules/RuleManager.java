@@ -50,7 +50,7 @@ public class RuleManager {
     }
 
     /**
-     * @param cells - game window
+     * @param cells - game windows
      * @return ErrrorType - cause of validation failure
      */
 

@@ -2,10 +2,30 @@ package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
-import it.polimi.ingsw.sagrada.game.intercomm.ActionMessageVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.ActionVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.LobbyLoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.RegisterEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.util.ErrorEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionVisitor;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
@@ -14,7 +34,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class JsonMessage implements CommandKeyword, ActionMessageVisitor {
@@ -108,7 +129,7 @@ public class JsonMessage implements CommandKeyword, ActionMessageVisitor {
         try {
             JSONObject jsonMsg = (JSONObject)parser.parse(json);
             JSONObject data;
-            System.out.println("Type : " + (String)jsonMsg.get(COMMAND_TYPE));
+            System.out.println("Type : " + jsonMsg.get(COMMAND_TYPE));
             switch ((String)jsonMsg.get(COMMAND_TYPE)) {
                 case LOBBY_TIME:
                     data = (JSONObject) jsonMsg.get(TIME);

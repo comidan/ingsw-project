@@ -12,7 +12,7 @@ public class CellButton extends StackPane implements ViewUpdate, GuiDisable {
     private DiceView diceView;
 
 
-    //occupied cell in my window
+    //occupied cell in my windows
     public CellButton(ButtonControllerInterface buttonControllerInterface, DiceView diceView) {
         super();
         if (buttonControllerInterface != null)
@@ -26,12 +26,12 @@ public class CellButton extends StackPane implements ViewUpdate, GuiDisable {
 
     }
 
-    // dice in other players window
+    // dice in other player windows
     public CellButton() {
         this(null, null);
     }
 
-    //empty cell in my window
+    //empty cell in my windows
     public CellButton(ButtonControllerInterface buttonControllerInterface) {
         this(buttonControllerInterface, null);
     }

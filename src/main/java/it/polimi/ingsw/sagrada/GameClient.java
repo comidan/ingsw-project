@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada;
 
-import it.polimi.ingsw.sagrada.gui.LoginGuiView;
+import it.polimi.ingsw.sagrada.gui.login.LoginGuiView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -11,7 +11,7 @@ public class GameClient extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         //path is relative to target because getResource is called
 
     }

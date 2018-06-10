@@ -19,16 +19,26 @@ public enum EventTypeEnum {
     public static String toString(EventTypeEnum eventTypeEnum) {
         Logger logger = Logger.getLogger(EventTypeEnum.class.getName());
         switch(eventTypeEnum) {
-            case WINDOW_GAME_MANAGER_EVENT: return "it.polimi.ingsw.sagrada.game.intercomm.message.WindowGameManagerEvent";
-            case DICE_GAME_MANAGER_EVENT: return "it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent";
-            case BEGIN_TURN_EVENT: return "it.polimi.ingsw.sagrada.game.intercomm.message.BeginTurnEvent";
-            case END_TURN_EVENT: return "it.polimi.ingsw.sagrada.game.intercomm.message.EndTurnEvent";
-            case NUM_PLAYER_CHANGE: return "it.polimi.ingsw.sagrada.game.intercomm.message.NumPlayerEvent";
-            case DICE_RESPONSE: return "it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse";
-            case WINDOW_RESPONSE: return "it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse";
-            case PRIVATE_OBJECTIVE_RESPONSE: return "it.polimi.ingsw.sagrada.game.intercomm.message.PrivateObjectiveResponse";
-            case PUBLIC_OBJECTIVE_RESPONSE: return "it.polimi.ingsw.sagrada.game.intercomm.message.PublicObjectiveResponse";
-            case RULE_RESPONSE: return "it.polimi.ingsw.sagrada.game.intercomm.message.RuleResponse";
+            case WINDOW_GAME_MANAGER_EVENT:
+                return "it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent";
+            case DICE_GAME_MANAGER_EVENT:
+                return "it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent";
+            case BEGIN_TURN_EVENT:
+                return "it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent";
+            case END_TURN_EVENT:
+                return "it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent";
+            case NUM_PLAYER_CHANGE:
+                return "it.polimi.ingsw.sagrada.game.intercomm.message.game.NumPlayerEvent";
+            case DICE_RESPONSE:
+                return "it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse";
+            case WINDOW_RESPONSE:
+                return "it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse";
+            case PRIVATE_OBJECTIVE_RESPONSE:
+                return "it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse";
+            case PUBLIC_OBJECTIVE_RESPONSE:
+                return "it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse";
+            case RULE_RESPONSE:
+                return "it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse";
             default: logger.log(Level.SEVERE, "Wrong type of Event");
         }
         return null;

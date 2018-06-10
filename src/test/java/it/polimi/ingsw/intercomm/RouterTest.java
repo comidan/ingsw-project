@@ -2,12 +2,14 @@ package it.polimi.ingsw.intercomm;
 
 import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Player;
-import it.polimi.ingsw.sagrada.game.base.WindowManager;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
-import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
-import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class RouterTest {
     private static final Logger LOGGER = Logger.getLogger(RouterTest.class.getName());
-    private static final String BASE_PATH = "src/main/resources/json/window/";
+    private static final String BASE_PATH = "src/main/resources/json/windows/";
     private static final String FIRST_USER = "Mottola";
     private static final String SECOND_USER = "ingconti";
     private static final String DRAFT = "draft";
@@ -52,7 +54,7 @@ public class RouterTest {
         dynamicRouter.subscribeChannel(DiceResponse.class, diceController);
         gameManager.startGame();
 
-        List<Message> msgs = messageGenerator("window");
+        List<Message> msgs = messageGenerator("windows");
         for(Message message:msgs) {
             dynamicRouter.dispatch(message);
         }
@@ -96,7 +98,7 @@ public class RouterTest {
     private List<Message> messageGenerator(String type) {
         List<Message> messages = new ArrayList<>();
 
-        if(type.equals("window")){
+        if (type.equals("windows")) {
             Map<String, List<Integer>> ids = windowController.getMessage();
             messages.add(new WindowEvent(FIRST_USER, ids.get(FIRST_USER).get(0), WindowSide.FRONT));
             messages.add(new WindowEvent(SECOND_USER, ids.get(SECOND_USER).get(0), WindowSide.REAR));

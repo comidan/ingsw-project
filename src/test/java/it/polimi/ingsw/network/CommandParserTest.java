@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.sagrada.game.intercomm.message.LoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import org.json.simple.JSONObject;
 import org.junit.Test;

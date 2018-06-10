@@ -2,10 +2,12 @@ package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Picker;
-import it.polimi.ingsw.sagrada.game.intercomm.*;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceGameManagerEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 
 import java.util.ArrayList;

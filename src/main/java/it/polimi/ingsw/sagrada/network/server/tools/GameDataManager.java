@@ -1,12 +1,29 @@
 package it.polimi.ingsw.sagrada.network.server.tools;
 
-import it.polimi.ingsw.sagrada.game.intercomm.*;
-import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -1,9 +1,18 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.ResponseMessageVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.ResponseVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.message.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;

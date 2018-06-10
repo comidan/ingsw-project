@@ -2,10 +2,12 @@ package it.polimi.ingsw.sagrada.game.base;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Picker;
-import it.polimi.ingsw.sagrada.game.intercomm.*;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowGameManagerEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.WindowResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
 import it.polimi.ingsw.sagrada.game.playables.Token;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;

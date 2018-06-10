@@ -22,7 +22,7 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	}
 
 	/**
-	 * @param cells window matrix
+     * @param cells windows matrix
 	 * @return type of error
 	 */
 	@Override
@@ -49,7 +49,7 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	}
 
 	/**
-	 * @param cells window matrix
+     * @param cells windows matrix
 	 * @param row row location
 	 * @param col col location
 	 * @return type of error
@@ -97,7 +97,7 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	}
 
 	/**
-	 * @param cells window matrix
+     * @param cells windows matrix
 	 * @param row row location
 	 * @param col col location
 	 * @return type of error
@@ -119,7 +119,7 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	}
 
 	/**
-	 * @param cell cell from window
+     * @param cell cell from windows
 	 * @return dice value if present
 	 */
 	private int getDiceValue(Cell cell) {
@@ -130,7 +130,7 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	}
 
 	/**
-	 * @param cell cell from window
+     * @param cell cell from windows
 	 * @return dice color if present
 	 */
 	private Colors getDiceColor(Cell cell) {

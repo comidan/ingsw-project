@@ -1,5 +1,7 @@
 package it.polimi.ingsw.sagrada.game.intercomm;
 
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
+
 import java.io.Serializable;
 
 public interface Message extends Serializable {

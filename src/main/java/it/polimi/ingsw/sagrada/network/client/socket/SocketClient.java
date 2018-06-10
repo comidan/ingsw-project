@@ -3,15 +3,17 @@ package it.polimi.ingsw.sagrada.network.client.socket;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.*;
-import it.polimi.ingsw.sagrada.gui.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.LobbyLoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.player.RegisterEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.util.ErrorEvent;
+import it.polimi.ingsw.sagrada.gui.login.LoginGuiAdapter;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandManager;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.client.protocols.networklink.discoverinternet.DiscoverInternet;
-import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -19,7 +21,6 @@ import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -46,9 +47,9 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     private DynamicRouter dynamicRouter;
 
 
-    public SocketClient() throws IOException {
+    public SocketClient() {
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
-        dynamicRouter = LoginGuiManager.getDynamicRouter();
+        dynamicRouter = LoginGuiAdapter.getDynamicRouter();
         establishServerConnection();
     }
 
@@ -99,7 +100,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     }
 
     @Override
-    public void sendRemoteMessage(Message message) throws RemoteException {
+    public void sendRemoteMessage(Message message) {
         outSocket.println(CommandManager.createPayload(message));
         System.out.println(message);
     }
@@ -115,7 +116,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     }
 
     @Override
-    public void disconnect() throws RemoteException {
+    public void disconnect() {
         outSocket.println(JsonMessage.createDisconnectMessage(username).toJSONString());
         heartbeatProtocolManager.kill();
         executor.shutdown();
@@ -123,12 +124,12 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     }
 
     @Override
-    public String getId() throws RemoteException {
+    public String getId() {
         return username;
     }
 
     @Override
-    public void sendResponse(Message message) throws RemoteException {
+    public void sendResponse(Message message) {
         //outSocket.println(commandManager.createPayload(message));
     }
 
@@ -138,8 +139,8 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
 
             while (!loginSuccessful) {
                 outVideo.println("Connected to " + ADDRESS + ":" + PORT + "\nThis is the first login firewall : \n");
-                username = LoginGuiManager.getUsername();
-                JSONObject message = createMessage(username, LoginGuiManager.getPassword());
+                username = LoginGuiAdapter.getUsername();
+                JSONObject message = createMessage(username, LoginGuiAdapter.getPassword());
                 initializeConnectionStream();
                 outSocket.println(message.toJSONString());
                 String jsonResponse = inSocket.readLine();
@@ -242,6 +243,6 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
 
     @Override
     public void sendMessage(LoginState message) {
-        LoginGuiManager.getDynamicRouter().dispatch(message);
+        LoginGuiAdapter.getDynamicRouter().dispatch(message);
     }
 }

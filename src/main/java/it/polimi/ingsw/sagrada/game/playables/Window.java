@@ -35,8 +35,8 @@ public class Window implements WindowModelInterface {
 
     /**
      * @param dice - dice to be added
-     * @param x    - window x-position
-     * @param y    - window y-position
+     * @param x    - windows x-position
+     * @param y    - windows y-position
      * @return
      */
     public boolean setCell(Dice dice, int y, int x) {
@@ -66,7 +66,7 @@ public class Window implements WindowModelInterface {
     }
 
     public String toString() {
-        StringBuilder output = new StringBuilder("");
+        StringBuilder output = new StringBuilder();
 
         output.append(name);
         output.append("\n\n");
