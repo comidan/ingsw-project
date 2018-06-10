@@ -148,7 +148,6 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     public void run() {
         while (!executor.isShutdown()) {
             try {
-                System.out.println("Attending client data - " + identifier);
                 executePayload(input.readLine());
             } catch (IOException exc) {
                 fastRecovery.apply(identifier);
