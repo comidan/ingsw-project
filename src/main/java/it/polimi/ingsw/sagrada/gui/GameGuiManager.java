@@ -139,6 +139,18 @@ public class GameGuiManager {
         });
     }
 
+    public void setPrivateObjective(int id){
+        Platform.runLater(() -> gameView.setPrivateObjective(id));
+    }
+
+    public void setPublicObjectives(List<Integer> publicObjectives) {
+        Platform.runLater(() -> gameView.setPublicObjectives(publicObjectives));
+    }
+
+    public void setToolCards(List<Integer> toolCards) {
+        Platform.runLater(() -> gameView.setToolCards(toolCards));
+    }
+
     public void notifyTurn() {
         Platform.runLater(gameView::notifyTurn);
     }

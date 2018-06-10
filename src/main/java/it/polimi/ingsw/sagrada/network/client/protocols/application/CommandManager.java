@@ -28,6 +28,9 @@ public class CommandManager implements MessageVisitor {
     private static List<String> playerList = new ArrayList<>();
     private static List<String> playerLobbyListBackup = new ArrayList<>();
     private static String username;
+    private PrivateObjectiveResponse privateObjectiveResponse;
+    private PublicObjectiveResponse publicObjectiveResponse;
+    private ToolCardResponse toolCardResponse;
 
     private CommandManager() {}
 
@@ -94,9 +97,12 @@ public class CommandManager implements MessageVisitor {
         if(gameGuiManager == null) {
             windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
             gameGuiManager = new GameGuiManager(GameView.getInstance(username,
-                    windowChoiceGuiController.getStage(),
-                    playerList,
-                    windowGameManager.getWindows()), client);
+                                                                    windowChoiceGuiController.getStage(),
+                                                                    playerList,
+                                                                    windowGameManager.getWindows()), client);
+            gameGuiManager.setToolCards(toolCardResponse.getIds());
+            gameGuiManager.setPublicObjectives(publicObjectiveResponse.getIdObjective());
+            gameGuiManager.setPrivateObjective(privateObjectiveResponse.getIdObjective());
         }
         gameGuiManager.notifyTurn();
     }
@@ -143,6 +149,9 @@ public class CommandManager implements MessageVisitor {
                                                                     windowChoiceGuiController.getStage(),
                                                                     playerList,
                                                                     windowGameManager.getWindows()), client);
+            gameGuiManager.setToolCards(toolCardResponse.getIds());
+            gameGuiManager.setPublicObjectives(publicObjectiveResponse.getIdObjective());
+            gameGuiManager.setPrivateObjective(privateObjectiveResponse.getIdObjective());
             gameGuiManager.notifyEndTurn();
         }
         gameGuiManager.setDiceList(diceResponse);
@@ -161,5 +170,27 @@ public class CommandManager implements MessageVisitor {
     @Override
     public void visit(NewTurnResponse newTurnResponse) {
         gameGuiManager.setRound(newTurnResponse.getRound());
+    }
+
+    @Override
+    public void visit(PrivateObjectiveResponse privateObjectiveResponse) {
+
+        this.privateObjectiveResponse = privateObjectiveResponse;
+        if(gameGuiManager != null)
+            gameGuiManager.setPrivateObjective(privateObjectiveResponse.getIdObjective());
+    }
+
+    @Override
+    public void visit(PublicObjectiveResponse publicObjectiveResponse) {
+        this.publicObjectiveResponse = publicObjectiveResponse;
+        if(gameGuiManager != null)
+            gameGuiManager.setPublicObjectives(publicObjectiveResponse.getIdObjective());
+    }
+
+    @Override
+    public void visit(ToolCardResponse toolCardResponse) {
+        this.toolCardResponse = toolCardResponse;
+        if(gameGuiManager != null)
+            gameGuiManager.setToolCards(toolCardResponse.getIds());
     }
 }

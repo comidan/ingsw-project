@@ -1,19 +1,17 @@
 package it.polimi.ingsw.sagrada.network.server.tools;
 
-import it.polimi.ingsw.sagrada.game.intercomm.Channel;
-import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
-import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
-import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GameDataManager implements Channel<Message, Message> {
+public class GameDataManager implements Channel<Message, Message>, MessageVisitor {
 
     private static final Logger LOGGER = Logger.getLogger(GameDataManager.class.getName());
 
@@ -33,108 +31,13 @@ public class GameDataManager implements Channel<Message, Message> {
         dynamicRouter.subscribeChannel(OpponentDiceMoveResponse.class, this);
         dynamicRouter.subscribeChannel(RuleResponse.class, this);
         dynamicRouter.subscribeChannel(NewTurnResponse.class, this);
+        dynamicRouter.subscribeChannel(ToolCardResponse.class, this);
     }
 
     @Override
-    public void dispatch(Message message) { //add visitor pattern here
-        String msgType = message.getType().getName();
-
-        if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.DICE_RESPONSE))) {
-            Iterator itr = clientMap.entrySet().iterator();
-            while(itr.hasNext()) {
-                Map.Entry pair = (Map.Entry)itr.next();
-                try {
-                    ((Client)pair.getValue()).sendResponse(message);
-                } catch (RemoteException e) {
-                    LOGGER.log(Level.SEVERE, e::getMessage);
-                }
-            }
-        }
-        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.WINDOW_RESPONSE))) {
-            WindowResponse windowResponse = (WindowResponse)message;
-            try {
-                getClient(windowResponse.getPlayerId()).sendResponse(message);
-            } catch (RemoteException e) {
-                LOGGER.log(Level.SEVERE, e::getMessage);
-            }
-        }
-        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT))) {
-            BeginTurnEvent beginTurnEvent = (BeginTurnEvent)message;
-            try {
-                getClient(beginTurnEvent.getIdPlayer()).sendResponse(message);
-            } catch (RemoteException e) {
-                LOGGER.log(Level.SEVERE, e::getMessage);
-            }
-        }
-        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.PRIVATE_OBJECTIVE_RESPONSE))) {
-            PrivateObjectiveResponse privateObjectiveResponse = (PrivateObjectiveResponse)message;
-            try {
-                getClient(privateObjectiveResponse.getIdPlayer()).sendResponse(message);
-            } catch (RemoteException e) {
-                LOGGER.log(Level.SEVERE, e::getMessage);
-            }
-        }
-        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.PUBLIC_OBJECTIVE_RESPONSE))) {
-            PublicObjectiveResponse publicObjectiveResponse = (PublicObjectiveResponse)message;
-            Iterator itr = clientMap.entrySet().iterator();
-            while(itr.hasNext()) {
-                Map.Entry pair = (Map.Entry)itr.next();
-                try {
-                    ((Client)pair.getValue()).sendResponse(message);
-                } catch (RemoteException e) {
-                    LOGGER.log(Level.SEVERE, e::getMessage);
-                }
-            }
-        }
-        else if(message instanceof OpponentWindowResponse) {
-            OpponentWindowResponse opponentWindowResponse = (OpponentWindowResponse) message;
-            Iterator itr = clientMap.entrySet().iterator();
-            while(itr.hasNext()) {
-                Map.Entry pair = (Map.Entry)itr.next();
-                try {
-                    ((Client)pair.getValue()).sendResponse(opponentWindowResponse);
-                } catch (RemoteException e) {
-                    LOGGER.log(Level.SEVERE, e::getMessage);
-                }
-            }
-        }
-
-        else if(message instanceof OpponentDiceMoveResponse) {
-            OpponentDiceMoveResponse opponentDiceMoveResponse = (OpponentDiceMoveResponse)message;
-            Iterator itr = clientMap.entrySet().iterator();
-            while(itr.hasNext()) {
-                Map.Entry pair = (Map.Entry)itr.next();
-                try {
-                    Client client = (Client)pair.getValue();
-                    if(!client.equals(getClient(opponentDiceMoveResponse.getIdPlayer()))) {
-                        System.out.println("OpponentDice Sent");
-                        client.sendResponse(opponentDiceMoveResponse);
-                    }
-                } catch (RemoteException e) {
-                    LOGGER.log(Level.SEVERE, e::getMessage);
-                }
-            }
-        }
-        else if(msgType.equals(EventTypeEnum.toString(EventTypeEnum.RULE_RESPONSE))) {
-            RuleResponse ruleResponse = (RuleResponse)message;
-            try {
-                getClient(ruleResponse.getPlayerId()).sendResponse(message);
-            } catch (RemoteException e) {
-                LOGGER.log(Level.SEVERE, e::getMessage);
-            }
-        }
-        else if(message instanceof NewTurnResponse) {
-            NewTurnResponse newTurnResponse = (NewTurnResponse) message;
-            Iterator itr = clientMap.entrySet().iterator();
-            while(itr.hasNext()) {
-                Map.Entry pair = (Map.Entry)itr.next();
-                try {
-                    ((Client)pair.getValue()).sendResponse(newTurnResponse);
-                } catch (RemoteException e) {
-                    LOGGER.log(Level.SEVERE, e::getMessage);
-                }
-            }
-        }
+    public void dispatch(Message message) {
+        System.out.println("I received : " + message);
+        message.accept(this);
     }
 
     @Override
@@ -144,5 +47,116 @@ public class GameDataManager implements Channel<Message, Message> {
 
     private Client getClient(String id) {
         return clientMap.get(id);
+    }
+
+    private void sendRemoteMessage(Message message, Function<Client, Boolean> filter) {
+        Iterator itr = clientMap.entrySet().iterator();
+        while(itr.hasNext()) {
+            Map.Entry pair = (Map.Entry)itr.next();
+            try {
+                if(filter.apply((Client)pair.getValue())) {
+                    System.out.println("Sending to " + ((Client) pair.getValue()).getId());
+                    ((Client) pair.getValue()).sendResponse(message);
+                }
+            } catch (RemoteException e) {
+                LOGGER.log(Level.SEVERE, e::getMessage);
+            }
+        }
+    }
+
+    @Override
+    public void visit(Message message) {
+        LOGGER.log(Level.INFO, message.getType().getName());
+    }
+
+    @Override
+    public void visit(AddPlayerEvent message) {
+        LOGGER.log(Level.INFO, message.getType().getName());
+    }
+
+    @Override
+    public void visit(BeginTurnEvent beginTurnEvent) {
+        try {
+            getClient(beginTurnEvent.getIdPlayer()).sendResponse(beginTurnEvent);
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e::getMessage);
+        }
+    }
+
+    @Override
+    public void visit(MatchTimeEvent matchTimeEvent) {
+        LOGGER.log(Level.INFO, matchTimeEvent.getType().getName());
+    }
+
+    @Override
+    public void visit(HeartbeatInitEvent heartbeatInitEvent) {
+        LOGGER.log(Level.INFO, heartbeatInitEvent.getType().getName());
+    }
+
+    @Override
+    public void visit(RemovePlayerEvent removePlayerEvent) {
+        LOGGER.log(Level.INFO, removePlayerEvent.getType().getName());
+    }
+
+    @Override
+    public void visit(WindowResponse windowResponse) {
+        try {
+            getClient(windowResponse.getPlayerId()).sendResponse(windowResponse);
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e::getMessage);
+        }
+    }
+
+    @Override
+    public void visit(OpponentWindowResponse opponentWindowResponse) {
+        sendRemoteMessage(opponentWindowResponse, filter -> anyone());
+    }
+
+    @Override
+    public void visit(DiceResponse diceResponse) {
+        System.out.println("Sending " + diceResponse.getDst());
+        sendRemoteMessage(diceResponse, filter -> anyone());
+    }
+
+    @Override
+    public void visit(OpponentDiceMoveResponse opponentDiceMoveResponse) {
+        sendRemoteMessage(opponentDiceMoveResponse, filter -> !filter.equals(getClient(opponentDiceMoveResponse.getIdPlayer())));
+    }
+
+    @Override
+    public void visit(RuleResponse ruleResponse) {
+        try {
+            getClient(ruleResponse.getPlayerId()).sendResponse(ruleResponse);
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e::getMessage);
+        }
+    }
+
+    @Override
+    public void visit(NewTurnResponse newTurnResponse) {
+        sendRemoteMessage(newTurnResponse, filter -> anyone());
+    }
+
+    @Override
+    public void visit(PrivateObjectiveResponse privateObjectiveResponse) {
+        try {
+            getClient(privateObjectiveResponse.getIdPlayer()).sendResponse(privateObjectiveResponse);
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e::getMessage);
+        }
+    }
+
+    @Override
+    public void visit(PublicObjectiveResponse publicObjectiveResponse) {
+        sendRemoteMessage(publicObjectiveResponse, filter -> anyone());
+    }
+
+    @Override
+    public void visit(ToolCardResponse toolCardResponse) {
+        sendRemoteMessage(toolCardResponse, filter -> anyone());
+    }
+
+    private boolean anyone() {
+        return true;
     }
 }

@@ -27,4 +27,10 @@ public interface MessageVisitor {
     void visit(RuleResponse ruleResponse);
 
     void visit(NewTurnResponse newTurnResponse);
+
+    void visit(PrivateObjectiveResponse privateObjectiveResponse);
+
+    void visit(PublicObjectiveResponse publicObjectiveResponse);
+
+    void visit(ToolCardResponse toolCardResponse);
 }

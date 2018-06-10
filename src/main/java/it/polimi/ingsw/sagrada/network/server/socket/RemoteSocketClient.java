@@ -1,7 +1,7 @@
 package it.polimi.ingsw.sagrada.network.server.socket;
 
-import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
@@ -100,24 +100,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
 
     @Override
     public void sendResponse(Message message) {
-        String messageType = message.getType().getName();
-        String payload;
-        if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.DICE_RESPONSE)))
-            payload = messageParser.createJsonDiceResponse((DiceResponse)message);
-        else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.WINDOW_RESPONSE)))
-            payload = messageParser.createJsonWindowResponse((WindowResponse)message);
-        else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.BEGIN_TURN_EVENT)))
-            payload = messageParser.createJsonBeginTurnEvent((BeginTurnEvent)message);
-        else if(messageType.equals(EventTypeEnum.toString(EventTypeEnum.RULE_RESPONSE)))
-            payload = messageParser.createJsonRuleResponse((RuleResponse)message);
-        else if(message instanceof OpponentWindowResponse)
-            payload = messageParser.createOpponentWindowsResponse((OpponentWindowResponse) message);
-        else if((message instanceof OpponentDiceMoveResponse))
-            payload = messageParser.createOpponentDiceResponse((OpponentDiceMoveResponse)message);
-        else if(message instanceof NewTurnResponse)
-            payload = messageParser.createJsonNewRoundResponse((NewTurnResponse) message);
-        else
-            payload = "ERROR";
+        String payload = messageParser.createJsonResponse((ResponseVisitor) message);
         output.println(payload);
     }
 
@@ -165,6 +148,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     public void run() {
         while (!executor.isShutdown()) {
             try {
+                System.out.println("Attending client data - " + identifier);
                 executePayload(input.readLine());
             } catch (IOException exc) {
                 fastRecovery.apply(identifier);

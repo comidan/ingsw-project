@@ -5,22 +5,18 @@ import it.polimi.ingsw.sagrada.game.intercomm.MessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.ResponseMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.ResponseVisitor;
 
-public class PrivateObjectiveResponse implements Message, ResponseVisitor {
+import java.util.List;
 
-    private int idObjective;
-    private String idPlayer;
+public class ToolCardResponse implements Message, ResponseVisitor {
 
-    public PrivateObjectiveResponse(int idObjective, String idPlayer) {
-        this.idObjective = idObjective;
-        this.idPlayer = idPlayer;
+    private List<Integer> ids;
+
+    public ToolCardResponse(List<Integer> ids) {
+        this.ids = ids;
     }
 
-    public int getIdObjective() {
-        return idObjective;
-    }
-
-    public String getIdPlayer() {
-        return idPlayer;
+    public List<Integer> getIds() {
+        return ids;
     }
 
     @Override

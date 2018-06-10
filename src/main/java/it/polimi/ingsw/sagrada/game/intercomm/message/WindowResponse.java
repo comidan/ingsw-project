@@ -2,10 +2,12 @@ package it.polimi.ingsw.sagrada.game.intercomm.message;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseVisitor;
 
 import java.util.List;
 
-public class WindowResponse implements Message {
+public class WindowResponse implements Message, ResponseVisitor {
 
     private String playerId;
     private List<Integer> ids;
@@ -31,5 +33,10 @@ public class WindowResponse implements Message {
     @Override
     public void accept(MessageVisitor messageVisitor) {
         messageVisitor.visit(this);
+    }
+
+    @Override
+    public String accept(ResponseMessageVisitor responseMessageVisitor) {
+        return responseMessageVisitor.visit(this);
     }
 }

@@ -101,6 +101,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     @Override
     public void sendRemoteMessage(Message message) throws RemoteException {
         outSocket.println(CommandManager.createPayload(message));
+        System.out.println(message);
     }
 
     @Override

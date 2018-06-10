@@ -2,6 +2,8 @@ package it.polimi.ingsw.sagrada.game.intercomm.message;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseVisitor;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 
 import java.io.Serializable;
@@ -9,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OpponentWindowResponse implements Message {
+public class OpponentWindowResponse implements Message, ResponseVisitor {
 
     private List<String> players;
     private Map<String, Pair<Integer, WindowSide>> windows;
@@ -41,6 +43,11 @@ public class OpponentWindowResponse implements Message {
 
     public WindowSide getPlayerWindowSide(String username) {
         return windows.get(username).getSecondEntry();
+    }
+
+    @Override
+    public String accept(ResponseMessageVisitor responseMessageVisitor) {
+        return responseMessageVisitor.visit(this);
     }
 
     private static class Pair<T, U> implements Serializable {

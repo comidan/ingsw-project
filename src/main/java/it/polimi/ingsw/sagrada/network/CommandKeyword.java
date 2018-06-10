@@ -54,4 +54,7 @@ public interface CommandKeyword {
     String DRAFT = "draft";
     String ROUND_TRACK = "roundtrack";
     String NEW_ROUND = "newround";
+    String PUBLIC_OBJECTIVES = "public_objectives";
+    String PRIVATE_OBJECTIVE = "private_objective";
+    String TOOL_CARDS = "tool_cards";
 }

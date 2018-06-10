@@ -2,11 +2,13 @@ package it.polimi.ingsw.sagrada.game.intercomm.message;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseVisitor;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.util.List;
 
-public class DiceResponse implements Message {
+public class DiceResponse implements Message, ResponseVisitor {
 
     private String dst;
     private List<Dice> diceList;
@@ -32,5 +34,10 @@ public class DiceResponse implements Message {
     @Override
     public void accept(MessageVisitor messageVisitor) {
         messageVisitor.visit(this);
+    }
+
+    @Override
+    public String accept(ResponseMessageVisitor responseMessageVisitor) {
+        return responseMessageVisitor.visit(this);
     }
 }

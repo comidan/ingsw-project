@@ -14,16 +14,15 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class JsonMessage implements CommandKeyword, ActionMessageVisitor {
 
-    private String username;
+    private String playerId;
 
-    public JsonMessage(String username) {
-        this.username = username;
+    public JsonMessage(String playerId) {
+        this.playerId = playerId;
     }
 
     public String getMessage(ActionVisitor actionVisitor) {
@@ -68,7 +67,7 @@ public class JsonMessage implements CommandKeyword, ActionMessageVisitor {
         return container;
     }
 
-    public static JSONObject createWindowEvent(String username, int windowId, String side) {
+    private JSONObject createWindowEvent(String username, int windowId, String side) {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, username);
         content.put(WINDOW_ID, windowId+"");
@@ -80,7 +79,7 @@ public class JsonMessage implements CommandKeyword, ActionMessageVisitor {
         return container;
     }
 
-    public static JSONObject createDiceEvent(DiceEvent diceEvent) {
+    private JSONObject createDiceEvent(DiceEvent diceEvent) {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, diceEvent.getIdPlayer());
         content.put(DICE_ID, diceEvent.getIdDice()+"");
@@ -96,7 +95,7 @@ public class JsonMessage implements CommandKeyword, ActionMessageVisitor {
         return container;
     }
 
-    public static JSONObject createEndTurnEvent(EndTurnEvent endTurnEvent) {
+    private JSONObject createEndTurnEvent(EndTurnEvent endTurnEvent) {
         JSONObject content = new JSONObject();
         content.put(MESSAGE_TYPE, ACTION);
         content.put(COMMAND_TYPE, END_TURN);
@@ -185,6 +184,27 @@ public class JsonMessage implements CommandKeyword, ActionMessageVisitor {
                 case NEW_ROUND:
                     JSONObject newRoundResponse = (JSONObject)jsonMsg.get(NEW_ROUND);
                     return new NewTurnResponse(Integer.parseInt((String) newRoundResponse.get(NEW_ROUND)));
+                case PUBLIC_OBJECTIVES:
+                    JSONArray publicObjectives = (JSONArray) jsonMsg.get(PUBLIC_OBJECTIVES);
+                    List<Integer> ids = new ArrayList<>();
+                    for(int i = 0; i < publicObjectives.size(); i++) {
+                        JSONObject publicObjective = ((JSONObject) publicObjectives.get(i));
+                        ids.add(Integer.parseInt((String) publicObjective.get(ID)));
+                    }
+                    return new PublicObjectiveResponse(ids);
+                case PRIVATE_OBJECTIVE:
+                    data = (JSONObject) jsonMsg.get(PRIVATE_OBJECTIVE);
+                    String playerId = (String) data.get(PLAYER_ID);
+                    int privateObjectId = Integer.parseInt((String) data.get(ID));
+                    return new PrivateObjectiveResponse(privateObjectId, playerId);
+                case TOOL_CARDS:
+                    JSONArray toolCards = (JSONArray) jsonMsg.get(TOOL_CARDS);
+                    List<Integer> toolIds = new ArrayList<>();
+                    for(int i = 0; i < toolCards.size(); i++) {
+                        JSONObject publicObjective = ((JSONObject) toolCards.get(i));
+                        toolIds.add(Integer.parseInt((String) publicObjective.get(ID)));
+                    }
+                    return new ToolCardResponse(toolIds);
                 default:
                     return null;
             }
@@ -202,7 +222,7 @@ public class JsonMessage implements CommandKeyword, ActionMessageVisitor {
 
     @Override
     public String visit(WindowEvent windowEvent) {
-        return createWindowEvent(username, windowEvent.getIdWindow(), WindowSide.sideToString(windowEvent.getWindowSide())).toJSONString();
+        return createWindowEvent(playerId, windowEvent.getIdWindow(), WindowSide.sideToString(windowEvent.getWindowSide())).toJSONString();
     }
 
     @Override

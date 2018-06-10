@@ -3,8 +3,10 @@ package it.polimi.ingsw.sagrada.game.intercomm.message;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseVisitor;
 
-public class RuleResponse implements Message {
+public class RuleResponse implements Message, ResponseVisitor {
 
     private boolean validMove;
     private String playerId;
@@ -30,5 +32,10 @@ public class RuleResponse implements Message {
 
     public String getPlayerId() {
         return playerId;
+    }
+
+    @Override
+    public String accept(ResponseMessageVisitor responseMessageVisitor) {
+        return responseMessageVisitor.visit(this);
     }
 }

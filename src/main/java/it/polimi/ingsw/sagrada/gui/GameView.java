@@ -89,8 +89,16 @@ public class GameView extends Application {
 
     }
 
-    void setPrivateObjective(){
-        cardBoard.setPrivateObjective();
+    void setPrivateObjective(int id) {
+        cardBoard.setPrivateObjective(id);
+    }
+
+    void setPublicObjectives(List<Integer> publicObjectives) {
+        cardBoard.setPublicObjectives(publicObjectives);
+    }
+
+    void setToolCards(List<Integer> toolCards) {
+        cardBoard.setToolCards(toolCards);
     }
 
     void removeMistakenDice(int row, int col){
@@ -137,7 +145,6 @@ public class GameView extends Application {
         anchorPane.setBottomAnchor(horizontalBox, resizer.getHeightPixel(11));
         anchorPane.setLeftAnchor(horizontalBox, resizer.getWidthPixel(10));
         anchorPane.getChildren().addAll(horizontalBox);
-        setPrivateObjective();
         anchorPane.setBottomAnchor(cardBoard, resizer.getHeightPixel(7));
         anchorPane.setRightAnchor(cardBoard, resizer.getWidthPixel(32));
         anchorPane.getChildren().addAll(cardBoard);

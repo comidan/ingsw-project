@@ -1,5 +1,8 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.ResponseVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.message.*;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
@@ -9,17 +12,20 @@ import org.json.simple.JSONObject;
 
 import java.util.List;
 
-public class MessageParser implements CommandKeyword {
+public class MessageParser implements CommandKeyword, ResponseMessageVisitor {
 
+    public String createJsonResponse(ResponseVisitor responseVisitor) {
+        return responseVisitor.accept(this);
+    }
 
-    public String createJsonDiceResponse(DiceResponse diceResponse) {
+    private String createJsonDiceResponse(DiceResponse diceResponse) {
         JSONObject message = new JSONObject();
         message.put(MESSAGE_TYPE, RESPONSE);
         message.put(COMMAND_TYPE, DICE_LIST);
         JSONObject diceList = new JSONObject();
         diceList.put(DESTINATION, diceResponse.getDst());
         JSONArray diceArray = new JSONArray();
-        for(Dice dice:diceResponse.getDiceList()) {
+        for(Dice dice : diceResponse.getDiceList()) {
             JSONObject diceM = new JSONObject();
             diceM.put(ID, dice.getId()+"");
             diceM.put(VALUE, dice.getValue()+"");
@@ -31,7 +37,7 @@ public class MessageParser implements CommandKeyword {
         return message.toJSONString();
     }
 
-    public String createJsonWindowResponse(WindowResponse windowResponse) {
+    private String createJsonWindowResponse(WindowResponse windowResponse) {
         JSONObject message = new JSONObject();
         message.put(MESSAGE_TYPE, RESPONSE);
         message.put(COMMAND_TYPE, WINDOW_LIST);
@@ -43,7 +49,7 @@ public class MessageParser implements CommandKeyword {
         return message.toJSONString();
     }
 
-    public String createJsonBeginTurnEvent(BeginTurnEvent beginTurnEvent) {
+    private String createJsonBeginTurnEvent(BeginTurnEvent beginTurnEvent) {
         JSONObject message = new JSONObject();
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, beginTurnEvent.getIdPlayer());
@@ -53,7 +59,7 @@ public class MessageParser implements CommandKeyword {
         return message.toJSONString();
     }
 
-    public String createJsonRuleResponse(RuleResponse ruleResponse) {
+    private String createJsonRuleResponse(RuleResponse ruleResponse) {
         JSONObject message = new JSONObject();
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, ruleResponse.getPlayerId());
@@ -64,7 +70,7 @@ public class MessageParser implements CommandKeyword {
         return message.toJSONString();
     }
 
-    public String createOpponentWindowsResponse(OpponentWindowResponse opponentWindowResponse) {
+    private String createOpponentWindowsResponse(OpponentWindowResponse opponentWindowResponse) {
         List<String> players = opponentWindowResponse.getPlayers();
         JSONArray windows = new JSONArray();
         for(String player : players) {
@@ -81,7 +87,7 @@ public class MessageParser implements CommandKeyword {
         return container.toJSONString();
     }
 
-    public String createOpponentDiceResponse(OpponentDiceMoveResponse opponentDiceMoveResponse) {
+    private String createOpponentDiceResponse(OpponentDiceMoveResponse opponentDiceMoveResponse) {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, opponentDiceMoveResponse.getIdPlayer());
         content.put(DICE_ID, opponentDiceMoveResponse.getDice().getId()+"");
@@ -99,7 +105,7 @@ public class MessageParser implements CommandKeyword {
         return container.toJSONString();
     }
 
-    public String createJsonNewRoundResponse(NewTurnResponse newTurnResponse) {
+    private String createJsonNewRoundResponse(NewTurnResponse newTurnResponse) {
         JSONObject content = new JSONObject();
         content.put(NEW_ROUND, newTurnResponse.getRound()+"");
         JSONObject container = new JSONObject();
@@ -107,5 +113,101 @@ public class MessageParser implements CommandKeyword {
         container.put(MESSAGE_TYPE, RESPONSE);
         container.put(NEW_ROUND, content);
         return container.toJSONString();
+    }
+
+    private String createJsonPublicObjectivesResponse(PublicObjectiveResponse publicObjectiveResponse) {
+        List<Integer> publicObjectiveIds = publicObjectiveResponse.getIdObjective();
+        JSONArray ids = new JSONArray();
+        for(int publicObjectiveId : publicObjectiveIds) {
+            JSONObject id = new JSONObject();
+            id.put(ID, publicObjectiveId + "");
+            ids.add(id);
+        }
+        JSONObject container = new JSONObject();
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, PUBLIC_OBJECTIVES);
+        container.put(PUBLIC_OBJECTIVES, ids);
+        return container.toJSONString();
+    }
+
+    private String createJsonPrivateObjectiveResponse(PrivateObjectiveResponse privateObjectiveResponse) {
+        JSONObject content = new JSONObject();
+        content.put(ID, privateObjectiveResponse.getIdObjective() + "");
+        content.put(PLAYER_ID, privateObjectiveResponse.getIdPlayer());
+        JSONObject container = new JSONObject();
+        container.put(COMMAND_TYPE, PRIVATE_OBJECTIVE);
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(PRIVATE_OBJECTIVE, content);
+        return container.toJSONString();
+    }
+
+    private String createJsonToolCardsResponse(ToolCardResponse toolCardResponse) {
+        List<Integer> toolCardIds = toolCardResponse.getIds();
+        JSONArray ids = new JSONArray();
+        for(int toolCardId : toolCardIds) {
+            JSONObject id = new JSONObject();
+            id.put(ID, toolCardId + "");
+            ids.add(id);
+        }
+        JSONObject container = new JSONObject();
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, TOOL_CARDS);
+        container.put(TOOL_CARDS, ids);
+        return container.toJSONString();
+    }
+
+    @Override
+    public String visit(Message message) {
+        return ERROR;
+    }
+
+    @Override
+    public String visit(DiceResponse diceResponse) {
+        return createJsonDiceResponse(diceResponse);
+    }
+
+    @Override
+    public String visit(WindowResponse windowResponse) {
+        return createJsonWindowResponse(windowResponse);
+    }
+
+    @Override
+    public String visit(BeginTurnEvent beginTurnEvent) {
+        return createJsonBeginTurnEvent(beginTurnEvent);
+    }
+
+    @Override
+    public String visit(OpponentWindowResponse opponentWindowResponse) {
+        return createOpponentWindowsResponse(opponentWindowResponse);
+    }
+
+    @Override
+    public String visit(OpponentDiceMoveResponse opponentDiceMoveResponse) {
+        return createOpponentDiceResponse(opponentDiceMoveResponse);
+    }
+
+    @Override
+    public String visit(NewTurnResponse newTurnResponse) {
+        return createJsonNewRoundResponse(newTurnResponse);
+    }
+
+    @Override
+    public String visit(RuleResponse ruleResponse) {
+        return createJsonRuleResponse(ruleResponse);
+    }
+
+    @Override
+    public String visit(PublicObjectiveResponse publicObjectiveResponse) {
+        return createJsonPublicObjectivesResponse(publicObjectiveResponse);
+    }
+
+    @Override
+    public String visit(PrivateObjectiveResponse privateObjectiveResponse) {
+        return createJsonPrivateObjectiveResponse(privateObjectiveResponse);
+    }
+
+    @Override
+    public String visit(ToolCardResponse toolCardResponse) {
+        return createJsonToolCardsResponse(toolCardResponse);
     }
 }

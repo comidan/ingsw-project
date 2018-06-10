@@ -98,18 +98,25 @@ public class GameManager implements Channel<Message, Message> {
         privateObjective = cardManager.dealPrivateObjective(players.size());
         for (int i = 0; i < players.size(); i++) {
             players.get(i).setPrivateObjectiveCard(privateObjective.get(i));
+            sendMessage(new PrivateObjectiveResponse(privateObjective.get(i).getId(), players.get(i).getId()));
         }
     }
 
     private void dealToolState() {
         List<ToolCard> tools = cardManager.dealTool();
         toolManager = ToolManager.getInstance(tools);
+        List<Integer> toolCardIds = new ArrayList<>();
+        tools.forEach(toolCard -> toolCardIds.add(toolCard.getId()));
+        sendMessage(new ToolCardResponse(toolCardIds));
     }
 
     private void dealPublicObjectiveState() {
         List<ObjectiveCard> publicObjective;
         publicObjective = cardManager.dealPublicObjective();
         scoreTrack = ScoreTrack.getScoreTrack(publicObjective);
+        List<Integer> publicObjectiveIds = new ArrayList<>();
+        publicObjective.forEach(objectiveCard -> publicObjectiveIds.add(objectiveCard.getId()));
+        sendMessage(new PublicObjectiveResponse(publicObjectiveIds));
     }
 
     private void dealWindowState() {
@@ -157,6 +164,7 @@ public class GameManager implements Channel<Message, Message> {
             System.out.println("Begin turn sent to " + beginTurnEvent.getIdPlayer());
         }
         else {
+            System.out.println("Ending round...");
             List<Dice> diceToRoundTrack = diceManager.putDiceRoundTrack();
             roundTrack.addDice(diceToRoundTrack, stateIterator.getRoundNumber());
             sendMessage(new DiceResponse(CommandKeyword.ROUND_TRACK, diceToRoundTrack));
@@ -172,18 +180,16 @@ public class GameManager implements Channel<Message, Message> {
             ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
             if(errorType == ErrorType.NO_ERROR) {
                 sendMessage(new OpponentDiceMoveResponse(idPlayer, dice, position));
-                sendMessage(new DiceResponse("draft", diceManager.getDraft()));
+                sendMessage(new DiceResponse(CommandKeyword.DRAFT, diceManager.getDraft()));
             }
             else {
                 //revert model to the previous move
                 diceManager.revert();
                 window.resetCell(position.getRow(), position.getCol());
-
             }
             sendMessage(new RuleResponse(idPlayer, errorType == ErrorType.NO_ERROR));
         }
     }
-
 
     private void scoreState() {
         for (Player p:players) {
@@ -213,6 +219,7 @@ public class GameManager implements Channel<Message, Message> {
     @Override
     public void dispatch(Message message) {
         String eventType = message.getType().getName();
+        System.out.println(eventType);
         if(eventType.equals(EventTypeEnum.toString(WINDOW_GAME_MANAGER_EVENT))) {
             WindowGameManagerEvent msgW = (WindowGameManagerEvent) message;
             dealWindowsToPlayer(idToPlayer(msgW.getIdPlayer()), msgW.getWindow());
