@@ -14,6 +14,9 @@ import java.util.Properties;
 public abstract class Database
 {
     public static final int MYSQL_STANDARD_REGISTERED_PORT = 3306;
+    public static final String MYSQL_STANDARD_USERNAME = "root";
+    public static final String MYSQL_STANDARD_AUTH = "";
+    public static final String MYSQL_STANDARD_DB_NAME = "sagrada";
 
     protected String databaseURL;
     protected String username;

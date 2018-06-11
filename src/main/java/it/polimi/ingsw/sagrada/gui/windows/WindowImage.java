@@ -1,14 +1,17 @@
 package it.polimi.ingsw.sagrada.gui.windows;
 
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class WindowImage extends ImageView {
+import java.io.InputStream;
+
+class WindowImage extends ImageView {
     private int windowId;
     private WindowSide side;
 
-    public WindowImage(String path, int windowId, WindowSide side) {
-        super(path);
+    WindowImage(InputStream imageStream, int windowId, WindowSide side) {
+        super(new Image(imageStream));
         this.windowId = windowId;
         this.side = side;
     }

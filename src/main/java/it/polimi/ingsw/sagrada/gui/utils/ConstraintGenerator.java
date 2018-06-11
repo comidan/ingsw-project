@@ -9,18 +9,20 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ConstraintGenerator {
     private static final Logger LOGGER = Logger.getAnonymousLogger();
-    private static final String BASE_PATH = "src/main/resources/json/window/";
+    private static final String BASE_PATH = "/json/window/";
     private JSONArray windowsArray;
 
     public ConstraintGenerator() {
         try {
             JSONParser parser = new JSONParser();
-            windowsArray = (JSONArray) parser.parse(new FileReader(BASE_PATH + "Windows.json"));
+            windowsArray = (JSONArray) parser.parse(new InputStreamReader(ConstraintGenerator.class
+                                                    .getResourceAsStream(BASE_PATH + "Windows.json")));
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Something breaks in reading JSON file");
         } catch (ParseException e) {

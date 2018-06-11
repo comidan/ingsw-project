@@ -7,10 +7,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.io.File;
+import java.io.InputStreamReader;
 
 public class CellView extends ImageView {
 
-    private static final String DICE_IMAGE_ROOT_PATH = "src/main/resources/images/DiceImages/";
+    private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
     private int row;
     private int col;
     private int diceId;
@@ -23,7 +24,7 @@ public class CellView extends ImageView {
         this.col = col;
         this.constraint = constraint;
         this.occupied = false;
-        cellConstraint = new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getConstraintFileName(constraint)).toURI().toString(), 60, 60, true, false);
+        cellConstraint = new Image(CellView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getConstraintFileName(constraint)), 60, 60, true, false);
         setImage(cellConstraint);
     }
 
@@ -46,7 +47,7 @@ public class CellView extends ImageView {
     public void setImageCell(DiceView diceView) {
                 Constraint color = diceView.getColor();
                 Constraint value = diceView.getValue();
-                setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)).toURI().toString(), 60, 60, true, false));
+                setImage(new Image(CellView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)), 60, 60, true, false));
                 this.occupied = true;
     }
 

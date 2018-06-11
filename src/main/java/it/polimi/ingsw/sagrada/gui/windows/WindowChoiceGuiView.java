@@ -18,11 +18,12 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WindowChoiceGuiView extends Application {
-    private static final String BASE_PATH = "src/main/resources/images/window_images/window";
+    private static final String BASE_PATH = "/images/window_images/window";
 
     private double windowHeight;
     private double windowWidth;
@@ -108,13 +109,10 @@ public class WindowChoiceGuiView extends Application {
 
         //windows upload
         windowResponse.getIds().forEach(id -> {
-            String path = BASE_PATH+id.toString();
-            imageViewList.add(new WindowImage(
-                    new File(path+"Front.jpg").toURI().toString(),
-                    id, WindowSide.FRONT));
-            imageViewList.add(new WindowImage(
-                    new File(path+"Rear.jpg").toURI().toString(),
-                    id, WindowSide.REAR));
+            InputStream pathFront = WindowChoiceGuiView.class.getResourceAsStream(BASE_PATH + id.toString() + "Front.jpg");
+            InputStream pathRear = WindowChoiceGuiView.class.getResourceAsStream(BASE_PATH + id.toString() + "Rear.jpg");
+            imageViewList.add(new WindowImage(pathFront, id, WindowSide.FRONT));
+            imageViewList.add(new WindowImage(pathRear, id, WindowSide.REAR));
         });
 
         //Window styling

@@ -14,7 +14,7 @@ import java.io.File;
 
 public class ToolCardView extends StackPane {
 
-    private static final String TOOL_IMAGE_ROOT_PATH = "src/main/resources/images/ToolImages/";
+    private static final String TOOL_IMAGE_ROOT_PATH = "/images/ToolImages/";
     private int id;
     private Resizer resizer;
     private int tokenNumber = 0;
@@ -26,7 +26,7 @@ public class ToolCardView extends StackPane {
         this.resizer = new Resizer();
         this.id = id;
         ImageView imageView = new ImageView();
-        imageView.setImage(new Image(new File(TOOL_IMAGE_ROOT_PATH + Integer.toString(id) + ".jpg").toURI().toString(), resizer.getWidthPixel(15), resizer.getHeightPixel(20), true, false));
+        imageView.setImage(new Image(ToolCardView.class.getResourceAsStream(TOOL_IMAGE_ROOT_PATH + Integer.toString(id) + ".jpg"), resizer.getWidthPixel(15), resizer.getHeightPixel(20), true, false));
         this.getChildren().add(imageView);
         this.getChildren().add(tokenGrid);
         label = new Label();

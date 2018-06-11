@@ -14,6 +14,7 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -26,7 +27,7 @@ import java.util.logging.Logger;
 public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel<Message, LoginState> {
 
     private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
-    private static final String NETWORK_CONFIG_PATH = "src/main/resources/json/config/network_config.json";
+    private static final String NETWORK_CONFIG_PATH = "/json/config/network_config.json";
     private static final Logger LOGGER = Logger.getLogger(RMIClient.class.getName());
     private static final String ADDRESS = getConfigAddress();
     private static final String PROTOCOL = "rmi://";
@@ -128,7 +129,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         JSONParser parser = new JSONParser();
         try {
 
-            Object obj = parser.parse(new FileReader(NETWORK_CONFIG_PATH));
+            Object obj = parser.parse(new InputStreamReader(RMIClient.class.getResourceAsStream(NETWORK_CONFIG_PATH)));
             JSONObject jsonObject = (JSONObject) obj;
             return (String) jsonObject.get("ip_address");
         }

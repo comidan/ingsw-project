@@ -17,7 +17,7 @@ import java.io.File;
  */
 public class DiceView extends ImageView{
 
-    private static final String DICE_IMAGE_ROOT_PATH = "src/main/resources/images/DiceImages/";
+    private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
     private Constraint color;
     private Constraint value;
     private int id;
@@ -26,7 +26,7 @@ public class DiceView extends ImageView{
         this.color = color;
         this.value = value;
         this.id = id;
-        setImage(new Image(new File(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)).toURI().toString(), 50, 50, true, false));
+        setImage(new Image(DiceView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)), 50, 50, true, false));
     }
 
     public Constraint getColor() {

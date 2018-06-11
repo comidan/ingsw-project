@@ -10,13 +10,14 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class AdvancedEncryptionStandard {
 
     private static final Logger LOGGER = Logger.getLogger(AdvancedEncryptionStandard.class.getName());
-    private static final String KEY_STORE_PATH = "src/main/resources/json/security/KeyStore.json";
+    private static final String KEY_STORE_PATH = "/json/security/KeyStore.json";
     private static final String KEY = getKey(); // WARNING : PLEASE FIND A MORE SECURE WAY
     private static final String INIT_VECTOR = getInitializationVector();
     private static final String ENCODING = "UTF-8";
@@ -74,7 +75,7 @@ class AdvancedEncryptionStandard {
         JSONParser parser = new JSONParser();
         try {
 
-            Object obj = parser.parse(new FileReader(KEY_STORE_PATH));
+            Object obj = parser.parse(new InputStreamReader(AdvancedEncryptionStandard.class.getResourceAsStream(KEY_STORE_PATH)));
             JSONObject jsonObject = (JSONObject) obj;
             return (String) jsonObject.get("key");
         }
@@ -89,7 +90,7 @@ class AdvancedEncryptionStandard {
 
         try {
 
-            Object obj = parser.parse(new FileReader(KEY_STORE_PATH));
+            Object obj = parser.parse(new InputStreamReader(AdvancedEncryptionStandard.class.getResourceAsStream(KEY_STORE_PATH)));
             JSONObject jsonObject = (JSONObject) obj;
             return (String) jsonObject.get("initialization_vector");
         }

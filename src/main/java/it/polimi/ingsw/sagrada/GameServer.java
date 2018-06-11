@@ -54,7 +54,7 @@ public class GameServer {
             Enumeration classEnum = jar.entries();
             while (classEnum.hasMoreElements()) {
                 JarEntry file = (java.util.jar.JarEntry) classEnum.nextElement();
-                if(file.getName().startsWith("it") || file.getName().startsWith("json/") || file.getName().startsWith("json/")) {
+                if(file.getName().startsWith("it")) {
                     File f = new java.io.File(destDir + file.getName());
                     System.out.println("Extracting " + file.getName());
                     f.getParentFile().mkdirs();

@@ -68,7 +68,7 @@ public class GameGuiAdapter {
                         int row = cellView.getRow();
                         int col = cellView.getCol();
                         Position position = new Position(row, col);
-                        DiceEvent diceEvent = new DiceEvent(username, idDice, position, "draft");
+                        DiceEvent diceEvent = new DiceEvent(username, idDice, position, CommandKeyword.DRAFT);
                         try {
                             client.sendRemoteMessage(diceEvent);
                             System.out.println("Notified dice move");

@@ -12,6 +12,7 @@ import it.polimi.ingsw.sagrada.game.playables.Token;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.game.rules.CellRule;
+import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +20,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,8 +30,7 @@ import java.util.logging.Logger;
 
 public class WindowManager implements Channel<WindowEvent, WindowResponse> {
 
-    private static final String BASE_PATH_ALT = "src/main/resources/json/window/";
-    private static final String BASE_PATH = "bytecode/json/window/";
+    private static final String BASE_PATH = "/json/window/Windows.json";
     private static final int WINDOWS_PER_CARD = 2;
     private static final int NUM_OF_WINDOWS = 12;
 
@@ -46,19 +47,11 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         List<Integer> id = new ArrayList<>();
         for (int i = 0; i < NUM_OF_WINDOWS; i++) id.add(i);
         try {
-            windowsArray = (JSONArray) parser.parse(new FileReader(BASE_PATH + "Windows.json"));
+            windowsArray = (JSONArray) parser.parse(new InputStreamReader(WindowManager.class.getResourceAsStream(BASE_PATH)));
             picker = new Picker<>(id).pickerIterator();
         }
         catch (IOException e) {
-            try {
-                windowsArray = (JSONArray) parser.parse(new FileReader(BASE_PATH_ALT + "Windows.json"));
-                picker = new Picker<>(id).pickerIterator();
-            } catch (IOException exc) {
-                logger.log(Level.SEVERE, "Something breaks in reading JSON file");
-            }
-            catch (ParseException exc) {
-                logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
-            }
+            logger.log(Level.SEVERE, "Something breaks in reading JSON file");
         }
         catch (ParseException e) {
             logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
