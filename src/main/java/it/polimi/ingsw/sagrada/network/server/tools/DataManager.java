@@ -25,7 +25,8 @@ public class DataManager {
 
     private static final Logger LOGGER = Logger.getLogger(DataManager.class.getName());
     private static final Map<String, String> loggedUsers = new HashMap<>();
-    private static final String DATABASE_CONFIG_PATH = "src/main/resources/json/config/database_config.json";
+    private static final String DATABASE_CONFIG_PATH_ALT = "src/main/resources/json/config/database_config.json";
+    private static final String DATABASE_CONFIG_PATH = "bytecode/json/config/database_config.json";
     private static final String NETWORK_CONFIG_ERROR = "network config fatal error";
 
     private Database database;
@@ -161,8 +162,16 @@ public class DataManager {
             return (String) jsonObject.get("dbms_username");
         }
         catch (Exception exc) {
-            LOGGER.log(Level.SEVERE, () -> NETWORK_CONFIG_ERROR);
-            return "";
+            try {
+
+                Object obj = parser.parse(new FileReader(DATABASE_CONFIG_PATH_ALT));
+                JSONObject jsonObject = (JSONObject) obj;
+                return (String) jsonObject.get("dbms_username");
+            }
+            catch (Exception e) {
+                LOGGER.log(Level.SEVERE, () -> NETWORK_CONFIG_ERROR);
+                return "";
+            }
         }
     }
 
@@ -175,8 +184,16 @@ public class DataManager {
             return (String) jsonObject.get("dbms_auth");
         }
         catch (Exception exc) {
-            LOGGER.log(Level.SEVERE, () -> NETWORK_CONFIG_ERROR);
-            return "";
+            try {
+
+                Object obj = parser.parse(new FileReader(DATABASE_CONFIG_PATH_ALT));
+                JSONObject jsonObject = (JSONObject) obj;
+                return (String) jsonObject.get("dbms_auth");
+            }
+            catch (Exception e) {
+                LOGGER.log(Level.SEVERE, () -> NETWORK_CONFIG_ERROR);
+                return "";
+            }
         }
     }
 
@@ -189,8 +206,16 @@ public class DataManager {
             return (String) jsonObject.get("db_name");
         }
         catch (Exception exc) {
-            LOGGER.log(Level.SEVERE, () -> NETWORK_CONFIG_ERROR);
-            return "";
+            try {
+
+                Object obj = parser.parse(new FileReader(DATABASE_CONFIG_PATH_ALT));
+                JSONObject jsonObject = (JSONObject) obj;
+                return (String) jsonObject.get("db_name");
+            }
+            catch (Exception e) {
+                LOGGER.log(Level.SEVERE, () -> NETWORK_CONFIG_ERROR);
+                return "";
+            }
         }
     }
 
@@ -203,8 +228,16 @@ public class DataManager {
             return Integer.parseInt((String) jsonObject.get("dbms_port"));
         }
         catch (Exception exc) {
-            LOGGER.log(Level.SEVERE, () -> NETWORK_CONFIG_ERROR);
-            return Database.MYSQL_STANDARD_REGISTERED_PORT;
+            try {
+
+                Object obj = parser.parse(new FileReader(DATABASE_CONFIG_PATH_ALT));
+                JSONObject jsonObject = (JSONObject) obj;
+                return Integer.parseInt((String) jsonObject.get("dbms_port"));
+            }
+            catch (Exception e) {
+                LOGGER.log(Level.SEVERE, () -> NETWORK_CONFIG_ERROR);
+                return Database.MYSQL_STANDARD_REGISTERED_PORT;
+            }
         }
     }
 }

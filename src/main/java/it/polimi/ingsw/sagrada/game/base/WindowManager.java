@@ -28,7 +28,8 @@ import java.util.logging.Logger;
 
 public class WindowManager implements Channel<WindowEvent, WindowResponse> {
 
-    private static final String BASE_PATH = "src/main/resources/json/window/";
+    private static final String BASE_PATH_ALT = "src/main/resources/json/window/";
+    private static final String BASE_PATH = "bytecode/json/window/";
     private static final int WINDOWS_PER_CARD = 2;
     private static final int NUM_OF_WINDOWS = 12;
 
@@ -47,9 +48,19 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         try {
             windowsArray = (JSONArray) parser.parse(new FileReader(BASE_PATH + "Windows.json"));
             picker = new Picker<>(id).pickerIterator();
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Something breaks in reading JSON file");
-        } catch (ParseException e) {
+        }
+        catch (IOException e) {
+            try {
+                windowsArray = (JSONArray) parser.parse(new FileReader(BASE_PATH_ALT + "Windows.json"));
+                picker = new Picker<>(id).pickerIterator();
+            } catch (IOException exc) {
+                logger.log(Level.SEVERE, "Something breaks in reading JSON file");
+            }
+            catch (ParseException exc) {
+                logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
+            }
+        }
+        catch (ParseException e) {
             logger.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
         }
 

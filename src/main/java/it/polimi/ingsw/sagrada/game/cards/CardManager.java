@@ -28,8 +28,10 @@ public class CardManager {
 	private static final int NUM_PUBLIC_OBJECTIVE = 3;
 	private static final int NUM_TOOLS = 3;
 
-	private static final String BASE_PATH_OBJECTIVE = "src/main/resources/json/objective/";
-	private static final String BASE_PATH_TOOL = "src/main/resources/json/tool/";
+	private static final String BASE_PATH_OBJECTIVE_ALT = "src/main/resources/json/objective/";
+	private static final String BASE_PATH_TOOL_ALT = "src/main/resources/json/tool/";
+	private static final String BASE_PATH_OBJECTIVE = "bytecode/json/objective/";
+	private static final String BASE_PATH_TOOL = "bytecode/json/tool/";
 
 	private static final Logger LOGGER = Logger.getLogger(Colors.class.getName());
 
@@ -41,7 +43,7 @@ public class CardManager {
 
 		JSONParser parser = new JSONParser();
 		try{
-			JSONArray tools = (JSONArray)parser.parse(new FileReader(BASE_PATH_TOOL+"ToolCard.json"));
+			JSONArray tools = (JSONArray)parser.parse(new FileReader(BASE_PATH_TOOL + "ToolCard.json"));
 			Iterator<JSONObject> picker = new Picker<JSONObject>(tools).pickerIterator();
 			for(int i=0; i<NUM_TOOLS; i++) {
 				if(picker.hasNext()) {
@@ -54,7 +56,24 @@ public class CardManager {
 				}
 			}
 		}catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Something breaks in reading JSON file");
+			try{
+				JSONArray tools = (JSONArray)parser.parse(new FileReader(BASE_PATH_TOOL_ALT + "ToolCard.json"));
+				Iterator<JSONObject> picker = new Picker<JSONObject>(tools).pickerIterator();
+				for(int i=0; i<NUM_TOOLS; i++) {
+					if(picker.hasNext()) {
+						JSONObject tool = picker.next();
+						int id = ((Long)tool.get("id")).intValue();
+						String name = (String)tool.get("name");
+						JSONArray actions = (JSONArray)tool.get("action");
+
+						toolCards.add(new ToolCard(id, name, getToolRule(actions)));
+					}
+				}
+			}catch (IOException exc) {
+				LOGGER.log(Level.SEVERE, "Something breaks in reading JSON file");
+			} catch (ParseException exc) {
+				LOGGER.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
+			}
 		} catch (ParseException e) {
 			LOGGER.log(Level.SEVERE, "JSON parser founds something wrong, check JSON file");
 		}
@@ -97,7 +116,23 @@ public class CardManager {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, () -> "Something breaks in reading JSON file");
+			try{
+				JSONArray publicObjective = (JSONArray)parser.parse(new FileReader(BASE_PATH_OBJECTIVE_ALT + "PublicObjective.json"));
+				Iterator<JSONObject> picker = new Picker<JSONObject>(publicObjective).pickerIterator();
+				for(int i=0; i<NUM_PUBLIC_OBJECTIVE; i++) {
+					if(picker.hasNext()) {
+						JSONObject card = picker.next();
+						int id = ((Long)card.get("id")).intValue();
+						int value = ((Long)card.get("value")).intValue();
+						String name = (String)card.get("name");
+						cards.add(new ObjectiveCard(id, name, findObjectiveRule(id, value)));
+					}
+				}
+			} catch (IOException exc) {
+				LOGGER.log(Level.SEVERE, () -> "Something breaks in reading JSON file");
+			} catch (ParseException exc) {
+				LOGGER.log(Level.SEVERE, () -> "JSON parser founds something wrong, check JSON file");
+			}
 		} catch (ParseException e) {
 			LOGGER.log(Level.SEVERE, () -> "JSON parser founds something wrong, check JSON file");
 		}
