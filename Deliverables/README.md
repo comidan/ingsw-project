@@ -313,7 +313,7 @@
     - Release:	14.04
     
 # SonarQube last run screen : 
-[![N|SonarQube](https://preview.ibb.co/dPiY1J/sonar_Qube_Test_Intro.png)](https://preview.ibb.co/dPiY1J/sonar_Qube_Test_Intro.png)
+[![N|SonarQube](http://upload.vstanced.com/images/2018/06/13/yyC.jpg)](http://upload.vstanced.com/images/2018/06/13/yyC.jpg)
 
 # Testing coverage :
  - ### Detailed coverage [here](https://github.com/Daniele-Comi/ingsw-project/wiki/Coverage-report)
