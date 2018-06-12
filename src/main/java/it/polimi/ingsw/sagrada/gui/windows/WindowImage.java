@@ -6,11 +6,11 @@ import javafx.scene.image.ImageView;
 
 import java.io.InputStream;
 
-class WindowImage extends ImageView {
+public class WindowImage extends ImageView {
     private int windowId;
     private WindowSide side;
 
-    WindowImage(InputStream imageStream, int windowId, WindowSide side) {
+    public WindowImage(InputStream imageStream, int windowId, WindowSide side) {
         super(new Image(imageStream));
         this.windowId = windowId;
         this.side = side;

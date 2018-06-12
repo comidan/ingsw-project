@@ -46,4 +46,12 @@ public class Dice implements Serializable {
     public void roll() {
         value = ThreadLocalRandom.current().nextInt(1,MAX_VALUE + 1);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Dice))
+            return false;
+        Dice dice = (Dice) obj;
+        return id == dice.getId();
+    }
 }

@@ -14,11 +14,11 @@ public class Resizer {
     }
 
     public double getHeightPixel(int perc) {
-        return (perc * windowHeight / 100);
+        return perc * windowHeight / 100;
     }
 
     public double getWidthPixel(int perc) {
-        return (perc * windowWidth / 100);
+        return perc * windowWidth / 100;
     }
 
     public double getWindowHeight(){

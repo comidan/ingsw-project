@@ -45,14 +45,14 @@ public class GUIManager {
     }
 
     public static double getHeightPixel(int perc) {
-        return (perc * getWindowHeight() / 100);
+        return perc * getWindowHeight() / 100;
     }
 
     public static double getWidthPixel(int perc) {
-        return (perc * getWindowWidth() / 100);
+        return perc * getWindowWidth() / 100;
     }
 
     public static double getResizedFont(double dim) {
-        return dim*getScreenHeight()/1080;
+        return dim * getScreenHeight() / 1080;
     }
 }

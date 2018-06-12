@@ -48,7 +48,8 @@ public class CellView extends ImageView {
                 Constraint color = diceView.getColor();
                 Constraint value = diceView.getValue();
                 setImage(new Image(CellView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)), 60, 60, true, false));
-                this.occupied = true;
+                occupied = true;
+                diceId = diceView.getDiceID();
     }
 
     public boolean isOccupied(){

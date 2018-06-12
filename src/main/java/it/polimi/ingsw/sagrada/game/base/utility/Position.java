@@ -18,4 +18,12 @@ public class Position implements Serializable {
     public int getCol() {
         return col;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Position))
+            return false;
+        Position position = (Position) obj;
+        return row == position.getRow() && col == position.getCol();
+    }
 }

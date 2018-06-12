@@ -10,8 +10,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
-import java.io.File;
-
 public class ToolCardView extends StackPane {
 
     private static final String TOOL_IMAGE_ROOT_PATH = "/images/ToolImages/";
