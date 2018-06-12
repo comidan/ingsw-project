@@ -161,7 +161,6 @@ public class DataManager {
             return (String) jsonObject.get("dbms_username");
         }
         catch (Exception exc) {
-            exc.printStackTrace();
             LOGGER.log(Level.SEVERE, NETWORK_CONFIG_ERROR);
             return Database.MYSQL_STANDARD_USERNAME;
         }

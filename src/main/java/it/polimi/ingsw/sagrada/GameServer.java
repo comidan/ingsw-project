@@ -61,7 +61,9 @@ public class GameServer {
                     if (file.isDirectory()) {
                         f.mkdir();
                         continue;
-                    } else f.createNewFile();
+                    }
+                    else if(!f.createNewFile())
+                        LOGGER.log(Level.SEVERE, () -> "Error creating file");
                     InputStream is =  jar.getInputStream(file);
                     try(FileOutputStream fos = new java.io.FileOutputStream(f)) {
                         while (is.available() > 0)

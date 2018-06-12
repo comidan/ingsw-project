@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.game.playables;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -53,5 +54,10 @@ public class Dice implements Serializable {
             return false;
         Dice dice = (Dice) obj;
         return id == dice.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, value, color);
     }
 }

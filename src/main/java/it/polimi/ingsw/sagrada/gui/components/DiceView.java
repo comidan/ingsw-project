@@ -9,8 +9,6 @@ import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.File;
-
 /**
  *
  * @author Daniele

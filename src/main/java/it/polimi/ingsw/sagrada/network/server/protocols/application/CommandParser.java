@@ -62,30 +62,6 @@ public class CommandParser implements CommandKeyword {
         }
     }
 
-    private Message parseChoice(JSONObject message) {
-        switch((String)message.get(COMMAND_TYPE)) {
-            case WINDOW_CHOICE:
-                JSONObject messageW = (JSONObject)message.get(WINDOW);
-                String idPlayerW = (String)messageW.get(PLAYER_ID);
-                int idWindow = Integer.parseInt((String)messageW.get(WINDOW_ID));
-                WindowSide side = WindowSide.stringToWindowSide((String)messageW.get(WINDOW_SIDE));
-                return new WindowEvent(idPlayerW, idWindow, side);
-            case MOVE_DICE_CHOICE:
-                JSONObject data = (JSONObject) message.get(MOVE_DICE);
-                String idPlayerD = (String)data.get(PLAYER_ID);
-                int idDice = Integer.parseInt((String)data.get(DICE_ID));
-                String source = (String)data.get("source");
-                JSONObject pos = (JSONObject)data.get(POSITION);
-                int row = Integer.parseInt((String)pos.get("y"));
-                int col = Integer.parseInt((String)pos.get("x"));
-                Position position = new Position(row, col);
-                return  new DiceEvent(idPlayerD, idDice, position, source);
-            case "end_turn":
-                return new EndTurnEvent((String)message.get(PLAYER_ID));
-            default: return null;
-        }
-    }
-
     public String createJSONCountdown(String time) {
         JSONObject content = new JSONObject();
         content.put(TIME, time);
@@ -96,9 +72,9 @@ public class CommandParser implements CommandKeyword {
         return container.toJSONString();
     }
 
-    public String createJSONAddLobbyPlayer(String time) {
+    public String createJSONAddLobbyPlayer(String username) {
         JSONObject content = new JSONObject();
-        content.put(USERNAME, time);
+        content.put(USERNAME, username);
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, RESPONSE);
         container.put(COMMAND_TYPE, ADD_PLAYER);
@@ -106,9 +82,9 @@ public class CommandParser implements CommandKeyword {
         return container.toJSONString();
     }
 
-    public String createJSONRemoveLobbyPlayer(String time) {
+    public String createJSONRemoveLobbyPlayer(String username) {
         JSONObject content = new JSONObject();
-        content.put(USERNAME, time);
+        content.put(USERNAME, username);
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, RESPONSE);
         container.put(COMMAND_TYPE, REMOVE_PLAYER);

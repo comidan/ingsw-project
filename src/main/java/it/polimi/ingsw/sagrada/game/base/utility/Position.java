@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.game.base.utility;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Position implements Serializable {
     private int row;
@@ -25,5 +26,10 @@ public class Position implements Serializable {
             return false;
         Position position = (Position) obj;
         return row == position.getRow() && col == position.getCol();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(row, col);
     }
 }
