@@ -66,246 +66,272 @@
      T E S T S
     -------------------------------------------------------
     Running it.polimi.ingsw.base.DiceManagerTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.256 sec
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.131 sec
     Running it.polimi.ingsw.base.GameManagerTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.168 sec
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.228 sec
     Running it.polimi.ingsw.base.PickerTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.base.PlayerIteratorTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
-    Running it.polimi.ingsw.base.RoundTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Running it.polimi.ingsw.base.PlayerIteratorTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Running it.polimi.ingsw.base.RoundTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.cards.PrivateObjectiveDealerTest
     Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.cards.PublicObjectiveDealerTest
+    Colori diversi - Colonna
     Sfumature medie
-    Sfumature diverse - Riga
-    Diagonali Colorate
+    Colori diversi - Riga
     Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     Running it.polimi.ingsw.cards.ToolDealerTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.database.DatabaseSQLRemoteConnectionTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.039 sec
+    Wed Jun 13 00:40:59 CEST 2018 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.659 sec
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.database.SQLDatabase connect
+    GRAVE: Fatal DB error : Access denied for user 'root'@'localhost' (using password: YES)
+    Running it.polimi.ingsw.gui.CellViewTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.29 sec
+    Running it.polimi.ingsw.gui.ConstraintGeneratorTest
+    1|W|3|B|W|
+    W|2|B|W|W|
+    6|B|W|4|W|
+    B|5|2|W|1|
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Running it.polimi.ingsw.gui.ConstraintTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.gui.DiceViewTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.gui.GUIManagerTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 sec
+    Running it.polimi.ingsw.gui.ResizerTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.gui.WindowGameManagerTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Running it.polimi.ingsw.gui.WindowImageTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Running it.polimi.ingsw.intercomm.IntercommunicationActionResponseVisitorTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.intercomm.IntercommunicationMessageVisitorTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    Running it.polimi.ingsw.intercomm.RouterTest
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse
+    it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    Window player Mottola : Aurorae Magnificus 5
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse
+    it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    Window player ingconti : Comitas 10
+    Initializing opponents windows message
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse
+    1 turn started
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    Printing
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse
+    9
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    42
+    2
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent
+    61
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    71
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse
+    End print
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    Begin turn sent to Mottola
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent
+    it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent
+    Begin turn sent to ingconti
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse
+    it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent
+    Begin turn sent to ingconti
+    it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent
+    it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent
+    Begin turn sent to Mottola
+    it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent
+    it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent
+    Ending round...
+    2 turn started
+    Printing
+    80
+    82
+    34
+    32
+    76
+    End print
+    Begin turn sent to ingconti
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Running it.polimi.ingsw.network.client.JSONMessageTest
+    Type : login_heartbeat
+    Type : login
+    Type : error
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+    Running it.polimi.ingsw.network.CommandParserTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.network.MatchLobbyPoolTest
+    1
+    2
+    giu 13, 2018 12:41:03 AM it.polimi.ingsw.sagrada.network.server.tools.MatchLobbyPool releaseLobby
+    GRAVE: Connection refused to host: 192.168.1.5; nested exception is: 
+     java.net.ConnectException: Connection refused: connect
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.232 sec
+    Running it.polimi.ingsw.network.MatchLobbyTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.network.protocols.DiscoverInternetTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.network.protocols.DiscoverLanTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.248 sec
+    giu 13, 2018 12:41:03 AM it.polimi.ingsw.network.protocols.HeartbeatTest onAcquiredCommunication
+    INFORMAZIONI: identifier connected at 1528843263442
     Running it.polimi.ingsw.network.protocols.HeartbeatTest
-    mag 16, 2018 2:19:38 PM it.polimi.ingsw.network.protocols.HeartbeatTest onAcquiredCommunication
-    INFORMAZIONI: 02-15-51-B2-CE-69                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                connected at 1526473178013
-    mag 16, 2018 2:19:39 PM it.polimi.ingsw.network.protocols.HeartbeatTest onHeartbeat
-    INFORMAZIONI: Received heartbet from 02-15-51-B2-CE-69                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                in 1000 at 1526473179014
-    mag 16, 2018 2:19:41 PM it.polimi.ingsw.network.protocols.HeartbeatTest onHeartbeat
-    INFORMAZIONI: Received heartbet from 02-15-51-B2-CE-69                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                in 2000 at 1526473181027
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.054 sec
+    3
+    giu 13, 2018 12:41:04 AM it.polimi.ingsw.network.protocols.HeartbeatTest onHeartbeat
+    INFORMAZIONI: Received heartbet from identifier in 1000 at 1528843264443
+    4
+    giu 13, 2018 12:41:05 AM it.polimi.ingsw.network.protocols.HeartbeatTest onHeartbeat
+    INFORMAZIONI: Received heartbet from identifier in 1000 at 1528843265446
+    5
+    giu 13, 2018 12:41:06 AM it.polimi.ingsw.network.protocols.HeartbeatTest onHeartbeat
+    INFORMAZIONI: Received heartbet from identifier in 1000 at 1528843266446
+    6
+    giu 13, 2018 12:41:07 AM it.polimi.ingsw.network.protocols.HeartbeatTest onHeartbeat
+    INFORMAZIONI: Received heartbet from identifier in 1000 at 1528843267446
+    7
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.995 sec
+    giu 13, 2018 12:41:08 AM it.polimi.ingsw.network.protocols.HeartbeatTest onHeartbeat
+    Running it.polimi.ingsw.network.protocols.NetworkCommunicationProtocolTest
+    INFORMAZIONI: Received heartbet from identifier in 1000 at 1528843268446
+    Type : dice_list
+    Type : window_list
+    Type : begin_turn
+    Type : opponent_window_list
+    Dice pre message: 0
+    Type : opponent_dice_response
+    Type : newround
+    Type : rule_response
+    Type : public_objectives
+    Type : private_objective
+    Type : tool_cards
+    Type : login_heartbeat
+    Type : lobby_add_player
+    Type : login
+    Type : lobby_time
+    Type : lobby_remove_player
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Running it.polimi.ingsw.network.protocols.NetworkUtilsTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.108 sec
+    Running it.polimi.ingsw.network.security.SecurityTest
+    8
+    Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.604 sec
+    Running it.polimi.ingsw.network.tools.PortDiscoveryTest
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: waiting port being discovered, you can do something else
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: waiting port being discovered, you can do something else
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: waiting port being discovered, you can do something else
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: waiting port being discovered, you can do something else
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: discover available TCP and UDP port : 49153
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: waiting port being discovered, you can do something else
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: discover available TCP port : 49153
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: waiting port being discovered, you can do something else
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: waiting port being discovered, you can do something else
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: waiting port being discovered, you can do something else
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: waiting port being discovered, you can do something else
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: waiting port being discovered, you can do something else
+    giu 13, 2018 12:41:09 AM it.polimi.ingsw.network.tools.PortDiscoveryTest portDiscoveryTest
+    INFORMAZIONI: discover available UDP port : 49152
     Running it.polimi.ingsw.playables.CellTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.playables.DiceTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     Running it.polimi.ingsw.playables.RoundTrackTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.playables.ScoreTrackTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.playables.WindowTest
-    Batllo
-    
-     | |6| | |
-     |5|L|4| |
-    3|G|Y|P|2|
-    1|4|R|5|3|
-    
-    Bellesguard
-    
-    L|6| | |Y|
-     |3|L| | |
-     |5|6|2| |
-     |4| |1|G|
-    
-    Chromatic Splendor
-    
-     | |G| | |
-    2|Y|5|L|1|
-     |R|3|P| |
-    1| |6| |4|
-    
-    Comitas
-    
-    Y| |2| |6|
-     |4| |5|Y|
-     | | |Y|5|
-    1|2|Y|3| |
-    
-    Sun Catcher
-    
-     |L|2| |Y|
-     |4| |R| |
-     | |5|Y| |
-    G|3| | |P|
-    
-    Shadow Thief
-    
-    6|P| | |5|
-    5| |P| | |
-    R|6| |P| |
-    Y|R|5|4|3|
-    
-    Symphony of Light
-    
-    2| |5| |1|
-    Y|6|P|2|R|
-     |L|4|G| |
-     |3| |5| |
-    
-    Virtus
-    
-    4| |2|5|G|
-     | |6|G|2|
-     |3|G|4| |
-    5|G|1| | |
-    
-    Aurorae Magnificus
-    
-    5|G|L|P|2|
-    P| | | |Y|
-    Y| |6| |P|
-    1| | |G|4|
-    
-    Aurora Sagradis
-    
-    R| |L| |Y|
-    4|P|3|G|2|
-     |1| |5| |
-     | |6| | |
-    
     Kaleidoscopic Dream
-    
-    Y|L| | |1|
-    G| |5| |4|
-    3| |R| |G|
-    2| | |L|Y|
-    
-    Firmitas
-    
-    P|6| | |3|
-    5|P|3| | |
-     |2|P|1| |
-     |1|5|P|4|
-    
-    Lux Mundi
-    
-     | |1| | |
-    1|G|3|L|2|
-    L|5|4|6|G|
-     |L|5|G| |
-    
-    Lux Astram
-    
-     |1|G|P|4|
-    6|P|2|5|G|
-    1|G|5|3|P|
-     | | | | |
-    
-    Via Lux
-    
-    Y| |6| | |
-     |1|5| |2|
-    3|Y|R|P| |
-     | |4|3|R|
-    
-    Industria
-    
-    1|R|3| |6|
-    5|4|R|2| |
-     | |5|R|1|
-     | | |3|R|
-    
-    Fractal Drops
-    
-     |4| |Y|6|
-    R| |2| | |
-     | |R|P|1|
-    L|Y| | | |
-    
-    Ripple of Light
-    
-     | | |R|5|
-     | |P|4|L|
-     |L|3|Y|6|
-    Y|2|G|1|R|
-    
-    Gravitas
-    
-    1| |3|L| |
-     |2|L| | |
-    6|L| |4| |
-    L|5|2| |1|
-    
-    Water of Life
-    
-    6|L| | |1|
-     |5|L| | |
-    4|R|2|L| |
-    G|6|Y|3|P|
-    
-    Fulgor del Cielo
-    
-     |L|R| | |
-     |4|5| |L|
-    L|2| |R|5|
-    6|R|3|1| |
-    
-    Luz Celestial
-    
-     | |R|5| |
-    P|4| |G|3|
-    6| | |L| |
-     |Y|2| | |
-    
-    Firelight
-    
-    3|4|1|5| |
-     |6|2| |Y|
-     | | |Y|R|
-    5| |Y|R|6|
-    
-    Sun's Glory
-    
-    1|P|Y| |4|
-    P|Y| | |6|
-    Y| | |5|3|
-     |5|4|2|1|
-    
-    Kaleidoscopic Dream
-    
-    Y|L| | |1|
-    G| |5| |4|
-    3| |R| |G|
-    2| | |L|Y|
-    
-    Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+
+    Y|B|||1|
+    G||5||4|
+    3||R||G|
+    2|||B|Y|
+
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.rules.CellBuilderTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.rules.CellRuleTest
-    Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     Running it.polimi.ingsw.rules.MainGameRuleTest
-    Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     Running it.polimi.ingsw.rules.ObjectiveBuilderTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.rules.ObjectiveRuleTest
-    Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     Running it.polimi.ingsw.rules.RuleManagerTest
-    Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+    Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     Running it.polimi.ingsw.rules.ToolBuilderTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.rules.ToolRuleTest
-    Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
-    
+    Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+
     Results :
-    
-    Tests run: 42, Failures: 0, Errors: 0, Skipped: 0
-    
+
+    Tests run: 66, Failures: 0, Errors: 0, Skipped: 0
+
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
     [INFO] ------------------------------------------------------------------------
-    [INFO] Total time: 13.140 s
-    [INFO] Finished at: 2018-05-16T14:19:42+02:00
-    [INFO] Final Memory: 11M/245M
+    [INFO] Total time: 14.189 s
+    [INFO] Finished at: 2018-06-13T00:41:09+02:00
+    [INFO] Final Memory: 12M/309M
     [INFO] ------------------------------------------------------------------------
 # Travis CI OS detils :
     - Distributor ID:	Ubuntu
@@ -313,7 +339,7 @@
     - Release:	14.04
     
 # SonarQube last run screen : 
-[![N|SonarQube](http://upload.vstanced.com/images/2018/06/13/yyC.jpg)](http://upload.vstanced.com/images/2018/06/13/yyC.jpg)
+[![N|SonarQube](http://upload.vstanced.com/images/2018/06/13/yyP.jpg)](http://upload.vstanced.com/images/2018/06/13/yyP.jpg)
 
 # Testing coverage :
  - ### Detailed coverage [here](https://github.com/Daniele-Comi/ingsw-project/wiki/Coverage-report)
