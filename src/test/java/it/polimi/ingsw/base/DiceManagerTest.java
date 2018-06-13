@@ -1,28 +1,40 @@
 package it.polimi.ingsw.base;
 
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.*;
 
 import org.junit.Test;
 
-import java.util.List;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
-public class DiceManagerTest {
-    private List<Dice> pickedDice;
+public class DiceManagerTest implements Channel<DiceResponse, DiceEvent> {
+    private int numberOfPlayers = 3;
+    private DiceManager diceManager;
 
     @Test
     public void testDicePick() {
-        /*int numberOfPlayers = 3;
-        DiceManager diceManager = new DiceManager(2, )
-        assertEquals(90, DiceManager.getDiceManager(numberOfPlayers).getBagSize());
-        pickedDice = new ArrayList<>();
-        List<Dice> diceCompared = new ArrayList<>();
-        DiceManager diceManager = DiceManager.getDiceManager(numberOfPlayers);
-        diceManager.getDice(RoundStateEnum.SETUP_ROUND);
-        pickedDice = diceManager.getDraft();
-        diceCompared.add(pickedDice.get(0));
 
-        //diceManager.setId(pickedDice.get(0).getId());
-        //assertNotNull(diceManager.getDraft());
-        //assertEquals(diceManager.getDice(RoundStateEnum.IN_GAME), diceCompared);*/
+        DynamicRouter dynamicRouter = new MessageDispatcher();
+        dynamicRouter.subscribeChannel(DiceResponse.class, this);
+        diceManager = new DiceManager(numberOfPlayers, null, dynamicRouter);
+        diceManager.bagToDraft();
+        diceManager.setNumberOfPlayers(++numberOfPlayers);
+        diceManager.bagToDraft();
+    }
+
+    @Override
+    public void dispatch(DiceResponse message) {
+        assertEquals(2 * numberOfPlayers + 1, diceManager.getDraft().size());
+        assertArrayEquals(message.getDiceList().toArray(new Dice[0]), diceManager.getDraft().toArray(new Dice[0]));
+    }
+
+    @Override
+    public void sendMessage(DiceEvent message) {
+        throw new UnsupportedOperationException();
     }
 }

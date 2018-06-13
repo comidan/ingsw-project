@@ -34,11 +34,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class JsonMessage implements CommandKeyword, ActionMessageVisitor {
+public class JsonMessage implements ActionMessageVisitor {
 
     private String playerId;
 

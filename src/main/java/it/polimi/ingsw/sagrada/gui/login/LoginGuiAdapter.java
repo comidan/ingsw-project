@@ -77,7 +77,6 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
 
     @Override
     public void dispatch(LoginState message) {
-        System.out.println("Dispatching state");
         switch (message) {
             case AUTH_FAILED_USER_ALREADY_LOGGED: loginGuiView.setErrorText("User already logged"); break;
             case AUTH_OK: changeScene(); break;
@@ -102,6 +101,6 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
 
     @Override
     public void sendMessage(Message message) {
-
+        throw new UnsupportedOperationException();
     }
 }

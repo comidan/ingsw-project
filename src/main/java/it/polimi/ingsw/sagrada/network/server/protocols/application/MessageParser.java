@@ -15,13 +15,15 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
-import it.polimi.ingsw.sagrada.network.CommandKeyword;
+
+import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.List;
 
-public class MessageParser implements CommandKeyword, ResponseMessageVisitor {
+public class MessageParser implements ResponseMessageVisitor {
 
     public String createJsonResponse(ResponseVisitor responseVisitor) {
         return responseVisitor.accept(this);

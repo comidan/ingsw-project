@@ -20,6 +20,6 @@ public class WindowController implements Channel<WindowResponse, Message> {
 
     @Override
     public void sendMessage(Message message) {
-
+        throw new UnsupportedOperationException();
     }
 }

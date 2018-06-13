@@ -12,6 +12,7 @@ public class DiceController implements Channel<DiceResponse, Message> {
 
     @Override
     public void sendMessage(Message message) {
+        throw new UnsupportedOperationException();
     }
 
     public DiceResponse getDiceResponse() {

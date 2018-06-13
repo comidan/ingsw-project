@@ -9,12 +9,14 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
-import it.polimi.ingsw.sagrada.network.CommandKeyword;
+
+import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class CommandParser implements CommandKeyword {
+public class CommandParser {
 
     public synchronized Message parse(String message) {
 

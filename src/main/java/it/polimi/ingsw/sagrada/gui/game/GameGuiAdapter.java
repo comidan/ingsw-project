@@ -37,6 +37,12 @@ public class GameGuiAdapter {
     public GameGuiAdapter(GameView gameView, Client client) {
         this.clickedObject = new ClickedObject();
         this.gameView = gameView;
+        setEndTurnHandler(client);
+        setCellHandler(client);
+        setToolHandler();
+    }
+
+    private void setEndTurnHandler(Client client) {
         Platform.runLater(() -> {
             this.draftView = this.gameView.getDraftView();
             this.roundtrackView = this.gameView.getRoundtrackView();
@@ -51,12 +57,16 @@ public class GameGuiAdapter {
                 }
 
             });
+        });
+    }
 
+    private void setCellHandler(Client client) {
+        Platform.runLater(() -> {
             this.gameView.setCellClickListener(event ->
             {
                 DiceView diceView = clickedObject.getClickedDice();
                 System.out.println(diceView == null);
-                if(diceView !=null) {
+                if (diceView != null) {
                     CellView cellView = (CellView) event.getSource();
                     System.out.println(cellView.isOccupied());
                     if (!cellView.isOccupied()) {
@@ -79,11 +89,26 @@ public class GameGuiAdapter {
                     }
                 }
             });
+        });
+    }
 
+    private void setDraftListener() {
+        Platform.runLater(() -> {
+            this.gameView.setDraftClickHandler(event ->
+            {
+                DiceView diceView = (DiceView) event.getSource();
+                clickedObject.setClickedDice(diceView);
+                System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
+            });
+        });
+    }
+
+    private void setToolHandler() {
+        Platform.runLater(() -> {
             this.gameView.setToolClickHandler(event -> {
                 ToolCardView toolCardView = (ToolCardView) event.getSource();
                 int tokenNumber;
-                if(toolCardView.getTokenNumber() == 0)
+                if (toolCardView.getTokenNumber() == 0)
                     tokenNumber = 1;
                 else tokenNumber = 2;
                 gameView.removeToken(tokenNumber);
@@ -96,35 +121,34 @@ public class GameGuiAdapter {
         });
     }
 
-    private void setDraftListener() {
-        this.gameView.setDraftClickHandler(event ->
-        {
-            DiceView diceView = (DiceView) event.getSource();
-            clickedObject.setClickedDice(diceView);
-            System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
-        });
-    }
-
     private void setRoundTrackClick(){
-        this.gameView.setRoundtrackClickHandler(event -> {
-            DiceView clickedDice = (DiceView) event.getSource();
-            clickedObject.setClickedDice(clickedDice);
+        Platform.runLater(() -> {
+            this.gameView.setRoundtrackClickHandler(event -> {
+                DiceView clickedDice = (DiceView) event.getSource();
+                clickedObject.setClickedDice(clickedDice);
+            });
         });
     }
 
 
     //method to call this on server demand must be created
     private void addDiceRoundtrack(List<DiceView> diceViewList, int roundNumber){
-        this.gameView.setRoundtrackImage(diceViewList, roundNumber);
+        Platform.runLater(() -> {
+            this.gameView.setRoundtrackImage(diceViewList, roundNumber);
+        });
     }
 
     public void setToken(int tokenNumber){
-        this.gameView.setToken(tokenNumber);
+        Platform.runLater(() -> {
+            this.gameView.setToken(tokenNumber);
+        });
     }
 
     //method to call this on server demand must be created
     public void removeMistakenDice(int row, int col){
-        this.gameView.removeMistakenDice(row, col);
+        Platform.runLater(() -> {
+            this.gameView.removeMistakenDice(row, col);
+        });
     }
 
     private void setDraft(DiceResponse diceResponse) {
@@ -177,7 +201,6 @@ public class GameGuiAdapter {
     public void notifyMoveResponse(RuleResponse ruleResponse) {
         Platform.runLater(() -> {
             if(!ruleResponse.isMoveValid()) {
-                System.out.println("Removing Dice");
                 lastMove.removeMistakenDice();
             }
         });

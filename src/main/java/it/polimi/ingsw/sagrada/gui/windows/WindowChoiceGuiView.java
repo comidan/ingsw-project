@@ -60,7 +60,7 @@ public class WindowChoiceGuiView extends Application {
     @Override
     public void start(Stage primaryStage) {
         initialize();
-        instance = this;
+        setWIndowChoiceViewInstance(this);
         primaryStage.setTitle("Window chooser");
         primaryStage.setResizable(false);
 
@@ -88,6 +88,10 @@ public class WindowChoiceGuiView extends Application {
         Scene scene = new Scene(anchorPane, windowWidth, windowHeight);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private static void setWIndowChoiceViewInstance(WindowChoiceGuiView wIndowChoiceViewInstance) {
+        WindowChoiceGuiView.instance = wIndowChoiceViewInstance;
     }
 
     private void initialize() {

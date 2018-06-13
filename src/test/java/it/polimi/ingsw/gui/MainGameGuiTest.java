@@ -57,27 +57,27 @@ public class MainGameGuiTest {
             GameGuiAdapter gameGuiAdapter = new GameGuiAdapter(gameView, new Client() {
                 @Override
                 public void startHeartbeat(int port) {
-
+                    throw new UnsupportedOperationException();
                 }
 
                 @Override
                 public void close() {
-
+                    throw new UnsupportedOperationException();
                 }
 
                 @Override
                 public void sendMessage(String message) {
-
+                    throw new UnsupportedOperationException();
                 }
 
                 @Override
                 public void sendRemoteMessage(Message message) {
-
+                    throw new UnsupportedOperationException();
                 }
 
                 @Override
                 public void disconnect() {
-
+                    throw new UnsupportedOperationException();
                 }
 
                 @Override

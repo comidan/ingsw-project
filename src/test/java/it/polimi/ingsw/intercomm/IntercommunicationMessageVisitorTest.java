@@ -92,7 +92,6 @@ public class IntercommunicationMessageVisitorTest implements MessageVisitor {
 
     @Override
     public void visit(Message message) {
-
     }
 
     @Override

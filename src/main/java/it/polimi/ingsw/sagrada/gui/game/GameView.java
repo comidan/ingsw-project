@@ -154,7 +154,11 @@ public class GameView extends Application {
     public void start(Stage primaryStage) {
         initialize();
         createScene(primaryStage);
-        gameView = this;
+        setGameViewInstance(this);
+    }
+
+    private static void setGameViewInstance(GameView gameViewInstance) {
+        gameView = gameViewInstance;
     }
 
     public void terminate() {
