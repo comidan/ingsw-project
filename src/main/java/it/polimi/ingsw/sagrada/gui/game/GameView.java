@@ -237,7 +237,11 @@ public class GameView extends Application {
 
     void notifyTurn() {
         components.forEach(node -> node.setDisable(false));
+    }
 
+    void removePlayer(String playerId) {
+        players.remove(playerId);
+        verticalBox.getChildren().removeAll(windows.get(playerId));
     }
 
     void notifyEndTurn() {

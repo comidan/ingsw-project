@@ -203,9 +203,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
     @Override
     public void setTimer(String time) {
-        System.out.println("Setting time");
-        /*if(lobbyGuiView != null)
-            lobbyGuiView.setTimer(time);*/
         CommandManager.setTimer(time);
 
     }
@@ -217,11 +214,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
 
     @Override
     public void setPlayer(String playerName) {
-        System.out.println("Setting player " + playerName);
-        /*if(lobbyGuiView != null)
-            lobbyGuiView.setPlayer(playerName);
-        else
-            playerLobbyListBackup.add(playerName);*/
         CommandManager.setPlayer(playerName);
     }
 

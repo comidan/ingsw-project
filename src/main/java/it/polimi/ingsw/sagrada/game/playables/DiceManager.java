@@ -49,14 +49,11 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         diceDraftBackup = null;
         draftPool.clear();
         Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
-        System.out.println("Printing");
         for (int i = 0; i < diceNumber; i++) {
             Dice dice = bagPicker.next();
             dice.roll();
-            System.out.println(dice.getId());
             draftPool.add(dice);
         }
-        System.out.println("End print");
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }
 
@@ -86,6 +83,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
 
     public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
+        diceNumber = this.numberOfPlayers * 2 + 1;
     }
 
     @Override

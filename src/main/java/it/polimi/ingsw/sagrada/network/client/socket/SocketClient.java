@@ -102,7 +102,6 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     @Override
     public void sendRemoteMessage(Message message) {
         outSocket.println(CommandManager.createPayload(message));
-        System.out.println(message);
     }
 
     @Override
@@ -230,8 +229,9 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 String json = inSocket.readLine();
                 CommandManager.executePayload(json);
             } catch (IOException exc) {
-                fastRecovery();
+                LOGGER.log(Level.SEVERE, exc::getMessage);
                 executor.shutdown();
+                fastRecovery();
             }
         }
     }

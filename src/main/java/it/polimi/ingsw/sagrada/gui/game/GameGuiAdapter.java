@@ -158,6 +158,10 @@ public class GameGuiAdapter {
         Platform.runLater(() -> gameView.setPublicObjectives(publicObjectives));
     }
 
+    public void removePlayer(String playerId) {
+        Platform.runLater(() -> gameView.removePlayer(playerId));
+    }
+
     public void setToolCards(List<Integer> toolCards) {
         Platform.runLater(() -> gameView.setToolCards(toolCards));
     }

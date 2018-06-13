@@ -79,8 +79,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             registry.bind("Lobby:"+identifier , this);
             this.identifier = "Lobby:" + identifier;
         }
-        catch (RemoteException|AlreadyBoundException exc ) {
-
+        catch (RemoteException | AlreadyBoundException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
         }
     }
 
@@ -88,7 +88,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         return clientPool.size() == MAX_POOL_SIZE;
     }
 
-    public boolean isInGame() {
+    boolean isInGame() {
         return inGame;
     }
 
@@ -97,7 +97,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         clientIdTokens.add(clientID);
     }
 
-    public void closeLobby() {
+    void closeLobby() {
         heartbeatProtocolManager.kill();
     }
 
@@ -109,10 +109,12 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         return identifier;
     }
 
-    public boolean removePlayer(String username) {
+    private boolean removePlayer(String username) {
         synchronized (signOut) {
             signOut.apply(username);
         }
+        if(inGame)
+            gameManager.removePlayer(username);
         clientPool.remove(username);
         clientIds.remove(username);
         clientIdTokens.remove(username);
@@ -197,10 +199,14 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         catch (RemoteException|AlreadyBoundException exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
         }
-        for(String username : clientIds) {
-            System.out.println("Remote user set");
-            clientPool.get(token).setPlayer(username);
-        }
+        clientIds.forEach(username -> {
+            try {
+                clientPool.get(token).setPlayer(username);
+            }
+            catch (RemoteException exc) {
+                LOGGER.log(Level.SEVERE, exc::getMessage);
+            }
+        });
         return true;
     }
 
@@ -223,11 +229,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     DataManager.sendLoginLobbyResponse(client, heartbeatPort);
                     heartbeatProtocolManager.addHost(id, heartbeatPort);
                     executor.submit(socketClient);
-                    System.out.println(id + " correctly logged on lobby server");
-                    for(String username : clientIds) {
-                        System.out.println("Remote user set");
+                    for(String username : clientIds)
                         clientPool.get(id).setPlayer(username);
-                    }
                 }
                 else
                     DataManager.sendLoginError(client);
@@ -246,7 +249,6 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         gameDataManager = new GameDataManager(dynamicRouter, clientPool);
         gameManager = new GameManager(players, dynamicRouter);
         gameManager.startGame();
-        System.out.println("Starting game now...");
     }
 
     private void sendToModel(Message message) {
@@ -272,10 +274,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                 int currentSeconds = (int) elapsedTime / 1000;
                 if (currentSeconds != elapsedTimeSecond) {
                     elapsedTimeSecond = currentSeconds;
-                    System.out.println(elapsedTimeSecond);
                     for(String username : clientIds)
                         try {
-                            System.out.println("Remote time set");
                             clientPool.get(username).setTimer((timeToWait / 1000 - currentSeconds) + "");
                         }
                         catch (RemoteException exc) {

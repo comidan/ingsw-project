@@ -94,8 +94,11 @@ public class CommandManager implements MessageVisitor {
 
     public static void removePlayer(String playerName) {
         Platform.runLater(() -> {
-            if(lobbyGuiView != null)
+            if(gameGuiAdapter != null)
+                gameGuiAdapter.removePlayer(playerName);
+            else if(lobbyGuiView != null)
                 lobbyGuiView.removePlayer(playerName);
+            playerList.remove(playerName);
         });
     }
 

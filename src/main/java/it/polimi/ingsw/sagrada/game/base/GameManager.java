@@ -231,6 +231,14 @@ public class GameManager implements Channel<Message, Message> {
         return null;
     }
 
+    public void removePlayer(String playerId) {
+        synchronized (players) {
+            players.removeIf(player -> player.getId().equals(playerId));
+            playerIterator.removePlayer(playerId);
+            diceManager.setNumberOfPlayers(players.size());
+        }
+    }
+
     @Override
     public void dispatch(Message message) {
         String eventType = message.getType().getName();

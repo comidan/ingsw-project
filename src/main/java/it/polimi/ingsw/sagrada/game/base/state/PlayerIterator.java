@@ -3,17 +3,18 @@ package it.polimi.ingsw.sagrada.game.base.state;
 import java.util.*;
 
 public class PlayerIterator implements Iterator<String> {
-    private List<String> idPlayer;
-    private List<String> turnIteration = new ArrayList<>();
+    private List<String> players;
+    private List<String> turnIteration;
     private int numPlayer;
     private int itr;
     private int turnNum;
 
-    public PlayerIterator(List<String> idPlayer) {
-        this.idPlayer = idPlayer;
-        int size = idPlayer.size();
+    public PlayerIterator(List<String> players) {
+        this.players = players;
+        turnIteration  = new ArrayList<>();
+        int size = players.size();
         for(int i=0; i<size-1; i++) { //example 0-1-2-0-1
-            this.idPlayer.add(idPlayer.get(i));
+            this.players.add(players.get(i));
         }
         this.itr = 0;
         this.numPlayer = size;
@@ -43,11 +44,19 @@ public class PlayerIterator implements Iterator<String> {
         int offset = turnNum%numPlayer;
         for(int i=0; i<2*numPlayer; i++) {
             if(i<numPlayer) {
-                turnIteration.add(idPlayer.get(i+offset));
+                turnIteration.add(players.get(i+offset));
             }
             else {
-                turnIteration.add(idPlayer.get(2*numPlayer-1-i+offset));
+                turnIteration.add(players.get(2*numPlayer-1-i+offset));
             }
+        }
+    }
+
+    public void removePlayer(String playerId) {
+        synchronized (players) {
+            players.remove(playerId);
+            numPlayer = players.size();
+            getRoundSequence();
         }
     }
 }
