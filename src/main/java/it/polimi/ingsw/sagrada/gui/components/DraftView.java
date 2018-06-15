@@ -9,10 +9,20 @@ import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * The Class DraftView.
+ */
 public class DraftView extends GridPane {
 
+    /** The draft. */
     private List<DiceView> draft;
 
+    /**
+     * Instantiates a new draft view.
+     *
+     * @param diceResponse the dice response
+     */
     public DraftView(DiceResponse diceResponse) {
         draft = new ArrayList<>();
         diceResponse.getDiceList().forEach(dice -> draft.add(new DiceView(Constraint.getColorConstraint(dice.getColor()),
@@ -21,6 +31,9 @@ public class DraftView extends GridPane {
         createGrid();
     }
 
+    /**
+     * Creates the grid.
+     */
     private void createGrid() {
         int counter = 0;
         for(int i = 0; i < 3; i++)
@@ -33,6 +46,11 @@ public class DraftView extends GridPane {
 
     }
 
+    /**
+     * Removes the dice view.
+     *
+     * @param diceView the dice view
+     */
     public void removeDiceView(DiceView diceView) {
 
         draft.remove(diceView);
@@ -40,6 +58,11 @@ public class DraftView extends GridPane {
 
     }
 
+    /**
+     * Sets the draft listener.
+     *
+     * @param draftClickHandler the new draft listener
+     */
     public void setDraftListener(EventHandler<MouseEvent> draftClickHandler) {
         draft.forEach(diceView -> diceView.setOnMouseClicked(draftClickHandler));
     }

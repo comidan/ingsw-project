@@ -4,14 +4,19 @@ import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 
 import java.util.function.Function;
 
+
 /**
- * 
+ * The Class ToolRule.
  */
 public class ToolRule extends Rule<DTO, ErrorType> {
 
 
+	/** The function. */
 	private Function<DTO, ErrorType> function;
+	
 	/**
+	 * Instantiates a new tool rule.
+	 *
 	 * @param function - building object's constructor
 	 */
 	ToolRule(final Function function) {
@@ -19,6 +24,8 @@ public class ToolRule extends Rule<DTO, ErrorType> {
 	}
 
 	/**
+	 * Builder.
+	 *
 	 * @return builder object
 	 */
 	public static ToolBuilder<ToolRule> builder() {
@@ -26,7 +33,10 @@ public class ToolRule extends Rule<DTO, ErrorType> {
 	}
 
 	/**
+	 * Check rule.
+	 *
 	 * @param dto - data transfer object containing action data
+	 * @return the error type
 	 */
 	@Override
 	public ErrorType checkRule(DTO dto) {

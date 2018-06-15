@@ -12,13 +12,11 @@ import it.polimi.ingsw.sagrada.game.playables.Token;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.game.rules.CellRule;
-import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -28,19 +26,34 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * Window manager class, bridge from json window representation to the dynamic model one
+ */
 public class WindowManager implements Channel<WindowEvent, WindowResponse> {
 
     private static final String BASE_PATH = "/json/window/Windows.json";
+
     private static final int WINDOWS_PER_CARD = 2;
+
     private static final int NUM_OF_WINDOWS = 12;
 
     private Iterator<Integer> picker;
+
     private static final Logger logger = Logger.getAnonymousLogger();
+
     private JSONArray windowsArray;
 
     private Consumer<Message> dispatchGameManager;
+
     private DynamicRouter dynamicRouter;
 
+    /**
+     * Instantiates a new window manager.
+     *
+     * @param dispatchGameManager the dispatch game manager
+     * @param dynamicRouter the dynamic router
+     */
     public WindowManager(Consumer<Message> dispatchGameManager, DynamicRouter dynamicRouter) {
         JSONParser parser;
         parser = new JSONParser();
@@ -62,6 +75,11 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         this.dynamicRouter.subscribeChannel(WindowEvent.class, this);
     }
 
+    /**
+     * Deal window id.
+     *
+     * @param playerId the player id
+     */
     public void dealWindowId(String playerId) {
         List<Integer> windowId = new ArrayList<>();
         for (int i = 0; i < WINDOWS_PER_CARD; i++) {
@@ -71,6 +89,13 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         sendMessage(new WindowResponse(playerId, windowId));
     }
 
+    /**
+     * Generate window.
+     *
+     * @param id the id
+     * @param side the side
+     * @return the window
+     */
     public Window generateWindow(int id, WindowSide side) {
         JSONObject card = (JSONObject) windowsArray.get(id);
 
@@ -87,6 +112,12 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         return new Window(name, cells, tokens, id, side);
     }
 
+    /**
+     * Creates the cell matrix.
+     *
+     * @param cells the cells
+     * @return the cell[][]
+     */
     private Cell[][] createCellMatrix(JSONArray cells) {
         Cell[][] cellMatrix = new Cell[4][5];
 
@@ -130,17 +161,29 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         return cellMatrix;
     }
 
+    /**
+     * Checks if is numeric.
+     *
+     * @param s the s
+     * @return true, if is numeric
+     */
     private boolean isNumeric(String s) {
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }
 
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void dispatch(WindowEvent message) {
         Window window = generateWindow(message.getIdWindow(), message.getWindowSide());
         dispatchGameManager.accept(new WindowGameManagerEvent(message.getIdPlayer(), window));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendMessage(WindowResponse message) {
         dynamicRouter.dispatch(message);

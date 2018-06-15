@@ -7,11 +7,21 @@ import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+
+/**
+ * The Class PlayerModel.
+ */
 public class PlayerModel {
 
+    /** The window model. */
     WindowModel windowModel;
+    
+    /** The id. */
     int id;
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -20,6 +30,9 @@ public class PlayerModel {
         return id == that.id;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
 
@@ -27,11 +40,22 @@ public class PlayerModel {
     }
 
 
+    /**
+     * Gets the window model.
+     *
+     * @return the window model
+     */
     public WindowModel getWindowModel() {
         return windowModel;
     }
 
 
+    /**
+     * To singleton.
+     *
+     * @param <T> the generic type
+     * @return the collector
+     */
     public static <T> Collector<T, ?, T> toSingleton() {
         return Collectors.collectingAndThen(
                 Collectors.toList(),

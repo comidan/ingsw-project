@@ -17,25 +17,49 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class LobbyGuiView.
+ */
 public class LobbyGuiView {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(LobbyGuiView.class.getName());
+    
+    /** The Constant WAITING_PLAYER. */
     private static final String WAITING_PLAYER = "Waiting player...";
 
+    /** The first player. */
     @FXML
     private Label firstPlayer;
+    
+    /** The second player. */
     @FXML
     private Label secondPlayer;
+    
+    /** The third player. */
     @FXML
     private Label thirdPlayer;
+    
+    /** The fourth player. */
     @FXML
     private Label fourthPlayer;
+    
+    /** The timer. */
     @FXML
     private Label timer;
 
+    /** The player shown. */
     private List<String> playerShown = new ArrayList<>();
+    
+    /** The stage. */
     private static Stage stage;
 
+    /**
+     * Sets the player.
+     *
+     * @param username the new player
+     */
     public void setPlayer(String username) {
         playerShown.add(username);
         int position = playerShown.indexOf(username);
@@ -48,6 +72,11 @@ public class LobbyGuiView {
         }
     }
 
+    /**
+     * Removes the player.
+     *
+     * @param username the username
+     */
     public void removePlayer(String username) {
         int position = playerShown.indexOf(username);
         playerShown.remove(position);
@@ -60,26 +89,57 @@ public class LobbyGuiView {
         }
     }
 
+    /**
+     * Sets the first player.
+     *
+     * @param message the new first player
+     */
     private void setFirstPlayer(String message) {
         Platform.runLater(() -> firstPlayer.setText(message));
     }
 
+    /**
+     * Sets the second player.
+     *
+     * @param message the new second player
+     */
     private void setSecondPlayer(String message) {
         Platform.runLater(() -> secondPlayer.setText(message));
     }
 
+    /**
+     * Sets the third player.
+     *
+     * @param message the new third player
+     */
     private void setThirdPlayer(String message) {
         Platform.runLater(() -> thirdPlayer.setText(message));
     }
 
+    /**
+     * Sets the fourth player.
+     *
+     * @param message the new fourth player
+     */
     private void setFourthPlayer(String message) {
         Platform.runLater(() -> fourthPlayer.setText(message));
     }
 
+    /**
+     * Sets the timer.
+     *
+     * @param message the new timer
+     */
     public void setTimer(String message) {
         Platform.runLater(() -> timer.setText(message));
     }
 
+    /**
+     * Inits the.
+     *
+     * @param stage the stage
+     * @return the lobby gui view
+     */
     public static LobbyGuiView init(Stage stage) {
         try {
             FXMLLoader loaderLobby = new FXMLLoader(LobbyGuiView.class.getResource("/templates/MatchLobbyGui.fxml"));
@@ -120,10 +180,21 @@ public class LobbyGuiView {
         }
     }
 
+    /**
+     * Gets the height pixel.
+     *
+     * @param perc the perc
+     * @return the height pixel
+     */
     private static double getHeightPixel(int perc) {
         return (perc * GUIManager.getWindowHeight() / 100);
     }
 
+    /**
+     * Gets the stage.
+     *
+     * @return the stage
+     */
     public Stage getStage() {
         return (Stage) timer.getScene().getWindow();
     }

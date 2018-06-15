@@ -21,22 +21,46 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class DataManager.
+ */
 public class DataManager {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(DataManager.class.getName());
+    
+    /** The Constant loggedUsers. */
     private static final Map<String, String> loggedUsers = new HashMap<>();
+    
+    /** The Constant DATABASE_CONFIG_PATH. */
     private static final String DATABASE_CONFIG_PATH = "/json/config/database_config.json";
+    
+    /** The Constant NETWORK_CONFIG_ERROR. */
     private static final String NETWORK_CONFIG_ERROR = "network config fatal error";
 
+    /** The database. */
     private Database database;
+    
+    /** The dbms username. */
     private static String DBMS_USERNAME = getDbmsUsername();
+    
+    /** The dbms auth. */
     private static String DBMS_AUTH = getDbmsAuth();
+    
+    /** The db name. */
     private static String DB_NAME = getDbName();
+    
+    /** The dbms port. */
     private static int DBMS_PORT = getDbmsPort();
 
+    /** The data manager. */
     private static DataManager dataManager;
 
 
+    /**
+     * Instantiates a new data manager.
+     */
     private DataManager()  {
 
         try {
@@ -53,6 +77,11 @@ public class DataManager {
         }
     }
 
+    /**
+     * Gets the data manager.
+     *
+     * @return the data manager
+     */
     public static DataManager getDataManager() {
         if(dataManager == null)
             dataManager = new DataManager();
@@ -60,6 +89,13 @@ public class DataManager {
     }
 
 
+    /**
+     * Authenticate.
+     *
+     * @param username the username
+     * @param hashedPassowrd the hashed passowrd
+     * @return the login state
+     */
     public synchronized LoginState authenticate(String username, String hashedPassowrd) {
         if(loggedUsers.get(username) != null)
             return LoginState.AUTH_FAILED_USER_ALREADY_LOGGED;
@@ -79,6 +115,13 @@ public class DataManager {
         }
     }
 
+    /**
+     * Sign up.
+     *
+     * @param username the username
+     * @param hashedPassword the hashed password
+     * @return true, if successful
+     */
     public synchronized boolean signUp(String username, String hashedPassword) {
         try {
             long nanoDate = new java.util.Date().getTime();
@@ -96,11 +139,25 @@ public class DataManager {
         }
     }
 
+    /**
+     * Receive login data.
+     *
+     * @param clientSocket the client socket
+     * @return the string
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String receiveLoginData(Socket clientSocket) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         return input.readLine();
     }
 
+    /**
+     * Send login error.
+     *
+     * @param clientSocket the client socket
+     * @param data the data
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void sendLoginError(Socket clientSocket, String data) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
@@ -108,6 +165,12 @@ public class DataManager {
         output.flush();
     }
 
+    /**
+     * Send login error.
+     *
+     * @param clientSocket the client socket
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void sendLoginError(Socket clientSocket) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
@@ -115,6 +178,12 @@ public class DataManager {
         output.flush();
     }
 
+    /**
+     * Send login signup.
+     *
+     * @param clientSocket the client socket
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void sendLoginSignup(Socket clientSocket) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
@@ -122,6 +191,14 @@ public class DataManager {
         output.flush();
     }
 
+    /**
+     * Send login response.
+     *
+     * @param clientSocket the client socket
+     * @param token the token
+     * @param lobbyPort the lobby port
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void sendLoginResponse(Socket clientSocket, String token, int lobbyPort) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
@@ -129,6 +206,13 @@ public class DataManager {
         output.flush();
     }
 
+    /**
+     * Send login lobby response.
+     *
+     * @param clientSocket the client socket
+     * @param heartbeatPort the heartbeat port
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void sendLoginLobbyResponse(Socket clientSocket, int heartbeatPort) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
@@ -136,6 +220,14 @@ public class DataManager {
         output.flush();
     }
 
+    /**
+     * Token authentication.
+     *
+     * @param tokens the tokens
+     * @param client the client
+     * @return the int
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static int tokenAuthentication(List<String> tokens, Socket client) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
         String data = input.readLine();
@@ -148,10 +240,20 @@ public class DataManager {
         }
     }
 
+    /**
+     * Gets the sign out.
+     *
+     * @return the sign out
+     */
     public static synchronized Function<String, Boolean> getSignOut() {
         return username -> loggedUsers.remove(username) != null;
     }
 
+    /**
+     * Gets the dbms username.
+     *
+     * @return the dbms username
+     */
     private static String getDbmsUsername() {
         JSONParser parser = new JSONParser();
         try {
@@ -166,6 +268,11 @@ public class DataManager {
         }
     }
 
+    /**
+     * Gets the dbms auth.
+     *
+     * @return the dbms auth
+     */
     private static String getDbmsAuth() {
         JSONParser parser = new JSONParser();
         try {
@@ -180,6 +287,11 @@ public class DataManager {
         }
     }
 
+    /**
+     * Gets the db name.
+     *
+     * @return the db name
+     */
     private static String getDbName() {
         JSONParser parser = new JSONParser();
         try {
@@ -194,6 +306,11 @@ public class DataManager {
         }
     }
 
+    /**
+     * Gets the dbms port.
+     *
+     * @return the dbms port
+     */
     private static int getDbmsPort() {
         JSONParser parser = new JSONParser();
         try {

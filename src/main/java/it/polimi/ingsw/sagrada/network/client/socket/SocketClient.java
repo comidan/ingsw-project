@@ -28,31 +28,67 @@ import java.util.logging.Logger;
 
 import static java.lang.Thread.sleep;
 
+
+/**
+ * The Class SocketClient.
+ */
 public class SocketClient implements Runnable, Client, Channel<Message, LoginState> {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
+    
+    /** The Constant PORT. */
     private static final int PORT = 49152; //change to dynamic in some elegant way
+    
+    /** The Constant ADDRESS. */
     private static final String ADDRESS = getConfigAddress(); //just for now, next will be obtained in far smarter way
+    
+    /** The Constant SERVER_WAITING_RESPONSE_TIME. */
     private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
+    
+    /** The Constant NETWORK_CONFIG_PATH. */
     private static final String NETWORK_CONFIG_PATH = "/json/config/network_config.json";
 
+    /** The socket. */
     private Socket socket;
+    
+    /** The in socket. */
     private BufferedReader inSocket;
+    
+    /** The out socket. */
     private PrintWriter outSocket;
+    
+    /** The out video. */
     private PrintWriter outVideo;
+    
+    /** The executor. */
     private ExecutorService executor;
+    
+    /** The username. */
     private String username;
+    
+    /** The lobby port. */
     private int lobbyPort;
+    
+    /** The heartbeat protocol manager. */
     private HeartbeatProtocolManager heartbeatProtocolManager;
+    
+    /** The dynamic router. */
     private DynamicRouter dynamicRouter;
 
 
+    /**
+     * Instantiates a new socket client.
+     */
     public SocketClient() {
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
         dynamicRouter = LoginGuiAdapter.getDynamicRouter();
         establishServerConnection();
     }
 
+    /**
+     * Establish server connection.
+     */
     private void establishServerConnection() {
         while (!connect())
             try {
@@ -64,11 +100,19 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         login();
     }
 
+    /**
+     * Initialize connection stream.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void initializeConnectionStream() throws IOException {
         inSocket = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         outSocket = new PrintWriter(socket.getOutputStream(), true);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#startHeartbeat(int)
+     */
     public void startHeartbeat(int port) {
         try {
             heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, username);
@@ -78,10 +122,22 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         }
     }
 
+    /**
+     * Creates the message.
+     *
+     * @param userName the user name
+     * @param auth the auth
+     * @return the JSON object
+     */
     private JSONObject createMessage(String userName, String auth) {
         return JsonMessage.createLoginMessage(userName, auth);
     }
 
+    /**
+     * Connect.
+     *
+     * @return true, if successful
+     */
     private boolean connect() {
         try {
             socket = new Socket(InetAddress.getByName(ADDRESS), PORT);
@@ -94,16 +150,25 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#sendMessage(java.lang.String)
+     */
     @Override
     public void sendMessage(String message) {
         System.out.println(message);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#sendRemoteMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendRemoteMessage(Message message) {
         outSocket.println(CommandManager.createPayload(message));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#close()
+     */
     @Override
     public void close() {
         try {
@@ -114,6 +179,9 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#disconnect()
+     */
     @Override
     public void disconnect() {
         outSocket.println(JsonMessage.createDisconnectMessage(username).toJSONString());
@@ -122,16 +190,25 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         close();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#getId()
+     */
     @Override
     public String getId() {
         return username;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#sendResponse(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendResponse(Message message) {
         //outSocket.println(commandManager.createPayload(message));
     }
 
+    /**
+     * Login.
+     */
     private void login() {
         try {
             boolean loginSuccessful = false;
@@ -181,6 +258,12 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         }
     }
 
+    /**
+     * Initialize lobby link.
+     *
+     * @param identifier the identifier
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void initializeLobbyLink(String identifier) throws IOException {
         socket = new Socket(ADDRESS, lobbyPort);
         initializeConnectionStream();
@@ -190,6 +273,9 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         executor.submit(this);
     }
 
+    /**
+     * Fast recovery.
+     */
     private void fastRecovery() {
         DiscoverLan discoverLan = new DiscoverLan();
         try {
@@ -210,6 +296,11 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         }
     }
 
+    /**
+     * Gets the config address.
+     *
+     * @return the config address
+     */
     private static String getConfigAddress() {
         JSONParser parser = new JSONParser();
         try {
@@ -223,6 +314,9 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
     public void run() {
         while (!executor.isShutdown()) {
             try {
@@ -236,11 +330,17 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void dispatch(Message message) {
 
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendMessage(LoginState message) {
         LoginGuiAdapter.getDynamicRouter().dispatch(message);

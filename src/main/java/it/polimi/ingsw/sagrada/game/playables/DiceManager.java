@@ -15,18 +15,42 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
+
+/**
+ * The Class DiceManager.
+ */
 public class DiceManager implements Channel<DiceEvent, DiceResponse> {
+    
+    /** The draft pool. */
     private List<Dice> draftPool;
+    
+    /** The bag pool. */
     private List<Dice> bagPool;
+    
+    /** The dice draft backup. */
     private Dice diceDraftBackup;
+    
+    /** The Constant DICE_PER_COLOR. */
     private static final int DICE_PER_COLOR = 18;
+    
+    /** The dice number. */
     private int diceNumber;
+    
+    /** The number of players. */
     private int numberOfPlayers; // missing method to fetch this value, temporary value for testing
+    
+    /** The dispatch game manager. */
     private Consumer<Message> dispatchGameManager;
+    
+    /** The dynamic router. */
     private DynamicRouter dynamicRouter;
 
     /**
-     * initialize pools
+     * initialize pools.
+     *
+     * @param numberOfPlayers the number of players
+     * @param dispatchGameManager the dispatch game manager
+     * @param dynamicRouter the dynamic router
      */
     public DiceManager(int numberOfPlayers, Consumer<Message> dispatchGameManager, DynamicRouter dynamicRouter) {
         bagPool = new ArrayList<>();
@@ -45,6 +69,9 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         this.dynamicRouter.subscribeChannel(DiceEvent.class, this);
     }
 
+    /**
+     * Bag to draft.
+     */
     public void bagToDraft() {
         diceDraftBackup = null;
         draftPool.clear();
@@ -57,6 +84,12 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }
 
+    /**
+     * Gets the dice draft.
+     *
+     * @param idDice the id dice
+     * @return the dice draft
+     */
     private Dice getDiceDraft(int idDice) {
         for (Dice dice : draftPool) {
             if (dice.getId() == idDice) {
@@ -68,24 +101,45 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         return null;
     }
 
+    /**
+     * Revert.
+     */
     public void revert() {
         draftPool.add(diceDraftBackup);
         diceDraftBackup = null;
     }
 
+    /**
+     * Gets the draft.
+     *
+     * @return the draft
+     */
     public List<Dice> getDraft() {
         return draftPool;
     }
 
+    /**
+     * Put dice round track.
+     *
+     * @return the list
+     */
     public List<Dice> putDiceRoundTrack() {
         return new ArrayList<>(draftPool);
     }
 
+    /**
+     * Sets the number of players.
+     *
+     * @param numberOfPlayers the new number of players
+     */
     public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
         diceNumber = this.numberOfPlayers * 2 + 1;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void dispatch(DiceEvent message) {
         Dice dice = getDiceDraft(message.getIdDice());
@@ -93,6 +147,9 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         dispatchGameManager.accept(diceGameManagerEvent);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendMessage(DiceResponse message) {
         dynamicRouter.dispatch(message);

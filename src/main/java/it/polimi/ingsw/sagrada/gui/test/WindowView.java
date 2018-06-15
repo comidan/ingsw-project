@@ -5,12 +5,25 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
+
 //done for now (MUST REMOVE PARAMETER WINDOW ID WHEN WINDOW MODEL IS ACTUAL MODEL)
 
+/**
+ * The Class WindowView.
+ */
 public class WindowView extends StackPane implements ViewUpdate {
+    
+    /** The window model. */
     WindowModelInterface windowModel;
 
 
+    /**
+     * Instantiates a new window view.
+     *
+     * @param windowModel the window model
+     * @param windowId the window id
+     * @param size the size
+     */
     public WindowView(WindowModelInterface windowModel, Integer windowId, int size) {
 
         this.windowModel = windowModel;
@@ -34,15 +47,29 @@ public class WindowView extends StackPane implements ViewUpdate {
 
     }
 
+    /**
+     * Creates the button.
+     *
+     * @return the cell button
+     */
     protected CellButton createButton() {
         return new CellButton();
     }
 
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.gui.test.ViewUpdate#update()
+     */
     public void update() {
 
     }
 
+    /**
+     * Resize.
+     *
+     * @param iv2 the iv 2
+     * @param dim the dim
+     */
     private void resize(ImageView iv2, int dim) {
         iv2.setFitHeight(dim);
         iv2.setFitWidth(dim);

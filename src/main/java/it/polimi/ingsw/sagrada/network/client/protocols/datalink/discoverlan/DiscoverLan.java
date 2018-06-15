@@ -10,21 +10,48 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+
+/**
+ * The Class DiscoverLan.
+ */
 public class DiscoverLan {
+    
+    /**
+     * The Class Network.
+     */
     private static class Network {
+        
+        /** The network. */
         int network;
+        
+        /** The mask. */
         int mask;
 
+        /**
+         * Instantiates a new network.
+         *
+         * @param n the n
+         * @param m the m
+         */
         Network(int n, int m) {
             network = n;
             mask = m;
         }
     };
 
+    /** The m directly attached networks. */
     // list of networks on interfaces of machine this code is being run on
     private List<Network> mDirectlyAttachedNetworks = new ArrayList<>();
+    
+    /** The assigned local ip. */
     private List<InetAddress> assignedLocalIp = new ArrayList<>();
 
+    /**
+     * Addr bytes to int.
+     *
+     * @param addr the addr
+     * @return the int
+     */
     private int addrBytesToInt(byte[] addr) {
         int addri = 0;
         for (int i = 0; i < addr.length; ++i)
@@ -32,6 +59,9 @@ public class DiscoverLan {
         return addri;
     }
 
+    /**
+     * Collect local addresses.
+     */
     private void collectLocalAddresses() {
         try {
             Enumeration<NetworkInterface> nifs = NetworkInterface.getNetworkInterfaces();
@@ -57,6 +87,12 @@ public class DiscoverLan {
         }
     }
 
+    /**
+     * Checks if is directly attached and reachable.
+     *
+     * @param address the address
+     * @return true, if is directly attached and reachable
+     */
     public boolean isDirectlyAttachedAndReachable(InetAddress address) {
         int checkedAddr = addrBytesToInt(address.getAddress());
         try {
@@ -74,6 +110,12 @@ public class DiscoverLan {
         return false;
     }
 
+    /**
+     * Checks if is host reachable.
+     *
+     * @param address the address
+     * @return true, if is host reachable
+     */
     public boolean isHostReachable(InetAddress address) {
         mDirectlyAttachedNetworks.clear();
         assignedLocalIp.clear();
@@ -87,6 +129,9 @@ public class DiscoverLan {
         return false;
     }
 
+    /**
+     * Instantiates a new discover lan.
+     */
     public DiscoverLan() {
         collectLocalAddresses();
     }

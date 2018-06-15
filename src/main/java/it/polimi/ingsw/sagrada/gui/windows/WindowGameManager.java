@@ -7,20 +7,41 @@ import it.polimi.ingsw.sagrada.gui.utils.ConstraintGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * The Class WindowGameManager.
+ */
 public class WindowGameManager {
 
+    /** The constraints. */
     private List<Constraint[][]> constraints;
+    
+    /** The constraint generator. */
     private ConstraintGenerator constraintGenerator;
 
+    /**
+     * Instantiates a new window game manager.
+     */
     public WindowGameManager() {
         constraints = new ArrayList<>();
         constraintGenerator = new ConstraintGenerator();
     }
 
+    /**
+     * Adds the window.
+     *
+     * @param id the id
+     * @param side the side
+     */
     public void addWindow(int id, WindowSide side) {
         constraints.add(constraintGenerator.getConstraintMatrix(id, side));
     }
 
+    /**
+     * Gets the windows.
+     *
+     * @return the windows
+     */
     public List<Constraint[][]> getWindows() {
         return constraints;
     }

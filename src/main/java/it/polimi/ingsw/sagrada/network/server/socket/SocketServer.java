@@ -20,17 +20,40 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class SocketServer.
+ */
 public class SocketServer implements Runnable, Server {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(SocketServer.class.getName());
 
+    /** The port. */
     private int port;
+    
+    /** The server socket. */
     private ServerSocket serverSocket;
+    
+    /** The cached executor. */
     private ExecutorService executor, cachedExecutor;
+    
+    /** The command parser. */
     private CommandParser commandParser;
+    
+    /** The port discovery. */
     private PortDiscovery portDiscovery;
+    
+    /** The data manager. */
     private DataManager dataManager;
 
+    /**
+     * Instantiates a new socket server.
+     *
+     * @throws InterruptedException the interrupted exception
+     * @throws ExecutionException the execution exception
+     * @throws SocketException the socket exception
+     */
     public SocketServer() throws InterruptedException, ExecutionException, SocketException {
         portDiscovery = new PortDiscovery();
         dataManager = DataManager.getDataManager();
@@ -43,6 +66,9 @@ public class SocketServer implements Runnable, Server {
     }
 
 
+    /**
+     * Initialize core function.
+     */
     private void initializeCoreFunction() {
         executor = Executors.newSingleThreadExecutor();
         cachedExecutor = Executors.newCachedThreadPool();
@@ -50,6 +76,11 @@ public class SocketServer implements Runnable, Server {
         System.out.println("Server correctly initialized and running on port " + port);
     }
 
+    /**
+     * Creates the server socket.
+     *
+     * @return the server socket
+     */
     private ServerSocket createServerSocket() {
         try {
 
@@ -61,6 +92,9 @@ public class SocketServer implements Runnable, Server {
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
     @Override
     public void run() {
         while (!executor.isShutdown()) {
@@ -75,6 +109,12 @@ public class SocketServer implements Runnable, Server {
         }
     }
 
+    /**
+     * Initialize user session.
+     *
+     * @param clientSocket the client socket
+     * @return the runnable
+     */
     private Runnable initializeUserSession(Socket clientSocket) {
         return () -> {
             try {
@@ -118,6 +158,13 @@ public class SocketServer implements Runnable, Server {
         };
     }
 
+    /**
+     * Join user lobby.
+     *
+     * @param clientIdToken the client id token
+     * @return the int
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private synchronized int joinUserLobby(String clientIdToken) throws IOException{
         MatchLobby availableLobby = lobbyPool.getAvailableLobby();
         availableLobby.addClient(clientIdToken);

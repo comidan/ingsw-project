@@ -8,21 +8,30 @@ import it.polimi.ingsw.sagrada.game.playables.Dice;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /**
- * 
+ * The Class MainGameRule.
  */
 public class MainGameRule extends Rule<Cell[][], ErrorType> {
 
+	/** The ignore color set. */
 	private HashSet<Integer> ignoreColorSet;
+	
+	/** The ignore value set. */
 	private HashSet<Integer> ignoreValueSet;
 
+	/**
+	 * Instantiates a new main game rule.
+	 */
 	MainGameRule() {
 		ignoreColorSet = new HashSet<>();
 		ignoreValueSet = new HashSet<>();
 	}
 
 	/**
-     * @param cells windows matrix
+	 * Check rule.
+	 *
+	 * @param cells windows matrix
 	 * @return type of error
 	 */
 	@Override
@@ -44,12 +53,20 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return ErrorType.NO_ERROR;
 	}
 
+	/**
+	 * Checks for dice clearance.
+	 *
+	 * @param dice the dice
+	 * @return true, if successful
+	 */
 	private boolean hasDiceClearance(Dice dice) {
 		return ignoreValueSet.contains(dice.getId()) || ignoreColorSet.contains(dice.getId());
 	}
 
 	/**
-     * @param cells windows matrix
+	 * Check current cell rule.
+	 *
+	 * @param cells windows matrix
 	 * @param row row location
 	 * @param col col location
 	 * @return type of error
@@ -61,6 +78,14 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 			return ErrorType.NO_ERROR;
 	}
 
+	/**
+	 * Check dice positioning rule.
+	 *
+	 * @param cells the cells
+	 * @param row the row
+	 * @param col the col
+	 * @return the error type
+	 */
 	private ErrorType checkDicePositioningRule(Cell[][] cells, int row, int col) {
 
 		ErrorType errorType1 = checkConsecutiveDicePositioning(cells, row, col);
@@ -70,6 +95,14 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return ErrorType.NO_ERROR;
 	}
 
+	/**
+	 * Check diagonal dice positioning.
+	 *
+	 * @param cells the cells
+	 * @param row the row
+	 * @param col the col
+	 * @return the error type
+	 */
 	private ErrorType checkDiagonalDicePositioning(Cell[][] cells, int row, int col) {
 		if (row < cells.length - 1 && col < cells[row].length - 1 && cells[row + 1][col + 1].isOccupied())
 			return ErrorType.NO_ERROR;
@@ -82,6 +115,14 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return ErrorType.MATRIX_ERROR;
 	}
 
+	/**
+	 * Check consecutive dice positioning.
+	 *
+	 * @param cells the cells
+	 * @param row the row
+	 * @param col the col
+	 * @return the error type
+	 */
 	private ErrorType checkConsecutiveDicePositioning(Cell[][] cells, int row, int col) {
 		if(row == 0 || col == 0 || row == cells.length - 1 || col == cells[0].length - 1)
 			return ErrorType.NO_ERROR;
@@ -97,7 +138,9 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	}
 
 	/**
-     * @param cells windows matrix
+	 * Check same orthogonal value color.
+	 *
+	 * @param cells windows matrix
 	 * @param row row location
 	 * @param col col location
 	 * @return type of error
@@ -119,7 +162,9 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	}
 
 	/**
-     * @param cell cell from windows
+	 * Gets the dice value.
+	 *
+	 * @param cell cell from windows
 	 * @return dice value if present
 	 */
 	private int getDiceValue(Cell cell) {
@@ -130,7 +175,9 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	}
 
 	/**
-     * @param cell cell from windows
+	 * Gets the dice color.
+	 *
+	 * @param cell cell from windows
 	 * @return dice color if present
 	 */
 	private Colors getDiceColor(Cell cell) {
@@ -140,10 +187,20 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return dice.getColor();
 	}
 
+	/**
+	 * Gets the ignore color set.
+	 *
+	 * @return the ignore color set
+	 */
 	Set<Integer> getIgnoreColorSet() {
 		return ignoreColorSet;
 	}
 
+	/**
+	 * Gets the ignore value set.
+	 *
+	 * @return the ignore value set
+	 */
 	Set<Integer> getIgnoreValueSet() {
 		return ignoreValueSet;
 	}

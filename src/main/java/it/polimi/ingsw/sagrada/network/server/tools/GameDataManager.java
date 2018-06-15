@@ -28,13 +28,27 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class GameDataManager.
+ */
 public class GameDataManager implements Channel<Message, Message>, MessageVisitor {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(GameDataManager.class.getName());
 
+    /** The dynamic router. */
     private DynamicRouter dynamicRouter;
+    
+    /** The client map. */
     private Map<String, ClientBase> clientMap;
 
+    /**
+     * Instantiates a new game data manager.
+     *
+     * @param dynamicRouter the dynamic router
+     * @param clientMap the client map
+     */
     public GameDataManager(DynamicRouter dynamicRouter, Map<String, ClientBase> clientMap) {
         this.dynamicRouter = dynamicRouter;
         this.clientMap = clientMap;
@@ -51,21 +65,39 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         dynamicRouter.subscribeChannel(ToolCardResponse.class, this);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void dispatch(Message message) {
         System.out.println("I received : " + message);
         message.accept(this);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendMessage(Message message) {
         dynamicRouter.dispatch(message);
     }
 
+    /**
+     * Gets the client.
+     *
+     * @param id the id
+     * @return the client
+     */
     private Client getClient(String id) {
         return clientMap.get(id);
     }
 
+    /**
+     * Send remote message.
+     *
+     * @param message the message
+     * @param filter the filter
+     */
     private void sendRemoteMessage(Message message, Function<Client, Boolean> filter) {
         Iterator itr = clientMap.entrySet().iterator();
         while(itr.hasNext()) {
@@ -81,16 +113,25 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void visit(Message message) {
         LOGGER.log(Level.INFO, message.getType().getName());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent)
+     */
     @Override
     public void visit(AddPlayerEvent message) {
         LOGGER.log(Level.INFO, message.getType().getName());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent)
+     */
     @Override
     public void visit(BeginTurnEvent beginTurnEvent) {
         try {
@@ -100,21 +141,33 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent)
+     */
     @Override
     public void visit(MatchTimeEvent matchTimeEvent) {
         LOGGER.log(Level.INFO, matchTimeEvent.getType().getName());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent)
+     */
     @Override
     public void visit(HeartbeatInitEvent heartbeatInitEvent) {
         LOGGER.log(Level.INFO, heartbeatInitEvent.getType().getName());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent)
+     */
     @Override
     public void visit(RemovePlayerEvent removePlayerEvent) {
         LOGGER.log(Level.INFO, removePlayerEvent.getType().getName());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse)
+     */
     @Override
     public void visit(WindowResponse windowResponse) {
         try {
@@ -124,22 +177,34 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse)
+     */
     @Override
     public void visit(OpponentWindowResponse opponentWindowResponse) {
         sendRemoteMessage(opponentWindowResponse, filter -> anyone());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse)
+     */
     @Override
     public void visit(DiceResponse diceResponse) {
         System.out.println("Sending " + diceResponse.getDst());
         sendRemoteMessage(diceResponse, filter -> anyone());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse)
+     */
     @Override
     public void visit(OpponentDiceMoveResponse opponentDiceMoveResponse) {
         sendRemoteMessage(opponentDiceMoveResponse, filter -> !filter.equals(getClient(opponentDiceMoveResponse.getIdPlayer())));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse)
+     */
     @Override
     public void visit(RuleResponse ruleResponse) {
         try {
@@ -149,11 +214,17 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse)
+     */
     @Override
     public void visit(NewTurnResponse newTurnResponse) {
         sendRemoteMessage(newTurnResponse, filter -> anyone());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse)
+     */
     @Override
     public void visit(PrivateObjectiveResponse privateObjectiveResponse) {
         try {
@@ -163,16 +234,27 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse)
+     */
     @Override
     public void visit(PublicObjectiveResponse publicObjectiveResponse) {
         sendRemoteMessage(publicObjectiveResponse, filter -> anyone());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse)
+     */
     @Override
     public void visit(ToolCardResponse toolCardResponse) {
         sendRemoteMessage(toolCardResponse, filter -> anyone());
     }
 
+    /**
+     * Anyone.
+     *
+     * @return true, if successful
+     */
     private boolean anyone() {
         return true;
     }

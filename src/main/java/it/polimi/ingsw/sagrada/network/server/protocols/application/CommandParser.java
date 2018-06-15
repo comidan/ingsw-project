@@ -16,8 +16,18 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
+/**
+ * The Class CommandParser.
+ */
 public class CommandParser {
 
+    /**
+     * Parses the.
+     *
+     * @param message the message
+     * @return the message
+     */
     public synchronized Message parse(String message) {
 
         JSONParser parser = new JSONParser();
@@ -64,6 +74,12 @@ public class CommandParser {
         }
     }
 
+    /**
+     * Creates the JSON countdown.
+     *
+     * @param time the time
+     * @return the string
+     */
     public String createJSONCountdown(String time) {
         JSONObject content = new JSONObject();
         content.put(TIME, time);
@@ -74,6 +90,12 @@ public class CommandParser {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the JSON add lobby player.
+     *
+     * @param username the username
+     * @return the string
+     */
     public String createJSONAddLobbyPlayer(String username) {
         JSONObject content = new JSONObject();
         content.put(USERNAME, username);
@@ -84,6 +106,12 @@ public class CommandParser {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the JSON remove lobby player.
+     *
+     * @param username the username
+     * @return the string
+     */
     public String createJSONRemoveLobbyPlayer(String username) {
         JSONObject content = new JSONObject();
         content.put(USERNAME, username);
@@ -94,6 +122,12 @@ public class CommandParser {
         return container.toJSONString();
     }
 
+    /**
+     * Crate JSON message.
+     *
+     * @param message the message
+     * @return the string
+     */
     public String crateJSONMessage(String message) {
         JSONObject content = new JSONObject();
         content.put(METADATA, message);
@@ -104,6 +138,13 @@ public class CommandParser {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the JSON login response.
+     *
+     * @param token the token
+     * @param lobbyPort the lobby port
+     * @return the string
+     */
     public String createJSONLoginResponse(String token, int lobbyPort) {
         JSONObject content = new JSONObject();
         content.put(TOKEN, token);
@@ -116,6 +157,12 @@ public class CommandParser {
         return container.toJSONString();
     }
 
+    /**
+     * Crate JSON login lobby response.
+     *
+     * @param heartbeatPort the heartbeat port
+     * @return the string
+     */
     public String crateJSONLoginLobbyResponse(int heartbeatPort) {
         JSONObject content = new JSONObject();
         content.put(HEARTBEAT_PORT, heartbeatPort+"");
@@ -127,6 +174,11 @@ public class CommandParser {
         return container.toJSONString();
     }
 
+    /**
+     * Crate JSON login response register.
+     *
+     * @return the string
+     */
     public String crateJSONLoginResponseRegister() {
         JSONObject content = new JSONObject();
         content.put(LOGIN, REGISTER);
@@ -137,6 +189,11 @@ public class CommandParser {
         return container.toJSONString();
     }
 
+    /**
+     * Crate JSON login response error.
+     *
+     * @return the string
+     */
     public String crateJSONLoginResponseError() {
         JSONObject content = new JSONObject();
         content.put(ERROR, ERROR);
@@ -147,6 +204,12 @@ public class CommandParser {
         return container.toJSONString();
     }
 
+    /**
+     * Crate JSON login response error.
+     *
+     * @param error the error
+     * @return the string
+     */
     public String crateJSONLoginResponseError(String error) {
         JSONObject content = new JSONObject();
         content.put(ERROR, error);

@@ -5,12 +5,18 @@ import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- *
+ * The Class RoundTrack.
  */
 public class RoundTrack {
+    
+    /** The round dice. */
     private List<List<Dice>> roundDice;
 
+    /**
+     * Instantiates a new round track.
+     */
     public RoundTrack() {
         roundDice = new ArrayList<>(10);
         for (int i=0; i<10; i++) {
@@ -19,6 +25,8 @@ public class RoundTrack {
     }
 
     /**
+     * Gets the available colors.
+     *
      * @return iterator of current dice on round track
      */
     public List<Colors> getAvailableColors() {
@@ -33,6 +41,13 @@ public class RoundTrack {
     }
 
 
+    /**
+     * Gets the dice from round.
+     *
+     * @param color the color
+     * @param round the round
+     * @return the dice from round
+     */
     public Dice getDiceFromRound(Colors color, int round) {
         for (Dice dice : roundDice.get(round)) {
             if (dice.getColor() == color)
@@ -43,6 +58,8 @@ public class RoundTrack {
     }
 
     /**
+     * Adds the dice.
+     *
      * @param diceList - Dice to be added
      * @param round    - round reference
      */

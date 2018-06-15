@@ -15,13 +15,26 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class ServerRMI.
+ */
 public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI, Server {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(ServerRMI.class.getName());
 
+    /** The data manager. */
     private DataManager dataManager;
+    
+    /** The available lobby. */
     private MatchLobby availableLobby;
 
+    /**
+     * Instantiates a new server RMI.
+     *
+     * @throws RemoteException the remote exception
+     */
     public ServerRMI() throws RemoteException {
         try {
             Registry registry = LocateRegistry.getRegistry(1099);
@@ -33,11 +46,17 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
         }
     }
 
+    /**
+     * Initialize core function.
+     */
     private void initializeCoreFunction() {
         dataManager = DataManager.getDataManager();
         System.out.println("Server RMI correctly initialized and running");
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI#login(it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI, java.lang.String, java.lang.String)
+     */
     @Override
     public LoginState login(ClientRMI clientRMI, String username, String hashedPassword) throws RemoteException {
         try {
@@ -74,12 +93,22 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI#getMatchLobbyId()
+     */
     @Override
     public String getMatchLobbyId() throws RemoteException {
         System.out.println("Sending matchLobby");
         return availableLobby.getLobbyIdentifier();
     }
 
+    /**
+     * Join user lobby.
+     *
+     * @param clientIdToken the client id token
+     * @return the match lobby
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private synchronized MatchLobby joinUserLobby(String clientIdToken) throws IOException{
         availableLobby = lobbyPool.getAvailableLobby();
         availableLobby.addClient(clientIdToken);

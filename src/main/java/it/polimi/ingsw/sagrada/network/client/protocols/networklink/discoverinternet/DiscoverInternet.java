@@ -7,8 +7,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+
+/**
+ * The Class DiscoverInternet.
+ */
 public class DiscoverInternet {
 
+    /**
+     * Check internet connection.
+     *
+     * @return true, if successful
+     */
     public static boolean checkInternetConnection() {
         /*try {
             int timeout = 2000;
@@ -40,6 +49,12 @@ public class DiscoverInternet {
         }
     }
 
+    /**
+     * Checks if is private IP.
+     *
+     * @param address the address
+     * @return true, if is private IP
+     */
     public static boolean isPrivateIP(InetAddress address) {
         if(!(address instanceof Inet4Address))
             return false;

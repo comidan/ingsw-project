@@ -31,60 +31,147 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * The Class GameView.
+ */
 public class GameView extends Application {
 
+    /** The windows. */
     private static Map<String, WindowView> windows;
+    
+    /** The draft view. */
     private DraftView draftView;
+    
+    /** The vertical box. */
     private VBox verticalBox;
+    
+    /** The horizontal box. */
     private HBox horizontalBox;
+    
+    /** The anchor pane. */
     private AnchorPane anchorPane;
+    
+    /** The username. */
     private static String username;
+    
+    /** The players. */
     private static List<String> players;
+    
+    /** The constraints. */
     private static List<Constraint[][]> constraints;
+    
+    /** The end turn. */
     private Button endTurn;
+    
+    /** The resizer. */
     private Resizer resizer;
+    
+    /** The roundtrack view. */
     private RoundtrackView roundtrackView;
+    
+    /** The game view. */
     private static GameView gameView = null;
+    
+    /** The card board. */
     private CardBoard cardBoard;
+    
+    /** The token grid. */
     private GridPane tokenGrid;
+    
+    /** The components. */
     private List<Node> components;
 
+    /**
+     * Gets the username.
+     *
+     * @return the username
+     */
     public String getUsername(){
         return username;
     }
 
+    /**
+     * Sets the cell click listener.
+     *
+     * @param cellClickEventHandler the new cell click listener
+     */
     void setCellClickListener(EventHandler<MouseEvent> cellClickEventHandler) {
         windows.get(username).setWindowDiceListener(cellClickEventHandler);
     }
 
+    /**
+     * Sets the roundtrack click handler.
+     *
+     * @param diceClickHandler the new roundtrack click handler
+     */
     void setRoundtrackClickHandler(EventHandler<MouseEvent> diceClickHandler){
         roundtrackView.setClickHandler(diceClickHandler);
     }
 
+    /**
+     * Sets the tool click handler.
+     *
+     * @param toolClickHandler the new tool click handler
+     */
     void setToolClickHandler(EventHandler<MouseEvent> toolClickHandler){
         cardBoard.setToolClickHandler(toolClickHandler);
     }
 
+    /**
+     * Sets the draft click handler.
+     *
+     * @param draftClickHandler the new draft click handler
+     */
     void setDraftClickHandler(EventHandler<MouseEvent> draftClickHandler) {
         draftView.setDraftListener(draftClickHandler);
     }
 
+    /**
+     * Sets the end turn handler.
+     *
+     * @param endTurnEventHandler the new end turn handler
+     */
     void setEndTurnHandler(EventHandler<ActionEvent> endTurnEventHandler){
         endTurn.setOnAction(endTurnEventHandler);
     }
 
+    /**
+     * Gets the draft view.
+     *
+     * @return the draft view
+     */
     DraftView getDraftView() {
         return draftView;
     }
 
+    /**
+     * Gets the roundtrack view.
+     *
+     * @return the roundtrack view
+     */
     RoundtrackView getRoundtrackView(){
         return this.roundtrackView;
     }
 
+    /**
+     * Sets the roundtrack image.
+     *
+     * @param diceViews the dice views
+     * @param currentRound the current round
+     */
     void setRoundtrackImage(List<DiceView> diceViews, int currentRound){
         this.roundtrackView.setImage(diceViews, currentRound);
     }
 
+    /**
+     * Gets the single instance of GameView.
+     *
+     * @param username the username
+     * @param players the players
+     * @param constraints the constraints
+     * @return single instance of GameView
+     */
     public static GameView getInstance(String username, List<String> players, List<Constraint[][]> constraints) {
         if (gameView == null) {
             new Thread(() -> startGameGUI(username, players, constraints)).start(); //)Platform.runLater(() -> startGameGUI(username, stage, player, diceResponse, constraints));
@@ -99,29 +186,58 @@ public class GameView extends Application {
         return gameView;
     }
 
+    /**
+     * Sets the private objective.
+     *
+     * @param id the new private objective
+     */
     void setPrivateObjective(int id) {
         cardBoard.setPrivateObjective(id);
     }
 
+    /**
+     * Sets the public objectives.
+     *
+     * @param publicObjectives the new public objectives
+     */
     void setPublicObjectives(List<Integer> publicObjectives) {
         cardBoard.setPublicObjectives(publicObjectives);
     }
 
+    /**
+     * Sets the tool cards.
+     *
+     * @param toolCards the new tool cards
+     */
     void setToolCards(List<Integer> toolCards) {
         cardBoard.setToolCards(toolCards);
     }
 
+    /**
+     * Removes the mistaken dice.
+     *
+     * @param row the row
+     * @param col the col
+     */
     void removeMistakenDice(int row, int col){
         windows.get(username).removeMistakenDice(row, col);
     }
 
 
+    /**
+     * Removes the token.
+     *
+     * @param number the number
+     */
     void removeToken(int number){
         tokenGrid.getChildren().remove(0, number);
     }
 
 
 
+    /**
+     * Initialize.
+     */
     private void initialize(){
         this.cardBoard = new CardBoard();
         this.resizer = new Resizer();
@@ -138,6 +254,11 @@ public class GameView extends Application {
         anchorPane.resize(resizer.getWindowWidth(), resizer.getWindowHeight());
     }
 
+    /**
+     * Sets the token.
+     *
+     * @param tokenNumber the new token
+     */
     public void setToken(int tokenNumber) {
         tokenGrid = new GridPane();
         for (int i = 0; i < tokenNumber; i++) {
@@ -150,6 +271,9 @@ public class GameView extends Application {
 
     }
 
+    /* (non-Javadoc)
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     @Override
     public void start(Stage primaryStage) {
         initialize();
@@ -157,15 +281,31 @@ public class GameView extends Application {
         setGameViewInstance(this);
     }
 
+    /**
+     * Sets the game view instance.
+     *
+     * @param gameViewInstance the new game view instance
+     */
     private static void setGameViewInstance(GameView gameViewInstance) {
         gameView = gameViewInstance;
     }
 
+    /**
+     * Terminate.
+     */
     public void terminate() {
         Stage stage = (Stage) anchorPane.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Start game GUI.
+     *
+     * @param username the username
+     * @param stage the stage
+     * @param players the players
+     * @param constraints the constraints
+     */
     private static void startGameGUI(String username, Stage stage, List<String> players, List<Constraint[][]> constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
@@ -174,6 +314,13 @@ public class GameView extends Application {
         new GameView().start(stage);
     }
 
+    /**
+     * Start game GUI.
+     *
+     * @param username the username
+     * @param players the players
+     * @param constraints the constraints
+     */
     private static void startGameGUI(String username, List<String> players, List<Constraint[][]> constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
@@ -182,6 +329,15 @@ public class GameView extends Application {
         GameView.launch(GameView.class);
     }
 
+    /**
+     * Gets the single instance of GameView.
+     *
+     * @param username the username
+     * @param stage the stage
+     * @param players the players
+     * @param constraints the constraints
+     * @return single instance of GameView
+     */
     public static GameView getInstance(String username, Stage stage, List<String> players, List<Constraint[][]> constraints) {
         if (gameView == null) {
            Platform.runLater(() -> startGameGUI(username, stage, players, constraints));
@@ -196,6 +352,11 @@ public class GameView extends Application {
         return gameView;
     }
 
+    /**
+     * Creates the scene.
+     *
+     * @param primaryStage the primary stage
+     */
     private void createScene(Stage primaryStage) {
 
         players.forEach(user -> windows.put(user, new WindowView(constraints.get(players.indexOf(user)))));
@@ -228,6 +389,11 @@ public class GameView extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Sets the draft.
+     *
+     * @param diceResponse the new draft
+     */
     public void setDraft(DiceResponse diceResponse) {
         if(draftView != null)
             anchorPane.getChildren().removeAll(draftView);
@@ -239,19 +405,37 @@ public class GameView extends Application {
         components.add(draftView);
     }
 
+    /**
+     * Notify turn.
+     */
     void notifyTurn() {
         components.forEach(node -> node.setDisable(false));
     }
 
+    /**
+     * Removes the player.
+     *
+     * @param playerId the player id
+     */
     void removePlayer(String playerId) {
         players.remove(playerId);
         verticalBox.getChildren().removeAll(windows.get(playerId));
     }
 
+    /**
+     * Notify end turn.
+     */
     void notifyEndTurn() {
         components.forEach(node -> node.setDisable(true));
     }
 
+    /**
+     * Sets the opponent window.
+     *
+     * @param username the username
+     * @param dice the dice
+     * @param position the position
+     */
     void setOpponentWindow(String username, Dice dice, Position position) {
         windows.get(username).setDice(dice, position);
     }

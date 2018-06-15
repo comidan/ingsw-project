@@ -5,13 +5,21 @@ import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class UDPHeartbeatSender.
+ */
 class UDPHeartbeatSender {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(UDPHeartbeatSender.class.getName());
 
     /**
+     * Send heart beat.
+     *
      * @param ipAddress ip address to send UDP datagram
      * @param port port number to associate to UDP datagram
+     * @param payload the payload
      */
     void sendHeartBeat(InetAddress ipAddress, int port, String payload) {
         try (DatagramSocket clientSocket = new DatagramSocket()) {

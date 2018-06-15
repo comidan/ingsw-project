@@ -23,12 +23,28 @@ import org.json.simple.JSONObject;
 
 import java.util.List;
 
+
+/**
+ * The Class MessageParser.
+ */
 public class MessageParser implements ResponseMessageVisitor {
 
+    /**
+     * Creates the json response.
+     *
+     * @param responseVisitor the response visitor
+     * @return the string
+     */
     public String createJsonResponse(ResponseVisitor responseVisitor) {
         return responseVisitor.accept(this);
     }
 
+    /**
+     * Creates the json dice response.
+     *
+     * @param diceResponse the dice response
+     * @return the string
+     */
     private String createJsonDiceResponse(DiceResponse diceResponse) {
         JSONObject message = new JSONObject();
         message.put(MESSAGE_TYPE, RESPONSE);
@@ -48,6 +64,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return message.toJSONString();
     }
 
+    /**
+     * Creates the json window response.
+     *
+     * @param windowResponse the window response
+     * @return the string
+     */
     private String createJsonWindowResponse(WindowResponse windowResponse) {
         JSONObject message = new JSONObject();
         message.put(MESSAGE_TYPE, RESPONSE);
@@ -60,6 +82,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return message.toJSONString();
     }
 
+    /**
+     * Creates the json begin turn event.
+     *
+     * @param beginTurnEvent the begin turn event
+     * @return the string
+     */
     private String createJsonBeginTurnEvent(BeginTurnEvent beginTurnEvent) {
         JSONObject message = new JSONObject();
         JSONObject content = new JSONObject();
@@ -70,6 +98,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return message.toJSONString();
     }
 
+    /**
+     * Creates the json rule response.
+     *
+     * @param ruleResponse the rule response
+     * @return the string
+     */
     private String createJsonRuleResponse(RuleResponse ruleResponse) {
         JSONObject message = new JSONObject();
         JSONObject content = new JSONObject();
@@ -81,6 +115,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return message.toJSONString();
     }
 
+    /**
+     * Creates the opponent windows response.
+     *
+     * @param opponentWindowResponse the opponent window response
+     * @return the string
+     */
     private String createOpponentWindowsResponse(OpponentWindowResponse opponentWindowResponse) {
         List<String> players = opponentWindowResponse.getPlayers();
         JSONArray windows = new JSONArray();
@@ -98,6 +138,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the opponent dice response.
+     *
+     * @param opponentDiceMoveResponse the opponent dice move response
+     * @return the string
+     */
     private String createOpponentDiceResponse(OpponentDiceMoveResponse opponentDiceMoveResponse) {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, opponentDiceMoveResponse.getIdPlayer());
@@ -116,6 +162,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the json new round response.
+     *
+     * @param newTurnResponse the new turn response
+     * @return the string
+     */
     private String createJsonNewRoundResponse(NewTurnResponse newTurnResponse) {
         JSONObject content = new JSONObject();
         content.put(NEW_ROUND, newTurnResponse.getRound()+"");
@@ -126,6 +178,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the json public objectives response.
+     *
+     * @param publicObjectiveResponse the public objective response
+     * @return the string
+     */
     private String createJsonPublicObjectivesResponse(PublicObjectiveResponse publicObjectiveResponse) {
         List<Integer> publicObjectiveIds = publicObjectiveResponse.getIdObjective();
         JSONArray ids = new JSONArray();
@@ -141,6 +199,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the json private objective response.
+     *
+     * @param privateObjectiveResponse the private objective response
+     * @return the string
+     */
     private String createJsonPrivateObjectiveResponse(PrivateObjectiveResponse privateObjectiveResponse) {
         JSONObject content = new JSONObject();
         content.put(ID, privateObjectiveResponse.getIdObjective() + "");
@@ -152,6 +216,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the json tool cards response.
+     *
+     * @param toolCardResponse the tool card response
+     * @return the string
+     */
     private String createJsonToolCardsResponse(ToolCardResponse toolCardResponse) {
         List<Integer> toolCardIds = toolCardResponse.getIds();
         JSONArray ids = new JSONArray();
@@ -167,56 +237,89 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public String visit(Message message) {
         return ERROR;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse)
+     */
     @Override
     public String visit(DiceResponse diceResponse) {
         return createJsonDiceResponse(diceResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse)
+     */
     @Override
     public String visit(WindowResponse windowResponse) {
         return createJsonWindowResponse(windowResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent)
+     */
     @Override
     public String visit(BeginTurnEvent beginTurnEvent) {
         return createJsonBeginTurnEvent(beginTurnEvent);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse)
+     */
     @Override
     public String visit(OpponentWindowResponse opponentWindowResponse) {
         return createOpponentWindowsResponse(opponentWindowResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse)
+     */
     @Override
     public String visit(OpponentDiceMoveResponse opponentDiceMoveResponse) {
         return createOpponentDiceResponse(opponentDiceMoveResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse)
+     */
     @Override
     public String visit(NewTurnResponse newTurnResponse) {
         return createJsonNewRoundResponse(newTurnResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse)
+     */
     @Override
     public String visit(RuleResponse ruleResponse) {
         return createJsonRuleResponse(ruleResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse)
+     */
     @Override
     public String visit(PublicObjectiveResponse publicObjectiveResponse) {
         return createJsonPublicObjectivesResponse(publicObjectiveResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse)
+     */
     @Override
     public String visit(PrivateObjectiveResponse privateObjectiveResponse) {
         return createJsonPrivateObjectiveResponse(privateObjectiveResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse)
+     */
     @Override
     public String visit(ToolCardResponse toolCardResponse) {
         return createJsonToolCardsResponse(toolCardResponse);

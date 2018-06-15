@@ -8,13 +8,20 @@ import it.polimi.ingsw.sagrada.game.playables.Dice;
 import java.util.Set;
 import java.util.function.Function;
 
+
 /**
- * 
+ * The Class ToolBuilder.
+ *
+ * @param <T> the generic type
  */
 public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 
+	/** The function. */
 	private Function<DTO, ErrorType> function;
 
+	/* (non-Javadoc)
+	 * @see it.polimi.ingsw.sagrada.game.base.Builder#build()
+	 */
 	@Override
 	public ToolRule build() {
 		if(function == null)
@@ -23,6 +30,12 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 	}
 
 
+	/**
+	 * Check if null.
+	 *
+	 * @param objects the objects
+	 * @return the error type
+	 */
 	private ErrorType checkIfNull(Object... objects) {
 		for(Object object : objects)
 			if(object == null)
@@ -31,6 +44,8 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 	}
 
 	/**
+	 * Sets the increment dice feature.
+	 *
 	 * @return this ToolBuilder with an updated tool feature
 	 */
 	public ToolBuilder<T> setIncrementDiceFeature() {
@@ -54,6 +69,8 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 	}
 
 	/**
+	 * Sets the move ignoring color rule feature.
+	 *
 	 * @return this ToolBuilder with an updated tool feature
 	 */
 	public ToolBuilder<T> setMoveIgnoringColorRuleFeature() {
@@ -84,6 +101,8 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 	}
 
 	/**
+	 * Sets the move ignoring value rule feature.
+	 *
 	 * @return this ToolBuilder with an updated tool feature
 	 */
 	public ToolBuilder<T> setMoveIgnoringValueRuleFeature() {
@@ -113,6 +132,11 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 		return this;
 	}
 
+	/**
+	 * Sets the move opposite side dice feature.
+	 *
+	 * @return the tool builder
+	 */
 	public ToolBuilder setMoveOppositeSideDiceFeature() {
 		function = dto -> {
 			Dice dice = dto.getDice();
@@ -124,6 +148,11 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 		return this;
 	}
 
+	/**
+	 * Sets the roll dice feature.
+	 *
+	 * @return the tool builder
+	 */
 	public ToolBuilder setRollDiceFeature() {
 		function = dto -> {
 			Dice dice = dto.getDice();
@@ -135,6 +164,11 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 		return this;
 	}
 
+	/**
+	 * Sets the add new dice feature.
+	 *
+	 * @return the tool builder
+	 */
 	public ToolBuilder setAddNewDiceFeature() {
 		function = dto -> {
 			int row = dto.getNewPosition().getRow();

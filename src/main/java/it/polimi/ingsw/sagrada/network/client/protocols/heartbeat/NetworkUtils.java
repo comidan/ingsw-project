@@ -5,9 +5,18 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+
+/**
+ * The Interface NetworkUtils.
+ */
 public interface NetworkUtils {
 
     /**
+     * Gets the MAC address.
+     *
+     * @return the MAC address
+     * @throws UnknownHostException the unknown host exception
+     * @throws SocketException the socket exception
      * @apiNote get this network interface's MAC address
      */
     static String getMACAddress() throws UnknownHostException, SocketException {

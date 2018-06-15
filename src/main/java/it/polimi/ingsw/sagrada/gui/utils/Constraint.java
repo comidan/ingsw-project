@@ -2,23 +2,60 @@ package it.polimi.ingsw.sagrada.gui.utils;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 
+
+/**
+ * The Enum Constraint.
+ */
 public enum Constraint {
+    
+    /** The one. */
     ONE,
+    
+    /** The two. */
     TWO,
+    
+    /** The three. */
     THREE,
+    
+    /** The four. */
     FOUR,
+    
+    /** The five. */
     FIVE,
+    
+    /** The six. */
     SIX,
+    
+    /** The red. */
     RED,
+    
+    /** The green. */
     GREEN,
+    
+    /** The yellow. */
     YELLOW,
+    
+    /** The blue. */
     BLUE,
+    
+    /** The purple. */
     PURPLE,
+    
+    /** The white. */
     WHITE;
 
+    /** The Constant DEFAULT_CONSTRAINT_INIT_NAME. */
     private static final String DEFAULT_CONSTRAINT_INIT_NAME = "Constraint";
+    
+    /** The Constant DEFAULT_DICE_INIT_NAME. */
     private static final String DEFAULT_DICE_INIT_NAME = "Dice";
 
+    /**
+     * Gets the constraint file name.
+     *
+     * @param constraint the constraint
+     * @return the constraint file name
+     */
     public static String getConstraintFileName(Constraint constraint) {
 
         switch(constraint) {
@@ -38,6 +75,13 @@ public enum Constraint {
         }
     }
 
+    /**
+     * Gets the dice file name.
+     *
+     * @param color the color
+     * @param value the value
+     * @return the dice file name
+     */
     public static String getDiceFileName(Constraint color, Constraint value) {
         String partialColorCompositeFileName =  getConstraintFileName(color);
         String partialValueCompositeFileName = getConstraintFileName(value);
@@ -46,6 +90,12 @@ public enum Constraint {
         return DEFAULT_DICE_INIT_NAME + valueConstraint + colorConstraint + ".png";
     }
 
+    /**
+     * Gets the value constraint.
+     *
+     * @param value the value
+     * @return the value constraint
+     */
     public static Constraint getValueConstraint(int value) {
         switch(value) {
             case 1 : return Constraint.ONE;
@@ -58,6 +108,12 @@ public enum Constraint {
         }
     }
 
+    /**
+     * Gets the color constraint.
+     *
+     * @param color the color
+     * @return the color constraint
+     */
     public static Constraint getColorConstraint(Colors color) {
         if(color.equals(Colors.RED))
             return Constraint.RED;
@@ -73,6 +129,9 @@ public enum Constraint {
             return Constraint.WHITE;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Enum#toString()
+     */
     @Override
     public String toString() {
         switch (this) {

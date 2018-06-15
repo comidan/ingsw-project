@@ -10,11 +10,24 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class MatchLobbyPool.
+ */
 public class MatchLobbyPool {
 
+    /** The Constant lobbyPool. */
     private static final List<MatchLobby> lobbyPool = new ArrayList<>();
+    
+    /** The Constant LOGGER. */
     private static final Logger LOGGER  = Logger.getLogger(MatchLobbyPool.class.getName());
 
+    /**
+     * Gets the available lobby.
+     *
+     * @return the available lobby
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public MatchLobby getAvailableLobby() throws IOException {
         MatchLobby availableLobby = null;
         for(MatchLobby lobby : lobbyPool)
@@ -29,6 +42,12 @@ public class MatchLobbyPool {
         return availableLobby;
     }
 
+    /**
+     * Release lobby.
+     *
+     * @param matchLobby the match lobby
+     * @return true, if successful
+     */
     public boolean releaseLobby(MatchLobby matchLobby) {
         matchLobby.closeLobby();
         try {

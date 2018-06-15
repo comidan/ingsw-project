@@ -19,60 +19,116 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class LoginGuiView.
+ */
 public class LoginGuiView extends Application {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(LoginGuiView.class.getName());
 
+    /** The socket radio button. */
     @FXML
     private RadioButton socketRadioButton;
+    
+    /** The window height. */
     private double windowHeight;
+    
+    /** The window width. */
     private double windowWidth;
 
+    /** The rmi radiobutton. */
     @FXML
     private RadioButton rmiRadiobutton;
+    
+    /** The login button. */
     @FXML
     private Button loginButton;
+    
+    /** The password field. */
     @FXML
     private PasswordField passwordField;
+    
+    /** The username field. */
     @FXML
     private TextField usernameField;
+    
+    /** The error text. */
     @FXML
     private Label errorText;
 
+    /** The window. */
     private Stage window;
 
+    /**
+     * Instantiates a new login gui view.
+     */
     public LoginGuiView() {
         windowWidth = GUIManager.getWindowWidth();
         windowHeight = GUIManager.getWindowHeight();
     }
 
+    /**
+     * Adds the login button listener.
+     *
+     * @param listener the listener
+     */
     public void addLoginButtonListener(EventHandler<ActionEvent> listener) {
         loginButton.setOnAction(listener);
     }
 
+    /**
+     * Sets the error text.
+     *
+     * @param message the new error text
+     */
     public void setErrorText(String message) {
         Platform.runLater(() -> {
             errorText.setText(message);
         });
     }
 
+    /**
+     * Checks if is credential correct.
+     *
+     * @return true, if is credential correct
+     */
     public boolean isCredentialCorrect() {
         return (usernameField.getText().length() != 0 && passwordField.getText().length() != 0);
     }
 
+    /**
+     * Gets the selected communication.
+     *
+     * @return the selected communication
+     */
     public String getSelectedCommunication() {
         if (socketRadioButton.isSelected()) return "Socket";
         else return "RMI";
     }
 
+    /**
+     * Gets the username.
+     *
+     * @return the username
+     */
     public String getUsername() {
         return usernameField.getText();
     }
 
+    /**
+     * Gets the password.
+     *
+     * @return the password
+     */
     public String getPassword() {
         return passwordField.getText();
     }
 
+    /**
+     * Sets the radio group.
+     */
     public void setRadioGroup() {
         ToggleGroup group = new ToggleGroup();
         socketRadioButton.setToggleGroup(group);
@@ -80,10 +136,18 @@ public class LoginGuiView extends Application {
         rmiRadiobutton.setToggleGroup(group);
     }
 
+    /**
+     * Gets the window.
+     *
+     * @return the window
+     */
     public Stage getWindow() {
         return (Stage) loginButton.getScene().getWindow();
     }
 
+    /* (non-Javadoc)
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.window = primaryStage;
@@ -121,6 +185,11 @@ public class LoginGuiView extends Application {
         window.show();
     }
 
+    /**
+     * Change scene.
+     *
+     * @return the lobby gui view
+     */
     public LobbyGuiView changeScene() {
         FXMLLoader loaderLobby = new FXMLLoader(getClass().getResource("/templates/MatchLobbyGui.fxml"));
         Parent lobby = null;
@@ -164,6 +233,12 @@ public class LoginGuiView extends Application {
         }
     }
 
+    /**
+     * Gets the height pixel.
+     *
+     * @param perc the perc
+     * @return the height pixel
+     */
     private double getHeightPixel(int perc) {
         return (perc * windowHeight / 100);
     }

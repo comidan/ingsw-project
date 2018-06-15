@@ -9,14 +9,36 @@ import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class WindowChoiceGuiController.
+ */
 public class WindowChoiceGuiController {
+    
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(WindowChoiceGuiController.class.getName());
+    
+    /** The view. */
     private WindowChoiceGuiView view;
+    
+    /** The client. */
     private Client client;
+    
+    /** The chosen. */
     private boolean chosen;
+    
+    /** The window id. */
     private int windowId;
+    
+    /** The window side. */
     private WindowSide windowSide;
 
+    /**
+     * Instantiates a new window choice gui controller.
+     *
+     * @param view the view
+     * @param client the client
+     */
     public WindowChoiceGuiController(WindowChoiceGuiView view, Client client) {
         this.chosen = false;
         this.view = view;
@@ -41,14 +63,29 @@ public class WindowChoiceGuiController {
         });
     }
 
+    /**
+     * Gets the window id.
+     *
+     * @return the window id
+     */
     public int getWindowId() {
         return windowId;
     }
 
+    /**
+     * Gets the window side.
+     *
+     * @return the window side
+     */
     public WindowSide getWindowSide() {
         return windowSide;
     }
 
+    /**
+     * Gets the stage.
+     *
+     * @return the stage
+     */
     public Stage getStage() {
         return view.getStage();
     }

@@ -18,12 +18,29 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class LoginGuiAdapter.
+ */
 public class LoginGuiAdapter implements Channel<LoginState, Message> {
+    
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(LoginGuiView.class.getName());
+    
+    /** The executor service. */
     private ExecutorService executorService = Executors.newCachedThreadPool();
+    
+    /** The login gui view. */
     private static LoginGuiView loginGuiView;
+    
+    /** The Constant dynamicRouter. */
     private static final DynamicRouter dynamicRouter = new MessageDispatcher();
 
+    /**
+     * Instantiates a new login gui adapter.
+     *
+     * @param loginGuiView the login gui view
+     */
     LoginGuiAdapter(LoginGuiView loginGuiView) {
         dynamicRouter.subscribeChannel(LoginState.class, this);
         LoginGuiAdapter.loginGuiView = loginGuiView;
@@ -52,18 +69,36 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
         });
     }
 
+    /**
+     * Gets the username.
+     *
+     * @return the username
+     */
     public static String getUsername() {
         return loginGuiView.getUsername();
     }
 
+    /**
+     * Gets the password.
+     *
+     * @return the password
+     */
     public static String getPassword() {
         return Security.generateMD5Hash(loginGuiView.getPassword());
     }
 
+    /**
+     * Notify error.
+     *
+     * @param message the message
+     */
     public static void notifyError(String message) {
         loginGuiView.setErrorText(message);
     }
 
+    /**
+     * Change scene.
+     */
     private void changeScene() {
         Platform.runLater(() -> {
             LobbyGuiView lobbyGuiView = GUIManager.initLobbyGuiView(loginGuiView.getWindow());
@@ -71,10 +106,18 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
         });
     }
 
+    /**
+     * Gets the dynamic router.
+     *
+     * @return the dynamic router
+     */
     public static DynamicRouter getDynamicRouter() {
         return dynamicRouter;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void dispatch(LoginState message) {
         switch (message) {
@@ -99,6 +142,9 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendMessage(Message message) {
         throw new UnsupportedOperationException();

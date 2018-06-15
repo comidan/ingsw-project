@@ -12,11 +12,24 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class ConstraintGenerator.
+ */
 public class ConstraintGenerator {
+    
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getAnonymousLogger();
+    
+    /** The Constant BASE_PATH. */
     private static final String BASE_PATH = "/json/window/";
+    
+    /** The windows array. */
     private JSONArray windowsArray;
 
+    /**
+     * Instantiates a new constraint generator.
+     */
     public ConstraintGenerator() {
         try {
             JSONParser parser = new JSONParser();
@@ -29,6 +42,13 @@ public class ConstraintGenerator {
         }
     }
 
+    /**
+     * Gets the constraint matrix.
+     *
+     * @param id the id
+     * @param side the side
+     * @return the constraint matrix
+     */
     public Constraint[][] getConstraintMatrix(int id, WindowSide side) {
         JSONObject card = (JSONObject) windowsArray.get(id);
         JSONArray windows = (JSONArray) card.get("windows");
@@ -36,6 +56,12 @@ public class ConstraintGenerator {
         return getMatrix((JSONArray)specificWindow.get("cells"));
     }
     
+    /**
+     * Gets the matrix.
+     *
+     * @param cells the cells
+     * @return the matrix
+     */
     private Constraint[][] getMatrix(JSONArray cells) {
         Constraint[][] constraintMatrix = new Constraint[4][5];
 
@@ -78,6 +104,12 @@ public class ConstraintGenerator {
         return constraintMatrix;
     }
 
+    /**
+     * Checks if is numeric.
+     *
+     * @param s the s
+     * @return true, if is numeric
+     */
     private boolean isNumeric(String s) {
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }

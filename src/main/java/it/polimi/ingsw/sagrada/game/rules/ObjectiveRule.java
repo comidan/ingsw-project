@@ -8,20 +8,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+
 /**
- * 
+ * The Class ObjectiveRule.
  */
 public class ObjectiveRule extends Rule<Cell[][], Integer> {
 
+	/** The value. */
 	private int value;
+	
+	/** The card type. */
 	private CardType cardType;
+	
+	/** The objective type. */
 	private CardType objectiveType;
+	
+	/** The function. */
 	private Function<Cell[][], Integer> function;
+	
+	/** The color constraints. */
 	private List<Colors> colorConstraints;
+	
+	/** The value constraints. */
 	private List<Integer> valueConstraints;
 
 	/**
-	 * @param function
+	 * Instantiates a new objective rule.
+	 *
+	 * @param function the function
+	 * @param value the value
+	 * @param cardType the card type
+	 * @param constraints the constraints
+	 * @param objectiveType the objective type
 	 */
 	ObjectiveRule(final Function function, int value, CardType cardType, List constraints, CardType objectiveType) {
 		this.function = function;
@@ -39,6 +57,8 @@ public class ObjectiveRule extends Rule<Cell[][], Integer> {
 	}
 
 	/**
+	 * Builder.
+	 *
 	 * @return builder object
 	 */
 	public static ObjectiveBuilder<ObjectiveRule> builder() {
@@ -46,7 +66,9 @@ public class ObjectiveRule extends Rule<Cell[][], Integer> {
 	}
 
 	/**
-     * @param cells - windows to be rule-checked
+	 * Check rule.
+	 *
+	 * @param cells - windows to be rule-checked
 	 * @return total score
 	 */
 
@@ -55,22 +77,47 @@ public class ObjectiveRule extends Rule<Cell[][], Integer> {
 		return function.apply(cells);
 	}
 
+	/**
+	 * Gets the type.
+	 *
+	 * @return the type
+	 */
 	public CardType getType() {
 		return cardType;
 	}
 
+	/**
+	 * Gets the objective type.
+	 *
+	 * @return the objective type
+	 */
 	public CardType getObjectiveType() {
 		return objectiveType;
 	}
 
+	/**
+	 * Gets the score.
+	 *
+	 * @return the score
+	 */
 	public int getScore() {
 		return value;
 	}
 
+	/**
+	 * Gets the color constraints.
+	 *
+	 * @return the color constraints
+	 */
 	public List<Colors> getColorConstraints() {
 		return colorConstraints;
 	}
 
+	/**
+	 * Gets the value constraints.
+	 *
+	 * @return the value constraints
+	 */
 	public List<Integer> getValueConstraints() {
 		return valueConstraints;
 	}

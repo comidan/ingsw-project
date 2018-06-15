@@ -21,28 +21,66 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * The Class WindowChoiceGuiView.
+ */
 public class WindowChoiceGuiView extends Application {
+    
+    /** The Constant BASE_PATH. */
     private static final String BASE_PATH = "/images/window_images/window";
 
+    /** The window height. */
     private double windowHeight;
+    
+    /** The window width. */
     private double windowWidth;
+    
+    /** The window response. */
     private static WindowResponse windowResponse;
+    
+    /** The instance. */
     private static WindowChoiceGuiView instance;
 
+    /** The anchor pane. */
     private AnchorPane anchorPane;
+    
+    /** The title. */
     private Label title;
+    
+    /** The notification. */
     private Label notification;
+    
+    /** The image view list. */
     private List<WindowImage> imageViewList;
 
+    /**
+     * Sets the window cell listener.
+     *
+     * @param handler the new window cell listener
+     */
     public void setWindowCellListener(EventHandler<MouseEvent> handler) {
         imageViewList.forEach(img -> img.setOnMouseClicked(handler));
     }
 
+    /**
+     * Start game gui.
+     *
+     * @param windowResponse the window response
+     * @param stage the stage
+     */
     private static void startGameGui(WindowResponse windowResponse, Stage stage) {
         WindowChoiceGuiView.windowResponse = windowResponse;
         new WindowChoiceGuiView().start(stage);
     }
 
+    /**
+     * Gets the single instance of WindowChoiceGuiView.
+     *
+     * @param windowResponse the window response
+     * @param stage the stage
+     * @return single instance of WindowChoiceGuiView
+     */
     public static WindowChoiceGuiView getInstance(WindowResponse windowResponse, Stage stage) {
         if (instance == null) {
             Platform.runLater(() -> startGameGui(windowResponse, stage));
@@ -57,6 +95,9 @@ public class WindowChoiceGuiView extends Application {
         return instance;
     }
 
+    /* (non-Javadoc)
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     @Override
     public void start(Stage primaryStage) {
         initialize();
@@ -90,10 +131,18 @@ public class WindowChoiceGuiView extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Sets the w indow choice view instance.
+     *
+     * @param wIndowChoiceViewInstance the new w indow choice view instance
+     */
     private static void setWIndowChoiceViewInstance(WindowChoiceGuiView wIndowChoiceViewInstance) {
         WindowChoiceGuiView.instance = wIndowChoiceViewInstance;
     }
 
+    /**
+     * Initialize.
+     */
     private void initialize() {
         imageViewList = new ArrayList<>();
 
@@ -143,10 +192,20 @@ public class WindowChoiceGuiView extends Application {
         notification.setWrapText(true);
     }
 
+    /**
+     * Sets the notification message.
+     *
+     * @param message the new notification message
+     */
     public void setNotificationMessage(String message) {
         notification.setText(message);
     }
 
+    /**
+     * Gets the stage.
+     *
+     * @return the stage
+     */
     public Stage getStage() {
         return (Stage) anchorPane.getScene().getWindow();
     }

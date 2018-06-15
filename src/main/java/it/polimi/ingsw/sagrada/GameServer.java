@@ -19,13 +19,33 @@ import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class GameServer.
+ */
 public class GameServer {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(GameServer.class.getName());
+    
+    /** The Constant registry. */
     private static final Registry registry = getRegistry();
+    
+    /** The Constant CLASS_DIR. */
     private static final String CLASS_DIR = new File("").getAbsolutePath().replace("\\", "/") + "/bytecode/";
+    
+    /** The Constant JAR_DIR. */
     private static final String JAR_DIR = new File("").getAbsolutePath().replace("\\", "/") + "/" + getJarName();
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     * @throws InterruptedException the interrupted exception
+     * @throws ExecutionException the execution exception
+     * @throws SocketException the socket exception
+     * @throws RemoteException the remote exception
+     */
     public static void main(String[] args) throws InterruptedException, ExecutionException, SocketException, RemoteException {
         if(new File(JAR_DIR).isFile()) {
             initDynamicClassLoading(CLASS_DIR, JAR_DIR);
@@ -37,6 +57,11 @@ public class GameServer {
         new ServerRMI();
     }
 
+    /**
+     * Gets the registry.
+     *
+     * @return the registry
+     */
     private static Registry getRegistry() {
         try {
             return LocateRegistry.createRegistry(1099);
@@ -48,6 +73,12 @@ public class GameServer {
         }
     }
 
+    /**
+     * Inits the dynamic class loading.
+     *
+     * @param destDir the dest dir
+     * @param jarFile the jar file
+     */
     @SuppressWarnings("Suppress init warnings")
     private static void initDynamicClassLoading(String destDir, String jarFile) {
         try (JarFile jar = new java.util.jar.JarFile(jarFile)) {
@@ -78,6 +109,11 @@ public class GameServer {
         }
     }
 
+    /**
+     * Gets the jar name.
+     *
+     * @return the jar name
+     */
     private static String getJarName() {
         return new File(GameServer.class.getProtectionDomain()
                                         .getCodeSource()

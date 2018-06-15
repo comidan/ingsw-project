@@ -9,17 +9,33 @@ import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+
 /**
+ * The Class DiceView.
  *
  * @author Daniele
  */
 public class DiceView extends ImageView{
 
+    /** The Constant DICE_IMAGE_ROOT_PATH. */
     private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
+    
+    /** The color. */
     private Constraint color;
+    
+    /** The value. */
     private Constraint value;
+    
+    /** The id. */
     private int id;
 
+    /**
+     * Instantiates a new dice view.
+     *
+     * @param color the color
+     * @param value the value
+     * @param id the id
+     */
     public DiceView(Constraint color, Constraint value, int id) {
         this.color = color;
         this.value = value;
@@ -27,14 +43,29 @@ public class DiceView extends ImageView{
         setImage(new Image(DiceView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)), 50, 50, true, false));
     }
 
+    /**
+     * Gets the color.
+     *
+     * @return the color
+     */
     public Constraint getColor() {
         return color;
     }
 
+    /**
+     * Gets the value.
+     *
+     * @return the value
+     */
     public Constraint getValue() {
         return value;
     }
 
+    /**
+     * Gets the dice ID.
+     *
+     * @return the dice ID
+     */
     public int getDiceID() {
         return id;
     }

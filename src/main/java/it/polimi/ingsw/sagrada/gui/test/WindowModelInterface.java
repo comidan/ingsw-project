@@ -1,13 +1,23 @@
 package it.polimi.ingsw.sagrada.gui.test;
 
+
 //TO BE CONNECTED TO MODEL
 
 
+/**
+ * The Interface WindowModelInterface.
+ */
 public interface WindowModelInterface {
 
 
     // public String getWindowPath();
 
+    /**
+     * Gets the url.
+     *
+     * @param id the id
+     * @return the url
+     */
     public default String getUrl(int id) {
 
         String url;

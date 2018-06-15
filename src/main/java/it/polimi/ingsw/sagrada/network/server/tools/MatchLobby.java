@@ -34,30 +34,79 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class MatchLobby.
+ */
 public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener, Runnable, AbstractMatchLobbyRMI {
 
+    /** The Constant MAX_POOL_SIZE. */
     private static final int MAX_POOL_SIZE = 4;
+    
+    /** The Constant TIME_WAIT_UNIT. */
     private static final long TIME_WAIT_UNIT = 10000;
+    
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(MatchLobby.class.getName());
 
+    /** The client pool. */
     private Map<String, ClientBase> clientPool;
+    
+    /** The client ids. */
     private List<String> clientIds;
+    
+    /** The client id tokens. */
     private List<String> clientIdTokens;
+    
+    /** The executor. */
     private ExecutorService executor;
+    
+    /** The lobby server. */
     private ExecutorService lobbyServer;
+    
+    /** The check game start. */
     private ExecutorService checkGameStart;
+    
+    /** The start time. */
     private long startTime;
+    
+    /** The heartbeat protocol manager. */
     private HeartbeatProtocolManager heartbeatProtocolManager;
+    
+    /** The port discovery. */
     private PortDiscovery portDiscovery;
+    
+    /** The sign out. */
     private Function<String, Boolean> signOut;
+    
+    /** The server socket. */
     private ServerSocket serverSocket;
+    
+    /** The identifier. */
     private String identifier;
+    
+    /** The port. */
     private int port;
+    
+    /** The game manager. */
     private GameManager gameManager;
+    
+    /** The dynamic router. */
     private DynamicRouter dynamicRouter;
+    
+    /** The game data manager. */
     private GameDataManager gameDataManager;
+    
+    /** The in game. */
     private boolean inGame;
 
+    /**
+     * Instantiates a new match lobby.
+     *
+     * @param signOut the sign out
+     * @param identifier the identifier
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public MatchLobby(Function<String, Boolean> signOut, String identifier) throws IOException {
         clientPool = new HashMap<>();
         portDiscovery = new PortDiscovery();
@@ -84,31 +133,63 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         }
     }
 
+    /**
+     * Checks if is full.
+     *
+     * @return true, if is full
+     */
     public boolean isFull() {
         return clientPool.size() == MAX_POOL_SIZE;
     }
 
+    /**
+     * Checks if is in game.
+     *
+     * @return true, if is in game
+     */
     boolean isInGame() {
         return inGame;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI#addClient(java.lang.String)
+     */
     @Override
     public void addClient(String clientID) {
         clientIdTokens.add(clientID);
     }
 
+    /**
+     * Close lobby.
+     */
     void closeLobby() {
         heartbeatProtocolManager.kill();
     }
 
+    /**
+     * Gets the port.
+     *
+     * @return the port
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     * Gets the lobby identifier.
+     *
+     * @return the lobby identifier
+     */
     public String getLobbyIdentifier() {
         return identifier;
     }
 
+    /**
+     * Removes the player.
+     *
+     * @param username the username
+     * @return true, if successful
+     */
     private boolean removePlayer(String username) {
         synchronized (signOut) {
             signOut.apply(username);
@@ -131,11 +212,17 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatListener#onHeartbeat(it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatEvent)
+     */
     @Override
     public void onHeartbeat(HeartbeatEvent event) {
 
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatListener#onDeath(it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatEvent)
+     */
     @Override
     public void onDeath(HeartbeatEvent event) {
         System.out.println(event.getSource() + " is offline");
@@ -149,16 +236,25 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatListener#onLossCommunication(it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatEvent)
+     */
     @Override
     public void onLossCommunication(HeartbeatEvent event) {
         System.out.println(event.getSource() + " maybe offline");
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatListener#onReacquiredCommunication(it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatEvent)
+     */
     @Override
     public void onReacquiredCommunication(HeartbeatEvent event) {
         System.out.println(event.getSource() + " came back");
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatListener#onAcquiredCommunication(it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.HeartbeatEvent)
+     */
     @Override
     public void onAcquiredCommunication(HeartbeatEvent event) {
         for(String clientId : clientIds) {
@@ -173,11 +269,20 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         }
     }
 
+    /**
+     * Fast recovery client connection.
+     *
+     * @param identifier the identifier
+     * @return true, if successful
+     */
     private boolean fastRecoveryClientConnection(String identifier) {
         clientIdTokens.add(identifier);
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI#joinLobby(java.lang.String, it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI)
+     */
     @Override
     public boolean joinLobby(String token, ClientRMI clientRMI) throws RemoteException {
         if(!clientIdTokens.contains(token))
@@ -210,6 +315,9 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
     @Override
     public void run() {
         while(!lobbyServer.isShutdown()) {
@@ -241,6 +349,9 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         }
     }
 
+    /**
+     * Start game.
+     */
     private void startGame() {
         inGame = true;
         List<Player> players = new ArrayList<>();
@@ -251,15 +362,32 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         gameManager.startGame();
     }
 
+    /**
+     * Send to model.
+     *
+     * @param message the message
+     */
     private void sendToModel(Message message) {
         dynamicRouter.dispatch(message);
     }
 
+    /**
+     * The Class CheckStartGameCondition.
+     */
     private class CheckStartGameCondition implements Runnable{
+        
+        /** The elapsed time. */
         long elapsedTime;
+        
+        /** The elapsed time second. */
         int elapsedTimeSecond=0;
+        
+        /** The previous time to wait. */
         long previousTimeToWait;
 
+        /* (non-Javadoc)
+         * @see java.lang.Runnable#run()
+         */
         @Override
         public void run() {
             long timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size() + 1);

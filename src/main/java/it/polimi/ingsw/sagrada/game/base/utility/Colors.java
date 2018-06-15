@@ -5,16 +5,32 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * Colors enum making possible to distinguish between various colors
+ */
 public enum Colors {
+
     YELLOW,
+
     RED,
+
     GREEN,
+
     BLUE,
+
     PURPLE,
-    BLACK; //error color
+
+    /** Error color for some computational work */
+    BLACK;
 
     private static final Logger LOGGER = Logger.getLogger(Colors.class.getName());
 
+    /**
+     * Gets allowed colors as list
+     *
+     * @return the color list
+     */
     public static List<Colors> getColorList() {
         List<Colors> colorList = new ArrayList<>();
         colorList.add(YELLOW);
@@ -25,6 +41,12 @@ public enum Colors {
         return colorList;
     }
 
+    /**
+     * Cast color string equivalent to color
+     *
+     * @param color the color
+     * @return the colors
+     */
     public static Colors stringToColor(String color) {
         switch(color) {
             case "RED": return RED;
@@ -37,6 +59,9 @@ public enum Colors {
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Enum#toString()
+     */
     @Override
     public String toString() {
         switch(this) {
@@ -49,6 +74,11 @@ public enum Colors {
         }
     }
 
+    /**
+     * Get initial of the current color
+     *
+     * @return the color's initial letter
+     */
     public String toStringSingleLetter() {
         switch(this) {
             case RED: return "R";

@@ -2,13 +2,27 @@ package it.polimi.ingsw.sagrada.game.base.state;
 
 import java.util.*;
 
+
+/**
+ * PlayerIterator class, its job is to iterate over players and decide who's up next in a turn during the game
+ */
 public class PlayerIterator implements Iterator<String> {
+
     private List<String> players;
+
     private List<String> turnIteration;
+
     private int numPlayer;
+
     private int itr;
+
     private int turnNum;
 
+    /**
+     * Instantiates a new player iterator.
+     *
+     * @param players players list as strings
+     */
     public PlayerIterator(List<String> players) {
         this.players = players;
         turnIteration  = new ArrayList<>();
@@ -22,6 +36,9 @@ public class PlayerIterator implements Iterator<String> {
         getRoundSequence();
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#hasNext()
+     */
     @Override
     public boolean hasNext() {
         if(itr<2*numPlayer && turnNum<10) return true;
@@ -33,12 +50,18 @@ public class PlayerIterator implements Iterator<String> {
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#next()
+     */
     @Override
     public String next() {
         if(itr>=2*numPlayer) throw new NoSuchElementException();
         return turnIteration.get(itr++);
     }
 
+    /**
+     * Gets the round sequence, internal use only
+     */
     private void getRoundSequence() {
         turnIteration.clear();
         int offset = turnNum%numPlayer;
@@ -52,6 +75,11 @@ public class PlayerIterator implements Iterator<String> {
         }
     }
 
+    /**
+     * Removes player from iteration and coming up rounds. Called only by a direct order from above.
+     *
+     * @param playerId player's id which is going to be removed
+     */
     public void removePlayer(String playerId) {
         synchronized (players) {
             players.remove(playerId);

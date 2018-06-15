@@ -7,15 +7,26 @@ import it.polimi.ingsw.sagrada.game.playables.Dice;
 import java.awt.*;
 import java.util.function.Function;
 
+
 /**
+ * The Class CellBuilder.
  *
+ * @param <T> the generic type
  */
 public class CellBuilder<T extends CellRule> implements Builder {
 
+    /** The color constraint. */
     private Colors colorConstraint;
+    
+    /** The value constraint. */
     private Integer valueConstraint;
+    
+    /** The function. */
     private Function<Dice, Boolean> function;
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.base.Builder#build()
+     */
     @Override
     public CellRule build() {
         if (function == null) {
@@ -28,6 +39,8 @@ public class CellBuilder<T extends CellRule> implements Builder {
     }
 
     /**
+     * Sets the color constraint.
+     *
      * @param color - color constraint
      * @return this CellBuilder with an updated color rule
      */
@@ -39,6 +52,8 @@ public class CellBuilder<T extends CellRule> implements Builder {
     }
 
     /**
+     * Sets the number constraint.
+     *
      * @param value - number value constraint
      * @return this CellBuilder with an updated number value rule
      */

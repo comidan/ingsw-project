@@ -10,15 +10,35 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
+
+/**
+ * The Class ToolCardView.
+ */
 public class ToolCardView extends StackPane {
 
+    /** The Constant TOOL_IMAGE_ROOT_PATH. */
     private static final String TOOL_IMAGE_ROOT_PATH = "/images/ToolImages/";
+    
+    /** The id. */
     private int id;
+    
+    /** The resizer. */
     private Resizer resizer;
+    
+    /** The token number. */
     private int tokenNumber = 0;
+    
+    /** The token grid. */
     private GridPane tokenGrid;
+    
+    /** The label. */
     private Label label;
 
+    /**
+     * Instantiates a new tool card view.
+     *
+     * @param id the id
+     */
     public ToolCardView(int id) {
         tokenGrid = new GridPane();
         this.resizer = new Resizer();
@@ -31,14 +51,27 @@ public class ToolCardView extends StackPane {
         this.getChildren().add(label);
     }
 
+    /**
+     * Sets the tool click handler.
+     *
+     * @param toolClickHandler the new tool click handler
+     */
     public void setToolClickHandler(EventHandler<MouseEvent> toolClickHandler){
         this.setOnMouseClicked(toolClickHandler);
     }
 
+    /**
+     * Gets the tool id.
+     *
+     * @return the tool id
+     */
     public int getToolId(){
         return id;
     }
 
+    /**
+     * Adds the token.
+     */
     public void addToken(){
         setTokenNumber();
         for(int i = 0; i<tokenNumber; i++){
@@ -48,12 +81,20 @@ public class ToolCardView extends StackPane {
         label.setText(Integer.toString(tokenNumber));
     }
 
+    /**
+     * Sets the token number.
+     */
     public void setTokenNumber(){
         if(tokenNumber == 0)
             tokenNumber ++;
         else tokenNumber +=2;
     }
 
+    /**
+     * Gets the token number.
+     *
+     * @return the token number
+     */
     public int getTokenNumber(){
         return tokenNumber;
     }

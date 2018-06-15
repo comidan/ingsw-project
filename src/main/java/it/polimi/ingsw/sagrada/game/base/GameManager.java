@@ -38,28 +38,45 @@ import java.util.logging.Logger;
 
 import static it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum.*;
 
+
 /**
- *
+ * Main game class, core class for the model of the main MVC design pattern, manage main and core functions
  */
 
 public class GameManager implements Channel<Message, Message> {
 
     private List<Player> players;
+
     private DiceManager diceManager;
+
     private ScoreTrack scoreTrack;
+
     private CardManager cardManager;
+
     private ToolManager toolManager;
+
     private RoundTrack roundTrack;
+
     private StateIterator stateIterator = StateIterator.getInstance();
+
     private PlayerIterator playerIterator;
+
     private WindowManager windowManager;
+
     private RuleManager ruleManager;
+
     private DynamicRouter dynamicRouter;
 
     private List<Integer> scores = new ArrayList<>();
 
     private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
 
+    /**
+     * Instantiates a new game manager.
+     *
+     * @param players the players
+     * @param dynamicRouter the dynamic router dispatching message
+     */
     public GameManager(List<Player> players, DynamicRouter dynamicRouter) {
         Consumer<Message> function = this::dispatch;
 
@@ -81,10 +98,19 @@ public class GameManager implements Channel<Message, Message> {
         this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
     }
 
+    /**
+     * Gets the dispatch method reference.
+     *
+     * @return the dispatch method reference as a Consumer of Message
+     */
     public Consumer<Message> getDispatchReference() {
         return this::dispatch;
     }
 
+    /**
+     * Engine start
+     * Burn baby burn (Apollo 11 LEM Assembly cit.)
+     */
     public void startGame() {
         while (stateIterator.hasNext() && stateIterator.getCurrentState() != StateGameEnum.DEAL_WINDOWS) {
             stateIterator.next();
@@ -108,6 +134,9 @@ public class GameManager implements Channel<Message, Message> {
         }
     }
 
+    /**
+     * Distribute private objectives
+     */
     private void dealPrivateObjectiveState() {
         List<ObjectiveCard> privateObjective;
         privateObjective = cardManager.dealPrivateObjective(players.size());
@@ -117,6 +146,9 @@ public class GameManager implements Channel<Message, Message> {
         }
     }
 
+    /**
+     * Distribute tools
+     */
     private void dealToolState() {
         List<ToolCard> tools = cardManager.dealTool();
         toolManager = ToolManager.getInstance(tools);
@@ -125,6 +157,9 @@ public class GameManager implements Channel<Message, Message> {
         sendMessage(new ToolCardResponse(toolCardIds));
     }
 
+    /**
+     * Distribute public objectives
+     */
     private void dealPublicObjectiveState() {
         List<ObjectiveCard> publicObjective;
         publicObjective = cardManager.dealPublicObjective();
@@ -134,12 +169,21 @@ public class GameManager implements Channel<Message, Message> {
         sendMessage(new PublicObjectiveResponse(publicObjectiveIds));
     }
 
+    /**
+     * Distribute windows
+     */
     private void dealWindowState() {
         for (Player p : players) {
             windowManager.dealWindowId(p.getId());
         }
     }
 
+    /**
+     * Assign windows to player model
+     *
+     * @param player the player
+     * @param window the window
+     */
     private void dealWindowsToPlayer(Player player, Window window) {
         boolean dealt = true;
 
@@ -162,6 +206,9 @@ public class GameManager implements Channel<Message, Message> {
         }
     }
 
+    /**
+     * Start next round or if previous round was the last, init ending game procedures
+     */
     private void startRound() {
         if(stateIterator.next()==StateGameEnum.TURN) {
             System.out.println(stateIterator.getRoundNumber() + " turn started");
@@ -172,6 +219,9 @@ public class GameManager implements Channel<Message, Message> {
         else scoreState();
     }
 
+    /**
+     * Notify next player about his current state in this turn
+     */
     private void notifyNextPlayer() {
         if(playerIterator.hasNext()) {
             BeginTurnEvent beginTurnEvent = new BeginTurnEvent(playerIterator.next());
@@ -187,6 +237,13 @@ public class GameManager implements Channel<Message, Message> {
         }
     }
 
+    /**
+     * Sets a dice in a player's window
+     *
+     * @param idPlayer the id player
+     * @param dice the dice
+     * @param position the position
+     */
     private void setDiceInWindow(String idPlayer, Dice dice, Position position) {
         Player player = idToPlayer(idPlayer);
         if(player != null) {
@@ -206,24 +263,48 @@ public class GameManager implements Channel<Message, Message> {
         }
     }
 
+    /**
+     *  Computer final scores and set them on the score board
+     */
     private void scoreState() {
         for (Player p:players) {
             scores.add(scoreTrack.calculateScore(p));
         }
     }
 
+    /**
+     * Gets the scores
+     *
+     * @return the scores
+     */
     public List<Integer> getScores() {
         return scores;
     }
 
+    /**
+     * Gets the current game state
+     *
+     * @return the current state
+     */
     public StateGameEnum getCurrentState() {
         return stateIterator.getCurrentState();
     }
 
+    /**
+     * Gets the current players number
+     *
+     * @return the player number
+     */
     public int getPlayerNumber() {
         return players.size();
     }
 
+    /**
+     * Get player by its username
+     *
+     * @param id username
+     * @return the player
+     */
     private Player idToPlayer(String id) {
         for(Player p:players) {
             if(p.getId().equals(id)) return p;
@@ -231,6 +312,12 @@ public class GameManager implements Channel<Message, Message> {
         return null;
     }
 
+    /**
+     * Removes the player from the current game by its username
+     * Warning : this is not a retroactive operation, canNOT be undone
+     *
+     * @param playerId username
+     */
     public void removePlayer(String playerId) {
         synchronized (players) {
             players.removeIf(player -> player.getId().equals(playerId));
@@ -239,6 +326,9 @@ public class GameManager implements Channel<Message, Message> {
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void dispatch(Message message) {
         String eventType = message.getType().getName();
@@ -257,6 +347,9 @@ public class GameManager implements Channel<Message, Message> {
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendMessage(Message message) {
         dynamicRouter.dispatch(message);

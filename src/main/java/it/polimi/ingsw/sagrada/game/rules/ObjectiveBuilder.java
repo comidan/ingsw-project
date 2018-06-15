@@ -13,18 +13,33 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+
 /**
- * 
+ * The Class ObjectiveBuilder.
+ *
+ * @param <T> the generic type
  */
 public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 
 
+	/** The card type. */
 	private CardType cardType;
+	
+	/** The objective type. */
 	private CardType objectiveType;
+	
+	/** The value. */
 	private Integer value;
+	
+	/** The function. */
 	private Function<Cell[][], Integer> function;
+	
+	/** The constraints. */
 	private List constraints;
 
+	/* (non-Javadoc)
+	 * @see it.polimi.ingsw.sagrada.game.base.Builder#build()
+	 */
 	@Override
 	public ObjectiveRule build() {
 		if(function == null)
@@ -33,7 +48,9 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
 	/**
-     * @param cell cell from windows
+	 * Gets the dice value.
+	 *
+	 * @param cell cell from windows
 	 * @return dice value if present
 	 */
 	private int getDiceValue(Cell cell) {
@@ -44,7 +61,9 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
 	/**
-     * @param cell cell from windows
+	 * Gets the dice color.
+	 *
+	 * @param cell cell from windows
 	 * @return dice color if present
 	 */
 	private Colors getDiceColor(Cell cell) {
@@ -55,8 +74,10 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
 	/**
+	 * Sets the color shade color objective.
+	 *
 	 * @param color color constraint
-     * @return this ObjectiveBuilder with an updated objective rule
+	 * @return this ObjectiveBuilder with an updated objective rule
 	 */
 	public ObjectiveBuilder<T> setColorShadeColorObjective(Colors color) {
 		function = cells -> {
@@ -76,6 +97,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
     /**
+     * Sets the different dice color by rows objective.
+     *
      * @param objectiveScore rule score
      * @return this cell's rule
      */
@@ -109,6 +132,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
     /**
+     * Sets the different dice color by cols objective.
+     *
      * @param objectiveScore rule score
      * @return this cell's rule
      */
@@ -143,6 +168,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
     /**
+     * Sets the different dice value by cols objective.
+     *
      * @param objectiveScore rule score
      * @return this cell's rule
      */
@@ -177,6 +204,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
     /**
+     * Sets the different dice value by rows objective.
+     *
      * @param objectiveScore rule score
      * @return this cell's rule
      */
@@ -211,6 +240,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
 	/**
+	 * Sets the value couple objective.
+	 *
 	 * @param objectiveScore rule score
 	 * @param firstValue first pair value constraint
 	 * @param secondValue second pair value constraint
@@ -241,6 +272,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
 	/**
+	 * Sets the every color repeating objective.
+	 *
 	 * @param objectiveScore rule score
 	 * @return this cell's rule
 	 */
@@ -277,6 +310,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
 	/**
+	 * Sets the every dice value repeating objective.
+	 *
 	 * @param objectiveScore rule score
 	 * @return this cell's rule
 	 */
@@ -312,6 +347,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
     /**
+     * Compute diagonal partial score.
+     *
      * @param diagonalColorList diagonal to compute
      * @return computed score
      */
@@ -344,6 +381,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
     }
 
     /**
+     * Gets the diagonal color score.
+     *
      * @param cells windows matrix
      * @return total diagonals score
      */
@@ -378,6 +417,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
 	/**
+	 * Initialize empty nested list.
+	 *
 	 * @param inserts list dimension
 	 * @param function nested type constructor
 	 * @return initialized nested list
@@ -390,6 +431,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
     /**
+     * Gets the anti diagonal color score.
+     *
      * @param cells windows matrix
      * @return total anti diagonals score
      */
@@ -424,6 +467,8 @@ public class ObjectiveBuilder<T extends ObjectiveRule> implements Builder {
 	}
 
     /**
+     * Sets the same diagonal color objective.
+     *
      * @return this cell's rule
      */
 	public ObjectiveBuilder<T> setSameDiagonalColorObjective() {

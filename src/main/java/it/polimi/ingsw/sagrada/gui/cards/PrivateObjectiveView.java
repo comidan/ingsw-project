@@ -6,12 +6,26 @@ import javafx.scene.image.ImageView;
 
 import java.io.File;
 
+
+/**
+ * The Class PrivateObjectiveView.
+ */
 public class PrivateObjectiveView extends ImageView {
 
+    /** The Constant OBJECTIVE_IMAGE_ROOT_PATH. */
     private static final String OBJECTIVE_IMAGE_ROOT_PATH = "/images/ObjectiveImages/";
+    
+    /** The id. */
     private int id;
+    
+    /** The resizer. */
     private Resizer resizer;
 
+    /**
+     * Instantiates a new private objective view.
+     *
+     * @param id the id
+     */
     public PrivateObjectiveView(int id) {
         this.resizer = new Resizer();
         this.id = id;

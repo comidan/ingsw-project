@@ -14,16 +14,39 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class AdvancedEncryptionStandard.
+ */
 class AdvancedEncryptionStandard {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(AdvancedEncryptionStandard.class.getName());
+    
+    /** The Constant KEY_STORE_PATH. */
     private static final String KEY_STORE_PATH = "/json/security/KeyStore.json";
+    
+    /** The Constant KEY. */
     private static final String KEY = getKey(); // WARNING : PLEASE FIND A MORE SECURE WAY
+    
+    /** The Constant INIT_VECTOR. */
     private static final String INIT_VECTOR = getInitializationVector();
+    
+    /** The Constant ENCODING. */
     private static final String ENCODING = "UTF-8";
+    
+    /** The Constant AES_CIPHER_CONFIG. */
     private static final String AES_CIPHER_CONFIG = "AES/CBC/PKCS5PADDING";
+    
+    /** The Constant ENCRYPTION_ALGORITHM. */
     private static final String ENCRYPTION_ALGORITHM = "AES";
 
+    /**
+     * Encrypt.
+     *
+     * @param value the value
+     * @return the string
+     */
     private static String encrypt(String value) {
         try {
             IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(ENCODING));
@@ -43,6 +66,12 @@ class AdvancedEncryptionStandard {
         return null;
     }
 
+    /**
+     * Decrypt.
+     *
+     * @param encrypted the encrypted
+     * @return the string
+     */
     private static String decrypt(String encrypted) {
         try {
             IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(ENCODING));
@@ -62,15 +91,32 @@ class AdvancedEncryptionStandard {
         return null;
     }
 
+    /**
+     * Gets the encrypted data.
+     *
+     * @param data the data
+     * @return the encrypted data
+     */
     static String getEncryptedData(String data) {
         return encrypt(data);
     }
 
+    /**
+     * Gets the decrypted data.
+     *
+     * @param encryptedData the encrypted data
+     * @return the decrypted data
+     */
     static String getDecryptedData(String encryptedData) {
         return decrypt(encryptedData);
     }
 
 
+    /**
+     * Gets the key.
+     *
+     * @return the key
+     */
     private static String getKey() {
         JSONParser parser = new JSONParser();
         try {
@@ -85,6 +131,11 @@ class AdvancedEncryptionStandard {
         }
     }
 
+    /**
+     * Gets the initialization vector.
+     *
+     * @return the initialization vector
+     */
     private static String getInitializationVector() {
         JSONParser parser = new JSONParser();
 

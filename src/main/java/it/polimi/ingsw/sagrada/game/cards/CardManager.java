@@ -19,22 +19,35 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  * This class is utilised to generate all sets of cards that are used in the game.
  * This class should be called only from GameManager to deal various cards to the respective class
  * that will manage and utilised the sets.
  */
 public class CardManager {
+	
+	/** The Constant NUM_MAX_PLAYER. */
 	private static final int NUM_MAX_PLAYER = 4;
+	
+	/** The Constant NUM_PUBLIC_OBJECTIVE. */
 	private static final int NUM_PUBLIC_OBJECTIVE = 3;
+	
+	/** The Constant NUM_TOOLS. */
 	private static final int NUM_TOOLS = 3;
 
+	/** The Constant BASE_PATH_OBJECTIVE. */
 	private static final String BASE_PATH_OBJECTIVE = "/json/objective/PublicObjective.json";
+	
+	/** The Constant BASE_PATH_TOOL. */
 	private static final String BASE_PATH_TOOL = "/json/tool/ToolCard.json";
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = Logger.getLogger(Colors.class.getName());
 
 	/**
+	 * Deal tool.
+	 *
 	 * @return list of of already scrambled tools
 	 */
 	public List<ToolCard> dealTool() {
@@ -63,6 +76,12 @@ public class CardManager {
 		return toolCards;
 	}
 
+	/**
+	 * Gets the tool rule.
+	 *
+	 * @param actions the actions
+	 * @return the tool rule
+	 */
 	private ToolRule getToolRule(JSONArray actions) {
 		ToolBuilder toolBuilder = ToolRule.builder();
 		for(int j=0; j<actions.size(); j++) {
@@ -79,6 +98,8 @@ public class CardManager {
 	}
 
 	/**
+	 * Deal public objective.
+	 *
 	 * @return list of of already scrambled publicObjective
 	 */
 	public List<ObjectiveCard> dealPublicObjective() {
@@ -105,6 +126,13 @@ public class CardManager {
 		return cards;
 	}
 
+	/**
+	 * Find objective rule.
+	 *
+	 * @param id the id
+	 * @param value the value
+	 * @return the objective rule
+	 */
 	private ObjectiveRule findObjectiveRule(int id, int value) {
 		ObjectiveBuilder objectiveBuilder = ObjectiveRule.builder();
 		switch (id) {
@@ -124,6 +152,9 @@ public class CardManager {
 	}
 
 	/**
+	 * Deal private objective.
+	 *
+	 * @param numPlayer the num player
 	 * @return list of already scrambled privateObjective
 	 */
 	public List<ObjectiveCard> dealPrivateObjective(int numPlayer) {

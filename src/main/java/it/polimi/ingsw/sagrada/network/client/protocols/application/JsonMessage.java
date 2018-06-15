@@ -40,18 +40,41 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
+/**
+ * The Class JsonMessage.
+ */
 public class JsonMessage implements ActionMessageVisitor {
 
+    /** The player id. */
     private String playerId;
 
+    /**
+     * Instantiates a new json message.
+     *
+     * @param playerId the player id
+     */
     public JsonMessage(String playerId) {
         this.playerId = playerId;
     }
 
+    /**
+     * Gets the message.
+     *
+     * @param actionVisitor the action visitor
+     * @return the message
+     */
     public String getMessage(ActionVisitor actionVisitor) {
         return actionVisitor.accept(this);
     }
 
+    /**
+     * Creates the login message.
+     *
+     * @param username the username
+     * @param authentication the authentication
+     * @return the JSON object
+     */
     public static JSONObject createLoginMessage(String username, String authentication) {
 
         JSONObject content = new JSONObject();
@@ -64,6 +87,12 @@ public class JsonMessage implements ActionMessageVisitor {
         return container;
     }
 
+    /**
+     * Creates the disconnect message.
+     *
+     * @param username the username
+     * @return the JSON object
+     */
     public static JSONObject createDisconnectMessage(String username) {
         JSONObject content = new JSONObject();
         content.put(USERNAME, username);
@@ -74,12 +103,24 @@ public class JsonMessage implements ActionMessageVisitor {
         return container;
     }
 
+    /**
+     * Creates the token message.
+     *
+     * @param token the token
+     * @return the JSON object
+     */
     public static JSONObject createTokenMessage(String token) {
         JSONObject jsonToken = new JSONObject();
         jsonToken.put(TOKEN, token);
         return jsonToken;
     }
 
+    /**
+     * Creates the message.
+     *
+     * @param message the message
+     * @return the JSON object
+     */
     public static JSONObject createMessage(String message) {
         JSONObject content = new JSONObject();
         content.put(MESSAGE, message);
@@ -90,6 +131,14 @@ public class JsonMessage implements ActionMessageVisitor {
         return container;
     }
 
+    /**
+     * Creates the window event.
+     *
+     * @param username the username
+     * @param windowId the window id
+     * @param side the side
+     * @return the JSON object
+     */
     private JSONObject createWindowEvent(String username, int windowId, String side) {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, username);
@@ -102,6 +151,12 @@ public class JsonMessage implements ActionMessageVisitor {
         return container;
     }
 
+    /**
+     * Creates the dice event.
+     *
+     * @param diceEvent the dice event
+     * @return the JSON object
+     */
     private JSONObject createDiceEvent(DiceEvent diceEvent) {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, diceEvent.getIdPlayer());
@@ -118,6 +173,12 @@ public class JsonMessage implements ActionMessageVisitor {
         return container;
     }
 
+    /**
+     * Creates the end turn event.
+     *
+     * @param endTurnEvent the end turn event
+     * @return the JSON object
+     */
     private JSONObject createEndTurnEvent(EndTurnEvent endTurnEvent) {
         JSONObject content = new JSONObject();
         content.put(MESSAGE_TYPE, ACTION);
@@ -126,6 +187,12 @@ public class JsonMessage implements ActionMessageVisitor {
         return content;
     }
 
+    /**
+     * Parses the json data.
+     *
+     * @param json the json
+     * @return the message
+     */
     public static Message parseJsonData(String json) {
         JSONParser parser = new JSONParser();
         try {
@@ -238,21 +305,33 @@ public class JsonMessage implements ActionMessageVisitor {
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent)
+     */
     @Override
     public String visit(DiceEvent diceEvent) {
         return createDiceEvent(diceEvent).toJSONString();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent)
+     */
     @Override
     public String visit(WindowEvent windowEvent) {
         return createWindowEvent(playerId, windowEvent.getIdWindow(), WindowSide.sideToString(windowEvent.getWindowSide())).toJSONString();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent)
+     */
     @Override
     public String visit(EndTurnEvent endTurnEvent) {
         return createEndTurnEvent(endTurnEvent).toJSONString();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public String visit(Message message) {
         return CommandKeyword.ERROR;

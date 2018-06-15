@@ -5,16 +5,24 @@ import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.util.function.Function;
 
+
 /**
- * 
+ * The Class CellRule.
  */
 public class CellRule extends Rule<Dice, Boolean> {
 
+	/** The value constraint. */
 	private int valueConstraint;
+	
+	/** The color constraint. */
 	private Colors colorConstraint;
+	
+	/** The function. */
 	private Function<Dice, Boolean> function;
 
 	/**
+	 * Instantiates a new cell rule.
+	 *
 	 * @param function - rule checker function
 	 * @param colorConstraint - color constraint
 	 */
@@ -25,6 +33,8 @@ public class CellRule extends Rule<Dice, Boolean> {
 	}
 
 	/**
+	 * Instantiates a new cell rule.
+	 *
 	 * @param function - rule checker function
 	 * @param valueConstraint - value constraint
 	 */
@@ -35,6 +45,8 @@ public class CellRule extends Rule<Dice, Boolean> {
 	}
 
 	/**
+	 * Builder.
+	 *
 	 * @return builder object
 	 */
 	public static CellBuilder<CellRule> builder() {
@@ -42,6 +54,8 @@ public class CellRule extends Rule<Dice, Boolean> {
 	}
 
 	/**
+	 * Check rule.
+	 *
 	 * @param dice - check if dice can be positioned in this current cell
 	 * @return true if dice can be positioned in this current cell
 	 */
@@ -51,6 +65,8 @@ public class CellRule extends Rule<Dice, Boolean> {
 	}
 
 	/**
+	 * Gets the value constraint.
+	 *
 	 * @return value constraint
 	 */
 	public int getValueConstraint() {
@@ -58,6 +74,8 @@ public class CellRule extends Rule<Dice, Boolean> {
 	}
 
 	/**
+	 * Gets the color constraint.
+	 *
 	 * @return color constraint
 	 */
 	public Colors getColorConstraint() {

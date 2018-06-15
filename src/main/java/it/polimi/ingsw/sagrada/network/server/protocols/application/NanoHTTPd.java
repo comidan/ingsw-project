@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.URLEncoder;
 import java.util.*;
 
+
 /**
  * A simple, tiny, nicely embeddable HTTP 1.0 server in Java
  * <p/>
@@ -58,8 +59,9 @@ public class NanoHTTPd {
      *
      * @param uri    Percent-decoded URI without parameters, for example "/index.cgi"
      * @param method "GET", "POST" etc.
-     * @param parms  Parsed, percent decoded parameters from URI and, in case of POST, data.
      * @param header Header entries, percent decoded
+     * @param parms  Parsed, percent decoded parameters from URI and, in case of POST, data.
+     * @param files the files
      * @return HTTP response, see class Response for details
      */
     public Response serve(String uri, String method, Properties header, Properties parms, Properties files) {
@@ -92,8 +94,9 @@ public class NanoHTTPd {
      * Return one of these from serve().
      */
     public class Response {
+        
         /**
-         * Default constructor: response = HTTP_OK, data = mime = 'null'
+         * Default constructor: response = HTTP_OK, data = mime = 'null'.
          */
         public Response() {
             this.status = HTTP_OK;
@@ -101,6 +104,10 @@ public class NanoHTTPd {
 
         /**
          * Basic constructor.
+         *
+         * @param status the status
+         * @param mimeType the mime type
+         * @param data the data
          */
         public Response(String status, String mimeType, InputStream data) {
             this.status = status;
@@ -111,6 +118,10 @@ public class NanoHTTPd {
         /**
          * Convenience method that makes an InputStream out of
          * given text.
+         *
+         * @param status the status
+         * @param mimeType the mime type
+         * @param txt the txt
          */
         public Response(String status, String mimeType, String txt) {
             this.status = status;
@@ -124,6 +135,9 @@ public class NanoHTTPd {
 
         /**
          * Adds given line to the header.
+         *
+         * @param name the name
+         * @param value the value
          */
         public void addHeader(String name, String value) {
             header.put(name, value);
@@ -151,9 +165,7 @@ public class NanoHTTPd {
         public Properties header = new Properties();
     }
 
-    /**
-     * Some HTTP response status codes
-     */
+    /** Some HTTP response status codes. */
     public static final String
             HTTP_OK = "200 OK",
             HTTP_REDIRECT = "301 Moved Permanently",
@@ -163,9 +175,7 @@ public class NanoHTTPd {
             HTTP_INTERNALERROR = "500 Internal Server Error",
             HTTP_NOTIMPLEMENTED = "501 Not Implemented";
 
-    /**
-     * Common mime types for dynamic content
-     */
+    /** Common mime types for dynamic content. */
     public static final String
             MIME_PLAINTEXT = "text/plain",
             MIME_HTML = "text/html",
@@ -173,6 +183,7 @@ public class NanoHTTPd {
             MIME_XML = "text/xml";
 
 
+    /** The path. */
     private static String PATH;
 
     // ==================================================
@@ -182,6 +193,9 @@ public class NanoHTTPd {
     /**
      * Starts a HTTP server to given port.<p>
      * Throws an IOException if the socket is already in use
+     *
+     * @param port the port
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public NanoHTTPd(int port) throws IOException {
         myTcpPort = port;
@@ -214,6 +228,9 @@ public class NanoHTTPd {
 
     /**
      * Starts as a standalone file server and waits for Enter.
+     *
+     * @param args the args
+     * @param path the path
      */
     public static void init(String[] args, String path) {
         System.out.println("NanoHTTPd 1.22 (C) 2001,2005-2011 Jarno Elonen and (C) 2010 Konstantinos Togias\n" +
@@ -255,6 +272,12 @@ public class NanoHTTPd {
      * and returns the response.
      */
     private class HTTPSession implements Runnable {
+        
+        /**
+         * Instantiates a new HTTP session.
+         *
+         * @param s the s
+         */
         public HTTPSession(Socket s) {
             mySocket = s;
             Thread t = new Thread(this);
@@ -262,6 +285,9 @@ public class NanoHTTPd {
             t.start();
         }
 
+        /* (non-Javadoc)
+         * @see java.lang.Runnable#run()
+         */
         public void run() {
             try {
                 InputStream is = mySocket.getInputStream();
@@ -403,7 +429,13 @@ public class NanoHTTPd {
 
         /**
          * Decodes the sent headers and loads the data into
-         * java Properties' key - value pairs
+         * java Properties' key - value pairs.
+         *
+         * @param in the in
+         * @param pre the pre
+         * @param parms the parms
+         * @param header the header
+         * @throws InterruptedException the interrupted exception
          */
         private void decodeHeader(BufferedReader in, Properties pre, Properties parms, Properties header)
                 throws InterruptedException {
@@ -453,6 +485,13 @@ public class NanoHTTPd {
         /**
          * Decodes the Multipart Body data and put it
          * into java Properties' key - value pairs.
+         *
+         * @param boundary the boundary
+         * @param fbuf the fbuf
+         * @param in the in
+         * @param parms the parms
+         * @param files the files
+         * @throws InterruptedException the interrupted exception
          */
         private void decodeMultipartData(String boundary, byte[] fbuf, BufferedReader in, Properties parms, Properties files)
                 throws InterruptedException {
@@ -522,6 +561,10 @@ public class NanoHTTPd {
 
         /**
          * Find the byte positions where multipart boundaries start.
+         *
+         * @param b the b
+         * @param boundary the boundary
+         * @return the boundary positions
          */
         public int[] getBoundaryPositions(byte[] b, byte[] boundary) {
             int matchcount = 0;
@@ -554,6 +597,11 @@ public class NanoHTTPd {
          * Retrieves the content of a sent file and saves it
          * to a temporary file.
          * The full path to the saved file is returned.
+         *
+         * @param b the b
+         * @param offset the offset
+         * @param len the len
+         * @return the string
          */
         private String saveTmpFile(byte[] b, int offset, int len) {
             String path = "";
@@ -576,6 +624,10 @@ public class NanoHTTPd {
         /**
          * It returns the offset separating multipart file headers
          * from the file's data.
+         *
+         * @param b the b
+         * @param offset the offset
+         * @return the int
          */
         private int stripMultipartHeaders(byte[] b, int offset) {
             int i = 0;
@@ -589,6 +641,10 @@ public class NanoHTTPd {
         /**
          * Decodes the percent encoding scheme. <br/>
          * For example: "an+example%20string" -> "an example string"
+         *
+         * @param str the str
+         * @return the string
+         * @throws InterruptedException the interrupted exception
          */
         private String decodePercent(String str) throws InterruptedException {
             try {
@@ -621,6 +677,10 @@ public class NanoHTTPd {
          * adds them to given Properties. NOTE: this doesn't support multiple
          * identical keys due to the simplicity of Properties -- if you need multiples,
          * you might want to replace the Properties with a Hashtable of Vectors or such.
+         *
+         * @param parms the parms
+         * @param p the p
+         * @throws InterruptedException the interrupted exception
          */
         private void decodeParms(String parms, Properties p)
                 throws InterruptedException {
@@ -641,6 +701,10 @@ public class NanoHTTPd {
         /**
          * Returns an error message as a HTTP response and
          * throws InterruptedException to stop further request processing.
+         *
+         * @param status the status
+         * @param msg the msg
+         * @throws InterruptedException the interrupted exception
          */
         private void sendError(String status, String msg) throws InterruptedException {
             sendResponse(status, MIME_PLAINTEXT, null, new ByteArrayInputStream(msg.getBytes()));
@@ -649,6 +713,11 @@ public class NanoHTTPd {
 
         /**
          * Sends given response to the socket.
+         *
+         * @param status the status
+         * @param mime the mime
+         * @param header the header
+         * @param data the data
          */
         private void sendResponse(String status, String mime, Properties header, InputStream data) {
             try {
@@ -699,12 +768,16 @@ public class NanoHTTPd {
             }
         }
 
+        /** The my socket. */
         private Socket mySocket;
     }
 
     /**
      * URL-encodes everything between "/"-characters.
      * Encodes spaces as '%20' instead of '+'.
+     *
+     * @param uri the uri
+     * @return the string
      */
     private String encodeUri(String uri) {
         String newUri = "";
@@ -724,8 +797,13 @@ public class NanoHTTPd {
         return newUri;
     }
 
+    /** The my tcp port. */
     private int myTcpPort;
+    
+    /** The my server socket. */
     private final ServerSocket myServerSocket;
+    
+    /** The my thread. */
     private Thread myThread;
 
     // ==================================================
@@ -735,6 +813,12 @@ public class NanoHTTPd {
     /**
      * Serves file from homeDir and its' subdirectories (only).
      * Uses only URI, ignores all headers and HTTP parameters.
+     *
+     * @param uri the uri
+     * @param header the header
+     * @param homeDir the home dir
+     * @param allowDirectoryListing the allow directory listing
+     * @return the response
      */
     public Response serveFile(String uri, Properties header, File homeDir,
                               boolean allowDirectoryListing) {
@@ -861,9 +945,7 @@ public class NanoHTTPd {
         }
     }
 
-    /**
-     * Hashtable mapping (String)FILENAME_EXTENSION -> (String)MIME_TYPE
-     */
+    /** Hashtable mapping (String)FILENAME_EXTENSION -> (String)MIME_TYPE. */
     private static Hashtable theMimeTypes = new Hashtable();
 
     static {
@@ -890,9 +972,7 @@ public class NanoHTTPd {
             theMimeTypes.put(st.nextToken(), st.nextToken());
     }
 
-    /**
-     * GMT date formatter
-     */
+    /** GMT date formatter. */
     private static java.text.SimpleDateFormat gmtFrmt;
 
     static {
@@ -900,9 +980,7 @@ public class NanoHTTPd {
         gmtFrmt.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
-    /**
-     * The distribution licence
-     */
+    /** The distribution licence. */
     private static final String LICENCE =
             "Copyright (C) 2001,2005-2011 by Jarno Elonen <elonen@iki.fi>\n" +
                     "and Copyright (C) 2010 by Konstantinos Togias <info@ktogias.gr>\n" +

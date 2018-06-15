@@ -24,24 +24,56 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class RMIClient.
+ */
 public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel<Message, LoginState> {
 
+    /** The Constant SERVER_WAITING_RESPONSE_TIME. */
     private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
+    
+    /** The Constant NETWORK_CONFIG_PATH. */
     private static final String NETWORK_CONFIG_PATH = "/json/config/network_config.json";
+    
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(RMIClient.class.getName());
+    
+    /** The Constant ADDRESS. */
     private static final String ADDRESS = getConfigAddress();
+    
+    /** The Constant PROTOCOL. */
     private static final String PROTOCOL = "rmi://";
 
+    /** The lobby. */
     private AbstractMatchLobbyRMI lobby;
+    
+    /** The username. */
     private String username;
+    
+    /** The heartbeat protocol manager. */
     private HeartbeatProtocolManager heartbeatProtocolManager;
+    
+    /** The remote client. */
     private Client remoteClient;
+    
+    /** The server. */
     private AbstractServerRMI server;
 
+    /**
+     * Instantiates a new RMI client.
+     *
+     * @throws RemoteException the remote exception
+     */
     public RMIClient() throws RemoteException {
         establishServerConnection();
     }
 
+    /**
+     * Connect.
+     *
+     * @return true, if successful
+     */
     private boolean connect() {
         try {
             server = (AbstractServerRMI) Naming.lookup(PROTOCOL + ADDRESS + "/ServerRMI");
@@ -51,6 +83,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
     }
 
+    /**
+     * Establish server connection.
+     */
     private void establishServerConnection() {
         while (!connect())
             try {
@@ -62,6 +97,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         login();
     }
 
+    /**
+     * Login.
+     */
     private void login() {
         LoginState loginState = null;
 
@@ -96,6 +134,11 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
     }
 
+    /**
+     * Execute orders.
+     *
+     * @throws RemoteException the remote exception
+     */
     private void executeOrders() throws RemoteException {
         int choice;
         while (true) {
@@ -125,6 +168,11 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
     }
 
+    /**
+     * Gets the config address.
+     *
+     * @return the config address
+     */
     private static String getConfigAddress() {
         JSONParser parser = new JSONParser();
         try {
@@ -139,6 +187,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI#notifyLobby(java.lang.String)
+     */
     @Override
     public void notifyLobby(String lobbyId) throws RemoteException {
         try {
@@ -155,11 +206,17 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI#signUp()
+     */
     @Override
     public void signUp() {
         System.out.println("Signing up");
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI#notifyRemoteClientInterface(java.lang.String)
+     */
     @Override
     public void notifyRemoteClientInterface(String id) {
         try {
@@ -170,6 +227,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI#notifyHeartbeatPort(java.lang.Integer)
+     */
     @Override
     public void notifyHeartbeatPort(Integer port) {
         try {
@@ -181,62 +241,98 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#sendMessage(java.lang.String)
+     */
     @Override
     public void sendMessage(String message) {
         System.out.println(message);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#sendRemoteMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendRemoteMessage(Message message) throws RemoteException {
         remoteClient.sendRemoteMessage(message);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#close()
+     */
     @Override
     public void close() {
 
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#disconnect()
+     */
     @Override
     public void disconnect() {
 
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.ClientBase#setTimer(java.lang.String)
+     */
     @Override
     public void setTimer(String time) {
         CommandManager.setTimer(time);
 
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#startHeartbeat(int)
+     */
     @Override
     public void startHeartbeat(int port) {
 
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.ClientBase#setPlayer(java.lang.String)
+     */
     @Override
     public void setPlayer(String playerName) {
         CommandManager.setPlayer(playerName);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.ClientBase#removePlayer(java.lang.String)
+     */
     @Override
     public void removePlayer(String playerName) {
         CommandManager.removePlayer(playerName);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#getId()
+     */
     @Override
     public String getId() {
         return username;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#sendResponse(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendResponse(Message message) {
         CommandManager.executePayload(message);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void dispatch(Message message) {
 
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendMessage(LoginState message) {
         LoginGuiAdapter.getDynamicRouter().dispatch(message);

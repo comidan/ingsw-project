@@ -32,48 +32,111 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class CommandManager.
+ */
 public class CommandManager implements MessageVisitor {
 
+    /** The Constant commandManager. */
     private static final CommandManager commandManager = new CommandManager();
+    
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(CommandManager.class.getName());
 
+    /** The client. */
     private static Client client;
+    
+    /** The window choice gui controller. */
     private static WindowChoiceGuiController windowChoiceGuiController;
+    
+    /** The game gui adapter. */
     private static GameGuiAdapter gameGuiAdapter;
+    
+    /** The window game manager. */
     private static WindowGameManager windowGameManager;
+    
+    /** The lobby gui view. */
     private static LobbyGuiView lobbyGuiView;
+    
+    /** The player list. */
     private static List<String> playerList = new ArrayList<>();
+    
+    /** The player lobby list backup. */
     private static List<String> playerLobbyListBackup = new ArrayList<>();
+    
+    /** The username. */
     private static String username;
+    
+    /** The private objective response. */
     private PrivateObjectiveResponse privateObjectiveResponse;
+    
+    /** The public objective response. */
     private PublicObjectiveResponse publicObjectiveResponse;
+    
+    /** The tool card response. */
     private ToolCardResponse toolCardResponse;
 
+    /**
+     * Instantiates a new command manager.
+     */
     private CommandManager() {}
 
+    /**
+     * Sets the lobby gui view.
+     *
+     * @param lobbyGuiView the new lobby gui view
+     */
     public static void setLobbyGuiView(LobbyGuiView lobbyGuiView) {
         CommandManager.lobbyGuiView = lobbyGuiView;
     }
 
+    /**
+     * Sets the client data.
+     *
+     * @param username the username
+     * @param client the client
+     */
     public static void setClientData(String username, Client client) {
         CommandManager.username = username;
         CommandManager.client = client;
     }
 
+    /**
+     * Execute payload.
+     *
+     * @param json the json
+     */
     public static void executePayload(String json) {
         Message message = JsonMessage.parseJsonData(json);
         message.accept(commandManager);
     }
 
+    /**
+     * Execute payload.
+     *
+     * @param message the message
+     */
     public static void executePayload(Message message) {
         message.accept(commandManager);
     }
 
+    /**
+     * Creates the payload.
+     *
+     * @param message the message
+     * @return the string
+     */
     public static String createPayload(Message message) {
         JsonMessage jsonMessage = new JsonMessage(username);
         return jsonMessage.getMessage((ActionVisitor) message);
     }
 
+    /**
+     * Sets the player.
+     *
+     * @param playerName the new player
+     */
     public static void setPlayer(String playerName) {
         Platform.runLater(() -> {
             if(lobbyGuiView != null) {
@@ -85,6 +148,11 @@ public class CommandManager implements MessageVisitor {
         });
     }
 
+    /**
+     * Sets the timer.
+     *
+     * @param time the new timer
+     */
     public static void setTimer(String time) {
         Platform.runLater(() -> {
             if(lobbyGuiView != null)
@@ -92,6 +160,11 @@ public class CommandManager implements MessageVisitor {
         });
     }
 
+    /**
+     * Removes the player.
+     *
+     * @param playerName the player name
+     */
     public static void removePlayer(String playerName) {
         Platform.runLater(() -> {
             if(gameGuiAdapter != null)
@@ -102,16 +175,25 @@ public class CommandManager implements MessageVisitor {
         });
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void visit(Message message) {
         LOGGER.log(Level.INFO, message.getType().getName());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent)
+     */
     @Override
     public void visit(AddPlayerEvent addPlayerEvent) {
         setPlayer(addPlayerEvent.getUsername());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent)
+     */
     @Override
     public void visit(BeginTurnEvent beginTurnEvent) {
         if (gameGuiAdapter == null) {
@@ -127,11 +209,17 @@ public class CommandManager implements MessageVisitor {
         gameGuiAdapter.notifyTurn();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent)
+     */
     @Override
     public void visit(MatchTimeEvent matchTimeEvent) {
         setTimer(matchTimeEvent.getTime());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent)
+     */
     @Override
     public void visit(HeartbeatInitEvent heartbeatInitEvent) {
         try {
@@ -142,16 +230,25 @@ public class CommandManager implements MessageVisitor {
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent)
+     */
     @Override
     public void visit(RemovePlayerEvent removePlayerEvent) {
         removePlayer(removePlayerEvent.getUsername());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse)
+     */
     @Override
     public void visit(WindowResponse windowResponse) {
         windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView(windowResponse, lobbyGuiView.getStage()), client);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse)
+     */
     @Override
     public void visit(OpponentWindowResponse opponentWindowResponse) {
         if(windowGameManager == null)
@@ -161,6 +258,9 @@ public class CommandManager implements MessageVisitor {
             windowGameManager.addWindow(opponentWindowResponse.getPlayerWindowId(player), opponentWindowResponse.getPlayerWindowSide(player));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse)
+     */
     @Override
     public void visit(DiceResponse diceResponse) {
         if (gameGuiAdapter == null) {
@@ -177,21 +277,33 @@ public class CommandManager implements MessageVisitor {
         gameGuiAdapter.setDiceList(diceResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse)
+     */
     @Override
     public void visit(OpponentDiceMoveResponse opponentDiceMoveResponse) {
         gameGuiAdapter.setOpponentDiceResponse(opponentDiceMoveResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse)
+     */
     @Override
     public void visit(RuleResponse ruleResponse) {
         gameGuiAdapter.notifyMoveResponse(ruleResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse)
+     */
     @Override
     public void visit(NewTurnResponse newTurnResponse) {
         gameGuiAdapter.setRound(newTurnResponse.getRound());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse)
+     */
     @Override
     public void visit(PrivateObjectiveResponse privateObjectiveResponse) {
 
@@ -200,6 +312,9 @@ public class CommandManager implements MessageVisitor {
             gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse)
+     */
     @Override
     public void visit(PublicObjectiveResponse publicObjectiveResponse) {
         this.publicObjectiveResponse = publicObjectiveResponse;
@@ -207,6 +322,9 @@ public class CommandManager implements MessageVisitor {
             gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse)
+     */
     @Override
     public void visit(ToolCardResponse toolCardResponse) {
         this.toolCardResponse = toolCardResponse;

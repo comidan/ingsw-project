@@ -6,14 +6,30 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
+ * MSAccessDatabase moduele/library class
  *
  * @author daniele
  */
 class MSAccessDatabase extends Database {
+    
+    /** The Constant DATABASE_DRIVER package*/
     private static final String DATABASE_DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
+
     private static final Logger LOGGER = Logger.getLogger(MSAccessDatabase.class.getName());
     
+    /**
+     * Instantiates a new MS access database.
+     *
+     * @param username DB access username
+     * @param password DB access password
+     * @param maxPool DB max pool
+     * @param dbmsURL DBMS URL
+     * @param port DBMS port
+     * @param dbName DB name
+     * @throws SQLException SQL exception on connection fault
+     */
     MSAccessDatabase(String username, String password, int maxPool, String dbmsURL, int port, String dbName) throws SQLException
     {
         this.databaseURL = "jdbc:ucanaccess://"+dbmsURL+":"+port+"/"+dbName;
@@ -24,6 +40,16 @@ class MSAccessDatabase extends Database {
         statement = connection.createStatement();
     }
     
+    /**
+     * Instantiates a new MS access database using default port
+     *
+     * @param username DB access username
+     * @param password DB access password
+     * @param maxPool DB max pool
+     * @param dbmsURL DBMS URL
+     * @param dbName DB name
+     * @throws SQLException SQL exception on connection fault
+     */
     MSAccessDatabase(String username, String password, int maxPool, String dbmsURL, String dbName) throws SQLException
     {
         this.databaseURL = "jdbc:ucanaccess://"+dbmsURL+"/"+dbName;
@@ -34,6 +60,9 @@ class MSAccessDatabase extends Database {
         statement = connection.createStatement();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.database.Database#connect()
+     */
     protected Connection connect() throws SQLException {
         if(connection == null)
         {

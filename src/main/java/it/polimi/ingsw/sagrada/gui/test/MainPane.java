@@ -12,24 +12,55 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 //done for now
 
 //ALL IDS AND IDLISTS MUST BE REPLACED WITH MODEL ELEMENT THAT CONTAINS ID OR DIRECTLY IMAGE REFERENCE
 
+/**
+ * The Class MainPane.
+ */
 public class MainPane extends Application {
+    
+    /** The primary stage. */
     private Stage primaryStage;
+    
+    /** The root. */
     private AnchorPane root = new AnchorPane();
+    
+    /** The id list. */
     private List<Integer> idList; // to be removed and accessed as parameter
+    
+    /** The dice id list. */
     private List<Integer> diceIdList;
+    
+    /** The my id. */
     private int myId; // to be removed and accessed as parameter
+    
+    /** The other window views. */
     private List<WindowView> otherWindowViews;
+    
+    /** The other window models. */
     private List<WindowModel> otherWindowModels;
+    
+    /** The my window. */
     private MyWindowView myWindow;
+    
+    /** The my window model. */
     private WindowModel myWindowModel;
+    
+    /** The window model. */
     private WindowModelInterface windowModel;
+    
+    /** The game model. */
     private GameModel gameModel;
+    
+    /** The my player. */
     private PlayerModel myPlayer;
 
+    /**
+     * Instantiates a new main pane.
+     */
     public MainPane() {
         this.windowModel = new WindowModel();
         this.gameModel = new GameModel();
@@ -37,6 +68,9 @@ public class MainPane extends Application {
         this.otherWindowModels = new ArrayList<>();
     }
 
+    /**
+     * Sets the id.
+     */
     // to be removed, this must be done in controller
     private void setId() {
         idList = new ArrayList<>();
@@ -51,6 +85,9 @@ public class MainPane extends Application {
         diceIdList.add(56);
     }
 
+    /* (non-Javadoc)
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     //this is okay
     @Override
     public void start(Stage primaryStage) {
@@ -69,6 +106,9 @@ public class MainPane extends Application {
     }
 
 
+    /**
+     * Sets the my view.
+     */
     public void setMyView() {
         otherWindowModels = gameModel.getPlayerList().stream().filter(player -> !player.equals(myPlayer)).map(PlayerModel::getWindowModel).collect(Collectors.toList());
 
@@ -81,6 +121,11 @@ public class MainPane extends Application {
 
     }
 
+    /**
+     * Sets the other windows.
+     *
+     * @param idList the new other windows
+     */
     public void setOtherWindows(List<Integer> idList) {
         int size = idList.size();
         if (size == 1 || size == 3) {
@@ -122,6 +167,11 @@ public class MainPane extends Application {
     }
 
 
+    /**
+     * Creates the scene.
+     *
+     * @param primaryStage the primary stage
+     */
     //this is okay
     public void createScene(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -144,6 +194,11 @@ public class MainPane extends Application {
     }
 
 
+    /**
+     * Sets the draft.
+     *
+     * @param Id the new draft
+     */
     //button must be placed somewhere else
     public void setDraft(List<Integer> Id) {
 
