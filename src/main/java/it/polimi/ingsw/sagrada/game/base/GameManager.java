@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.game.base;
 import it.polimi.ingsw.sagrada.game.base.state.PlayerIterator;
 import it.polimi.ingsw.sagrada.game.base.state.StateGameEnum;
 import it.polimi.ingsw.sagrada.game.base.state.StateIterator;
+import it.polimi.ingsw.sagrada.game.base.state.StateIteratorSingletonPool;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.cards.CardManager;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
@@ -57,7 +58,7 @@ public class GameManager implements Channel<Message, Message> {
 
     private RoundTrack roundTrack;
 
-    private StateIterator stateIterator = StateIterator.getInstance();
+    private StateIterator stateIterator = StateIteratorSingletonPool.getStateIteratorInstance(hashCode());
 
     private PlayerIterator playerIterator;
 

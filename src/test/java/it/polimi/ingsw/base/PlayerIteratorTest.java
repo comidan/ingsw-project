@@ -3,6 +3,7 @@ package it.polimi.ingsw.base;
 import it.polimi.ingsw.sagrada.game.base.state.PlayerIterator;
 import it.polimi.ingsw.sagrada.game.base.state.StateGameEnum;
 import it.polimi.ingsw.sagrada.game.base.state.StateIterator;
+import it.polimi.ingsw.sagrada.game.base.state.StateIteratorSingletonPool;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -36,7 +37,7 @@ public class PlayerIteratorTest {
         playerList.add(SECOND_USER);
         playerList.add(THIRD_USER);
 
-        StateIterator stateIterator = StateIterator.getInstance();
+        StateIterator stateIterator = StateIteratorSingletonPool.getStateIteratorInstance(hashCode());
         stateIterator.forceState(StateGameEnum.DEAL_WINDOWS);
         PlayerIterator playerIterator = new PlayerIterator(playerList);
         while(stateIterator.next()==StateGameEnum.TURN) {

@@ -11,7 +11,6 @@ import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.ConstraintGenerator;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +55,7 @@ public class MainGameGuiTest {
             constraints.add(constraintGenerator.getConstraintMatrix(3, WindowSide.FRONT));
             GameView gameView = GameView.getInstance("test", players, constraints);
 
-            Platform.runLater(() -> {
-                gameView.setDraft(diceResponse);
-            });
+            Platform.runLater(() -> gameView.setDraft(diceResponse));
             GameGuiAdapter gameGuiAdapter = new GameGuiAdapter(gameView, new Client() {
                 @Override
                 public void startHeartbeat(int port) {

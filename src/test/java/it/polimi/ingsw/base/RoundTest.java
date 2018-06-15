@@ -2,6 +2,7 @@ package it.polimi.ingsw.base;
 
 import it.polimi.ingsw.sagrada.game.base.state.StateGameEnum;
 import it.polimi.ingsw.sagrada.game.base.state.StateIterator;
+import it.polimi.ingsw.sagrada.game.base.state.StateIteratorSingletonPool;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class RoundTest {
     @Test
     public void testRound() {
         StateGameEnum state;
-        StateIterator itr = StateIterator.getInstance();
+        StateIterator itr = StateIteratorSingletonPool.getStateIteratorInstance(hashCode());
         int index=0;
 
         //Method used only for testing. Please read StateIterator method to get full image of what's going on

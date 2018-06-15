@@ -7,13 +7,10 @@ import static it.polimi.ingsw.sagrada.game.base.state.StateGameEnum.*;
 
 
 /**
- * This Iterator manages various phase of the game. It's a Singleton
+ * This Iterator manages various phase of the game
  */
 
 public class StateIterator implements Iterator<StateGameEnum> {
-    
-    /** The instance. */
-    private static StateIterator instance;
     
     /** The current state. */
     private StateGameEnum currentState;
@@ -24,7 +21,7 @@ public class StateIterator implements Iterator<StateGameEnum> {
     /**
      * Instantiates a new state iterator.
      */
-    private StateIterator() {
+    StateIterator() {
         roundNumber=1;
         currentState=null;
     }
@@ -40,16 +37,6 @@ public class StateIterator implements Iterator<StateGameEnum> {
     public void forceState(StateGameEnum s) {
         currentState = s;
         roundNumber = 1;
-    }
-
-    /**
-     * Gets the single instance of StateIterator
-     *
-     * @return single instance of StateIterator
-     */
-    public static StateIterator getInstance() {
-        if(instance==null) instance = new StateIterator();
-        return instance;
     }
 
     /**
