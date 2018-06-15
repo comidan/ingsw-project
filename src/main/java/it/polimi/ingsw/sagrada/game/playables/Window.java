@@ -2,7 +2,6 @@ package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
-import it.polimi.ingsw.sagrada.gui.test.WindowModelInterface;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * The Class Window.
  */
-public class Window implements WindowModelInterface {
+public class Window {
 
     /** The name. */
     private String name;
