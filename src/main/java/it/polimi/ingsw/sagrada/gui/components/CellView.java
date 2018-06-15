@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 
 import java.io.File;
@@ -63,10 +64,11 @@ public class CellView extends ImageView {
     /**
      * Sets the cell listener.
      *
-     * @param cellClickEventHandler the new cell listener
+     * @param cellDragOver, cellDragDone the new cell listener
      */
-    public void setCellListener(EventHandler<MouseEvent> cellClickEventHandler){
-        setOnMouseClicked(cellClickEventHandler);
+    public void setCellListener(EventHandler<DragEvent> cellDragOver,EventHandler<DragEvent>  cellDragDone){
+        setOnDragOver(cellDragOver);
+        setOnDragDropped(cellDragDone);
 
     }
 

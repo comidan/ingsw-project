@@ -117,7 +117,15 @@ public class GUIManager {
      * @return the width pixel
      */
     public static double getWidthPixel(int perc) {
-        return perc * getWindowWidth() / 100;
+            return perc * getWindowWidth() / 100;
+    }
+
+    public static double getFullWidthPixel(int perc){
+        return perc * getScreenWidth() / 100;
+    }
+
+    public static double getFullHeightPixel(int perc){
+        return perc * getScreenHeight() / 100;
     }
 
     /**

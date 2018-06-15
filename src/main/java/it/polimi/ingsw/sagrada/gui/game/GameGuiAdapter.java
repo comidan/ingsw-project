@@ -16,6 +16,11 @@ import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -62,6 +67,7 @@ public class GameGuiAdapter {
         setEndTurnHandler(client);
         setCellHandler(client);
         setToolHandler();
+        setDraftListener();
     }
 
     /**
@@ -93,34 +99,42 @@ public class GameGuiAdapter {
      * @param client the new cell handler
      */
     private void setCellHandler(Client client) {
-        Platform.runLater(() -> {
-            this.gameView.setCellClickListener(event ->
-            {
-                DiceView diceView = clickedObject.getClickedDice();
-                System.out.println(diceView == null);
-                if (diceView != null) {
-                    CellView cellView = (CellView) event.getSource();
-                    System.out.println(cellView.isOccupied());
-                    if (!cellView.isOccupied()) {
-                        lastMove = cellView;
-                        cellView.setImageCell(diceView);
 
-                        String username = this.gameView.getUsername();
-                        int idDice = diceView.getDiceID();
-                        int row = cellView.getRow();
-                        int col = cellView.getCol();
-                        Position position = new Position(row, col);
-                        DiceEvent diceEvent = new DiceEvent(username, idDice, position, CommandKeyword.DRAFT);
-                        try {
-                            client.sendRemoteMessage(diceEvent);
-                            System.out.println("Notified dice move");
-                        } catch (RemoteException e) {
-                            LOGGER.log(Level.SEVERE, e::getMessage);
-                        }
-                        clickedObject.setClickedDice(null);
-                    }
-                }
-            });
+        GameGuiAdapter self = this;
+        Platform.runLater(() -> {
+            this.gameView.setCellClickListener(new EventHandler<DragEvent>() {
+                public void handle(DragEvent event) {
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);}
+                    }, new EventHandler<DragEvent>() {
+                    public void handle(DragEvent event) {
+                      DiceView diceView = clickedObject.getClickedDice();
+                      System.out.println(diceView == null);
+                      if (diceView != null) {
+                          CellView cellView = (CellView) event.getSource();
+                          System.out.println(cellView.isOccupied());
+                          if (!cellView.isOccupied()) {
+                              lastMove = cellView;
+                              cellView.setImageCell(diceView);
+                              event.consume();
+                              String username = self.gameView.getUsername();
+                              int idDice = diceView.getDiceID();
+                              int row = cellView.getRow();
+                              int col = cellView.getCol();
+                              Position position = new Position(row, col);
+                              DiceEvent diceEvent = new DiceEvent(username, idDice, position, CommandKeyword.DRAFT);
+                              try {
+                                  client.sendRemoteMessage(diceEvent);
+                                  System.out.println("Notified dice move");
+                              } catch (RemoteException e) {
+                                  LOGGER.log(Level.SEVERE, e::getMessage);
+                              }
+                              clickedObject.setClickedDice(null);
+                          }
+                      }
+             }
+
+             });
+
         });
     }
 
@@ -129,10 +143,20 @@ public class GameGuiAdapter {
      */
     private void setDraftListener() {
         Platform.runLater(() -> {
+
+
+
             this.gameView.setDraftClickHandler(event ->
             {
                 DiceView diceView = (DiceView) event.getSource();
                 clickedObject.setClickedDice(diceView);
+                Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
+                ClipboardContent content = new ClipboardContent();
+                content.putImage(diceView.getImage());
+                db.setContent(content);
+
+                event.consume();
+
                 System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
             });
         });

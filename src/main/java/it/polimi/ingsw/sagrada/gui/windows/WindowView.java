@@ -7,8 +7,10 @@ import it.polimi.ingsw.sagrada.gui.components.DiceView;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
 
 /**
@@ -18,7 +20,7 @@ public class WindowView extends GridPane {
 
     /** The label. */
     private final Label label;
-    
+
     /** The window dices. */
     private final CellView[][] windowDices;
 
@@ -28,12 +30,15 @@ public class WindowView extends GridPane {
      * @param constraints the constraints
      */
     public WindowView(Constraint[][] constraints) {
+
         label = new Label();
         windowDices = new CellView[4][5];
         for (int i = 0; i < constraints.length; i++)
             for (int j = 0; j < constraints[0].length; j++)
                 windowDices[i][j] = new CellView(i, j, constraints[i][j]);
         setGridLinesVisible(true);
+
+
         createGrid();
     }
 
@@ -41,20 +46,28 @@ public class WindowView extends GridPane {
      * Creates the grid.
      */
     private void createGrid() {
+        this.setStyle("-fx-border-color:black;-fx-border-width:4px;-fx-border-style:solid;");
         for (int i = 0; i < windowDices.length; i++)
-            for (int j = 0; j < windowDices[0].length; j++)
-                add(windowDices[i][j], j, i);
+            for (int j = 0; j < windowDices[0].length; j++) {
+
+
+        StackPane stackPane = new StackPane();
+        stackPane.setStyle("-fx-border-color:black;-fx-border-width:4px;-fx-border-style:solid;");
+        stackPane.getChildren().add(windowDices[i][j]);
+        this.add(stackPane, j, i);
+
+        }
     }
 
     /**
      * Sets the window dice listener.
      *
-     * @param cellClickEventHandler the new window dice listener
+     * @param cellDragOver, cellDragOver, the new window dice listener
      */
-    public void setWindowDiceListener(EventHandler<MouseEvent> cellClickEventHandler) {
+    public void setWindowDiceListener(EventHandler<DragEvent> cellDragOver, EventHandler <DragEvent> cellDragDone) {
         for (int i = 0; i < windowDices.length; i++)
             for (int j = 0; j < windowDices[0].length; j++)
-                windowDices[i][j].setCellListener(cellClickEventHandler);
+                windowDices[i][j].setCellListener(cellDragOver, cellDragDone );
     }
 
 
