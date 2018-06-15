@@ -99,7 +99,7 @@ public class MainGameGuiTest {
             scanner.nextInt();
         } catch (Exception exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
-            //fail();
+            fail();
         }
 
     }

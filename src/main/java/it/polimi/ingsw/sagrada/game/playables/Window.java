@@ -6,7 +6,7 @@ import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import java.util.List;
 
 /**
- *
+ *  Window model class representing a certain window including its cell/dice matrix
  */
 public class Window {
 
@@ -16,7 +16,15 @@ public class Window {
     private int id;
     private WindowSide side;
 
-
+    /**
+     * Instantiates a new window.
+     *
+     * @param name the name
+     * @param cellMatrix the cell matrix
+     * @param tokens the tokens
+     * @param id the id
+     * @param side the side
+     */
     public Window(String name, Cell[][] cellMatrix, List<Token> tokens, int id, WindowSide side) {
         this.name = name;
         this.cellMatrix = cellMatrix;
@@ -26,17 +34,21 @@ public class Window {
     }
 
     /**
-     * @return
+     * Gets the cell matrix.
+     *
+     * @return the cell matrix
      */
     public Cell[][] getCellMatrix() {
         return this.cellMatrix;
     }
 
     /**
+     * Sets the cell.
+     *
      * @param dice - dice to be added
-     * @param x    - windows x-position
      * @param y    - windows y-position
-     * @return
+     * @param x    - windows x-position
+     * @return true, if successful
      */
     public boolean setCell(Dice dice, int y, int x) {
         if (cellMatrix[y][x].isOccupied()) return false;
@@ -44,26 +56,55 @@ public class Window {
         return true;
     }
 
+    /**
+     * Reset cell.
+     *
+     * @param y the y
+     * @param x the x
+     */
     public void resetCell(int y, int x) {
         cellMatrix[y][x].removeCurrentDice();
     }
 
+    /**
+     * Gets the token number.
+     *
+     * @return the token number
+     */
     public int getTokenNumber() {
         return tokens.size();
     }
 
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the id.
+     *
+     * @return the id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Gets the side.
+     *
+     * @return the side
+     */
     public WindowSide getSide() {
         return side;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     public String toString() {
         StringBuilder output = new StringBuilder();
 

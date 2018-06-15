@@ -67,7 +67,6 @@ public class GameGuiAdapter {
         setEndTurnHandler(client);
         setCellHandler(client);
         setToolHandler();
-     //   setDraftListener();
     }
 
     /**
