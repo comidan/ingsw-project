@@ -1,9 +1,15 @@
 package it.polimi.ingsw.sagrada.gui.components;
 
+import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import it.polimi.ingsw.sagrada.gui.utils.Resizer;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,28 +18,37 @@ import java.util.List;
 /**
  * The Class RoundtrackView.
  */
-public class RoundtrackView extends GridPane {
+public class RoundtrackView extends StackPane {
 
     /** The Constant MAX_ROUND. */
     private static final int MAX_ROUND = 10;
 
-    /** The resizer. */
-    private Resizer resizer;
+    /** The GUIManager. */
+    private GUIManager guiManager;
     
     /** The cell view list. */
     private ArrayList<ArrayList<CellView>> cellViewList;
+
+    private GridPane grid;
+    private ImageView imageView;
 
     /**
      * Instantiates a new roundtrack view.
      */
     public RoundtrackView() {
-        this.resizer = new Resizer();
+        imageView = new ImageView();
+        imageView.setImage(new Image("/images/roundtrack.png", guiManager.getFullWidthPixel(62), guiManager.getFullHeightPixel(20), true, false));
+        this.getChildren().add(imageView);
+        this.grid = new GridPane();
+        this.guiManager = new GUIManager();
         this.cellViewList = new ArrayList<>();
-        this.resize(resizer.getWidthPixel(30), resizer.getHeightPixel(20));
         for (int i = 0; i< MAX_ROUND; i++){
             ArrayList<CellView> roundDiceList = new ArrayList<>();
             cellViewList.add(roundDiceList);
+
         }
+        this.getChildren().add(grid);
+
     }
 
     /**
@@ -47,7 +62,8 @@ public class RoundtrackView extends GridPane {
             CellView cell = new CellView();
             cellViewList.get(currentRound).add(cell);
             cellViewList.get(currentRound).get(i).setImageCell(diceView.get(i));
-            this.add(cell, currentRound, i);
+            grid.add(cell, currentRound, i);
+            this.setMargin(grid, new Insets(50,8,8,10));
 
         }
     }

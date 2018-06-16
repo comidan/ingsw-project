@@ -120,11 +120,11 @@ public class GUIManager {
             return perc * getWindowWidth() / 100;
     }
 
-    public static double getFullWidthPixel(int perc){
+    public static double getFullWidthPixel(double perc){
         return perc * getScreenWidth() / 100;
     }
 
-    public static double getFullHeightPixel(int perc){
+    public static double getFullHeightPixel(double perc){
         return perc * getScreenHeight() / 100;
     }
 

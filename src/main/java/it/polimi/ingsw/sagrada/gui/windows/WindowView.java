@@ -46,7 +46,7 @@ public class WindowView extends GridPane {
      * Creates the grid.
      */
     private void createGrid() {
-        this.setStyle("-fx-border-color:black;-fx-border-width:4px;-fx-border-style:solid;");
+        this.setStyle("-fx-border-color:black;-fx-border-width:5px;-fx-border-style:solid;");
         for (int i = 0; i < windowDices.length; i++)
             for (int j = 0; j < windowDices[0].length; j++) {
 

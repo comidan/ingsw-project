@@ -4,10 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.cards.CardBoard;
-import it.polimi.ingsw.sagrada.gui.components.DiceView;
-import it.polimi.ingsw.sagrada.gui.components.DraftView;
-import it.polimi.ingsw.sagrada.gui.components.RoundtrackView;
-import it.polimi.ingsw.sagrada.gui.components.TokenView;
+import it.polimi.ingsw.sagrada.gui.components.*;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import it.polimi.ingsw.sagrada.gui.windows.WindowView;
@@ -46,6 +43,9 @@ public class GameView extends Application {
     
     /** The vertical box. */
     private VBox verticalBox;
+
+    /** The frame view. */
+    private FrameView frame;
     
     /** The horizontal box. */
     private HBox horizontalBox;
@@ -163,7 +163,7 @@ public class GameView extends Application {
      * @param diceViews the dice views
      * @param currentRound the current round
      */
-    void setRoundtrackImage(List<DiceView> diceViews, int currentRound){
+    public void setRoundtrackImage(List<DiceView> diceViews, int currentRound){
         this.roundtrackView.setImage(diceViews, currentRound);
     }
 
@@ -242,6 +242,7 @@ public class GameView extends Application {
      * Initialize.
      */
     private void initialize(){
+        this.frame = new FrameView();
         this.cardBoard = new CardBoard();
         this.guiManager = new GUIManager();
         this.roundtrackView = new RoundtrackView();
@@ -268,8 +269,8 @@ public class GameView extends Application {
             tokenGrid.add(new TokenView(), i, 1);
         }
 
-        AnchorPane.setBottomAnchor(tokenGrid, guiManager.getHeightPixel(47));
-        AnchorPane.setLeftAnchor(tokenGrid, guiManager.getWidthPixel(10));
+        AnchorPane.setBottomAnchor(tokenGrid, guiManager.getFullHeightPixel(68));
+        AnchorPane.setLeftAnchor(tokenGrid, guiManager.getFullWidthPixel(9));
         anchorPane.getChildren().addAll(tokenGrid);
 
     }
@@ -365,23 +366,28 @@ public class GameView extends Application {
         players.forEach(user -> windows.put(user, new WindowView(constraints.get(players.indexOf(user)))));
         verticalBox.setSpacing(15);
         for (int i = 0; i < players.size(); i++)
-            if (!players.get(i).equals(username))
-                verticalBox.getChildren().add(windows.get(players.get(i)));
-        AnchorPane.setBottomAnchor(verticalBox, guiManager.getHeightPixel(10));
-        AnchorPane.setRightAnchor(verticalBox, guiManager.getWidthPixel(10));
+            if (!players.get(i).equals(username)) {
+                WindowView window = windows.get(players.get(i));
+                verticalBox.getChildren().add(window);
+            }
+        anchorPane.setBottomAnchor(verticalBox, guiManager.getFullHeightPixel(3));
+        anchorPane.setRightAnchor(verticalBox, guiManager.getFullWidthPixel(3));
         anchorPane.getChildren().addAll(verticalBox);
         endTurn = new Button("End turn");
-        horizontalBox.getChildren().add(endTurn);
+        /*horizontalBox.getChildren().add(endTurn);
         horizontalBox.setAlignment(Pos.BOTTOM_CENTER);
-        horizontalBox.getChildren().add(windows.get(username));
-        AnchorPane.setBottomAnchor(horizontalBox, guiManager.getHeightPixel(11));
-        AnchorPane.setLeftAnchor(horizontalBox, guiManager.getWidthPixel(10));
-        anchorPane.getChildren().addAll(horizontalBox);
-        AnchorPane.setBottomAnchor(cardBoard, guiManager.getHeightPixel(7));
-        AnchorPane.setRightAnchor(cardBoard, guiManager.getWidthPixel(32));
+        horizontalBox.getChildren().add(windows.get(username));*/
+        frame.addWindowToFrame(windows.get(username));
+        anchorPane.setBottomAnchor(frame, guiManager.getFullHeightPixel(1.7));
+        anchorPane.setLeftAnchor(frame, guiManager.getFullWidthPixel(7));
+        anchorPane.setBottomAnchor(endTurn, guiManager.getFullHeightPixel(6));
+        anchorPane.setLeftAnchor(endTurn, guiManager.getFullWidthPixel(36));
+        anchorPane.getChildren().addAll(frame, endTurn);
+        anchorPane.setBottomAnchor(cardBoard, guiManager.getFullHeightPixel(7));
+        anchorPane.setRightAnchor(cardBoard, guiManager.getFullWidthPixel(32));
         anchorPane.getChildren().addAll(cardBoard);
-        AnchorPane.setTopAnchor(roundtrackView, guiManager.getHeightPixel(17));
-        AnchorPane.setLeftAnchor(roundtrackView, guiManager.getWidthPixel(68));
+        AnchorPane.setTopAnchor(roundtrackView, guiManager.getFullHeightPixel(5));
+        AnchorPane.setRightAnchor(roundtrackView, guiManager.getFullWidthPixel(3));
         anchorPane.getChildren().add(roundtrackView);
         components = new ArrayList<>();
         components.add(endTurn);
@@ -406,6 +412,10 @@ public class GameView extends Application {
         AnchorPane.setRightAnchor(draftView, guiManager.getFullWidthPixel(50));
         anchorPane.getChildren().addAll(draftView);
         components.add(draftView);
+    }
+
+    public void removeDiceView(DiceView diceView){
+        draftView.removeDiceView(diceView);
     }
 
     /**

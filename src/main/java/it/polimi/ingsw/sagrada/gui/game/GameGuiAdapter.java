@@ -67,6 +67,8 @@ public class GameGuiAdapter {
         setEndTurnHandler(client);
         setCellHandler(client);
         setToolHandler();
+
+        setDraftListener();
     }
 
     /**
@@ -114,7 +116,9 @@ public class GameGuiAdapter {
                           if (!cellView.isOccupied()) {
                               lastMove = cellView;
                               cellView.setImageCell(diceView);
-                              event.consume();
+                              clickedObject.setClickedDice(null);
+                              gameView.removeDiceView(diceView);
+
                               String username = self.gameView.getUsername();
                               int idDice = diceView.getDiceID();
                               int row = cellView.getRow();
@@ -127,7 +131,8 @@ public class GameGuiAdapter {
                               } catch (RemoteException e) {
                                   LOGGER.log(Level.SEVERE, e::getMessage);
                               }
-                              clickedObject.setClickedDice(null);
+
+                              event.consume();
                           }
                       }
              }

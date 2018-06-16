@@ -5,12 +5,14 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
+import it.polimi.ingsw.sagrada.gui.components.DiceView;
 import it.polimi.ingsw.sagrada.gui.game.GameGuiAdapter;
 import it.polimi.ingsw.sagrada.gui.game.GameView;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.ConstraintGenerator;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +56,15 @@ public class MainGameGuiTest {
             constraints.add(constraintGenerator.getConstraintMatrix(2, WindowSide.FRONT));
             constraints.add(constraintGenerator.getConstraintMatrix(3, WindowSide.FRONT));
             GameView gameView = GameView.getInstance("test", players, constraints);
+            DiceView diceView = new DiceView(Constraint.BLUE, Constraint.THREE, 4);
+            DiceView diceView2 = new DiceView(Constraint.BLUE, Constraint.THREE, 4);
+            List<DiceView> diceViews = new ArrayList<>();
+            diceViews.add(diceView);
+            diceViews.add(diceView2);
 
             Platform.runLater(() -> gameView.setDraft(diceResponse));
+            Platform.runLater(() -> gameView.setRoundtrackImage(diceViews, 3));
+
             GameGuiAdapter gameGuiAdapter = new GameGuiAdapter(gameView, new Client() {
                 @Override
                 public void startHeartbeat(int port) {

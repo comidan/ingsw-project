@@ -3,7 +3,6 @@ package it.polimi.ingsw.sagrada.gui.components;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import javafx.event.EventHandler;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
