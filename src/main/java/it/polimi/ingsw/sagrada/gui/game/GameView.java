@@ -16,12 +16,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class GameView extends Application {
     private DraftView draftView;
     
     /** The vertical box. */
-    private VBox verticalBox;
+    private HBox hBox;
 
     /** The frame view. */
     private FrameView frame;
@@ -58,12 +58,14 @@ public class GameView extends Application {
     
     /** The players. */
     private static List<String> players;
-    
+
+    Button windowButton;
+
     /** The constraints. */
     private static List<Constraint[][]> constraints;
     
-    /** The end turn. */
-    private Button endTurn;
+    /** The end turn button. */
+    private EndTurn endTurn;
 
     /** The guiManager. */
     private GUIManager guiManager;
@@ -135,8 +137,8 @@ public class GameView extends Application {
      *
      * @param endTurnEventHandler the new end turn handler
      */
-    void setEndTurnHandler(EventHandler<ActionEvent> endTurnEventHandler){
-        endTurn.setOnAction(endTurnEventHandler);
+    void setEndTurnHandler(EventHandler<MouseEvent> endTurnEventHandler){
+        endTurn.setEndTurnHandler(endTurnEventHandler);
     }
 
     /**
@@ -242,11 +244,13 @@ public class GameView extends Application {
      * Initialize.
      */
     private void initialize(){
+        windowButton = new Button("SHOW OPPONENT WINDOWS");
+        endTurn = new EndTurn();
         this.frame = new FrameView();
         this.cardBoard = new CardBoard();
         this.guiManager = new GUIManager();
         this.roundtrackView = new RoundtrackView();
-        verticalBox = new VBox();
+        hBox = new HBox();
         horizontalBox = new HBox();
         anchorPane = new AnchorPane();
         anchorPane.setStyle(
@@ -364,25 +368,24 @@ public class GameView extends Application {
     private void createScene(Stage primaryStage) {
 
         players.forEach(user -> windows.put(user, new WindowView(constraints.get(players.indexOf(user)))));
-        verticalBox.setSpacing(15);
+        hBox.setSpacing(15);
         for (int i = 0; i < players.size(); i++)
             if (!players.get(i).equals(username)) {
                 WindowView window = windows.get(players.get(i));
-                verticalBox.getChildren().add(window);
+                hBox.getChildren().add(window);
             }
-        anchorPane.setBottomAnchor(verticalBox, guiManager.getFullHeightPixel(3));
-        anchorPane.setRightAnchor(verticalBox, guiManager.getFullWidthPixel(3));
-        anchorPane.getChildren().addAll(verticalBox);
-        endTurn = new Button("End turn");
+
         /*horizontalBox.getChildren().add(endTurn);
         horizontalBox.setAlignment(Pos.BOTTOM_CENTER);
         horizontalBox.getChildren().add(windows.get(username));*/
+        anchorPane.setBottomAnchor(windowButton, guiManager.getFullHeightPixel(50));
+        anchorPane.setRightAnchor(windowButton, guiManager.getFullHeightPixel(10));
         frame.addWindowToFrame(windows.get(username));
         anchorPane.setBottomAnchor(frame, guiManager.getFullHeightPixel(1.7));
         anchorPane.setLeftAnchor(frame, guiManager.getFullWidthPixel(7));
         anchorPane.setBottomAnchor(endTurn, guiManager.getFullHeightPixel(6));
         anchorPane.setLeftAnchor(endTurn, guiManager.getFullWidthPixel(36));
-        anchorPane.getChildren().addAll(frame, endTurn);
+        anchorPane.getChildren().addAll(frame, endTurn, windowButton);
         anchorPane.setBottomAnchor(cardBoard, guiManager.getFullHeightPixel(7));
         anchorPane.setRightAnchor(cardBoard, guiManager.getFullWidthPixel(32));
         anchorPane.getChildren().addAll(cardBoard);
@@ -432,7 +435,7 @@ public class GameView extends Application {
      */
     void removePlayer(String playerId) {
         players.remove(playerId);
-        verticalBox.getChildren().removeAll(windows.get(playerId));
+        hBox.getChildren().removeAll(windows.get(playerId));
     }
 
     /**
@@ -452,4 +455,16 @@ public class GameView extends Application {
     void setOpponentWindow(String username, Dice dice, Position position) {
         windows.get(username).setDice(dice, position);
     }
+
+    public void setWindowButtonHandler(EventHandler<MouseEvent> windowButtonHandler){
+      windowButton.setOnMouseClicked(windowButtonHandler);
+    }
+
+    public void showOtherWindows(){
+        anchorPane.setBottomAnchor(hBox, guiManager.getFullHeightPixel(3));
+        anchorPane.setRightAnchor(hBox, guiManager.getFullWidthPixel(3));
+        anchorPane.getChildren().addAll(hBox);
+    }
+
+
 }

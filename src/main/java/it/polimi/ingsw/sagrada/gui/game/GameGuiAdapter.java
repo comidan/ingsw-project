@@ -17,10 +17,7 @@ import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -67,7 +64,7 @@ public class GameGuiAdapter {
         setEndTurnHandler(client);
         setCellHandler(client);
         setToolHandler();
-
+        setWindowButtonHandler();
         setDraftListener();
     }
 
@@ -91,6 +88,12 @@ public class GameGuiAdapter {
                 }
 
             });
+        });
+    }
+
+    public void setWindowButtonHandler(){
+        gameView.setWindowButtonHandler(event ->{
+            gameView.showOtherWindows();
         });
     }
 
