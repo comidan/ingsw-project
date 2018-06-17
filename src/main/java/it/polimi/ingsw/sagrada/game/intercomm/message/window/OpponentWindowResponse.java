@@ -33,7 +33,7 @@ public class OpponentWindowResponse implements Message, ResponseVisitor {
     public OpponentWindowResponse(List<String> players, List<Integer> windows, List<WindowSide> sides) {
         this.windows = new HashMap<>();
         this.players = players;
-        players.forEach(player -> this.windows.put(player,  new Pair<Integer, WindowSide>(windows.get(players.indexOf(player)), sides.get(player.indexOf(player)))));
+        players.forEach(player -> this.windows.put(player,  new Pair<Integer, WindowSide>(windows.get(players.indexOf(player)), sides.get(players.indexOf(player)))));
     }
 
 

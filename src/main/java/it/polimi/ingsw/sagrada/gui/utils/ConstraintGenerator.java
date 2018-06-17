@@ -89,7 +89,7 @@ public class ConstraintGenerator {
                     } else {
                         constraintMatrix[i][j] = Constraint.getColorConstraint(Colors.stringToColor(constraint));
                     }
-
+                    System.out.println(constraintMatrix[i][j]);
                     if (index < numCellWithConstraint) {
                         singleCell = (JSONObject) cells.get(index++);
                         nextX = ((Long) singleCell.get("x")).intValue();

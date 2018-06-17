@@ -197,7 +197,6 @@ public class CommandManager implements MessageVisitor {
     @Override
     public void visit(BeginTurnEvent beginTurnEvent) {
         if (gameGuiAdapter == null) {
-            windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
             gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
                                                                     windowChoiceGuiController.getStage(),
                                                                     playerList,
@@ -254,8 +253,10 @@ public class CommandManager implements MessageVisitor {
         if(windowGameManager == null)
             windowGameManager = new WindowGameManager();
         List<String> players = opponentWindowResponse.getPlayers();
-        for(String player : players)
+        for(String player : players) {
+            System.out.println("Window id : " + opponentWindowResponse.getPlayerWindowId(player) + " Window side : " + opponentWindowResponse.getPlayerWindowSide(player));
             windowGameManager.addWindow(opponentWindowResponse.getPlayerWindowId(player), opponentWindowResponse.getPlayerWindowSide(player));
+        }
     }
 
     /* (non-Javadoc)
@@ -264,7 +265,6 @@ public class CommandManager implements MessageVisitor {
     @Override
     public void visit(DiceResponse diceResponse) {
         if (gameGuiAdapter == null) {
-            windowGameManager.addWindow(windowChoiceGuiController.getWindowId(), windowChoiceGuiController.getWindowSide());
             gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
                                                                     windowChoiceGuiController.getStage(),
                                                                     playerList,

@@ -46,6 +46,7 @@ public class CommandParser {
                     return new MessageEvent((String)data.get(MESSAGE));
                 case WINDOW_CHOICE :
                     data = (JSONObject) jsonMsg.get(WINDOW);
+                    System.out.println(message);
                     String idPlayerW = (String)data.get(PLAYER_ID);
                     int idWindow = Integer.parseInt((String)data.get(WINDOW_ID));
                     WindowSide side = WindowSide.stringToWindowSide((String)data.get(WINDOW_SIDE));

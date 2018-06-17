@@ -98,7 +98,6 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
      */
     public Window generateWindow(int id, WindowSide side) {
         JSONObject card = (JSONObject) windowsArray.get(id);
-
         JSONArray windows = (JSONArray) card.get("windows");
         JSONObject specificWindow = (JSONObject) windows.get(WindowSide.sideToInt(side));
         String name = (String) specificWindow.get("name");
@@ -107,8 +106,8 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         for (int j = 0; j < numTokens; j++) {
             tokens.add(new Token());
         }
+        JSONArray array = (JSONArray) specificWindow.get("cells");
         Cell[][] cells = createCellMatrix((JSONArray) specificWindow.get("cells"));
-
         return new Window(name, cells, tokens, id, side);
     }
 
@@ -129,7 +128,6 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         int nextX = -1;
         int nextY = -1;
         String constraint = "0";
-
         if (numCellWithConstraint != 0) {
             singleCell = (JSONObject) cells.get(index++);
             nextX = ((Long) singleCell.get("x")).intValue();
