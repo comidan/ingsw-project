@@ -280,6 +280,8 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         DiscoverLan discoverLan = new DiscoverLan();
         try {
             //DiscoverLan.isDirectlyAttacchedAndReachable to be fixed to check non-directly connected host
+            System.out.println((DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !discoverLan.isHostReachable(Inet4Address.getByName(ADDRESS))));
+            System.out.println((!DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !DiscoverInternet.checkInternetConnection()));
             while ((DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !discoverLan.isHostReachable(Inet4Address.getByName(ADDRESS)))
                     || (!DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !DiscoverInternet.checkInternetConnection()))
                 try {
@@ -289,8 +291,8 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 catch (InterruptedException exc) {
                     Thread.currentThread().interrupt();
                 }
-                System.out.println("Restoring connection...");
-                initializeLobbyLink(username);
+            System.out.println("Restoring connection...");
+            initializeLobbyLink(username);
         } catch (IOException exc) {
             LOGGER.log(Level.SEVERE, exc.getMessage());
         }

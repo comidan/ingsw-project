@@ -141,7 +141,8 @@ public class CommandManager implements MessageVisitor {
         Platform.runLater(() -> {
             if(lobbyGuiView != null) {
                 lobbyGuiView.setPlayer(playerName);
-                playerList.add(playerName);
+                if(!playerList.contains(playerName))
+                    playerList.add(playerName);
             }
             else
                 playerLobbyListBackup.add(playerName);

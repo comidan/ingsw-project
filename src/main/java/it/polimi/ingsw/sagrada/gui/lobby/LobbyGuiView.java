@@ -71,6 +71,8 @@ public class LobbyGuiView {
      * @param username the new player
      */
     public void setPlayer(String username) {
+        if(playerShown.contains(username))
+            return;
         playerShown.add(username);
         int position = playerShown.indexOf(username);
         switch (position) {

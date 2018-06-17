@@ -23,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -381,10 +382,8 @@ public class GameView extends Application {
         players.forEach(user -> windows.put(user, new WindowView(constraints.get(players.indexOf(user)))));
         hBox.setSpacing(15);
         for (int i = 0; i < players.size(); i++)
-            if (!players.get(i).equals(username)) {
-                WindowView window = windows.get(players.get(i));
-                hBox.getChildren().add(window);
-            }
+            if (!players.get(i).equals(username))
+                hBox.getChildren().add(windows.get(players.get(i)));
         setHBox();
         setWindow();
         setCardBoard();

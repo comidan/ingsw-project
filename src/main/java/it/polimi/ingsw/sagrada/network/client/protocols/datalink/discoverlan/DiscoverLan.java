@@ -1,5 +1,7 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan;
 
+import org.apache.commons.lang3.SystemUtils;
+
 import java.io.IOException;
 import java.net.NetworkInterface;
 import java.net.InterfaceAddress;
@@ -9,6 +11,7 @@ import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 /**
@@ -38,6 +41,8 @@ public class DiscoverLan {
             mask = m;
         }
     };
+
+    private static final Logger LOGGER = Logger.getLogger(DiscoverLan.class.getName());
 
     /** The m directly attached networks. */
     // list of networks on interfaces of machine this code is being run on
@@ -111,12 +116,12 @@ public class DiscoverLan {
     }
 
     /**
-     * Checks if is host reachable.
+     * Checks if is host theoretically reachable.
      *
      * @param address the address
      * @return true, if is host reachable
      */
-    public boolean isHostReachable(InetAddress address) {
+    public boolean isHostDirectlyReachable(InetAddress address) {
         mDirectlyAttachedNetworks.clear();
         assignedLocalIp.clear();
         collectLocalAddresses();
@@ -128,6 +133,27 @@ public class DiscoverLan {
         }
         return false;
     }
+
+    /**
+     * Checks if is host reachable.
+     *
+     * @param address the address
+     * @return true, if is host reachable
+     */
+    public boolean isHostReachable(InetAddress address) {
+        try {
+            Process p;
+            if(SystemUtils.IS_OS_WINDOWS)
+                p = Runtime.getRuntime().exec("ping -n 1 " + address.getHostAddress());
+            else
+                p = Runtime.getRuntime().exec("ping -c 1 " + address.getHostAddress());
+            return p.waitFor() == 0;
+        }
+        catch (IOException | InterruptedException exc) {
+            return false;
+        }
+    }
+
 
     /**
      * Instantiates a new discover lan.
