@@ -42,61 +42,61 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
 
     /** The Constant MAX_POOL_SIZE. */
     private static final int MAX_POOL_SIZE = 4;
-    
+
     /** The Constant TIME_WAIT_UNIT. */
-    private static final long TIME_WAIT_UNIT = 10000;
-    
+    private static final int TIME_WAIT_UNIT = 10000;
+
     /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(MatchLobby.class.getName());
 
     /** The client pool. */
     private Map<String, ClientBase> clientPool;
-    
+
     /** The client ids. */
     private List<String> clientIds;
-    
+
     /** The client id tokens. */
     private List<String> clientIdTokens;
-    
+
     /** The executor. */
     private ExecutorService executor;
-    
+
     /** The lobby server. */
     private ExecutorService lobbyServer;
-    
+
     /** The check game start. */
     private ExecutorService checkGameStart;
-    
+
     /** The start time. */
     private long startTime;
-    
+
     /** The heartbeat protocol manager. */
     private HeartbeatProtocolManager heartbeatProtocolManager;
-    
+
     /** The port discovery. */
     private PortDiscovery portDiscovery;
-    
+
     /** The sign out. */
     private Function<String, Boolean> signOut;
-    
+
     /** The server socket. */
     private ServerSocket serverSocket;
-    
+
     /** The identifier. */
     private String identifier;
-    
+
     /** The port. */
     private int port;
-    
+
     /** The game manager. */
     private GameManager gameManager;
-    
+
     /** The dynamic router. */
     private DynamicRouter dynamicRouter;
-    
+
     /** The game data manager. */
     private GameDataManager gameDataManager;
-    
+
     /** The in game. */
     private boolean inGame;
 
@@ -330,12 +330,13 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     Function<String, Boolean> fastRecovery = this::fastRecoveryClientConnection;
                     Consumer<Message> sendToModel = this::sendToModel;
                     RemoteSocketClient socketClient = new RemoteSocketClient(client, id, disconnect, fastRecovery, sendToModel);
-                    if(!clientIds.contains(id)) //in case of communication loss
+                    if(!clientIds.contains(id)) { //in case of communication loss
                         clientIds.add(id);
+                        int heartbeatPort = portDiscovery.obtainAvailableUDPPort();
+                        DataManager.sendLoginLobbyResponse(client, heartbeatPort);
+                        heartbeatProtocolManager.addHost(id, heartbeatPort);
+                    }
                     clientPool.put(id, socketClient);
-                    int heartbeatPort = portDiscovery.obtainAvailableUDPPort();
-                    DataManager.sendLoginLobbyResponse(client, heartbeatPort);
-                    heartbeatProtocolManager.addHost(id, heartbeatPort);
                     executor.submit(socketClient);
                     for(String username : clientIds)
                         clientPool.get(id).setPlayer(username);
@@ -375,43 +376,33 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      * The Class CheckStartGameCondition.
      */
     private class CheckStartGameCondition implements Runnable{
-        
+
         /** The elapsed time. */
-        long elapsedTime;
-        
-        /** The elapsed time second. */
-        int elapsedTimeSecond=0;
-        
-        /** The previous time to wait. */
-        long previousTimeToWait;
+        int elapsedTime = 0;
 
         /* (non-Javadoc)
          * @see java.lang.Runnable#run()
          */
         @Override
         public void run() {
-            long timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size() + 1);
-            previousTimeToWait = timeToWait;
-            while (elapsedTime < timeToWait) {
-                elapsedTime = System.currentTimeMillis() - startTime;
+            int timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size() + 1);
+            while (elapsedTime < timeToWait / 1000) {
                 timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size() + 1);
-                if(timeToWait != previousTimeToWait) {
-                    previousTimeToWait = timeToWait;
-                    elapsedTime = 0;
+                try {
+                    Thread.sleep(1000);
                 }
-                int currentSeconds = (int) elapsedTime / 1000;
-                if (currentSeconds != elapsedTimeSecond) {
-                    elapsedTimeSecond = currentSeconds;
-                    for(String username : clientIds)
-                        try {
-                            clientPool.get(username).setTimer((timeToWait / 1000 - currentSeconds) + "");
-                        }
-                        catch (RemoteException exc) {
-                            LOGGER.log(Level.SEVERE, exc::getMessage);
-                        }
+                catch (InterruptedException exc) {
+                    LOGGER.log(Level.SEVERE, exc::getMessage);
                 }
+                elapsedTime += 1;
+                for(String username : clientIds)
+                    try {
+                        clientPool.get(username).setTimer((timeToWait / 1000 - elapsedTime) + "");
+                    }
+                    catch (RemoteException exc) {
+                        LOGGER.log(Level.SEVERE, exc::getMessage);
+                    }
             }
-
             if(clientPool.size()>1) startGame();
         }
     }
