@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.gui.cards.CardBoard;
 import it.polimi.ingsw.sagrada.gui.cards.ToolCardView;
 import it.polimi.ingsw.sagrada.gui.components.CellView;
 import it.polimi.ingsw.sagrada.gui.components.DiceView;
@@ -61,6 +62,7 @@ public class GameGuiAdapter {
      */
     private CellView lastMove;
 
+
     /**
      * The current round.
      */
@@ -76,10 +78,10 @@ public class GameGuiAdapter {
         this.clickedObject = new ClickedObject();
         this.gameView = gameView;
         setEndTurnHandler(client);
-        setCardShow();
         setCellHandler(client);
         setToolHandler();
         setWindowButtonHandler();
+        setCardPreviewListener();
     }
 
     /**
@@ -116,12 +118,6 @@ public class GameGuiAdapter {
     }
 
 
-    public void setCardShow() {
-        gameView.setCardShow(event -> {
-            gameView.showCardboard();
-        });
-
-    }
         /**
          * Sets the cell handler.
          *
@@ -227,6 +223,52 @@ public class GameGuiAdapter {
     }
 
 
+    private void setToolCardPrevListener(){
+            gameView.setToolPreviewListener(event -> {
+                gameView.showToolCard();
+                gameView.setToolPreviewListener(eventDone -> {
+                    gameView.hideToolCard();
+                    setToolCardPrevListener();
+                });}
+            );
+
+    }
+
+    private void setPrivatePrevListener(){
+            gameView.setPrivatePreviewListener(event -> {
+                gameView.showPrivateCard();
+                gameView.setPrivatePreviewListener(eventDone -> {
+                    gameView.hidePrivateCard();
+                    setPrivatePrevListener();
+                });}
+            );
+
+    }
+
+    private void setPublicPrevListener(){
+            gameView.setPublicPreviewListener(event -> {
+                gameView.showPublicCard();
+                gameView.setPublicPreviewListener(eventDone -> {
+                    gameView.hidePublicCard();
+                    setPublicPrevListener();
+                });}
+            );
+    }
+
+
+
+    private void setCardPreviewListener(){
+        Platform.runLater(() -> {
+            setToolCardPrevListener();
+            setPrivatePrevListener();
+            setPublicPrevListener();
+        });
+    }
+
+
+
+
+
     /**
      * Adds the dice roundtrack.
      *
@@ -301,6 +343,7 @@ public class GameGuiAdapter {
             setDraftListener();
         });
     }
+
 
     /**
      * Sets the private objective.

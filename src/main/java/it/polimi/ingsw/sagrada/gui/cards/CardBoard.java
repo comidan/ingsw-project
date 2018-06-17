@@ -1,8 +1,12 @@
 package it.polimi.ingsw.sagrada.gui.cards;
 
+import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +15,7 @@ import java.util.List;
 /**
  * The Class CardBoard.
  */
-public class CardBoard extends GridPane {
+public class CardBoard extends AnchorPane {
     
     /** The tool card view list. */
     List<ToolCardView> toolCardViewList;
@@ -19,12 +23,31 @@ public class CardBoard extends GridPane {
     /** The objective card view list. */
     List<ObjectiveCardView> objectiveCardViewList;
 
+    private VBox privateCardBox;
+
+    private VBox publicCardBox;
+
+    private VBox toolBox;
+
+    private GUIManager guiManager;
+
     /**
      * Instantiates a new card board.
      */
     public CardBoard() {
+        guiManager = new GUIManager();
         toolCardViewList = new ArrayList<>();
         objectiveCardViewList = new ArrayList<>();
+        privateCardBox = new VBox();
+        publicCardBox = new VBox();
+        toolBox = new VBox();
+        setBottomAnchor(toolBox, guiManager.getFullHeightPixel(12));
+        setRightAnchor(toolBox, guiManager.getFullWidthPixel(20));
+        setBottomAnchor(privateCardBox, guiManager.getFullHeightPixel(12));
+        setRightAnchor(privateCardBox, guiManager.getFullWidthPixel(30));
+        setBottomAnchor(publicCardBox, guiManager.getFullHeightPixel(12));
+        setRightAnchor(publicCardBox, guiManager.getFullWidthPixel(40));
+
     }
 
     /**
@@ -44,7 +67,7 @@ public class CardBoard extends GridPane {
     public void setToolCards(List<Integer> toolCards) {
         toolCards.forEach(id -> {
             ToolCardView toolCardView = new ToolCardView(id);
-            add(toolCardView, toolCardViewList.size(), 1);
+            toolBox.getChildren().add(toolCardView);
             toolCardViewList.add(toolCardView);
         });
     }
@@ -57,8 +80,7 @@ public class CardBoard extends GridPane {
     public void setPublicObjectives(List<Integer> publicObjectives) {
         publicObjectives.forEach(id -> {
             ObjectiveCardView objectiveCardView = new ObjectiveCardView(id);
-            add(objectiveCardView, objectiveCardViewList.size(), 2);
-            objectiveCardViewList.add(objectiveCardView);
+            publicCardBox.getChildren().add(objectiveCardView);
         });
     }
 
@@ -69,6 +91,33 @@ public class CardBoard extends GridPane {
      */
     public void setPrivateObjective(int id) {
         PrivateObjectiveView privateObjectiveView = new PrivateObjectiveView(id);
-        add(privateObjectiveView, 2, 3);
+        privateCardBox.getChildren().add(privateObjectiveView);
     }
+
+    public void showPrivateCards(){
+        this.getChildren().add(privateCardBox);
+    }
+
+    public void showPublicCards(){
+        this.getChildren().add(publicCardBox);
+    }
+
+    public void showToolCards(){
+        this.getChildren().add(toolBox);
+    }
+
+    public void hidePrivateCards(){
+        this.getChildren().remove(privateCardBox);
+    }
+
+    public void hidePublicCards(){
+        this.getChildren().remove(publicCardBox);
+    }
+
+    public void hideToolCards(){
+        this.getChildren().remove(toolBox);
+    }
+
+
+
 }

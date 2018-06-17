@@ -46,10 +46,7 @@ public class GameView extends Application {
 
     /** The frame view. */
     private FrameView frame;
-    
-    /** The horizontal box. */
-    private HBox horizontalBox;
-    
+
     /** The anchor pane. */
     private AnchorPane anchorPane;
     
@@ -60,8 +57,6 @@ public class GameView extends Application {
     private static List<String> players;
 
     Button windowButton;
-
-    Button cardButton;
 
     /** The constraints. */
     private static List<Constraint[][]> constraints;
@@ -81,11 +76,21 @@ public class GameView extends Application {
     /** The card board. */
     private CardBoard cardBoard;
     
-    /** The token grid. */
+    /** The pane containing all the player's token. */
     private GridPane tokenGrid;
     
     /** The components. */
     private List<Node> components;
+
+
+    /** The preview of toolcards which are to be shown on click. */
+    private ImageView toolcardPrev;
+
+    /** The preview of public objective cards which are to be shown on click. */
+    private ImageView publicObjPrev;
+
+    /** The preview of private objective cards which are to be shown on click. */
+    private ImageView privateObjPrev;
 
     /**
      * Gets the username.
@@ -150,6 +155,10 @@ public class GameView extends Application {
      */
     DraftView getDraftView() {
         return draftView;
+    }
+
+    CardBoard getCardBoard(){
+        return cardBoard;
     }
 
     /**
@@ -247,14 +256,12 @@ public class GameView extends Application {
      */
     private void initialize(){
         windowButton = new Button("SHOW OPPONENT WINDOWS");
-        cardButton = new Button("SHOW CARDS");
         endTurn = new EndTurn();
         this.frame = new FrameView();
         this.cardBoard = new CardBoard();
         this.guiManager = new GUIManager();
         this.roundtrackView = new RoundtrackView();
         hBox = new HBox();
-        horizontalBox = new HBox();
         anchorPane = new AnchorPane();
         anchorPane.setStyle(
                 "-fx-background-image: url(" +
@@ -380,6 +387,7 @@ public class GameView extends Application {
         setHBox();
         setWindow();
         setCardBoard();
+        setCardPreviewButtons();
         setButtons();
         setRoundtrack();
         components = new ArrayList<>();
@@ -454,13 +462,8 @@ public class GameView extends Application {
         hBox.setOnMouseClicked(windowButtonHandler);
     }
 
-    public void setCardShow(EventHandler<MouseEvent> cardButtonHandler){
-        cardButton.setOnMouseClicked(cardButtonHandler);
-    }
-
-
     public void setHBox(){
-        anchorPane.setBottomAnchor(hBox, guiManager.getFullHeightPixel(3));
+        anchorPane.setBottomAnchor(hBox, guiManager.getFullHeightPixel(30));
         anchorPane.setRightAnchor(hBox, guiManager.getFullWidthPixel(3));
     }
 
@@ -478,35 +481,79 @@ public class GameView extends Application {
 
     }
     public void setButtons(){
-        anchorPane.setBottomAnchor(cardButton, guiManager.getFullHeightPixel(10));
-        anchorPane.setRightAnchor(cardButton,guiManager.getFullWidthPixel(50) );
         anchorPane.setBottomAnchor(windowButton, guiManager.getFullHeightPixel(50));
         anchorPane.setRightAnchor(windowButton, guiManager.getFullHeightPixel(10));
         anchorPane.setBottomAnchor(endTurn, guiManager.getFullHeightPixel(6));
         anchorPane.setLeftAnchor(endTurn, guiManager.getFullWidthPixel(36));
-        anchorPane.getChildren().addAll(endTurn, windowButton, cardButton);
+        anchorPane.getChildren().addAll(endTurn, windowButton);
     }
 
     public void setCardBoard(){
-        anchorPane.setBottomAnchor(cardBoard, guiManager.getFullHeightPixel(7));
-        anchorPane.setRightAnchor(cardBoard, guiManager.getFullWidthPixel(32));
-    }
-
-    public void showCardboard(){
+        anchorPane.setBottomAnchor(cardBoard, guiManager.getFullHeightPixel(0));
+        anchorPane.setRightAnchor(cardBoard, guiManager.getFullWidthPixel(0));
         anchorPane.getChildren().add(cardBoard);
     }
 
-    public void hideCardboard(){
-        anchorPane.getChildren().remove(cardBoard);
-    }
 
-    public void showOtherWindows(){
+
+    void showOtherWindows(){
         anchorPane.getChildren().addAll(hBox);
     }
 
-    public void hideOtherWindows(){
+    void hideOtherWindows(){
         anchorPane.getChildren().remove(hBox);
     }
 
+    private void setCardPreviewButtons(){
+        toolcardPrev = new ImageView(new Image("/images/toolCard.jpg"));
+        privateObjPrev = new ImageView(new Image("/images/privateObj.jpg"));
+        publicObjPrev = new ImageView(new Image("/images/publicObj.png"));
+        anchorPane.setBottomAnchor(toolcardPrev, guiManager.getFullHeightPixel(6));
+        anchorPane.setRightAnchor(toolcardPrev, guiManager.getFullWidthPixel(20));
+        anchorPane.setBottomAnchor(privateObjPrev, guiManager.getFullHeightPixel(6));
+        anchorPane.setRightAnchor(privateObjPrev, guiManager.getFullWidthPixel(30));
+        anchorPane.setBottomAnchor(publicObjPrev, guiManager.getFullHeightPixel(6));
+        anchorPane.setRightAnchor(publicObjPrev, guiManager.getFullWidthPixel(40));
+        anchorPane.getChildren().addAll(toolcardPrev, privateObjPrev, publicObjPrev);
+
+    }
+
+    void setToolPreviewListener(EventHandler<MouseEvent> cardHandler){
+        toolcardPrev.setOnMouseClicked(cardHandler);
+
+    }
+
+    void setPrivatePreviewListener(EventHandler<MouseEvent> cardHandler){
+        privateObjPrev.setOnMouseClicked(cardHandler);
+
+    }
+    void setPublicPreviewListener(EventHandler<MouseEvent> cardHandler){
+        publicObjPrev.setOnMouseClicked(cardHandler);
+
+    }
+
+    void showPublicCard(){
+        cardBoard.showPublicCards();
+    }
+
+    void showPrivateCard(){
+        cardBoard.showPrivateCards();
+    }
+
+    void showToolCard(){
+        cardBoard.showToolCards();
+    }
+
+    void hidePublicCard(){
+        cardBoard.hidePublicCards();
+    }
+
+    void hidePrivateCard(){
+        cardBoard.hidePrivateCards();
+    }
+
+    void hideToolCard(){
+        cardBoard.hideToolCards();
+    }
 
 }
