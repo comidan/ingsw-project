@@ -18,9 +18,9 @@ public class GUIManagerTest {
         double RATIO = 0.76;
         double RELATIVE_DIMENSION = 0.8;
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        assertEquals(Double.parseDouble(new DecimalFormat("#.00").format(gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION).replace(',', '.')), GUIManager.getWindowHeight(), 0);
-        assertEquals(Double.parseDouble(new DecimalFormat("#.00").format(gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION * RATIO).replace(',', '.')), GUIManager.getWindowWidth(), 0);
-        assertEquals(Double.parseDouble(new DecimalFormat("#.00").format(gd.getDisplayMode().getHeight() * 0.9).replace(',', '.')), GUIManager.getScreenHeight(), 0);
+        assertEquals(Double.parseDouble(new DecimalFormat("#.00").format(gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION).replace(',', '.')), Double.parseDouble(new DecimalFormat("#.00").format(GUIManager.getWindowHeight()).replace(',', '.')), 0);
+        assertEquals(Double.parseDouble(new DecimalFormat("#.00").format(gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION * RATIO).replace(',', '.')), Double.parseDouble(new DecimalFormat("#.00").format(GUIManager.getWindowWidth()).replace(',', '.')), 0);
+        assertEquals(Double.parseDouble(new DecimalFormat("#.00").format(gd.getDisplayMode().getHeight() * 0.9).replace(',', '.')), Double.parseDouble(new DecimalFormat("#.00").format(GUIManager.getScreenHeight()).replace(',', '.')), 0);
         assertEquals(gd.getDisplayMode().getWidth(), GUIManager.getScreenWidth(), 0);
         int x = new Random().nextInt() % 100;
         assertEquals(Double.parseDouble(new DecimalFormat("#.00").format(x * GUIManager.getWindowHeight() / 100).replace(',', '.')), Double.parseDouble(new DecimalFormat("#.00").format(GUIManager.getHeightPixel(x)).replace(',', '.')), 0);
