@@ -62,6 +62,7 @@ public class MainGameGuiTest {
             diceViews.add(diceView);
             diceViews.add(diceView2);
 
+
             Platform.runLater(() -> gameView.setDraft(diceResponse));
             Platform.runLater(() -> gameView.setRoundtrackImage(diceViews, 3));
 

@@ -61,6 +61,8 @@ public class GameView extends Application {
 
     Button windowButton;
 
+    Button cardButton;
+
     /** The constraints. */
     private static List<Constraint[][]> constraints;
     
@@ -245,6 +247,7 @@ public class GameView extends Application {
      */
     private void initialize(){
         windowButton = new Button("SHOW OPPONENT WINDOWS");
+        cardButton = new Button("SHOW CARDS");
         endTurn = new EndTurn();
         this.frame = new FrameView();
         this.cardBoard = new CardBoard();
@@ -374,24 +377,11 @@ public class GameView extends Application {
                 WindowView window = windows.get(players.get(i));
                 hBox.getChildren().add(window);
             }
-
-        /*horizontalBox.getChildren().add(endTurn);
-        horizontalBox.setAlignment(Pos.BOTTOM_CENTER);
-        horizontalBox.getChildren().add(windows.get(username));*/
-        anchorPane.setBottomAnchor(windowButton, guiManager.getFullHeightPixel(50));
-        anchorPane.setRightAnchor(windowButton, guiManager.getFullHeightPixel(10));
-        frame.addWindowToFrame(windows.get(username));
-        anchorPane.setBottomAnchor(frame, guiManager.getFullHeightPixel(1.7));
-        anchorPane.setLeftAnchor(frame, guiManager.getFullWidthPixel(7));
-        anchorPane.setBottomAnchor(endTurn, guiManager.getFullHeightPixel(6));
-        anchorPane.setLeftAnchor(endTurn, guiManager.getFullWidthPixel(36));
-        anchorPane.getChildren().addAll(frame, endTurn, windowButton);
-        anchorPane.setBottomAnchor(cardBoard, guiManager.getFullHeightPixel(7));
-        anchorPane.setRightAnchor(cardBoard, guiManager.getFullWidthPixel(32));
-        anchorPane.getChildren().addAll(cardBoard);
-        AnchorPane.setTopAnchor(roundtrackView, guiManager.getFullHeightPixel(5));
-        AnchorPane.setRightAnchor(roundtrackView, guiManager.getFullWidthPixel(3));
-        anchorPane.getChildren().add(roundtrackView);
+        setHBox();
+        setWindow();
+        setCardBoard();
+        setButtons();
+        setRoundtrack();
         components = new ArrayList<>();
         components.add(endTurn);
         components.add(windows.get(username));
@@ -460,10 +450,62 @@ public class GameView extends Application {
       windowButton.setOnMouseClicked(windowButtonHandler);
     }
 
-    public void showOtherWindows(){
+    public void setWindowHide(EventHandler<MouseEvent> windowButtonHandler){
+        hBox.setOnMouseClicked(windowButtonHandler);
+    }
+
+    public void setCardShow(EventHandler<MouseEvent> cardButtonHandler){
+        cardButton.setOnMouseClicked(cardButtonHandler);
+    }
+
+
+    public void setHBox(){
         anchorPane.setBottomAnchor(hBox, guiManager.getFullHeightPixel(3));
         anchorPane.setRightAnchor(hBox, guiManager.getFullWidthPixel(3));
+    }
+
+    public void setWindow(){
+        frame.addWindowToFrame(windows.get(username));
+        anchorPane.setBottomAnchor(frame, guiManager.getFullHeightPixel(1.7));
+        anchorPane.setLeftAnchor(frame, guiManager.getFullWidthPixel(7));
+        anchorPane.getChildren().addAll(frame);
+    }
+
+    public void setRoundtrack(){
+        AnchorPane.setTopAnchor(roundtrackView, guiManager.getFullHeightPixel(5));
+        AnchorPane.setRightAnchor(roundtrackView, guiManager.getFullWidthPixel(3));
+        anchorPane.getChildren().add(roundtrackView);
+
+    }
+    public void setButtons(){
+        anchorPane.setBottomAnchor(cardButton, guiManager.getFullHeightPixel(10));
+        anchorPane.setRightAnchor(cardButton,guiManager.getFullWidthPixel(50) );
+        anchorPane.setBottomAnchor(windowButton, guiManager.getFullHeightPixel(50));
+        anchorPane.setRightAnchor(windowButton, guiManager.getFullHeightPixel(10));
+        anchorPane.setBottomAnchor(endTurn, guiManager.getFullHeightPixel(6));
+        anchorPane.setLeftAnchor(endTurn, guiManager.getFullWidthPixel(36));
+        anchorPane.getChildren().addAll(endTurn, windowButton, cardButton);
+    }
+
+    public void setCardBoard(){
+        anchorPane.setBottomAnchor(cardBoard, guiManager.getFullHeightPixel(7));
+        anchorPane.setRightAnchor(cardBoard, guiManager.getFullWidthPixel(32));
+    }
+
+    public void showCardboard(){
+        anchorPane.getChildren().add(cardBoard);
+    }
+
+    public void hideCardboard(){
+        anchorPane.getChildren().remove(cardBoard);
+    }
+
+    public void showOtherWindows(){
         anchorPane.getChildren().addAll(hBox);
+    }
+
+    public void hideOtherWindows(){
+        anchorPane.getChildren().remove(hBox);
     }
 
 

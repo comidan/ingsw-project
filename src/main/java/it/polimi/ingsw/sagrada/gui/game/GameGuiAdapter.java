@@ -31,41 +31,55 @@ import java.util.logging.Logger;
  */
 public class GameGuiAdapter {
 
-    /** The Constant LOGGER. */
+    /**
+     * The Constant LOGGER.
+     */
     private static final Logger LOGGER = Logger.getLogger(GameGuiAdapter.class.getName());
 
-    /** The game view. */
+    /**
+     * The game view.
+     */
     private GameView gameView;
-    
-    /** The clicked object. */
+
+    /**
+     * The clicked object.
+     */
     private ClickedObject clickedObject;
-    
-    /** The draft view. */
+
+    /**
+     * The draft view.
+     */
     private DraftView draftView;
-    
-    /** The roundtrack view. */
+
+    /**
+     * The roundtrack view.
+     */
     private RoundtrackView roundtrackView;
-    
-    /** The last move. */
+
+    /**
+     * The last move.
+     */
     private CellView lastMove;
-    
-    /** The current round. */
+
+    /**
+     * The current round.
+     */
     private int currentRound;
 
     /**
      * Instantiates a new game gui adapter.
      *
      * @param gameView the game view
-     * @param client the client
+     * @param client   the client
      */
     public GameGuiAdapter(GameView gameView, Client client) {
         this.clickedObject = new ClickedObject();
         this.gameView = gameView;
         setEndTurnHandler(client);
+        setCardShow();
         setCellHandler(client);
         setToolHandler();
         setWindowButtonHandler();
-        setDraftListener();
     }
 
     /**
@@ -91,17 +105,28 @@ public class GameGuiAdapter {
         });
     }
 
-    public void setWindowButtonHandler(){
-        gameView.setWindowButtonHandler(event ->{
+    public void setWindowButtonHandler() {
+        gameView.setWindowButtonHandler(event -> {
             gameView.showOtherWindows();
+        });
+
+        gameView.setWindowHide(event -> {
+            gameView.hideOtherWindows();
         });
     }
 
-    /**
-     * Sets the cell handler.
-     *
-     * @param client the new cell handler
-     */
+
+    public void setCardShow() {
+        gameView.setCardShow(event -> {
+            gameView.showCardboard();
+        });
+
+    }
+        /**
+         * Sets the cell handler.
+         *
+         * @param client the new cell handler
+         */
     private void setCellHandler(Client client) {
 
         GameGuiAdapter self = this;
@@ -120,7 +145,6 @@ public class GameGuiAdapter {
                               lastMove = cellView;
                               cellView.setImageCell(diceView);
                               clickedObject.setClickedDice(null);
-                              gameView.removeDiceView(diceView);
 
                               String username = self.gameView.getUsername();
                               int idDice = diceView.getDiceID();
