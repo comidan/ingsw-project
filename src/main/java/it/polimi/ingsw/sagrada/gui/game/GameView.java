@@ -283,7 +283,7 @@ public class GameView extends Application {
             tokenGrid.add(new TokenView(), i, 1);
         }
 
-        AnchorPane.setBottomAnchor(tokenGrid, guiManager.getFullHeightPixel(68));
+        AnchorPane.setBottomAnchor(tokenGrid, guiManager.getFullHeightPixel(72));
         AnchorPane.setLeftAnchor(tokenGrid, guiManager.getFullWidthPixel(9));
         anchorPane.getChildren().addAll(tokenGrid);
 
@@ -296,6 +296,7 @@ public class GameView extends Application {
     public void start(Stage primaryStage) {
         initialize();
         createScene(primaryStage);
+        primaryStage.setTitle("Sagrada");
         setGameViewInstance(this);
     }
 
@@ -469,7 +470,7 @@ public class GameView extends Application {
 
     public void setWindow(){
         frame.addWindowToFrame(windows.get(username));
-        anchorPane.setBottomAnchor(frame, guiManager.getFullHeightPixel(1.7));
+        anchorPane.setBottomAnchor(frame, guiManager.getFullHeightPixel(6));
         anchorPane.setLeftAnchor(frame, guiManager.getFullWidthPixel(7));
         anchorPane.getChildren().addAll(frame);
     }

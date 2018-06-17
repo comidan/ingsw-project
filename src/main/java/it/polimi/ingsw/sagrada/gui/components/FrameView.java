@@ -24,7 +24,7 @@ public class FrameView extends StackPane {
     public void addWindowToFrame(WindowView windowView){
 
         setAlignment(windowView, Pos.BOTTOM_CENTER);
-        this.setMargin(windowView, new Insets(guiManager.getFullHeightPixel(31),guiManager.getFullWidthPixel(2.3),guiManager.getFullHeightPixel(3),guiManager.getFullWidthPixel(2.3)));
+        this.setMargin(windowView, new Insets(guiManager.getFullHeightPixel(34),guiManager.getFullWidthPixel(2.3),guiManager.getFullHeightPixel(1),guiManager.getFullWidthPixel(2.3)));
         getChildren().add(windowView);
     }
 
