@@ -88,7 +88,7 @@ public class GUIManager {
      * @return the screen height
      */
     public static double getScreenHeight() {
-        return gd.getDisplayMode().getHeight();
+        return gd.getDisplayMode().getHeight()*0.9;
     }
 
     /**
@@ -97,7 +97,7 @@ public class GUIManager {
      * @return the screen width
      */
     public static double getScreenWidth() {
-        return gd.getDisplayMode().getWidth();
+        return gd.getDisplayMode().getWidth()*0.9;
     }
 
     /**
