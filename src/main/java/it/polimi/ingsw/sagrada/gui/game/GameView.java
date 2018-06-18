@@ -478,7 +478,7 @@ public class GameView extends Application {
 
     }
     public void setButtons(){
-        Image image = new Image( getClass().getResource("/images/windowPrev.png").toExternalForm());
+        Image image = new Image(GameView.class.getResourceAsStream("/images/windowPrev.png"));
         windowButton.setMinHeight(image.getHeight());
         windowButton.setMinWidth(image.getWidth());
         Background background = new Background(new BackgroundImage( image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
