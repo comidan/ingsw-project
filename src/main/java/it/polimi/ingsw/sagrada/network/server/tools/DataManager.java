@@ -64,13 +64,11 @@ public class DataManager {
     private DataManager()  {
 
         try {
-            database = Database.initSQLDatabase(DBMS_USERNAME,
+            database = Database.initSQLiteDatabase(DBMS_USERNAME,
                                                 DBMS_AUTH,
                                                 100,
-                                                "localhost",
-                                                DBMS_PORT,
                                                 DB_NAME);
-            System.out.println("MySQL database connection initialized on port " + DBMS_PORT);
+            System.out.println("SQLite database connection initialized");
         }
         catch (SQLException exc) {
             LOGGER.log(Level.SEVERE, () -> "Fatal error while initializing MySQL database connection " + exc.getMessage());

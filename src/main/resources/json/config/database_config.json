@@ -1,6 +1,6 @@
 {
   "dbms_username" : "root",
   "dbms_auth" : "",
-  "db_name" : "sagrada",
+  "db_name" : "Sagrada.db",
   "dbms_port" : "3306"
 }

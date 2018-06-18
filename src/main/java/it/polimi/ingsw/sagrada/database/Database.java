@@ -112,6 +112,21 @@ public abstract class Database
     {
         return new MSAccessDatabase(username, password, maxPool, dbmsURL, dbName);
     }
+
+    /**
+     * Init the SQLite database connection using personalized port
+     *
+     * @param username DB access username
+     * @param password DB access password
+     * @param maxPool DB max pool
+     * @param dbName DB name
+     * @return database connection instance
+     * @throws SQLException SQL exception on connection fault
+     */
+    public static Database initSQLiteDatabase(String username, String password, int maxPool, String dbName) throws SQLException
+    {
+        return new SQLiteDatabase(username, password, maxPool, dbName);
+    }
     
     /**
      * Gets the properties for database connection : internal use only
