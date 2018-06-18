@@ -12,7 +12,6 @@ import it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
