@@ -82,6 +82,7 @@ public class GameGuiAdapter {
         setToolHandler();
         setWindowButtonHandler();
         setCardPreviewListener();
+
     }
 
     /**
@@ -195,6 +196,7 @@ public class GameGuiAdapter {
     private void setToolHandler() {
         Platform.runLater(() -> {
             this.gameView.setToolClickHandler(event -> {
+                System.out.println("tool card clicked");
                 ToolCardView toolCardView = (ToolCardView) event.getSource();
                 int tokenNumber;
                 if (toolCardView.getTokenNumber() == 0)
@@ -343,6 +345,7 @@ public class GameGuiAdapter {
             setDraftListener();
         });
     }
+
 
 
     /**

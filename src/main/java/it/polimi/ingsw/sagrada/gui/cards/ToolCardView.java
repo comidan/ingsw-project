@@ -2,13 +2,17 @@ package it.polimi.ingsw.sagrada.gui.cards;
 
 import it.polimi.ingsw.sagrada.gui.components.TokenView;
 import it.polimi.ingsw.sagrada.gui.utils.Resizer;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+
+import javax.swing.*;
 
 
 /**
@@ -34,6 +38,8 @@ public class ToolCardView extends StackPane {
     /** The label. */
     private Label label;
 
+    private Button button;
+
     /**
      * Instantiates a new tool card view.
      *
@@ -49,6 +55,7 @@ public class ToolCardView extends StackPane {
         this.getChildren().add(tokenGrid);
         label = new Label();
         this.getChildren().add(label);
+
     }
 
     /**

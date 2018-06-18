@@ -1,5 +1,7 @@
 package it.polimi.ingsw.sagrada.gui.components;
 
+import it.polimi.ingsw.sagrada.game.playables.Dice;
+import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import it.polimi.ingsw.sagrada.gui.utils.Resizer;
 import javafx.event.EventHandler;
@@ -8,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
@@ -22,6 +25,8 @@ public class RoundtrackView extends StackPane {
 
     /** The Constant MAX_ROUND. */
     private static final int MAX_ROUND = 10;
+
+    private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
 
     /** The GUIManager. */
     private GUIManager guiManager;
@@ -48,23 +53,26 @@ public class RoundtrackView extends StackPane {
 
         }
         this.getChildren().add(grid);
+        this.setMargin(grid, new Insets(60,8,2,10));
+        ColumnConstraints colConstr = new ColumnConstraints();
+        colConstr.setPercentWidth(10);
+        grid.getColumnConstraints().addAll(colConstr);
 
     }
 
     /**
-     * Sets the image.
+     * Sets the dice.
      *
-     * @param diceView the dice view
+     * @param diceViews the dice view
      * @param currentRound the current round
      */
-    public void setImage(List<DiceView> diceView, int currentRound) {
-         for(int i = 0; i< diceView.size(); i++){
+    public void setDice(List<DiceView> diceViews, int currentRound) {
+         for(int i = 0; i< diceViews.size(); i++){
             CellView cell = new CellView();
             cellViewList.get(currentRound).add(cell);
-            cellViewList.get(currentRound).get(i).setImageCell(diceView.get(i));
+            DiceView diceView = diceViews.get(i);
+            cellViewList.get(currentRound).get(i).setImage(new Image(CellView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
             grid.add(cell, currentRound, i);
-            this.setMargin(grid, new Insets(50,8,8,10));
-
         }
     }
 
@@ -81,4 +89,6 @@ public class RoundtrackView extends StackPane {
         }
 
     }
+
+
 }

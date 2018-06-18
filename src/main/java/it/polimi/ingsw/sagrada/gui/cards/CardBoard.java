@@ -1,7 +1,10 @@
 package it.polimi.ingsw.sagrada.gui.cards;
 
+import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -56,7 +59,14 @@ public class CardBoard extends AnchorPane {
      * @param toolClickHandler the new tool click handler
      */
     public void setToolClickHandler(EventHandler<MouseEvent> toolClickHandler) {
-        toolCardViewList.forEach(toolCardView -> toolCardView.setToolClickHandler(toolClickHandler));
+
+        for(Node toolCardView : toolBox.getChildren())
+        {
+            ToolCardView toolCard = (ToolCardView) toolCardView;
+            toolCard.setToolClickHandler(toolClickHandler);
+        }
+
+      //  ((ToolCardView)toolBox.getChildren()).forEach(toolCardView -> toolCardView.setToolClickHandler(toolClickHandler));
     }
 
     /**

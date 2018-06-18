@@ -178,7 +178,7 @@ public class GameView extends Application {
      * @param currentRound the current round
      */
     public void setRoundtrackImage(List<DiceView> diceViews, int currentRound){
-        this.roundtrackView.setImage(diceViews, currentRound);
+        this.roundtrackView.setDice(diceViews, currentRound);
     }
 
     /**
