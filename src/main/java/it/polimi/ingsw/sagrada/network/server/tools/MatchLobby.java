@@ -23,10 +23,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -51,6 +48,11 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
 
     /** The client pool. */
     private Map<String, ClientBase> clientPool;
+
+    /** The client state*/
+    private Map<String, Long> clientLinkState;
+
+    private Map<String, Boolean> clientTCPLinkEstablished;
 
     /** The client ids. */
     private List<String> clientIds;
@@ -109,6 +111,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      */
     public MatchLobby(Function<String, Boolean> signOut, String identifier) throws IOException {
         clientPool = new HashMap<>();
+        clientLinkState = new HashMap<>();
+        clientTCPLinkEstablished = new HashMap<>();
         portDiscovery = new PortDiscovery();
         clientIds = new ArrayList<>();
         clientIdTokens = new ArrayList<>();
@@ -217,7 +221,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      */
     @Override
     public void onHeartbeat(HeartbeatEvent event) {
-
+        clientLinkState.put(event.getSource(), event.getBeatTimeStamp());
     }
 
     /* (non-Javadoc)
@@ -241,6 +245,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      */
     @Override
     public void onLossCommunication(HeartbeatEvent event) {
+        clientTCPLinkEstablished.put(event.getSource(), false);
         System.out.println(event.getSource() + " maybe offline");
     }
 
@@ -249,7 +254,9 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      */
     @Override
     public void onReacquiredCommunication(HeartbeatEvent event) {
+        clientLinkState.put(event.getSource(), event.getBeatTimeStamp());
         System.out.println(event.getSource() + " came back");
+
     }
 
     /* (non-Javadoc)
@@ -312,6 +319,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                 LOGGER.log(Level.SEVERE, exc::getMessage);
             }
         });
+        clientTCPLinkEstablished.put(token, true);
         return true;
     }
 
@@ -340,6 +348,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     executor.submit(socketClient);
                     for(String username : clientIds)
                         clientPool.get(id).setPlayer(username);
+                    clientTCPLinkEstablished.put(id, true);
                 }
                 else
                     DataManager.sendLoginError(client);
@@ -350,10 +359,31 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         }
     }
 
+    private boolean checkValidClientLinkState() {
+        for(String id : clientIds)
+            if(new Date().getTime() - clientLinkState.get(id) > 1500 || !clientTCPLinkEstablished.get(id)) {
+                clientTCPLinkEstablished.put(id, false);
+                return false;
+            }
+        return true;
+    }
+
     /**
      * Start game.
      */
     private void startGame() {
+        while(!checkValidClientLinkState()) {
+            try {
+                Thread.sleep(500);
+            }
+            catch (InterruptedException exc) {
+                LOGGER.log(Level.SEVERE, exc::getMessage);
+            }
+        }
+        if(clientIds.size() <= 1) {
+            sendPayload("Lobby terminated : not enough players");
+            return;
+        }
         inGame = true;
         List<Player> players = new ArrayList<>();
         clientIds.forEach(username -> players.add(new Player(username)));
@@ -372,6 +402,18 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         dynamicRouter.dispatch(message);
     }
 
+    private void sendPayload(String payload) {
+        for(String username : clientIds) {
+            new Thread(() -> {
+                try {
+                    clientPool.get(username).setTimer(payload);
+                } catch (RemoteException exc) {
+                    LOGGER.log(Level.SEVERE, exc::getMessage);
+                }
+            }).start();
+        }
+    }
+
     /**
      * The Class CheckStartGameCondition.
      */
@@ -386,7 +428,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         @Override
         public void run() {
             int timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size() + 1);
-            while (elapsedTime < timeToWait / 1000) {
+            while (elapsedTime < timeToWait / 1000 && clientIds.size() != MAX_POOL_SIZE) {
                 timeToWait = TIME_WAIT_UNIT * (MAX_POOL_SIZE - clientIds.size() + 1);
                 try {
                     Thread.sleep(1000);
@@ -394,16 +436,16 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                 catch (InterruptedException exc) {
                     LOGGER.log(Level.SEVERE, exc::getMessage);
                 }
-                elapsedTime += 1;
-                for(String username : clientIds)
-                    try {
-                        clientPool.get(username).setTimer((timeToWait / 1000 - elapsedTime) + "");
-                    }
-                    catch (RemoteException exc) {
-                        LOGGER.log(Level.SEVERE, exc::getMessage);
-                    }
+                if(clientIds.size() > 1)
+                    elapsedTime += 1;
+                else
+                    elapsedTime = 0;
+                sendPayload(timeToWait / 1000 - elapsedTime + "");
             }
-            if(clientPool.size()>1) startGame();
+            if(clientPool.size()>1) {
+                sendPayload("Starting game...\nWaiting players...");
+                startGame();
+            }
         }
     }
 }
