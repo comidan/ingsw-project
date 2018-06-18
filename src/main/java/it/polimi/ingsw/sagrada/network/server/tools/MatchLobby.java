@@ -382,6 +382,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         }
         if(clientIds.size() <= 1) {
             sendPayload("Lobby terminated : not enough players");
+            closeLobby();
             return;
         }
         inGame = true;
@@ -407,6 +408,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             new Thread(() -> {
                 try {
                     clientPool.get(username).setTimer(payload);
+                    clientTCPLinkEstablished.put(username, true); //ignored, as it is supposed to be, if there is some socket related exception, on rmi case is just waiting for the blocking call to remote method setTimer
                 } catch (RemoteException exc) {
                     LOGGER.log(Level.SEVERE, exc::getMessage);
                 }
