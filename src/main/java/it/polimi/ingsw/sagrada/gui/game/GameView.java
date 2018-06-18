@@ -256,7 +256,7 @@ public class GameView extends Application {
      * Initialize.
      */
     private void initialize(){
-        windowButton = new Button("SHOW OPPONENT WINDOWS");
+        windowButton = new Button();
         endTurn = new EndTurn();
         this.frame = new FrameView();
         this.cardBoard = new CardBoard();
@@ -458,13 +458,10 @@ public class GameView extends Application {
       windowButton.setOnMouseClicked(windowButtonHandler);
     }
 
-    public void setWindowHide(EventHandler<MouseEvent> windowButtonHandler){
-        hBox.setOnMouseClicked(windowButtonHandler);
-    }
 
     public void setHBox(){
         anchorPane.setBottomAnchor(hBox, guiManager.getFullHeightPixel(30));
-        anchorPane.setRightAnchor(hBox, guiManager.getFullWidthPixel(3));
+        anchorPane.setRightAnchor(hBox, guiManager.getFullWidthPixel(6));
     }
 
     public void setWindow(){
@@ -481,8 +478,13 @@ public class GameView extends Application {
 
     }
     public void setButtons(){
-        anchorPane.setBottomAnchor(windowButton, guiManager.getFullHeightPixel(50));
-        anchorPane.setRightAnchor(windowButton, guiManager.getFullHeightPixel(10));
+        Image image = new Image( getClass().getResource("/images/windowPrev.png").toExternalForm());
+        windowButton.setMinHeight(image.getHeight());
+        windowButton.setMinWidth(image.getWidth());
+        Background background = new Background(new BackgroundImage( image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
+        windowButton.setBackground(background);
+        anchorPane.setBottomAnchor(windowButton, guiManager.getFullHeightPixel(30));
+        anchorPane.setRightAnchor(windowButton, guiManager.getFullWidthPixel(3));
         anchorPane.setBottomAnchor(endTurn, guiManager.getFullHeightPixel(6));
         anchorPane.setLeftAnchor(endTurn, guiManager.getFullWidthPixel(36));
         anchorPane.getChildren().addAll(endTurn, windowButton);

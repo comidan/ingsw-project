@@ -111,10 +111,11 @@ public class GameGuiAdapter {
     public void setWindowButtonHandler() {
         gameView.setWindowButtonHandler(event -> {
             gameView.showOtherWindows();
-        });
+            gameView.setWindowButtonHandler(eventDone -> {
+                gameView.hideOtherWindows();
+                setWindowButtonHandler();
+            });
 
-        gameView.setWindowHide(event -> {
-            gameView.hideOtherWindows();
         });
     }
 
