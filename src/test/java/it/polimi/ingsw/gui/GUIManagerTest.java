@@ -13,7 +13,6 @@ public class GUIManagerTest {
 
     /** DecimalFormat usage due to known issue revolving floating point computing approximation described in IEEE 754 */
 
-    @Test
     public void testGUIManager() {
         double RATIO = 0.76;
         double RELATIVE_DIMENSION = 0.8;
