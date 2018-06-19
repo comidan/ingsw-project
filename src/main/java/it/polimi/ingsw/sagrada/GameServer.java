@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.NanoHTTPd;
 import it.polimi.ingsw.sagrada.network.server.rmi.ServerRMI;
 import it.polimi.ingsw.sagrada.network.server.socket.SocketServer;
+import it.polimi.ingsw.sagrada.network.server.tools.PortDiscovery;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,7 +28,9 @@ public class GameServer {
 
     /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(GameServer.class.getName());
-    
+
+    private static int rmiPort = 1099;
+
     /** The Constant registry. */
     private static final Registry registry = getRegistry();
     
@@ -58,7 +61,7 @@ public class GameServer {
         else
             LOGGER.log(Level.SEVERE, () -> "Could not initialize dynamic class loading service");
         new SocketServer();
-        new ServerRMI();
+        new ServerRMI(rmiPort);
     }
 
     /**
@@ -68,9 +71,26 @@ public class GameServer {
      */
     private static Registry getRegistry() {
         try {
-            return LocateRegistry.createRegistry(1099);
+            return LocateRegistry.createRegistry(rmiPort);
         }
         catch (RemoteException exc) {
+            rmiPort = new PortDiscovery().obtainAvailableTCPPort();
+            return getRegistry(rmiPort);
+        }
+    }
+
+    /**
+     * Gets the registry.
+     *
+     * @param port binding rmi port
+     * @return the registry
+     */
+    private static Registry getRegistry(int port) {
+        try {
+            return LocateRegistry.createRegistry(rmiPort);
+        }
+        catch (RemoteException exc) {
+            exc.printStackTrace();
             LOGGER.log(Level.SEVERE, exc::getMessage);
             System.exit(-1);
             return null;

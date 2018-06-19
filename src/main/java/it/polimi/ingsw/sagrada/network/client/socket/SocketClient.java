@@ -38,10 +38,13 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
     
     /** The Constant PORT. */
-    private static final int PORT = 49152; //change to dynamic in some elegant way
-    
+    private static final int PORT = getConfigPort();
+
+    /** The Constant DEFAULT_PORT */
+    private static final int DEFAULT_PORT = 49152;
+
     /** The Constant ADDRESS. */
-    private static final String ADDRESS = getConfigAddress(); //just for now, next will be obtained in far smarter way
+    private static final String ADDRESS = getConfigAddress();
     
     /** The Constant SERVER_WAITING_RESPONSE_TIME. */
     private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
@@ -306,13 +309,40 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     private static String getConfigAddress() {
         JSONParser parser = new JSONParser();
         try {
-            Object obj = parser.parse(new InputStreamReader(SocketClient.class.getResourceAsStream(NETWORK_CONFIG_PATH)));
+            Object obj = parser.parse(new InputStreamReader(new FileInputStream(new File("resource" + NETWORK_CONFIG_PATH))));
             JSONObject jsonObject = (JSONObject) obj;
             return (String) jsonObject.get("ip_address");
         }
         catch (Exception exc) {
-            LOGGER.log(Level.SEVERE, () -> "network config fatal error");
-            return "";
+            try {
+                Object obj = parser.parse(new InputStreamReader(SocketClient.class.getResourceAsStream(NETWORK_CONFIG_PATH)));
+                JSONObject jsonObject = (JSONObject) obj;
+                return (String) jsonObject.get("ip_address");
+            }
+            catch (Exception e) {
+                LOGGER.log(Level.SEVERE, () -> "network config fatal error");
+                return "";
+            }
+        }
+    }
+
+    private static int getConfigPort() {
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new InputStreamReader(new FileInputStream(new File("resource" + NETWORK_CONFIG_PATH))));
+            JSONObject jsonObject = (JSONObject) obj;
+            return ((Long) jsonObject.get("port")).intValue();
+        }
+        catch (Exception exc) {
+            try {
+                Object obj = parser.parse(new InputStreamReader(SocketClient.class.getResourceAsStream(NETWORK_CONFIG_PATH)));
+                JSONObject jsonObject = (JSONObject) obj;
+                return ((Long) jsonObject.get("port")).intValue();
+            }
+            catch (Exception e) {
+                LOGGER.log(Level.SEVERE, () -> "network config fatal error");
+                return DEFAULT_PORT;
+            }
         }
     }
 

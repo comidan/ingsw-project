@@ -33,11 +33,12 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
     /**
      * Instantiates a new server RMI.
      *
+     * @param port rmi binding port
      * @throws RemoteException the remote exception
      */
-    public ServerRMI() throws RemoteException {
+    public ServerRMI(int port) throws RemoteException {
         try {
-            Registry registry = LocateRegistry.getRegistry(1099);
+            Registry registry = LocateRegistry.getRegistry(port);
             registry.bind("ServerRMI", this);
             initializeCoreFunction();
         }

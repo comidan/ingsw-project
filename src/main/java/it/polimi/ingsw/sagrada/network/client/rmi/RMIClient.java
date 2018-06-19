@@ -12,6 +12,8 @@ import it.polimi.ingsw.sagrada.network.server.rmi.AbstractServerRMI;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -44,6 +46,12 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     /** The Constant PROTOCOL. */
     private static final String PROTOCOL = "rmi://";
 
+    /** THe Constant RMI_PORT */
+    private static final int RMI_PORT = getConfigRMIPort();
+
+    /** THe Constant DEFAULT_RMI_PORT */
+    private static final int DEFAULT_RMI_PORT = 1099;
+
     /** The lobby. */
     private AbstractMatchLobbyRMI lobby;
     
@@ -75,7 +83,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      */
     private boolean connect() {
         try {
-            server = (AbstractServerRMI) Naming.lookup(PROTOCOL + ADDRESS + "/ServerRMI");
+            server = (AbstractServerRMI) Naming.lookup(PROTOCOL + ADDRESS + ":" + RMI_PORT + "/ServerRMI");
             return true;
         } catch (RemoteException | NotBoundException | MalformedURLException exc) {
             return false;
@@ -172,17 +180,48 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      *
      * @return the config address
      */
-    private static String getConfigAddress() {
+    private static String getConfigAddress() {  //add control on existing external set resource or check on internal value : DO THE SAME FOR OTHER POSSIBLY EXTERNAL RESOURCE METHOD
         JSONParser parser = new JSONParser();
         try {
-
-            Object obj = parser.parse(new InputStreamReader(RMIClient.class.getResourceAsStream(NETWORK_CONFIG_PATH)));
+            Object obj = parser.parse(new InputStreamReader(new FileInputStream(new File("resource" + NETWORK_CONFIG_PATH))));
             JSONObject jsonObject = (JSONObject) obj;
             return (String) jsonObject.get("ip_address");
         }
         catch (Exception exc) {
-            LOGGER.log(Level.SEVERE, () -> "network config fatal error");
-            return "";
+            try {
+                Object obj = parser.parse(new InputStreamReader(RMIClient.class.getResourceAsStream(NETWORK_CONFIG_PATH)));
+                JSONObject jsonObject = (JSONObject) obj;
+                return (String) jsonObject.get("ip_address");
+            }
+            catch (Exception e) {
+                LOGGER.log(Level.SEVERE, () -> "network config fatal error");
+                return "";
+            }
+        }
+    }
+
+    /**
+     * Gets the config address.
+     *
+     * @return the config address
+     */
+    private static int getConfigRMIPort() {
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new InputStreamReader(new FileInputStream(new File("resource" + NETWORK_CONFIG_PATH))));
+            JSONObject jsonObject = (JSONObject) obj;
+            return ((Long) jsonObject.get("rmi_port")).intValue();
+        }
+        catch (Exception exc) {
+            try {
+                Object obj = parser.parse(new InputStreamReader(RMIClient.class.getResourceAsStream(NETWORK_CONFIG_PATH)));
+                JSONObject jsonObject = (JSONObject) obj;
+                return ((Long) jsonObject.get("rmi_port")).intValue();
+            }
+            catch (Exception e) {
+                LOGGER.log(Level.SEVERE, () -> "network config fatal error");
+                return DEFAULT_RMI_PORT;
+            }
         }
     }
 
