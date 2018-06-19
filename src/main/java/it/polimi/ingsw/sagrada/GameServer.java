@@ -33,6 +33,9 @@ public class GameServer {
     
     /** The Constant CLASS_DIR. */
     private static final String CLASS_DIR = new File("").getAbsolutePath().replace("\\", "/") + "/bytecode/";
+
+    /** The Constant RES_DIR. */
+    private static final String RES_DIR = new File("").getAbsolutePath().replace("\\", "/") + "/resource/";
     
     /** The Constant JAR_DIR. */
     private static final String JAR_DIR = new File("").getAbsolutePath().replace("\\", "/") + "/" + getJarName();
@@ -48,7 +51,8 @@ public class GameServer {
      */
     public static void main(String[] args) throws InterruptedException, ExecutionException, SocketException, RemoteException {
         if(new File(JAR_DIR).isFile()) {
-            initDynamicClassLoading(CLASS_DIR, JAR_DIR);
+            initDynamicClassLoading();
+            initResourceFiles();
             new Thread(() -> NanoHTTPd.init(new String[]{}, CLASS_DIR)).start();
         }
         else
@@ -74,29 +78,59 @@ public class GameServer {
     }
 
     /**
-     * Inits the dynamic class loading.
-     *
-     * @param destDir the dest dir
-     * @param jarFile the jar file
+     * Init dynamic class loading.
      */
     @SuppressWarnings("Suppress init warnings")
-    private static void initDynamicClassLoading(String destDir, String jarFile) {
-        try (JarFile jar = new java.util.jar.JarFile(jarFile)) {
+    private static void initDynamicClassLoading() {
+        try (JarFile jar = new JarFile(JAR_DIR)) {
             Enumeration classEnum = jar.entries();
             while (classEnum.hasMoreElements()) {
-                JarEntry file = (java.util.jar.JarEntry) classEnum.nextElement();
+                JarEntry file = (JarEntry) classEnum.nextElement();
                 if(file.getName().startsWith("it")) {
-                    File f = new java.io.File(destDir + file.getName());
+                    File f = new File(CLASS_DIR + file.getName());
                     System.out.println("Extracting " + file.getName());
                     f.getParentFile().mkdirs();
                     if (file.isDirectory()) {
                         f.mkdir();
                         continue;
                     }
-                    else if(!f.createNewFile())
+                    else if(!f.exists() && !f.createNewFile())
                         LOGGER.log(Level.SEVERE, () -> "Error creating file");
                     InputStream is =  jar.getInputStream(file);
-                    try(FileOutputStream fos = new java.io.FileOutputStream(f)) {
+                    try(FileOutputStream fos = new FileOutputStream(f)) {
+                        while (is.available() > 0)
+                            fos.write(is.read());
+                    }
+                    is.close();
+                }
+            }
+        }
+        catch (IOException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+        }
+    }
+
+    /**
+     * Init resource files.
+     */
+    @SuppressWarnings("Suppress init warnings")
+    private static void initResourceFiles() {
+        try (JarFile jar = new JarFile(JAR_DIR)) {
+            Enumeration classEnum = jar.entries();
+            while (classEnum.hasMoreElements()) {
+                JarEntry file = (JarEntry) classEnum.nextElement();
+                if(file.getName().startsWith("database") || file.getName().startsWith("json/config")) {
+                    File f = new File(RES_DIR + file.getName());
+                    System.out.println("Extracting " + file.getName());
+                    f.getParentFile().mkdirs();
+                    if (file.isDirectory()) {
+                        f.mkdir();
+                        continue;
+                    }
+                    else if(!f.exists() && !f.createNewFile())
+                        LOGGER.log(Level.SEVERE, () -> "Error creating file");
+                    InputStream is =  jar.getInputStream(file);
+                    try(FileOutputStream fos = new FileOutputStream(f)) {
                         while (is.available() > 0)
                             fos.write(is.read());
                     }

@@ -30,12 +30,19 @@ class SQLiteDatabase extends Database {
      */
     SQLiteDatabase(String username, String password, int maxPool, String dbName) throws SQLException
     {
-        this.databaseURL = "jdbc:sqlite::resource:database/" + dbName; //just for now, next to be synced with dynamic resource extracting with failure countermeasures on internal readonly db
+        this.databaseURL = "jdbc:sqlite:" + System.getProperty("user.dir").replace("\\", "/") + "/resource/database/" + dbName;
         this.username = username;
         this.password = password;
         this.maxPool = maxPool + "";
         connection = connect();
-        statement = connection.createStatement();
+        try {
+            statement = connection.createStatement();
+        }
+        catch (NullPointerException exc) {
+            this.databaseURL = "jdbc:sqlite::resource:database/" + dbName;
+            connection = connect();
+            statement = connection.createStatement();
+        }
     }
 
     /* (non-Javadoc)
