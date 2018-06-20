@@ -13,7 +13,9 @@ import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 
 /**
@@ -55,15 +57,10 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     public DiceManager(int numberOfPlayers, Consumer<Message> dispatchGameManager, DynamicRouter dynamicRouter) {
         bagPool = new ArrayList<>();
         draftPool = new ArrayList<>();
-        int id = 0;
-        for (Colors color : Colors.getColorList()) {
-            for (int j = 0; j < DICE_PER_COLOR; j++) {
-                bagPool.add(new Dice(id++, color));
-            }
-        }
+        AtomicInteger id = new AtomicInteger(0);
+        Colors.getColorList().forEach(color -> IntStream.range(0, DICE_PER_COLOR).forEach(v -> bagPool.add(new Dice(id.getAndIncrement(), color))));
         this.numberOfPlayers = numberOfPlayers;
         diceNumber = this.numberOfPlayers * 2 + 1;
-
         this.dispatchGameManager = dispatchGameManager;
         this.dynamicRouter = dynamicRouter;
         this.dynamicRouter.subscribeChannel(DiceEvent.class, this);
@@ -76,11 +73,11 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         diceDraftBackup = null;
         draftPool.clear();
         Iterator<Dice> bagPicker = new Picker<>(bagPool).pickerIterator();
-        for (int i = 0; i < diceNumber; i++) {
+        IntStream.range(0, diceNumber).forEach(i -> {
             Dice dice = bagPicker.next();
             dice.roll();
             draftPool.add(dice);
-        }
+        });
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }
 

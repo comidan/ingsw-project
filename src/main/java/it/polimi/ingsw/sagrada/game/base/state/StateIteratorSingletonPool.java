@@ -25,11 +25,7 @@ public class StateIteratorSingletonPool {
      * @return a specific game's state iterator, create new one if absent
      */
     public static StateIterator getStateIteratorInstance(int hash) {
-        StateIterator stateIterator = instances.get(hash);
-        if(stateIterator == null) {
-            stateIterator = new StateIterator();
-            instances.put(hash, stateIterator);
-        }
-        return stateIterator;
+        instances.computeIfAbsent(hash, key -> instances.put(key, new StateIterator()));
+        return instances.get(hash);
     }
 }

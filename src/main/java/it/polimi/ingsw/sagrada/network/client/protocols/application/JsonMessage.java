@@ -240,25 +240,25 @@ public class JsonMessage implements ActionMessageVisitor {
                     data = (JSONObject) jsonMsg.get(DICE_LIST);
                     List<Dice> diceResponse = new ArrayList<>();
                     JSONArray diceArray = (JSONArray)data.get(DICE);
-                    for(int i = 0; i < diceArray.size(); i++) {
-                        JSONObject diceJson = ((JSONObject)diceArray.get(i));
+                    diceArray.forEach(raw -> {
+                        JSONObject diceJson = (JSONObject) raw;
                         Dice dice = new Dice(Integer.parseInt((String)(diceJson.get(ID))),
                                 Colors.stringToColor((String)(diceJson.get(COLOR))));
                         dice.setValue(Integer.parseInt((String)(diceJson).get(VALUE)));
                         diceResponse.add(dice);
-                    }
+                    });
                     return new DiceResponse((String)(data.get(DESTINATION)), diceResponse);
                 case OPPONENT_WINDOW_LIST:
                     JSONArray array = (JSONArray) jsonMsg.get(OPPONENT_WINDOW_LIST);
                     List<Integer> windowIds = new ArrayList<>();
                     List<WindowSide> windowSides = new ArrayList<>();
                     List<String> players = new ArrayList<>();
-                    for(int i = 0; i < array.size(); i++) {
-                        JSONObject windowJson = ((JSONObject) array.get(i));
+                    array.forEach(raw -> {
+                        JSONObject windowJson = (JSONObject) raw;
                         players.add((String) windowJson.get(PLAYER_ID));
                         windowIds.add(Integer.parseInt((String) windowJson.get(WINDOW_ID)));
                         windowSides.add(WindowSide.stringToWindowSide((String) windowJson.get(WINDOW_SIDE)));
-                    }
+                    });
                     return new OpponentWindowResponse(players, windowIds, windowSides);
                 case OPPONENT_DICE_RESPONSE:
                     JSONObject dice = (JSONObject)jsonMsg.get(DICE);
@@ -277,10 +277,10 @@ public class JsonMessage implements ActionMessageVisitor {
                 case PUBLIC_OBJECTIVES:
                     JSONArray publicObjectives = (JSONArray) jsonMsg.get(PUBLIC_OBJECTIVES);
                     List<Integer> ids = new ArrayList<>();
-                    for(int i = 0; i < publicObjectives.size(); i++) {
-                        JSONObject publicObjective = ((JSONObject) publicObjectives.get(i));
+                    publicObjectives.forEach(raw -> {
+                        JSONObject publicObjective = (JSONObject) raw;
                         ids.add(Integer.parseInt((String) publicObjective.get(ID)));
-                    }
+                    });
                     return new PublicObjectiveResponse(ids);
                 case PRIVATE_OBJECTIVE:
                     data = (JSONObject) jsonMsg.get(PRIVATE_OBJECTIVE);
@@ -290,10 +290,10 @@ public class JsonMessage implements ActionMessageVisitor {
                 case TOOL_CARDS:
                     JSONArray toolCards = (JSONArray) jsonMsg.get(TOOL_CARDS);
                     List<Integer> toolIds = new ArrayList<>();
-                    for(int i = 0; i < toolCards.size(); i++) {
-                        JSONObject publicObjective = ((JSONObject) toolCards.get(i));
+                    toolCards.forEach(raw -> {
+                        JSONObject publicObjective = (JSONObject) raw;
                         toolIds.add(Integer.parseInt((String) publicObjective.get(ID)));
-                    }
+                    });
                     return new ToolCardResponse(toolIds);
                 default:
                     return null;

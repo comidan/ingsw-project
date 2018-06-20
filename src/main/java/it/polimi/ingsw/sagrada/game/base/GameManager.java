@@ -36,6 +36,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 import static it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum.*;
 
@@ -80,21 +81,15 @@ public class GameManager implements Channel<Message, Message> {
      */
     public GameManager(List<Player> players, DynamicRouter dynamicRouter) {
         Consumer<Message> function = this::dispatch;
-
         this.players = players;
-
         cardManager = new CardManager();
         diceManager = new DiceManager(players.size(), function, dynamicRouter);
         windowManager = new WindowManager(function, dynamicRouter);
         ruleManager = new RuleManager();
         roundTrack = new RoundTrack();
-
         List<String> playersId = new ArrayList<>();
-        for (Player p:players) {
-            playersId.add(p.getId());
-        }
+        players.forEach(p -> playersId.add(p.getId()));
         playerIterator = new PlayerIterator(playersId);
-
         this.dynamicRouter = dynamicRouter;
         this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
     }
@@ -141,10 +136,10 @@ public class GameManager implements Channel<Message, Message> {
     private void dealPrivateObjectiveState() {
         List<ObjectiveCard> privateObjective;
         privateObjective = cardManager.dealPrivateObjective(players.size());
-        for (int i = 0; i < players.size(); i++) {
+        IntStream.range(0, players.size()).forEach(i -> {
             players.get(i).setPrivateObjectiveCard(privateObjective.get(i));
             sendMessage(new PrivateObjectiveResponse(privateObjective.get(i).getId(), players.get(i).getId()));
-        }
+        });
     }
 
     /**
@@ -189,9 +184,9 @@ public class GameManager implements Channel<Message, Message> {
         boolean dealt = true;
 
         player.setWindow(window);
-        for(Player p:players) {
-            if(p.isConnected() && p.getWindow()==null) dealt = false;
-        }
+        for(Player p:players)
+            if(p.isConnected() && p.getWindow()==null)
+                dealt = false;
 
         if(dealt) {
             List<Integer> windowsId = new ArrayList<>();
@@ -209,7 +204,7 @@ public class GameManager implements Channel<Message, Message> {
      * Start next round or if previous round was the last, init ending game procedures
      */
     private void startRound() {
-        if(stateIterator.next()==StateGameEnum.TURN) {
+        if(stateIterator.next() == StateGameEnum.TURN) {
             System.out.println(stateIterator.getRoundNumber() + " turn started");
             diceManager.bagToDraft();
             sendMessage(new NewTurnResponse(stateIterator.getRoundNumber()));

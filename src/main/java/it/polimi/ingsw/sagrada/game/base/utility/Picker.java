@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 
 /**
@@ -48,9 +49,7 @@ public class Picker<T> {
          * Instantiates a new pick iterator.
          */
         private PickIterator() {
-            for(int i=0; i<elements.size(); i++) {
-                index.add(i);
-            }
+            IntStream.range(0, elements.size()).forEach(index::add);
         }
 
         /* (non-Javadoc)

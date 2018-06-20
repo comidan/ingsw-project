@@ -205,14 +205,14 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         clientIdTokens.remove(username);
         heartbeatProtocolManager.removeFromMonitoredHost(username);
         System.out.println(username + " disconnected");
-        for(String clientId : clientIds)
+        clientIds.forEach(clientId -> {
             try {
                 clientPool.get(clientId).sendMessage(username + " disconnected");
                 clientPool.get(clientId).removePlayer(username);
-            }
-            catch (RemoteException exc) {
+            } catch (RemoteException exc) {
                 LOGGER.log(Level.SEVERE, exc::getMessage);
             }
+        });
         return true;
     }
 
@@ -231,13 +231,13 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     public void onDeath(HeartbeatEvent event) {
         System.out.println(event.getSource() + " is offline");
         removePlayer(event.getSource());
-        for(String clientId : clientIds)
+        clientIds.forEach(clientId -> {
             try {
                 clientPool.get(clientId).sendMessage(event.getSource() + " is offline");
-            }
-            catch (RemoteException exc) {
+            } catch (RemoteException exc) {
                 LOGGER.log(Level.SEVERE, exc::getMessage);
             }
+        });
     }
 
     /* (non-Javadoc)
@@ -264,7 +264,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      */
     @Override
     public void onAcquiredCommunication(HeartbeatEvent event) {
-        for(String clientId : clientIds) {
+        clientIds.forEach(clientId -> {
             if (!clientId.equals(event.getSource()))
                 try {
                     clientPool.get(clientId).sendMessage(event.getSource() + " is online");
@@ -273,7 +273,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                 catch (RemoteException exc) {
                     LOGGER.log(Level.SEVERE, exc::getMessage);
                 }
-        }
+        });
     }
 
     /**
@@ -404,16 +404,14 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     }
 
     private void sendPayload(String payload) {
-        for(String username : clientIds) {
-            new Thread(() -> {
-                try {
-                    clientPool.get(username).setTimer(payload);
-                    clientTCPLinkEstablished.put(username, true); //ignored, as it is supposed to be, if there is some socket related exception, on rmi case is just waiting for the blocking call to remote method setTimer
-                } catch (RemoteException exc) {
-                    LOGGER.log(Level.SEVERE, exc::getMessage);
-                }
-            }).start();
-        }
+        clientIds.forEach(username -> new Thread(() -> {
+            try {
+                clientPool.get(username).setTimer(payload);
+                clientTCPLinkEstablished.put(username, true); //ignored, as it is supposed to be, if there is some socket related exception, on rmi case is just waiting for the blocking call to remote method setTimer
+            } catch (RemoteException exc) {
+                LOGGER.log(Level.SEVERE, exc::getMessage);
+            }
+        }).start());
     }
 
     /**

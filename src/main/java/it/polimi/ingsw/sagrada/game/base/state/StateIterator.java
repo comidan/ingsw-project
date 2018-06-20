@@ -69,7 +69,7 @@ public class StateIterator implements Iterator<StateGameEnum> {
      * @see java.util.Iterator#next()
      */
     @Override
-    public StateGameEnum next() throws NoSuchElementException {
+    public StateGameEnum next() {
         if(currentState==null){
             currentState= StateGameEnum.getFirstState();
         } else {

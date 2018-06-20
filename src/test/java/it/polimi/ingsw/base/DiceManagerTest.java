@@ -18,7 +18,6 @@ public class DiceManagerTest implements Channel<DiceResponse, DiceEvent> {
 
     @Test
     public void testDicePick() {
-
         DynamicRouter dynamicRouter = new MessageDispatcher();
         dynamicRouter.subscribeChannel(DiceResponse.class, this);
         diceManager = new DiceManager(numberOfPlayers, null, dynamicRouter);

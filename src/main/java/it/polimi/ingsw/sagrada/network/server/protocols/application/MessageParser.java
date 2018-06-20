@@ -52,13 +52,13 @@ public class MessageParser implements ResponseMessageVisitor {
         JSONObject diceList = new JSONObject();
         diceList.put(DESTINATION, diceResponse.getDst());
         JSONArray diceArray = new JSONArray();
-        for(Dice dice : diceResponse.getDiceList()) {
+        diceResponse.getDiceList().forEach(dice -> {
             JSONObject diceM = new JSONObject();
             diceM.put(ID, dice.getId()+"");
             diceM.put(VALUE, dice.getValue()+"");
             diceM.put(COLOR, dice.getColor().toString());
             diceArray.add(diceM);
-        }
+        });
         diceList.put(DICE, diceArray);
         message.put(DICE_LIST, diceList);
         return message.toJSONString();
@@ -124,13 +124,13 @@ public class MessageParser implements ResponseMessageVisitor {
     private String createOpponentWindowsResponse(OpponentWindowResponse opponentWindowResponse) {
         List<String> players = opponentWindowResponse.getPlayers();
         JSONArray windows = new JSONArray();
-        for(String player : players) {
+        players.forEach(player -> {
             JSONObject window = new JSONObject();
             window.put(WINDOW_ID, opponentWindowResponse.getPlayerWindowId(player)+"");
             window.put(WINDOW_SIDE, WindowSide.sideToString(opponentWindowResponse.getPlayerWindowSide(player)));
             window.put(PLAYER_ID, player);
             windows.add(window);
-        }
+        });
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, RESPONSE);
         container.put(COMMAND_TYPE, OPPONENT_WINDOW_LIST);
@@ -187,11 +187,11 @@ public class MessageParser implements ResponseMessageVisitor {
     private String createJsonPublicObjectivesResponse(PublicObjectiveResponse publicObjectiveResponse) {
         List<Integer> publicObjectiveIds = publicObjectiveResponse.getIdObjective();
         JSONArray ids = new JSONArray();
-        for(int publicObjectiveId : publicObjectiveIds) {
+        publicObjectiveIds.forEach(publicObjectiveId -> {
             JSONObject id = new JSONObject();
             id.put(ID, publicObjectiveId + "");
             ids.add(id);
-        }
+        });
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, RESPONSE);
         container.put(COMMAND_TYPE, PUBLIC_OBJECTIVES);
@@ -225,11 +225,11 @@ public class MessageParser implements ResponseMessageVisitor {
     private String createJsonToolCardsResponse(ToolCardResponse toolCardResponse) {
         List<Integer> toolCardIds = toolCardResponse.getIds();
         JSONArray ids = new JSONArray();
-        for(int toolCardId : toolCardIds) {
+        toolCardIds.forEach(toolCardId -> {
             JSONObject id = new JSONObject();
             id.put(ID, toolCardId + "");
             ids.add(id);
-        }
+        });
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, RESPONSE);
         container.put(COMMAND_TYPE, TOOL_CARDS);

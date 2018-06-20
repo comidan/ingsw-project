@@ -255,7 +255,6 @@ public class DataManager {
     private static String getDbmsUsername() {
         JSONParser parser = new JSONParser();
         try {
-
             Object obj = parser.parse(new InputStreamReader(DataManager.class.getResourceAsStream(DATABASE_CONFIG_PATH)));
             JSONObject jsonObject = (JSONObject) obj;
             return (String) jsonObject.get("dbms_username");
@@ -274,7 +273,6 @@ public class DataManager {
     private static String getDbmsAuth() {
         JSONParser parser = new JSONParser();
         try {
-
             Object obj = parser.parse(new InputStreamReader(DataManager.class.getResourceAsStream(DATABASE_CONFIG_PATH)));
             JSONObject jsonObject = (JSONObject) obj;
             return (String) jsonObject.get("dbms_auth");
@@ -293,7 +291,6 @@ public class DataManager {
     private static String getDbName() {
         JSONParser parser = new JSONParser();
         try {
-
             Object obj = parser.parse(new InputStreamReader(DataManager.class.getResourceAsStream(DATABASE_CONFIG_PATH)));
             JSONObject jsonObject = (JSONObject) obj;
             return (String) jsonObject.get("db_name");
@@ -312,7 +309,6 @@ public class DataManager {
     private static int getDbmsPort() {
         JSONParser parser = new JSONParser();
         try {
-
             Object obj = parser.parse(new InputStreamReader(DataManager.class.getResourceAsStream(DATABASE_CONFIG_PATH)));
             JSONObject jsonObject = (JSONObject) obj;
             return Integer.parseInt((String) jsonObject.get("dbms_port"));

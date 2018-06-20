@@ -48,9 +48,9 @@ public class ToolManager {
 	public boolean canBuyTool(int id, List<Token> tokens) {
 		ToolCard card;
 		int cost;
-		int i=0;
+		int i = 0;
 
-		while(i<toolCards.size()) {
+		while(i < toolCards.size()) {
 			card = toolCards.get(i);
 			if(card.getId() == id) {
 				if(card.getUsage()==Usage.NEW) cost=1;

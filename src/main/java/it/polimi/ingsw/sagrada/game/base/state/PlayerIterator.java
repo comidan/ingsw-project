@@ -1,12 +1,15 @@
 package it.polimi.ingsw.sagrada.game.base.state;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 
 /**
  * PlayerIterator class, its job is to iterate over players and decide who's up next in a turn during the game
  */
 public class PlayerIterator implements Iterator<String> {
+
+    private static final int MAX_ROUND = 10;
 
     private List<String> players;
 
@@ -27,9 +30,7 @@ public class PlayerIterator implements Iterator<String> {
         this.players = players;
         turnIteration  = new ArrayList<>();
         int size = players.size();
-        for(int i=0; i<size-1; i++) { //example 0-1-2-0-1
-            this.players.add(players.get(i));
-        }
+        IntStream.range(0, size - 1).forEach(i -> this.players.add(players.get(i)));
         this.itr = 0;
         this.numPlayer = size;
         this.turnNum = 0;
@@ -41,13 +42,12 @@ public class PlayerIterator implements Iterator<String> {
      */
     @Override
     public boolean hasNext() {
-        if(itr<2*numPlayer && turnNum<10) return true;
-        else {
-            itr=0;
-            turnNum++;
-            getRoundSequence();
-            return false;
-        }
+        if(itr < 2 * numPlayer && turnNum < MAX_ROUND)
+            return true;
+        itr=0;
+        turnNum++;
+        getRoundSequence();
+        return false;
     }
 
     /* (non-Javadoc)
@@ -55,7 +55,7 @@ public class PlayerIterator implements Iterator<String> {
      */
     @Override
     public String next() {
-        if(itr>=2*numPlayer) throw new NoSuchElementException();
+        if(itr >= 2 * numPlayer) throw new NoSuchElementException();
         return turnIteration.get(itr++);
     }
 
@@ -64,15 +64,15 @@ public class PlayerIterator implements Iterator<String> {
      */
     private void getRoundSequence() {
         turnIteration.clear();
-        int offset = turnNum%numPlayer;
-        for(int i=0; i<2*numPlayer; i++) {
+        int offset = turnNum % numPlayer;
+        IntStream.range(0, 2 * numPlayer).forEach(i -> {
             if(i<numPlayer) {
                 turnIteration.add(players.get(i+offset));
             }
             else {
                 turnIteration.add(players.get(2*numPlayer-1-i+offset));
             }
-        }
+        });
     }
 
     /**

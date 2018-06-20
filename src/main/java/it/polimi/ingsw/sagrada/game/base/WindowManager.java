@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 
 /**
@@ -58,7 +59,7 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         JSONParser parser;
         parser = new JSONParser();
         List<Integer> id = new ArrayList<>();
-        for (int i = 0; i < NUM_OF_WINDOWS; i++) id.add(i);
+        IntStream.range(0, NUM_OF_WINDOWS).forEach(id::add);
         try {
             windowsArray = (JSONArray) parser.parse(new InputStreamReader(WindowManager.class.getResourceAsStream(BASE_PATH)));
             picker = new Picker<>(id).pickerIterator();
@@ -82,10 +83,10 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
      */
     public void dealWindowId(String playerId) {
         List<Integer> windowId = new ArrayList<>();
-        for (int i = 0; i < WINDOWS_PER_CARD; i++) {
-            if (picker.hasNext()) windowId.add(picker.next());
-        }
-
+        IntStream.range(0, WINDOWS_PER_CARD).forEach(i -> {
+            if(picker.hasNext())
+                windowId.add(picker.next());
+        });
         sendMessage(new WindowResponse(playerId, windowId));
     }
 
@@ -103,10 +104,7 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         String name = (String) specificWindow.get("name");
         int numTokens = ((Long) specificWindow.get("token")).intValue();
         List<Token> tokens = new ArrayList<>();
-        for (int j = 0; j < numTokens; j++) {
-            tokens.add(new Token());
-        }
-        JSONArray array = (JSONArray) specificWindow.get("cells");
+        IntStream.range(0, numTokens).forEach(i -> tokens.add(new Token()));
         Cell[][] cells = createCellMatrix((JSONArray) specificWindow.get("cells"));
         return new Window(name, cells, tokens, id, side);
     }
@@ -134,7 +132,6 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
             nextY = ((Long) singleCell.get("y")).intValue();
             constraint = (String) singleCell.get("constraint");
         } else constraintLeft = false;
-
         for (int i = 0; i < cellMatrix.length; i++) { //row
             for (int j = 0; j < cellMatrix[0].length; j++) { //column
                 if (constraintLeft && (i == nextY && j == nextX)) {

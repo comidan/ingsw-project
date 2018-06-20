@@ -3,9 +3,11 @@ package it.polimi.ingsw.sagrada.network.server.tools;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.IntStream;
 
 
 /**
@@ -34,9 +36,9 @@ public class PortDiscovery {
      * @return the int
      */
     public int obtainAvailablePort() {
-        for(int port = MIN_PORT_NUMBER; port <= MAX_PORT_NUMBER; port++)
-            if(isPortAvailable(port))
-                return port;
+        Optional<Integer> port = IntStream.range(MIN_PORT_NUMBER, MAX_PORT_NUMBER).boxed().filter(this::isPortAvailable).findFirst();
+        if(port.isPresent())
+            return port.get();
         throw new RuntimeException(DISCOVERY_ERROR);
     }
 
@@ -46,9 +48,9 @@ public class PortDiscovery {
      * @return the int
      */
     public int obtainAvailableTCPPort() {
-        for(int port = MIN_PORT_NUMBER; port <= MAX_PORT_NUMBER; port++)
-            if(isPortAvailableOnTCP(port))
-                return port;
+        Optional<Integer> port = IntStream.range(MIN_PORT_NUMBER, MAX_PORT_NUMBER).boxed().filter(this::isPortAvailableOnTCP).findFirst();
+        if(port.isPresent())
+            return port.get();
         throw new RuntimeException(DISCOVERY_ERROR);
     }
 
@@ -58,9 +60,9 @@ public class PortDiscovery {
      * @return the int
      */
     public int obtainAvailableUDPPort() {
-        for(int port = MIN_PORT_NUMBER; port <= MAX_PORT_NUMBER; port++)
-            if(isPortAvailableOnUDP(port))
-                return port;
+        Optional<Integer> port = IntStream.range(MIN_PORT_NUMBER, MAX_PORT_NUMBER).boxed().filter(this::isPortAvailableOnUDP).findFirst();
+        if(port.isPresent())
+            return port.get();
         throw new RuntimeException(DISCOVERY_ERROR);
     }
 

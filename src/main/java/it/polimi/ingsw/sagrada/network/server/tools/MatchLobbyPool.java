@@ -7,6 +7,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,11 +31,9 @@ public class MatchLobbyPool {
      */
     public MatchLobby getAvailableLobby() throws IOException {
         MatchLobby availableLobby = null;
-        for(MatchLobby lobby : lobbyPool)
-            if(!lobby.isFull() && !lobby.isInGame()) {
-                availableLobby = lobby;
-                break;
-            }
+        Optional<MatchLobby> findMatch = lobbyPool.stream().findAny().filter(lobby -> !lobby.isFull()).filter(lobby -> !lobby.isInGame());
+        if(findMatch.isPresent())
+            availableLobby = findMatch.get();
         if(availableLobby == null) {
             availableLobby = new MatchLobby(DataManager.getSignOut(), lobbyPool.size() + "");
             lobbyPool.add(availableLobby);

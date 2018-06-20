@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.game.rules;
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -72,11 +73,8 @@ public class RuleManager {
      */
     public int validateObjectiveRules(List<ObjectiveRule> rules, Cell[][] cells) {
         int score = rules.stream().mapToInt(rule -> validateRule(rule, cells)).sum();
-        for (int i = 0; i < cells.length; i++)
-            for (int j = 0; j < cells[0].length; j++)
-                if (!cells[i][j].isOccupied())
-                    score--;
-        return score;
+        int scoreFix = Arrays.stream(cells).flatMap(Arrays::stream).filter(cell -> !cell.isOccupied()).mapToInt(value -> 1).sum();
+        return score - scoreFix;
     }
 
     /**

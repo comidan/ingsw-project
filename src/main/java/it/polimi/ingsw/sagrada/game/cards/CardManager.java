@@ -11,13 +11,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 
 /**
@@ -57,16 +57,15 @@ public class CardManager {
 		try{
 			JSONArray tools = (JSONArray)parser.parse(new InputStreamReader(CardManager.class.getResourceAsStream(BASE_PATH_TOOL)));
 			Iterator<JSONObject> picker = new Picker<JSONObject>(tools).pickerIterator();
-			for(int i=0; i<NUM_TOOLS; i++) {
+			IntStream.range(0, NUM_TOOLS).forEach(i -> {
 				if(picker.hasNext()) {
 					JSONObject tool = picker.next();
 					int id = ((Long)tool.get("id")).intValue();
 					String name = (String)tool.get("name");
 					JSONArray actions = (JSONArray)tool.get("action");
-
 					toolCards.add(new ToolCard(id, name, getToolRule(actions)));
 				}
-			}
+			});
 		}catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Something breaks in reading JSON file");
 		} catch (ParseException e) {
@@ -84,16 +83,15 @@ public class CardManager {
 	 */
 	private ToolRule getToolRule(JSONArray actions) {
 		ToolBuilder toolBuilder = ToolRule.builder();
-		for(int j=0; j<actions.size(); j++) {
-			String action = (String)actions.get(j);
+		actions.forEach(json -> {
+			String action = (String) json;
 			switch (action) {
 				case "setIncrementDiceFeature": toolBuilder.setIncrementDiceFeature(); break;
 				case "setMoveIgnoringColorRuleFeature": toolBuilder.setMoveIgnoringColorRuleFeature(); break;
 				case "setMoveIgnoringValueRuleFeature": toolBuilder.setMoveIgnoringValueRuleFeature(); break;
 				default: LOGGER.log(Level.SEVERE, () -> "JSON is not correct. Check PublicObjective.json id");
 			}
-		}
-
+		});
 		return toolBuilder.build();
 	}
 
@@ -109,7 +107,7 @@ public class CardManager {
 		try{
 			JSONArray publicObjective = (JSONArray)parser.parse(new InputStreamReader(CardManager.class.getResourceAsStream(BASE_PATH_OBJECTIVE)));
 			Iterator<JSONObject> picker = new Picker<JSONObject>(publicObjective).pickerIterator();
-			for(int i=0; i<NUM_PUBLIC_OBJECTIVE; i++) {
+			IntStream.range(0, NUM_PUBLIC_OBJECTIVE).forEach(i -> {
 				if(picker.hasNext()) {
 					JSONObject card = picker.next();
 					int id = ((Long)card.get("id")).intValue();
@@ -117,7 +115,7 @@ public class CardManager {
 					String name = (String)card.get("name");
 					cards.add(new ObjectiveCard(id, name, findObjectiveRule(id, value)));
 				}
-			}
+			});
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, () -> "Something breaks in reading JSON file");
 		} catch (ParseException e) {
@@ -161,17 +159,16 @@ public class CardManager {
 		List<ObjectiveCard> cards = new ArrayList<>();
 		List<Colors> colors = Colors.getColorList();
 		Iterator<Colors> picker = new Picker<>(colors).pickerIterator();
-
-		if(numPlayer>NUM_MAX_PLAYER) return cards;
-
-		for(int i=0; i<numPlayer; i++) {
+		if(numPlayer>NUM_MAX_PLAYER)
+			return cards;
+		IntStream.range(0, numPlayer).forEach(i -> {
 			if(picker.hasNext()) {
 				ObjectiveBuilder objectiveBuilder = ObjectiveRule.builder();
 				Colors color = picker.next();
 				objectiveBuilder.setColorShadeColorObjective(color);
-				cards.add(new ObjectiveCard(i, "Obiettivo "+color.toString(), objectiveBuilder.build()));
+				cards.add(new ObjectiveCard(i, "Objective "+color.toString(), objectiveBuilder.build()));
 			}
-		}
+		});
 		return cards;
 	}
 
