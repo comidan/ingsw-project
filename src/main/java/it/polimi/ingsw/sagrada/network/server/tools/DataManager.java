@@ -43,16 +43,16 @@ public class DataManager {
     private Database database;
     
     /** The dbms username. */
-    private static String DBMS_USERNAME = getDbmsUsername();
+    private static final String DBMS_USERNAME = getDbmsUsername();
     
     /** The dbms auth. */
-    private static String DBMS_AUTH = getDbmsAuth();
+    private static final String DBMS_AUTH = getDbmsAuth();
     
     /** The db name. */
-    private static String DB_NAME = getDbName();
+    private static final String DB_NAME = getDbName();
     
     /** The dbms port. */
-    private static int DBMS_PORT = getDbmsPort();
+    private static final int DBMS_PORT = getDbmsPort();
 
     /** The data manager. */
     private static DataManager dataManager;
@@ -91,17 +91,17 @@ public class DataManager {
      * Authenticate.
      *
      * @param username the username
-     * @param hashedPassowrd the hashed passowrd
+     * @param hashedPassword the hashed passowrd
      * @return the login state
      */
-    public synchronized LoginState authenticate(String username, String hashedPassowrd) {
+    public synchronized LoginState authenticate(String username, String hashedPassword) {
         if(loggedUsers.get(username) != null)
             return LoginState.AUTH_FAILED_USER_ALREADY_LOGGED;
         try {
             ResultSet queryResult = database.executeRawQuery("SELECT Username, Password FROM User WHERE Username = '" + username + "' AND " +
-                    "Password = '" + hashedPassowrd + "'");
+                    "Password = '" + hashedPassword + "'");
             if(queryResult.next()) {
-                loggedUsers.put(username, hashedPassowrd);
+                loggedUsers.put(username, hashedPassword);
                 return LoginState.AUTH_OK;
             }
             else

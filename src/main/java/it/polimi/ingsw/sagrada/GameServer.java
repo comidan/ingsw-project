@@ -90,7 +90,6 @@ public class GameServer {
             return LocateRegistry.createRegistry(rmiPort);
         }
         catch (RemoteException exc) {
-            exc.printStackTrace();
             LOGGER.log(Level.SEVERE, exc::getMessage);
             System.exit(-1);
             return null;

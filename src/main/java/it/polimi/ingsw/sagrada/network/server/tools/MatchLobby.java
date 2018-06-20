@@ -378,6 +378,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             }
             catch (InterruptedException exc) {
                 LOGGER.log(Level.SEVERE, exc::getMessage);
+                Thread.currentThread().interrupt();
             }
         }
         if(clientIds.size() <= 1) {
@@ -435,6 +436,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                 }
                 catch (InterruptedException exc) {
                     LOGGER.log(Level.SEVERE, exc::getMessage);
+                    Thread.currentThread().interrupt();
                 }
                 if(clientIds.size() > 1)
                     elapsedTime += 1;
