@@ -1,16 +1,16 @@
 ### Analisi scelta DBMS
-La scelta del Database Management System non è una scelta tanto banale quanto può sembrare. In questo progetto è stato scelto l'utilizzo di utilizzare MySQL, quindi più precisamente verrà utilizzato un Rlational Database Manangement System.
+La scelta del Database Management System non è una scelta tanto banale quanto può sembrare. In questo progetto è stato scelto di utilizzare MySQL, quindi più precisamente verrà utilizzato un Relational Database Manangement System.
 
 ### Perchè MySQL?
 
 #### Sicurezza
-MySQL utilizza una sicurezza distribuita su più livelli andando a sfruttare il già esistente protocollo che ne fa da garante, SSL. MySQL supportandolo permette quindi una comunicazione sicura e criptata attraverso certificati e cifratura con chiavi RSA da 2048 bit.
+MySQL utilizza una sicurezza distribuita su più livelli andando a sfruttare il già esistente protocollo che ne fa da garante, SSL. MySQL, supportandolo, permette quindi una comunicazione sicura e criptata attraverso certificati e cifratura con chiavi RSA da 2048 bit.
 
 #### Affidabilità
-MySQL ha un'ottima gestione degli errori interni dovuti a un qualche tipo di corruzione del database riuscendo a fare eventuali operazioni di ripristino necessarie
+MySQL ha un'ottima gestione degli errori interni dovuti a un qualche tipo di corruzione del database riuscendo a svolgere eventuali operazioni di ripristino necessarie.
 
 #### Performance
-Una propriamente ben configurata istanza di MySQL è molto veloce per questi motivi :
+Una un'istanza propriamente configurata di MySQL è molto veloce per i seguenti motivi :
  - Covering index support
  - Adaptive hash index
  - Buffer pool implementation
@@ -20,7 +20,7 @@ Una propriamente ben configurata istanza di MySQL è molto veloce per questi mot
 <br/>  
 
 ### Analisi struttura concettuale database
-L'utilizzo di un database per la memorizzazione di vari tipi di dati, dagli utenti ai loro salvataggi alle loro partite e molto altro è subito sembrato la scelta più ovvia per questo progetto.
+L'utilizzo di un database per la memorizzazione di vari tipi di dati, dagli utenti ai loro salvataggi alle loro partite e molto altro, è subito sembrato la scelta più ovvia per questo progetto.
 
 In questo documento verrà esposto il modello relazionale scelto per la struttura interna del database e la consistenza dei dati in esso memorizzato.
 
@@ -31,7 +31,7 @@ L'UML nell'immagine sottostante indica come il database è implementato concettu
 
 ### Spiegazione modello concettuale
 Si può notare la presenza di relazioni M:N, questo comporterà la creazioni di ulteriori tabelle per poter creare una corrispondenza ed una coerenza tra i dati in esso memorizzati.
-Andando più in dettaglio si può analizzare le scelte pensate per il modello concettuale qui esposto.<br/>  
+Scendendo ulteriormente nel dettaglio, si possono analizzare le scelte pensate per il modello concettuale qui esposto.<br/>  
 La tabella User conterrà 3 campi :
  - username (alfanumerico e chiave primaria)
  - password (memorizzando solo il suo hash generato da MD5)
@@ -64,3 +64,7 @@ La porta utilizzata per il server in cui sarà presente MySQL dovrebbe essere la
 <img src="https://preview.ibb.co/dwFjwJ/only_Port80_Poli.png" alt="only_Port80_Poli"><br/>  
 
 La soluzione proposta è quindi di attenersi all'utilizzo di un MySQL server remoto su porta 80 o 443.
+
+
+### Disclaimer
+Per via delle indicazioni sulla consegna e svolgimento dell'esecuzione del software finale, è stato scelta l'implementazione del database utilizzando la tecnologia messa a disposizione dal DBMS SQLite, che consistendo in un unico file garantisce ovviamente una maggiore portabilità come risorsa a discapito dei vantaggi sopracitati MySQL, vantaggi ovviamente in questo caso prettamente teorici ovvero laddove si vadi a creare un ambiente dove sono presenti centinaia di client in diversi match : con l'adeguato hardware ed infrastruttura di rete, la cui astrazione è [qui](https://github.com/Daniele-Comi/ingsw-project/wiki/Network-architecture-analysis) descritta, disponibili.
