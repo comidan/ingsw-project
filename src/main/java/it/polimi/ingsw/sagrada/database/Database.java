@@ -28,24 +28,24 @@ public abstract class Database
     /** The Constant MYSQL_STANDARD_DB_NAME as default db name in case of missing json config */
     public static final String MYSQL_STANDARD_DB_NAME = "sagrada";
 
-    protected String databaseURL;
+    String databaseURL;
 
     protected String username;
 
     protected String password;
 
-    protected String maxPool;
+    String maxPool;
 
     protected Connection connection;
 
-    protected Properties properties;
+    private Properties properties;
 
-    protected Statement statement;
+    Statement statement;
 
     protected ResultSet resultSet;
     
     /** Describing multi thread status by allowing multiple queries on the same connection by disallowing auto commit */
-    protected boolean multiThread = false;
+    boolean multiThread = false;
     
     /**
      * Init the SQL database connection using personalized port
@@ -133,7 +133,7 @@ public abstract class Database
      *
      * @return database connection properties
      */
-    protected Properties getProperties() {
+    Properties getProperties() {
         if (properties == null) {
             properties = new Properties();
             properties.setProperty("user", username);

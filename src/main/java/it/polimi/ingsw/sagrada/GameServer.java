@@ -87,7 +87,7 @@ public class GameServer {
      */
     private static Registry getRegistry(int port) {
         try {
-            return LocateRegistry.createRegistry(rmiPort);
+            return LocateRegistry.createRegistry(port);
         }
         catch (RemoteException exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
