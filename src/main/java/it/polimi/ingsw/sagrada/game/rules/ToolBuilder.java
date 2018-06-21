@@ -4,8 +4,10 @@ import it.polimi.ingsw.sagrada.game.base.Builder;
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 
@@ -169,7 +171,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 	 *
 	 * @return the tool builder
 	 */
-	public ToolBuilder setAddNewDiceFeature() {
+	public ToolBuilder setAddNewDiceFeature() { //missing PlayerIterator feature to notify no turn for the player who chose this tool card
 		function = dto -> {
 			int row = dto.getNewPosition().getRow();
 			int col = dto.getNewPosition().getCol();
@@ -190,9 +192,145 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 			if (col - 1 >= 0 && cells[row][col - 1].isOccupied())
 				return ErrorType.ERROR;
 			cells[row][col].setDice(dice);
+			RuleManager ruleManager = new RuleManager();
+			if(ruleManager.validateWindow(cells) != ErrorType.NO_ERROR) {
+				cells[row][col].removeCurrentDice();
+				return ErrorType.ERROR;
+			}
 			return ErrorType.NO_ERROR;
 		};
 		return this;
 	}
 
+	/**
+	 * Sets two dices feature
+	 *
+	 * @return the tool builder
+	 */
+	public ToolBuilder setAddTwoDiceFeature() {
+		function = dto -> {
+			int row1 = dto.getNewPosition().getRow();
+			int col1 = dto.getNewPosition().getCol();
+			int row2 = dto.getSecondNewPosition().getRow();
+			int col2 = dto.getSecondNewPosition().getCol();
+			Dice dice1 = dto.getDice();
+			Dice dice2 = dto.getSecondDice();
+			Cell[][] cells = dto.getWindowMatrix();
+			if(checkIfNull(dice1, dice2, cells) == ErrorType.NULL_DATA)
+				return ErrorType.NULL_DATA;
+			RuleManager ruleManager = new RuleManager();
+			if(cells[row1][col1].isOccupied())
+				return ErrorType.ERROR;
+			if(cells[row2][col2].isOccupied())
+				return ErrorType.ERROR;
+			cells[row1][col1].setDice(dice1);
+			cells[row2][col2].setDice(dice2);
+			if(ruleManager.validateWindow(cells) != ErrorType.NO_ERROR) {
+				cells[row1][col1].removeCurrentDice();
+				cells[row2][col2].removeCurrentDice();
+				return ErrorType.MATRIX_ERROR;
+			}
+			return ErrorType.NO_ERROR;
+		};
+		return this;
+	}
+
+	/**
+	 * Sets exchange draft - round track dice feature
+	 *
+	 * @return the tool builder
+	 */
+	public ToolBuilder setExchangeDraftRoundTrackDiceFeature() {
+		function = dto -> {
+			Dice diceFromDraft = dto.getDice();
+			Dice diceFromRoundTrack = dto.getSecondDice();
+			BiConsumer<Dice, Dice> exchangeDraftDice = dto.getExchangeDraftDice();
+			BiConsumer<Dice, Dice> exchangeRoundTrackDice = dto.getExchangeRoundTrackDice();
+			exchangeDraftDice.accept(diceFromDraft, diceFromRoundTrack);
+			exchangeRoundTrackDice.accept(diceFromRoundTrack, diceFromDraft);
+			return ErrorType.NO_ERROR;
+		};
+		return this;
+	}
+
+	/**
+	 * Sets roll every dice in draft feature
+	 *
+	 * @return the tool builder
+	 */
+	public ToolBuilder setRollEveryDraftDice() {
+		function = dto -> {
+			dto.getRollDraft().run();
+			return ErrorType.NO_ERROR;
+		};
+		return this;
+	}
+
+	/**
+	 * Sets move from draft to bag and set new dice feature
+	 *
+	 * @return the tool builder
+	 */
+	public ToolBuilder setFromDraftToBagFeature(){
+		function = dto -> {
+			Dice diceFromDraft = dto.getDice();
+			Dice diceFromBag = dto.getSecondDice();
+			Cell[][] cells = dto.getWindowMatrix();
+			if(checkIfNull(diceFromBag, diceFromBag, cells) == ErrorType.NULL_DATA)
+				return ErrorType.NULL_DATA;
+			diceFromBag.setValue(dto.getImposedDiceValue());
+			int row = dto.getNewPosition().getRow();
+			int col = dto.getNewPosition().getCol();
+			if(cells[row][col].isOccupied())
+				return ErrorType.ERROR;
+			dto.getMoveDiceFromDraftToBag().accept(diceFromDraft);
+			cells[row][col].setDice(diceFromBag);
+			RuleManager ruleManager = new RuleManager();
+			if(ruleManager.validateWindow(cells) != ErrorType.NO_ERROR) {
+				cells[row][col].removeCurrentDice();
+				return ErrorType.ERROR;
+			}
+			return ErrorType.NO_ERROR;
+		};
+		return this;
+	}
+
+	/**
+	 * Sets move up to two dice of the same color of one Round Track's dice to new positions
+	 *
+	 * @return the tool builder
+	 */
+	public ToolBuilder setMoveSameRoundTrackDiceColorFeature() {
+		function = dto -> {
+			int row1Old = dto.getCurrentPosition().getRow();
+			int col1Old = dto.getCurrentPosition().getCol();
+			int row2Old = dto.getSecondCurrentPosition().getRow();
+			int col2Old = dto.getSecondCurrentPosition().getCol();
+			int row1 = dto.getNewPosition().getRow();
+			int col1 = dto.getNewPosition().getCol();
+			int row2 = dto.getSecondNewPosition().getRow();
+			int col2 = dto.getSecondNewPosition().getCol();
+			Dice dice1 = dto.getDice();
+			Dice dice2 = dto.getSecondDice();
+			Cell[][] cells = dto.getWindowMatrix();
+			if(checkIfNull(dice1, dice2, cells) == ErrorType.NULL_DATA)
+				return ErrorType.NULL_DATA;
+			if(!dice1.getColor().equals(dto.getImposedColor()) || !dice2.getColor().equals(dto.getImposedColor()))
+				return ErrorType.ERROR;
+			RuleManager ruleManager = new RuleManager();
+			if(cells[row1][col1].isOccupied() || cells[row2][col2].isOccupied())
+				return ErrorType.ERROR;
+			cells[row1Old][col1Old].removeCurrentDice();
+			cells[row2Old][col2Old].removeCurrentDice();
+			cells[row1][col1].setDice(dice1);
+			cells[row2][col2].setDice(dice2);
+			if(ruleManager.validateWindow(cells) != ErrorType.NO_ERROR) {
+				cells[row1][col1].removeCurrentDice();
+				cells[row2][col2].removeCurrentDice();
+				return ErrorType.MATRIX_ERROR;
+			}
+			return ErrorType.NO_ERROR;
+		};
+		return this;
+	}
 }

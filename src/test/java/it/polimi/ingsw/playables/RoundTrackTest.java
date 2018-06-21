@@ -2,6 +2,7 @@ package it.polimi.ingsw.playables;
 
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
 import it.polimi.ingsw.sagrada.game.playables.*;
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class RoundTrackTest {
         Dice dice = new Dice(3, Colors.RED);
         List<Dice> diceList = new ArrayList<>();
         diceList.add(dice);
-        RoundTrack roundTrack = new RoundTrack();
+        RoundTrack roundTrack = new RoundTrack(new MessageDispatcher());
         assertNotNull(roundTrack);
         roundTrack.addDice(diceList, 2);
         assertEquals(roundTrack.getDiceFromRound(Colors.RED, 2), dice);

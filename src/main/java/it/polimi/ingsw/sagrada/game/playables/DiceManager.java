@@ -13,6 +13,7 @@ import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -112,7 +113,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
      * @return the draft
      */
     public List<Dice> getDraft() {
-        return draftPool;
+        return draftPool.subList(0, draftPool.size());
     }
 
     /**
@@ -150,5 +151,28 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     @Override
     public void sendMessage(DiceResponse message) {
         dynamicRouter.dispatch(message);
+    }
+
+    /**
+     * Exchange one dice for an external one
+     *
+     * @param oldDice - Dice to be removed
+     * @param newDice - Dice to be added
+     */
+    public void exchangeDice(Dice oldDice, Dice newDice) {
+        if(draftPool.remove(oldDice)) {
+            draftPool.add(newDice);
+            sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
+        }
+    }
+
+    public void moveDiceFromDraftToBag(Dice diceFromDraft) {
+            draftPool.remove(diceFromDraft);
+            bagPool.add(diceFromDraft);
+    }
+
+    public void rollDraft() {
+        draftPool.forEach(Dice::roll);
+        sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }
 }

@@ -83,7 +83,6 @@ public class RuleManager {
      * @param cells - game windows
      * @return ErrrorType - cause of validation failure
      */
-
     public ErrorType validateWindow(Cell[][] cells) {
         return mainGameRule.checkRule(cells);
     }

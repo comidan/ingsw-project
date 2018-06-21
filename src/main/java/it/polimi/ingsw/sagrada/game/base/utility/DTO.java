@@ -4,6 +4,8 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 
 /**
@@ -13,6 +15,12 @@ public class DTO {
 
     private Dice dice;
 
+    private Dice secondDice;
+
+    private int imposedDiceValue;
+
+    private Colors imposedColor;
+
     private Set<Integer> ignoreColorSet;
 
     private Set<Integer> ignoreValueSet;
@@ -21,7 +29,19 @@ public class DTO {
 
     private Position currentPosition;
 
+    private Position secondCurrentPosition;
+
     private Position newPosition;
+
+    private Position secondNewPosition;
+
+    private Runnable rollDraft;
+
+    private BiConsumer<Dice, Dice> exchangeDraftDice;
+
+    private BiConsumer<Dice, Dice> exchangeRoundTrackDice;
+
+    private Consumer<Dice> moveDiceFromDraftToBag;
 
     /**
      * Gets the set dice
@@ -131,6 +151,75 @@ public class DTO {
         this.newPosition = newPosition;
     }
 
+    public Dice getSecondDice() {
+        return secondDice;
+    }
 
+    public void setSecondDice(Dice secondDice) {
+        this.secondDice = secondDice;
+    }
 
+    public Position getSecondNewPosition() {
+        return secondNewPosition;
+    }
+
+    public void setSecondNewPosition(Position secondNewPosition) {
+        this.secondNewPosition = secondNewPosition;
+    }
+
+    public BiConsumer<Dice, Dice> getExchangeDraftDice() {
+        return exchangeDraftDice;
+    }
+
+    public void setExchangeDraftDice(BiConsumer<Dice, Dice> exchangeDraftDice) {
+        this.exchangeDraftDice = exchangeDraftDice;
+    }
+
+    public BiConsumer<Dice, Dice> getExchangeRoundTrackDice() {
+        return exchangeRoundTrackDice;
+    }
+
+    public void setExchangeRoundTrackDice(BiConsumer<Dice, Dice> exchangeRoundTrackDice) {
+        this.exchangeRoundTrackDice = exchangeRoundTrackDice;
+    }
+
+    public Runnable getRollDraft() {
+        return rollDraft;
+    }
+
+    public void setRollDraft(Runnable rollDraft) {
+        this.rollDraft = rollDraft;
+    }
+
+    public int getImposedDiceValue() {
+        return imposedDiceValue;
+    }
+
+    public void setImposedDiceValue(int imposedDiceValue) {
+        this.imposedDiceValue = imposedDiceValue;
+    }
+
+    public Consumer<Dice> getMoveDiceFromDraftToBag() {
+        return moveDiceFromDraftToBag;
+    }
+
+    public void setMoveDiceFromDraftToBag(Consumer<Dice> moveDiceFromDraftToBag) {
+        this.moveDiceFromDraftToBag = moveDiceFromDraftToBag;
+    }
+
+    public Colors getImposedColor() {
+        return imposedColor;
+    }
+
+    public void setImposedColor(Colors imposedColor) {
+        this.imposedColor = imposedColor;
+    }
+
+    public Position getSecondCurrentPosition() {
+        return secondCurrentPosition;
+    }
+
+    public void setSecondCurrentPosition(Position secondCurrentPosition) {
+        this.secondCurrentPosition = secondCurrentPosition;
+    }
 }

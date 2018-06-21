@@ -86,7 +86,7 @@ public class GameManager implements Channel<Message, Message> {
         diceManager = new DiceManager(players.size(), function, dynamicRouter);
         windowManager = new WindowManager(function, dynamicRouter);
         ruleManager = new RuleManager();
-        roundTrack = new RoundTrack();
+        roundTrack = new RoundTrack(dynamicRouter);
         List<String> playersId = new ArrayList<>();
         players.forEach(p -> playersId.add(p.getId()));
         playerIterator = new PlayerIterator(playersId);
