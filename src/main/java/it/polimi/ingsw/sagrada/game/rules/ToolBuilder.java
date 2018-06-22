@@ -4,7 +4,6 @@ import it.polimi.ingsw.sagrada.game.base.Builder;
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
-import org.apache.commons.lang3.SystemUtils;
 
 import java.util.Set;
 import java.util.function.BiConsumer;

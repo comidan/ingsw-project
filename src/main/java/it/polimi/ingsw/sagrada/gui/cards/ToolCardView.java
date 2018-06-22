@@ -40,6 +40,8 @@ public class ToolCardView extends StackPane {
 
     private Button button;
 
+    private ImageView imageView;
+
     /**
      * Instantiates a new tool card view.
      *
@@ -49,7 +51,7 @@ public class ToolCardView extends StackPane {
         tokenGrid = new GridPane();
         this.resizer = new Resizer();
         this.id = id;
-        ImageView imageView = new ImageView();
+        imageView = new ImageView();
         imageView.setImage(new Image(ToolCardView.class.getResourceAsStream(TOOL_IMAGE_ROOT_PATH + Integer.toString(id) + ".jpg"), resizer.getWidthPixel(15), resizer.getHeightPixel(20), true, false));
         this.getChildren().add(imageView);
         this.getChildren().add(tokenGrid);
@@ -64,7 +66,7 @@ public class ToolCardView extends StackPane {
      * @param toolClickHandler the new tool click handler
      */
     public void setToolClickHandler(EventHandler<MouseEvent> toolClickHandler){
-        this.setOnMouseClicked(toolClickHandler);
+        setOnMouseClicked(toolClickHandler);
     }
 
     /**

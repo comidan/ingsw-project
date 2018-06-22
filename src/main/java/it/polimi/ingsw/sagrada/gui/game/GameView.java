@@ -10,7 +10,6 @@ import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import it.polimi.ingsw.sagrada.gui.windows.WindowView;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -21,9 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.SystemUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,7 +66,7 @@ public class GameView extends Application {
     private GUIManager guiManager;
     
     /** The roundtrack view. */
-    private RoundtrackView roundtrackView;
+    private RoundTrackView roundTrackView;
     
     /** The game view. */
     private static GameView gameView = null;
@@ -119,7 +116,7 @@ public class GameView extends Application {
      * @param diceClickHandler the new roundtrack click handler
      */
     void setRoundtrackClickHandler(EventHandler<MouseEvent> diceClickHandler){
-        roundtrackView.setClickHandler(diceClickHandler);
+        roundTrackView.setClickHandler(diceClickHandler);
     }
 
     /**
@@ -167,8 +164,8 @@ public class GameView extends Application {
      *
      * @return the roundtrack view
      */
-    RoundtrackView getRoundtrackView(){
-        return this.roundtrackView;
+    RoundTrackView getRoundTrackView(){
+        return this.roundTrackView;
     }
 
     /**
@@ -178,7 +175,7 @@ public class GameView extends Application {
      * @param currentRound the current round
      */
     public void setRoundtrackImage(List<DiceView> diceViews, int currentRound){
-        this.roundtrackView.setDice(diceViews, currentRound);
+        this.roundTrackView.setDice(diceViews, currentRound);
     }
 
     /**
@@ -261,7 +258,7 @@ public class GameView extends Application {
         this.frame = new FrameView();
         this.cardBoard = new CardBoard();
         this.guiManager = new GUIManager();
-        this.roundtrackView = new RoundtrackView();
+        this.roundTrackView = new RoundTrackView();
         hBox = new HBox();
         anchorPane = new AnchorPane();
         anchorPane.setStyle(
@@ -281,7 +278,7 @@ public class GameView extends Application {
     public void setToken(int tokenNumber) {
         tokenGrid = new GridPane();
         for (int i = 0; i < tokenNumber; i++) {
-            tokenGrid.add(new TokenView(), i, 1);
+            tokenGrid.add(new TokenView(), i, 1); //pay attention : manage click even when all tokens are removed : IndexOutOfBoundException
         }
 
         AnchorPane.setBottomAnchor(tokenGrid, guiManager.getFullHeightPixel(72));
@@ -472,9 +469,9 @@ public class GameView extends Application {
     }
 
     public void setRoundtrack(){
-        AnchorPane.setTopAnchor(roundtrackView, guiManager.getFullHeightPixel(5));
-        AnchorPane.setRightAnchor(roundtrackView, guiManager.getFullWidthPixel(3));
-        anchorPane.getChildren().add(roundtrackView);
+        AnchorPane.setTopAnchor(roundTrackView, guiManager.getFullHeightPixel(5));
+        AnchorPane.setRightAnchor(roundTrackView, guiManager.getFullWidthPixel(3));
+        anchorPane.getChildren().add(roundTrackView);
 
     }
     public void setButtons(){
@@ -507,9 +504,9 @@ public class GameView extends Application {
     }
 
     private void setCardPreviewButtons(){
-        toolcardPrev = new ImageView(new Image("/images/toolCard.jpg"));
-        privateObjPrev = new ImageView(new Image("/images/privateObj.jpg"));
-        publicObjPrev = new ImageView(new Image("/images/publicObj.png"));
+        toolcardPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/toolCard.jpg")));
+        privateObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/privateObj.jpg")));
+        publicObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/publicObj.png")));
         anchorPane.setBottomAnchor(toolcardPrev, guiManager.getFullHeightPixel(6));
         anchorPane.setRightAnchor(toolcardPrev, guiManager.getFullWidthPixel(20));
         anchorPane.setBottomAnchor(privateObjPrev, guiManager.getFullHeightPixel(6));

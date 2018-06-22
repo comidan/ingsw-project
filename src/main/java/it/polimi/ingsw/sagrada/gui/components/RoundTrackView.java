@@ -1,12 +1,9 @@
 package it.polimi.ingsw.sagrada.gui.components;
 
-import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
-import it.polimi.ingsw.sagrada.gui.utils.Resizer;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -19,9 +16,9 @@ import java.util.List;
 
 
 /**
- * The Class RoundtrackView.
+ * The Class RoundTrackView.
  */
-public class RoundtrackView extends StackPane {
+public class RoundTrackView extends StackPane {
 
     /** The Constant MAX_ROUND. */
     private static final int MAX_ROUND = 10;
@@ -32,7 +29,7 @@ public class RoundtrackView extends StackPane {
     private GUIManager guiManager;
     
     /** The cell view list. */
-    private ArrayList<ArrayList<CellView>> cellViewList;
+    private ArrayList<ArrayList<DiceView>> diceViewList;
 
     private GridPane grid;
     private ImageView imageView;
@@ -40,16 +37,16 @@ public class RoundtrackView extends StackPane {
     /**
      * Instantiates a new roundtrack view.
      */
-    public RoundtrackView() {
+    public RoundTrackView() {
         imageView = new ImageView();
-        imageView.setImage(new Image("/images/roundtrack.png", guiManager.getFullWidthPixel(62), guiManager.getFullHeightPixel(20), true, false));
+        imageView.setImage(new Image(RoundTrackView.class.getResourceAsStream("/images/roundtrack.png"), guiManager.getFullWidthPixel(62), guiManager.getFullHeightPixel(20), true, false));
         this.getChildren().add(imageView);
         this.grid = new GridPane();
         this.guiManager = new GUIManager();
-        this.cellViewList = new ArrayList<>();
+        this.diceViewList = new ArrayList<>();
         for (int i = 0; i< MAX_ROUND; i++){
-            ArrayList<CellView> roundDiceList = new ArrayList<>();
-            cellViewList.add(roundDiceList);
+            ArrayList<DiceView> roundDiceList = new ArrayList<>();
+            diceViewList.add(roundDiceList);
 
         }
         this.getChildren().add(grid);
@@ -68,11 +65,10 @@ public class RoundtrackView extends StackPane {
      */
     public void setDice(List<DiceView> diceViews, int currentRound) {
          for(int i = 0; i< diceViews.size(); i++){
-            CellView cell = new CellView();
-            cellViewList.get(currentRound).add(cell);
             DiceView diceView = diceViews.get(i);
-            cellViewList.get(currentRound).get(i).setImage(new Image(CellView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
-            grid.add(cell, currentRound, i);
+            diceViewList.get(currentRound).add(diceView);
+            diceViewList.get(currentRound).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
+            grid.add(diceView, currentRound, i);
         }
     }
 
@@ -82,9 +78,9 @@ public class RoundtrackView extends StackPane {
      * @param clickHandler the new click handler
      */
     public void setClickHandler(EventHandler<MouseEvent> clickHandler) {
-        for(int i = 0; i<cellViewList.size(); i++){
-            for (int j = 0; j<cellViewList.get(i).size(); j++){
-                cellViewList.get(i).get(j).setOnMouseClicked(clickHandler);
+        for(int i = 0; i< diceViewList.size(); i++){
+            for (int j = 0; j< diceViewList.get(i).size(); j++){
+                diceViewList.get(i).get(j).setOnMouseClicked(clickHandler);
             }
         }
 

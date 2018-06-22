@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -102,9 +103,13 @@ public class MainGameGuiTest {
                     return null;
                 }
             });
+            gameGuiAdapter.setToolCards(Arrays.asList(1,2,3));
+            gameGuiAdapter.setPrivateObjective(1);
+            gameGuiAdapter.setPublicObjectives(Arrays.asList(1,2,3));
             Scanner scanner = new Scanner(System.in);
             scanner.nextInt();
-        } catch (Exception exc) {
+        }
+        catch (Exception exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
             fail();
         }
