@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.gui.lobby;
 
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class NewLobbyView {
+public class NewLobbyView extends Application {
 
     private static final Logger LOGGER = Logger.getLogger(LobbyGuiView.class.getName());
     private static final String WAITING_PLAYER = "Waiting player...";
@@ -95,31 +96,41 @@ public class NewLobbyView {
             gameLabel.setText("Game will start in");
             AnchorPane.setBottomAnchor(gameLabel, GUIManager.getHeightPixel(13));
             ImageView dice1 = new ImageView();
-            dice1.setImage(new Image("/images/DiceImages/Dice1B.png"));
+            dice1.setImage(new Image("/images/DiceImages/Dice1B.png", 50, 50, true, true));
             AnchorPane.setBottomAnchor(dice1, GUIManager.getHeightPixel(62));
+            anchorPane.setLeftAnchor(dice1, GUIManager.getWidthPixel(20));
             Label player1 = new Label();
             player1.setText("Waiting player...");
+            anchorPane.setLeftAnchor(player1, GUIManager.getWidthPixel(30));
             AnchorPane.setBottomAnchor(player1, GUIManager.getHeightPixel(65));
             ImageView dice2 = new ImageView();
-            dice2.setImage(new Image("/images/DiceImages/Dice2Y.png"));
+            dice2.setImage(new Image("/images/DiceImages/Dice2Y.png", 50, 50, true, true));
             AnchorPane.setBottomAnchor(dice2, GUIManager.getHeightPixel(47));
             Label player2 = new Label();
+            anchorPane.setLeftAnchor(dice2, GUIManager.getWidthPixel(20));
+            anchorPane.setLeftAnchor(player2, GUIManager.getWidthPixel(30));
             player2.setText("Waiting player...");
             AnchorPane.setBottomAnchor(player2, GUIManager.getHeightPixel(50));
             ImageView dice3 = new ImageView();
-            dice3.setImage(new Image("/images/DiceImages/Dice3P.png"));
+            dice3.setImage(new Image("/images/DiceImages/Dice3P.png", 50, 50, true, true));
             AnchorPane.setBottomAnchor(dice3, GUIManager.getHeightPixel(32));
             Label player3 = new Label();
+            anchorPane.setLeftAnchor(player3, GUIManager.getHeightPixel(30));
+            anchorPane.setLeftAnchor(dice3,  GUIManager.getWidthPixel(20));
             player3.setText("Waiting player...");
             AnchorPane.setBottomAnchor(player3, GUIManager.getHeightPixel(35));
             ImageView dice4 = new ImageView();
-            dice4.setImage(new Image("/images/DiceImages/Dice4G.png"));
+            dice4.setImage(new Image("/images/DiceImages/Dice4G.png", 50, 50, true, true));
             AnchorPane.setBottomAnchor(dice4, GUIManager.getHeightPixel(17));
             Label player4 = new Label();
+            anchorPane.setBottomAnchor(player4, GUIManager.getHeightPixel(30));
             player4.setText("Waiting player...");
+            anchorPane.setLeftAnchor(dice4, GUIManager.getWidthPixel(20));
+            anchorPane.setLeftAnchor(player4, GUIManager.getWidthPixel(30));
             AnchorPane.setBottomAnchor(player4, GUIManager.getHeightPixel(20));
             Label timerLabel = new Label();
             AnchorPane.setBottomAnchor(timerLabel, GUIManager.getHeightPixel(10));
+            anchorPane.getChildren().addAll(player1, player2, player3, player4, dice1, dice2, dice3, dice4);
             NewLobbyView.stage = stage;
             stage.setScene(scene);
 
@@ -141,6 +152,12 @@ public class NewLobbyView {
 
         anchorPane.resize(windowWidth, windowHeight);
 
+    }
+
+    public void start(Stage stage){
+        initializeScene();
+        init(stage);
+        stage.show();
     }
 
 
