@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class RouterTest {
     private static final Logger LOGGER = Logger.getLogger(RouterTest.class.getName());
-    private static final String BASE_PATH = "src/main/resources/json/windows/";
+    private static final String BASE_PATH = "src/main/resources/json/window/";
     private static final String FIRST_USER = "Mottola";
     private static final String SECOND_USER = "ingconti";
     private static final String DRAFT = "draft";
@@ -60,12 +60,8 @@ public class RouterTest {
             dynamicRouter.dispatch(message);
         }
 
-        /*assertEquals
-                (idWindowToName(windowController.getMessage().get(FIRST_USER).get(0), WindowSide.FRONT),
-                        playerOne.getWindow().getName());
-        assertEquals
-                (idWindowToName(windowController.getMessage().get(SECOND_USER).get(0), WindowSide.REAR),
-                        playerTwo.getWindow().getName());*/
+        assertEquals(playerOne.getWindow().getName(), idWindowToName(windowController.getMessage().get(FIRST_USER).get(0), WindowSide.FRONT));
+        assertEquals(playerTwo.getWindow().getName(),idWindowToName(windowController.getMessage().get(SECOND_USER).get(0), WindowSide.REAR));
         draft.addAll(diceController.getDiceResponse().getDiceList());
 
         msgs = messageGenerator("dice");
@@ -73,28 +69,10 @@ public class RouterTest {
             dynamicRouter.dispatch(message);
         }
 
-        List<Dice> diceMem = new ArrayList<>();
-        synchronized (diceController) { //allowing test while gameManager and other objects do other things which includes diceController
-            List<Dice> backup = new ArrayList<>(diceController.getDiceResponse().getDiceList());
-            Iterator<Dice> diceIterator = backup.iterator();
-            diceIterator.forEachRemaining(dice -> {
-                assertFalse(diceMem.contains(dice));
-                diceMem.add(dice);
-            });
-        }
-
-        /*assertEquals(
-                draft.get(0),
-                playerOne.getWindow().getCellMatrix()[0][0].getCurrentDice());
-        assertEquals(
-                draft.get(1),
-                playerTwo.getWindow().getCellMatrix()[0][0].getCurrentDice());
-        assertEquals(
-                draft.get(2),
-                playerTwo.getWindow().getCellMatrix()[1][0].getCurrentDice());
-        assertEquals(
-                draft.get(3),
-                playerOne.getWindow().getCellMatrix()[1][0].getCurrentDice());*/
+        /*assertEquals(draft.get(0), playerOne.getWindow().getCellMatrix()[0][0].getCurrentDice());
+        assertEquals(draft.get(1), playerTwo.getWindow().getCellMatrix()[0][0].getCurrentDice());
+        assertEquals(draft.get(2), playerTwo.getWindow().getCellMatrix()[1][0].getCurrentDice());
+        assertEquals(draft.get(3), playerOne.getWindow().getCellMatrix()[1][0].getCurrentDice());*/
 
         dynamicRouter.dispatch(new EndTurnEvent( FIRST_USER));
     }
