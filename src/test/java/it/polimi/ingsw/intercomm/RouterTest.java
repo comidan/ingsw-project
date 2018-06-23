@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -71,12 +72,15 @@ public class RouterTest {
         for(Message message:msgs) {
             dynamicRouter.dispatch(message);
         }
-        diceResponse = diceController.getDiceResponse();
 
         List<Dice> diceMem = new ArrayList<>();
-        for(Dice dice:diceResponse.getDiceList()) {
-            assertFalse(diceMem.contains(dice));
-            diceMem.add(dice);
+        synchronized (diceController) { //allowing test while gameManager and other objects do other things which includes diceController
+            List<Dice> backup = new ArrayList<>(diceController.getDiceResponse().getDiceList());
+            Iterator<Dice> diceIterator = backup.iterator();
+            diceIterator.forEachRemaining(dice -> {
+                assertFalse(diceMem.contains(dice));
+                diceMem.add(dice);
+            });
         }
 
         /*assertEquals(

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.sagrada.gui.score;
 
-import it.polimi.ingsw.sagrada.gui.lobby.NewLobbyView;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -18,7 +17,6 @@ import java.util.Map;
 
 public class ScoreLobbyView extends Application{
     Stage stage;
-    GUIManager guiManager;
     AnchorPane anchorPane;
     Stage primaryStage;
 
@@ -38,7 +36,6 @@ public class ScoreLobbyView extends Application{
 
     public void initialize(Stage stage){
 
-        guiManager = new GUIManager();
         this.anchorPane = new AnchorPane();
         primaryStage = stage;
         anchorPane = new AnchorPane();
@@ -58,25 +55,25 @@ public class ScoreLobbyView extends Application{
         thirdPlayer = new Label();
         fourthPlayer = new Label();
         ImageView dice1 = new ImageView();
-        dice1.setImage(new Image("/images/DiceImages/Dice1B.png", 50, 50, true, true));
+        dice1.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice1B.png"), 50, 50, true, true));
         anchorPane.setBottomAnchor(dice1, GUIManager.getHeightPixel(62));
         anchorPane.setLeftAnchor(dice1, GUIManager.getWidthPixel(20));
         anchorPane.setLeftAnchor(firstPlayer, GUIManager.getWidthPixel(30));
         anchorPane.setBottomAnchor(firstPlayer, GUIManager.getHeightPixel(65));
         ImageView dice2 = new ImageView();
-        dice2.setImage(new Image("/images/DiceImages/Dice2Y.png", 50, 50, true, true));
+        dice2.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice2Y.png"), 50, 50, true, true));
         anchorPane.setBottomAnchor(dice2, GUIManager.getHeightPixel(47));
         anchorPane.setLeftAnchor(dice2, GUIManager.getWidthPixel(20));
         anchorPane.setLeftAnchor(secondPlayer, GUIManager.getWidthPixel(30));
         anchorPane.setBottomAnchor(secondPlayer, GUIManager.getHeightPixel(50));
         ImageView dice3 = new ImageView();
-        dice3.setImage(new Image("/images/DiceImages/Dice3P.png", 50, 50, true, true));
+        dice3.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice3P.png"), 50, 50, true, true));
         anchorPane.setBottomAnchor(dice3, GUIManager.getHeightPixel(32));
         anchorPane.setBottomAnchor(thirdPlayer, GUIManager.getHeightPixel(35));
         anchorPane.setLeftAnchor(dice3, GUIManager.getWidthPixel(20));
         anchorPane.setLeftAnchor(thirdPlayer, GUIManager.getWidthPixel(30));
         ImageView dice4 = new ImageView();
-        dice4.setImage(new Image("/images/DiceImages/Dice4G.png", 50, 50, true, true));
+        dice4.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice4G.png"), 50, 50, true, true));
         anchorPane.setBottomAnchor(dice4, GUIManager.getHeightPixel(17));
         anchorPane.setBottomAnchor(fourthPlayer, GUIManager.getHeightPixel(20));
         anchorPane.setLeftAnchor(dice4, GUIManager.getWidthPixel(20));
