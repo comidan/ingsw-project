@@ -9,6 +9,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
@@ -20,6 +21,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 import it.polimi.ingsw.sagrada.gui.game.GameGuiAdapter;
 import it.polimi.ingsw.sagrada.gui.game.GameView;
 import it.polimi.ingsw.sagrada.gui.lobby.LobbyGuiView;
+import it.polimi.ingsw.sagrada.gui.score.ScoreLobbyView;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import it.polimi.ingsw.sagrada.gui.windows.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.gui.windows.WindowGameManager;
@@ -28,7 +30,9 @@ import javafx.application.Platform;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,6 +62,9 @@ public class CommandManager implements MessageVisitor {
     
     /** The lobby gui view. */
     private static LobbyGuiView lobbyGuiView;
+
+    /** The score view. */
+    private static ScoreLobbyView scoreLobbyView;
     
     /** The player list. */
     private static List<String> playerList = new ArrayList<>();
@@ -331,5 +338,17 @@ public class CommandManager implements MessageVisitor {
         this.toolCardResponse = toolCardResponse;
         if (gameGuiAdapter != null)
             gameGuiAdapter.setToolCards(toolCardResponse.getIds());
+    }
+
+    /**
+     * Visit.
+     *
+     * @param scoreResponse the score response
+     */
+    @Override
+    public void visit(ScoreResponse scoreResponse) {
+        Map<String, Integer> ranking = new HashMap<>();
+        scoreResponse.getUsernames().forEach(username -> ranking.put(username, scoreResponse.getScore(username)));
+        scoreLobbyView = ScoreLobbyView.getInstance(ranking, gameGuiAdapter.getStage());
     }
 }

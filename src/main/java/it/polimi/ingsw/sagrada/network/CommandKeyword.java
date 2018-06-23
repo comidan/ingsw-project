@@ -170,4 +170,10 @@ public final class CommandKeyword {
   
   /** The Constant TOOL_CARDS. */
   public static final String TOOL_CARDS = "tool_cards";
+
+  /** The Constant SCORE. */
+  public static final String SCORE = "score";
+
+  /** The Constant RANKING. */
+  public static final String RANKING = "ranking";
 }

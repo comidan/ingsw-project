@@ -19,10 +19,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.playables.*;
@@ -261,9 +258,10 @@ public class GameManager implements Channel<Message, Message> {
      *  Computer final scores and set them on the score board
      */
     private void scoreState() {
-        for (Player p:players) {
-            scores.add(scoreTrack.calculateScore(p));
-        }
+        players.forEach(player -> scores.add(scoreTrack.calculateScore(player)));
+        List<String> usernames = new ArrayList<>();
+        players.forEach(player -> usernames.add(player.getId()));
+        sendMessage(new ScoreResponse(usernames, scores));
     }
 
     /**

@@ -69,7 +69,7 @@ public class RuleManager {
      *
      * @param rules - rules to be validated
      * @param cells the cells
-     * @return R
+     * @return score
      */
     public int validateObjectiveRules(List<ObjectiveRule> rules, Cell[][] cells) {
         int score = rules.stream().mapToInt(rule -> validateRule(rule, cells)).sum();

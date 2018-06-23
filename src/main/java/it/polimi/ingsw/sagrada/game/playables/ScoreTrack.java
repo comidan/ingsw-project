@@ -7,7 +7,6 @@ import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 
-
 import java.util.*;
 
 
@@ -69,7 +68,7 @@ public class ScoreTrack {
         RuleManager ruleManager = new RuleManager();
         score = ruleManager.validateObjectiveRules(objectiveRules, cellMatrix);
         score += tokenNumber;
-        return score;
+        return score >= 0 ? score : 0;
     }
 }
 

@@ -11,6 +11,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
@@ -63,6 +64,7 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         dynamicRouter.subscribeChannel(RuleResponse.class, this);
         dynamicRouter.subscribeChannel(NewTurnResponse.class, this);
         dynamicRouter.subscribeChannel(ToolCardResponse.class, this);
+        dynamicRouter.subscribeChannel(ScoreResponse.class, this);
     }
 
     /* (non-Javadoc)
@@ -248,6 +250,16 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
     @Override
     public void visit(ToolCardResponse toolCardResponse) {
         sendRemoteMessage(toolCardResponse, filter -> anyone());
+    }
+
+    /**
+     * Visit.
+     *
+     * @param scoreResponse the score response
+     */
+    @Override
+    public void visit(ScoreResponse scoreResponse) {
+        sendRemoteMessage(scoreResponse, filter -> anyone());
     }
 
     /**

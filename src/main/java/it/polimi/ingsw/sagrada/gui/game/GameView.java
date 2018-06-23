@@ -35,6 +35,8 @@ public class GameView extends Application {
 
     /** The windows. */
     private static Map<String, WindowView> windows;
+
+    private static Stage stage;
     
     /** The draft view. */
     private DraftView draftView;
@@ -54,7 +56,7 @@ public class GameView extends Application {
     /** The players. */
     private static List<String> players;
 
-    Button windowButton;
+    private Button windowButton;
 
     /** The constraints. */
     private static List<Constraint[][]> constraints;
@@ -553,6 +555,10 @@ public class GameView extends Application {
 
     void hideToolCard(){
         cardBoard.hideToolCards();
+    }
+
+    public Stage getStage() {
+        return (Stage) anchorPane.getScene().getWindow();
     }
 
 }

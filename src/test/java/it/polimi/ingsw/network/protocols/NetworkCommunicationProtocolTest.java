@@ -11,6 +11,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.LobbyLoginEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
@@ -175,6 +176,20 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
         String json = messageParser.createJsonResponse(toolCardResponse);
         ToolCardResponse toolCardResponseMessage = (ToolCardResponse) JsonMessage.parseJsonData(json);
         assertArrayEquals(toolCardResponse.getIds().toArray(new Integer[0]), toolCardResponseMessage.getIds().toArray(new Integer[0]));
+        return null;
+    }
+
+    /**
+     * Visit.
+     *
+     * @param scoreResponse the score response
+     * @return the string
+     */
+    @Override
+    public String visit(ScoreResponse scoreResponse) {
+        String json = messageParser.createJsonResponse(scoreResponse);
+        ScoreResponse scoreResponseMessage = (ScoreResponse) JsonMessage.parseJsonData(json);
+        scoreResponse.getUsernames().forEach(username -> assertEquals(scoreResponseMessage.getScore(username), scoreResponse.getScore(username)));
         return null;
     }
 }

@@ -9,11 +9,11 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
-import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 
 import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
@@ -22,6 +22,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -237,6 +238,22 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    private String createJsonScoreResponse(ScoreResponse scoreResponse) {
+        JSONArray ids = new JSONArray();
+        Set<String> usernames = scoreResponse.getUsernames();
+        usernames.forEach(username -> {
+            JSONObject id = new JSONObject();
+            id.put(USERNAME, username);
+            id.put(SCORE, scoreResponse.getScore(username) + "");
+            ids.add(id);
+        });
+        JSONObject container = new JSONObject();
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, RANKING);
+        container.put(RANKING, ids);
+        return container.toJSONString();
+    }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */
@@ -323,5 +340,16 @@ public class MessageParser implements ResponseMessageVisitor {
     @Override
     public String visit(ToolCardResponse toolCardResponse) {
         return createJsonToolCardsResponse(toolCardResponse);
+    }
+
+    /**
+     * Visit.
+     *
+     * @param scoreResponse the score response
+     * @return the string
+     */
+    @Override
+    public String visit(ScoreResponse scoreResponse) {
+        return createJsonScoreResponse(scoreResponse);
     }
 }

@@ -11,33 +11,35 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ScoreLobbyView extends Application{
-    Stage stage;
-    AnchorPane anchorPane;
-    Stage primaryStage;
 
+    private static ScoreLobbyView scoreLobbyView = null;
+
+    private Map<String, Integer> ranking;
+    private AnchorPane anchorPane;
+    private Stage primaryStage;
     private Label firstPlayer;
     private Label secondPlayer;
     private Label thirdPlayer;
     private Label fourthPlayer;
-
-    private List<String> playerShown = new ArrayList<>();
-
-
     /** The window height. */
     private double windowHeight;
 
     /** The window width. */
     private double windowWidth;
 
-    public void initialize(Stage stage){
+    private final List<String> playerShown = new ArrayList<>();
+
+    private ScoreLobbyView(Map<String, Integer> ranking) {
+        this.ranking = ranking;
+    }
+
+    public void initialize(){
 
         this.anchorPane = new AnchorPane();
-        primaryStage = stage;
         anchorPane = new AnchorPane();
         anchorPane.setStyle(
                 "-fx-background-image: url(" +
@@ -79,31 +81,29 @@ public class ScoreLobbyView extends Application{
         anchorPane.setLeftAnchor(dice4, GUIManager.getWidthPixel(20));
         anchorPane.setLeftAnchor(fourthPlayer, GUIManager.getWidthPixel(30));
         anchorPane.getChildren().addAll(dice1, firstPlayer, dice2, secondPlayer, dice3, thirdPlayer, dice4, fourthPlayer);
-        firstPlayer.setText("-");
-        secondPlayer.setText("-");
-        thirdPlayer.setText("-");
-        fourthPlayer.setText("-");
+        setScores();
     }
 
     public void start(Stage stage){
-        initialize(stage);
+        initialize();
         Scene scene = new Scene(anchorPane, windowWidth, windowHeight);
-
+        primaryStage = stage;
+        primaryStage.setFullScreen(false);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
-
+        scoreLobbyView = this;
     }
 
-    public void setScores(HashMap<String, Integer> playerOrder){
-        for (Map.Entry<String, Integer> entry : playerOrder.entrySet()) {
+    private void setScores(){
+        ranking.entrySet().forEach(entry -> {
             String username = entry.getKey();
             int score = entry.getValue();
             setPlayer(username, score);
-        }
+        });
     }
 
-    public void setPlayer(String username, int score) {
+    private void setPlayer(String username, int score) {
         playerShown.add(username);
         int position = playerShown.indexOf(username);
         switch (position) {
@@ -115,23 +115,44 @@ public class ScoreLobbyView extends Application{
         }
     }
 
-
-
     private void setFirstPlayer(String message, int score) {
-        Platform.runLater(() -> firstPlayer.setText(message + Integer.toString(score)));
+        Platform.runLater(() -> firstPlayer.setText(message + " did " + score + " points"));
     }
 
     private void setSecondPlayer(String message, int score) {
-        Platform.runLater(() -> secondPlayer.setText(message + Integer.toString(score)));
+        Platform.runLater(() -> secondPlayer.setText(message + " did " + score + " points"));
     }
 
     private void setThirdPlayer(String message, int score) {
-        Platform.runLater(() -> thirdPlayer.setText(message + Integer.toString(score)));
+        Platform.runLater(() -> thirdPlayer.setText(message + " did " + score + " points"));
     }
 
     private void setFourthPlayer(String message, int score) {
-        Platform.runLater(() -> fourthPlayer.setText(message + Integer.toString(score)));
+        Platform.runLater(() -> fourthPlayer.setText(message + " did " + score + " points"));
     }
 
+    private static void startScoreView(Map<String, Integer> ranking, Stage stage) {
+        new ScoreLobbyView(ranking).start(stage);
+    }
 
+    /**
+     * Gets the single instance of ScoreView.
+     *
+     * @param ranking the ranks
+     * @param stage the stage
+     * @return single instance of ScoreView
+     */
+    public static ScoreLobbyView getInstance(Map<String, Integer> ranking, Stage stage) {
+        if (scoreLobbyView == null) {
+            Platform.runLater(() -> startScoreView(ranking, stage));
+            while (scoreLobbyView == null)
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException exc) {
+                    Thread.currentThread().interrupt();
+                    return scoreLobbyView;
+                }
+        }
+        return scoreLobbyView;
+    }
 }

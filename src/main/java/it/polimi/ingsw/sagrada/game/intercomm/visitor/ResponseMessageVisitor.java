@@ -9,6 +9,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
 
@@ -105,4 +106,12 @@ public interface ResponseMessageVisitor {
      * @return the string
      */
     String visit(ToolCardResponse toolCardResponse);
+
+    /**
+     * Visit.
+     *
+     * @param scoreResponse the score response
+     * @return the string
+     */
+    String visit(ScoreResponse scoreResponse);
 }

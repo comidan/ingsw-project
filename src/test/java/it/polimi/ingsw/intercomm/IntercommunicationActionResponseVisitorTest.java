@@ -9,10 +9,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
@@ -27,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -34,6 +32,7 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
 
     private static String idPlayer = "test";
     private static int id = 0;
+    private static int score = 1;
     private static int round = 1;
     private static WindowSide side = WindowSide.FRONT;
     private static String source = CommandKeyword.DRAFT;
@@ -81,6 +80,8 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
         privateObjectiveResponse.accept(this);
         ToolCardResponse toolCardResponse = new ToolCardResponse(ids);
         toolCardResponse.accept(this);
+        ScoreResponse scoreResponse = new ScoreResponse(players, Arrays.asList(score));
+        scoreResponse.accept(this);
     }
 
     @Override
@@ -175,6 +176,19 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
     @Override
     public String visit(ToolCardResponse toolCardResponse) {
         assertArrayEquals(ids.toArray(new Integer[0]), toolCardResponse.getIds().toArray(new Integer[0]));
+        return null;
+    }
+
+    /**
+     * Visit.
+     *
+     * @param scoreResponse the score response
+     * @return the string
+     */
+    @Override
+    public String visit(ScoreResponse scoreResponse) {
+        assertEquals(players.get(0), scoreResponse.getUsernames().iterator().next());
+        assertEquals(score, scoreResponse.getScore(idPlayer));
         return null;
     }
 }

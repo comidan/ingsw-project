@@ -18,6 +18,7 @@ import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.*;
+import javafx.stage.Stage;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -429,5 +430,9 @@ public class GameGuiAdapter {
      */
     public void setRound(int round) {
         currentRound = round;
+    }
+
+    public Stage getStage() {
+        return gameView.getStage();
     }
 }

@@ -9,10 +9,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.LobbyLoginEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
@@ -36,9 +33,7 @@ import org.json.simple.parser.ParseException;
 
 import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -295,10 +290,17 @@ public class JsonMessage implements ActionMessageVisitor {
                         toolIds.add(Integer.parseInt((String) publicObjective.get(ID)));
                     });
                     return new ToolCardResponse(toolIds);
+                case RANKING:
+                    JSONArray ranks = (JSONArray) jsonMsg.get(RANKING);
+                    Map<String, Integer> ranking = new HashMap<>();
+                    ranks.forEach(raw -> {
+                        JSONObject rank = (JSONObject) raw;
+                        ranking.put((String) rank.get(USERNAME), Integer.parseInt((String) rank.get(SCORE)));
+                    });
+                    return new ScoreResponse(ranking);
                 default:
                     return null;
             }
-
         }
         catch (ParseException exc) {
             return null;

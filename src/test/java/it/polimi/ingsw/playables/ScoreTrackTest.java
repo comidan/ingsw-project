@@ -46,6 +46,6 @@ public class ScoreTrackTest {
         Dice dice = new Dice(23, Colors.RED);
         window.setCell(dice, 2, 2);
         int score = scoreTrack.calculateScore(playerOne);
-        assertEquals(-15, score);
+        assertEquals(0, score);
     }
 }

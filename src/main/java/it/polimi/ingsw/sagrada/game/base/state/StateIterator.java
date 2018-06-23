@@ -11,7 +11,9 @@ import static it.polimi.ingsw.sagrada.game.base.state.StateGameEnum.*;
  */
 
 public class StateIterator implements Iterator<StateGameEnum> {
-    
+
+    private static final int MAX_ROUNDS = 10;
+
     /** The current state. */
     private StateGameEnum currentState;
     
@@ -78,7 +80,11 @@ public class StateIterator implements Iterator<StateGameEnum> {
                 case DEAL_TOOL: currentState=DEAL_PUBLIC_OBJECTIVE; break;
                 case DEAL_PUBLIC_OBJECTIVE: currentState=DEAL_WINDOWS; break;
                 case DEAL_WINDOWS: currentState=TURN; break;
-                case TURN: if(roundNumber<10) roundNumber++;else currentState=SCORE; break;
+                case TURN: if(roundNumber < MAX_ROUNDS)
+                                roundNumber++;
+                            else
+                                currentState=SCORE;
+                            break;
                 default: throw new NoSuchElementException();
             }
         }
