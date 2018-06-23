@@ -18,10 +18,10 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     private static final int TIME_INTERVAL = 1000;
     
     /** The Constant TIME_LIFE_FRAMES. */
-    private static final int TIME_LIFE_FRAMES = 30;
+    private static final int TIME_LIFE_FRAMES = 5;
     
     /** The Constant TIME_LOSS_COMMUNICATION_FRAME. */
-    private static final int TIME_LOSS_COMMUNICATION_FRAME = 10;
+    private static final int TIME_LOSS_COMMUNICATION_FRAME = 3;
     
     /** The Constant UDP_VALID_PACKET_SIZE. */
     private static final int UDP_VALID_PACKET_SIZE  = 1024;
