@@ -24,9 +24,6 @@ public class RoundTrackView extends StackPane {
     private static final int MAX_ROUND = 10;
 
     private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
-
-    /** The GUIManager. */
-    private GUIManager guiManager;
     
     /** The cell view list. */
     private ArrayList<ArrayList<DiceView>> diceViewList;
@@ -39,10 +36,9 @@ public class RoundTrackView extends StackPane {
      */
     public RoundTrackView() {
         imageView = new ImageView();
-        imageView.setImage(new Image(RoundTrackView.class.getResourceAsStream("/images/roundtrack.png"), guiManager.getFullWidthPixel(62), guiManager.getFullHeightPixel(20), true, false));
+        imageView.setImage(new Image(RoundTrackView.class.getResourceAsStream("/images/roundtrack.png"), GUIManager.getGameWidthPixel(62), GUIManager.getGameHeightPixel(20), true, false));
         this.getChildren().add(imageView);
         this.grid = new GridPane();
-        this.guiManager = new GUIManager();
         this.diceViewList = new ArrayList<>();
         for (int i = 0; i< MAX_ROUND; i++){
             ArrayList<DiceView> roundDiceList = new ArrayList<>();

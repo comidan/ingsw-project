@@ -503,14 +503,20 @@ public class GameView extends Application {
 
     private void setCardPreviewButtons(){
         toolcardPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/toolCard.jpg")));
+        toolcardPrev.setPreserveRatio(true);
+        toolcardPrev.setFitWidth(GUIManager.getGameWidthPixel(8));
         privateObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/privateObj.jpg")));
+        privateObjPrev.setPreserveRatio(true);
+        privateObjPrev.setFitWidth(GUIManager.getGameWidthPixel(8));
         publicObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/publicObj.png")));
+        publicObjPrev.setPreserveRatio(true);
+        publicObjPrev.setFitWidth(GUIManager.getGameWidthPixel(8));
         anchorPane.setBottomAnchor(toolcardPrev, GUIManager.getGameHeightPixel(6));
-        anchorPane.setRightAnchor(toolcardPrev, GUIManager.getGameWidthPixel(20));
+        anchorPane.setRightAnchor(toolcardPrev, GUIManager.getGameWidthPixel(10));
         anchorPane.setBottomAnchor(privateObjPrev, GUIManager.getGameHeightPixel(6));
-        anchorPane.setRightAnchor(privateObjPrev, GUIManager.getGameWidthPixel(30));
+        anchorPane.setRightAnchor(privateObjPrev, GUIManager.getGameWidthPixel(20));
         anchorPane.setBottomAnchor(publicObjPrev, GUIManager.getGameHeightPixel(6));
-        anchorPane.setRightAnchor(publicObjPrev, GUIManager.getGameWidthPixel(40));
+        anchorPane.setRightAnchor(publicObjPrev, GUIManager.getGameWidthPixel(30));
         anchorPane.getChildren().addAll(toolcardPrev, privateObjPrev, publicObjPrev);
 
     }
