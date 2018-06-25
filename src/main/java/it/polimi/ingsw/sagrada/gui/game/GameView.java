@@ -63,9 +63,6 @@ public class GameView extends Application {
     
     /** The end turn button. */
     private EndTurn endTurn;
-
-    /** The guiManager. */
-    private GUIManager guiManager;
     
     /** The roundtrack view. */
     private RoundTrackView roundTrackView;
@@ -259,7 +256,6 @@ public class GameView extends Application {
         endTurn = new EndTurn();
         this.frame = new FrameView();
         this.cardBoard = new CardBoard();
-        this.guiManager = new GUIManager();
         this.roundTrackView = new RoundTrackView();
         hBox = new HBox();
         anchorPane = new AnchorPane();
@@ -269,7 +265,7 @@ public class GameView extends Application {
                         "); " +
                         "-fx-background-size: cover;"
         );
-        anchorPane.resize(guiManager.getWindowWidth(), guiManager.getWindowHeight());
+        anchorPane.resize(GUIManager.getGameWindowWidth(), GUIManager.getGameWindowHeight());
     }
 
     /**
@@ -283,8 +279,8 @@ public class GameView extends Application {
             tokenGrid.add(new TokenView(), i, 1); //pay attention : manage click even when all tokens are removed : IndexOutOfBoundException
         }
 
-        AnchorPane.setBottomAnchor(tokenGrid, guiManager.getFullHeightPixel(72));
-        AnchorPane.setLeftAnchor(tokenGrid, guiManager.getFullWidthPixel(9));
+        AnchorPane.setBottomAnchor(tokenGrid, GUIManager.getGameHeightPixel(80));
+        AnchorPane.setLeftAnchor(tokenGrid, GUIManager.getGameWidthPixel(9));
         anchorPane.getChildren().addAll(tokenGrid);
 
     }
@@ -392,7 +388,7 @@ public class GameView extends Application {
         components = new ArrayList<>();
         components.add(endTurn);
         components.add(windows.get(username));
-        Scene scene = new Scene(anchorPane, guiManager.getScreenWidth(), guiManager.getScreenHeight());
+        Scene scene = new Scene(anchorPane, GUIManager.getGameWindowWidth(), GUIManager.getGameWindowHeight());
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
@@ -408,8 +404,8 @@ public class GameView extends Application {
             anchorPane.getChildren().removeAll(draftView);
         draftView = new DraftView(diceResponse);
         draftView.setAlignment(Pos.CENTER);
-        AnchorPane.setBottomAnchor(draftView, guiManager.getHeightPixel(70));
-        AnchorPane.setRightAnchor(draftView, guiManager.getFullWidthPixel(50));
+        AnchorPane.setBottomAnchor(draftView, GUIManager.getGameHeightPixel(70));
+        AnchorPane.setRightAnchor(draftView, GUIManager.getGameWidthPixel(50));
         anchorPane.getChildren().addAll(draftView);
         components.add(draftView);
     }
@@ -459,20 +455,20 @@ public class GameView extends Application {
 
 
     public void setHBox(){
-        anchorPane.setBottomAnchor(hBox, guiManager.getFullHeightPixel(30));
-        anchorPane.setRightAnchor(hBox, guiManager.getFullWidthPixel(6));
+        anchorPane.setBottomAnchor(hBox, GUIManager.getGameHeightPixel(30));
+        anchorPane.setRightAnchor(hBox, GUIManager.getGameWidthPixel(6));
     }
 
     public void setWindow(){
         frame.addWindowToFrame(windows.get(username));
-        anchorPane.setBottomAnchor(frame, guiManager.getFullHeightPixel(6));
-        anchorPane.setLeftAnchor(frame, guiManager.getFullWidthPixel(7));
+        anchorPane.setBottomAnchor(frame, GUIManager.getGameHeightPixel(6));
+        anchorPane.setLeftAnchor(frame, GUIManager.getGameWidthPixel(7));
         anchorPane.getChildren().addAll(frame);
     }
 
     public void setRoundtrack(){
-        AnchorPane.setTopAnchor(roundTrackView, guiManager.getFullHeightPixel(5));
-        AnchorPane.setRightAnchor(roundTrackView, guiManager.getFullWidthPixel(3));
+        AnchorPane.setTopAnchor(roundTrackView, GUIManager.getGameHeightPixel(6));
+        AnchorPane.setRightAnchor(roundTrackView, GUIManager.getGameWidthPixel(3));
         anchorPane.getChildren().add(roundTrackView);
 
     }
@@ -482,16 +478,16 @@ public class GameView extends Application {
         windowButton.setMinWidth(image.getWidth());
         Background background = new Background(new BackgroundImage( image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
         windowButton.setBackground(background);
-        anchorPane.setBottomAnchor(windowButton, guiManager.getFullHeightPixel(30));
-        anchorPane.setRightAnchor(windowButton, guiManager.getFullWidthPixel(3));
-        anchorPane.setBottomAnchor(endTurn, guiManager.getFullHeightPixel(6));
-        anchorPane.setLeftAnchor(endTurn, guiManager.getFullWidthPixel(36));
+        AnchorPane.setBottomAnchor(windowButton, GUIManager.getGameHeightPixel(30));
+        AnchorPane.setRightAnchor(windowButton, GUIManager.getGameWidthPixel(3));
+        AnchorPane.setBottomAnchor(endTurn, GUIManager.getGameHeightPixel(6));
+        AnchorPane.setLeftAnchor(endTurn, GUIManager.getGameWidthPixel(36));
         anchorPane.getChildren().addAll(endTurn, windowButton);
     }
 
     public void setCardBoard(){
-        anchorPane.setBottomAnchor(cardBoard, guiManager.getFullHeightPixel(0));
-        anchorPane.setRightAnchor(cardBoard, guiManager.getFullWidthPixel(0));
+        anchorPane.setBottomAnchor(cardBoard, GUIManager.getGameHeightPixel(0));
+        anchorPane.setRightAnchor(cardBoard, GUIManager.getGameWidthPixel(0));
         anchorPane.getChildren().add(cardBoard);
     }
 
@@ -509,12 +505,12 @@ public class GameView extends Application {
         toolcardPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/toolCard.jpg")));
         privateObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/privateObj.jpg")));
         publicObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/publicObj.png")));
-        anchorPane.setBottomAnchor(toolcardPrev, guiManager.getFullHeightPixel(6));
-        anchorPane.setRightAnchor(toolcardPrev, guiManager.getFullWidthPixel(20));
-        anchorPane.setBottomAnchor(privateObjPrev, guiManager.getFullHeightPixel(6));
-        anchorPane.setRightAnchor(privateObjPrev, guiManager.getFullWidthPixel(30));
-        anchorPane.setBottomAnchor(publicObjPrev, guiManager.getFullHeightPixel(6));
-        anchorPane.setRightAnchor(publicObjPrev, guiManager.getFullWidthPixel(40));
+        anchorPane.setBottomAnchor(toolcardPrev, GUIManager.getGameHeightPixel(6));
+        anchorPane.setRightAnchor(toolcardPrev, GUIManager.getGameWidthPixel(20));
+        anchorPane.setBottomAnchor(privateObjPrev, GUIManager.getGameHeightPixel(6));
+        anchorPane.setRightAnchor(privateObjPrev, GUIManager.getGameWidthPixel(30));
+        anchorPane.setBottomAnchor(publicObjPrev, GUIManager.getGameHeightPixel(6));
+        anchorPane.setRightAnchor(publicObjPrev, GUIManager.getGameWidthPixel(40));
         anchorPane.getChildren().addAll(toolcardPrev, privateObjPrev, publicObjPrev);
 
     }

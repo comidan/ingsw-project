@@ -44,12 +44,12 @@ public class CardBoard extends AnchorPane {
         privateCardBox = new VBox();
         publicCardBox = new VBox();
         toolBox = new VBox();
-        setBottomAnchor(toolBox, guiManager.getFullHeightPixel(12));
-        setRightAnchor(toolBox, guiManager.getFullWidthPixel(20));
-        setBottomAnchor(privateCardBox, guiManager.getFullHeightPixel(12));
-        setRightAnchor(privateCardBox, guiManager.getFullWidthPixel(30));
-        setBottomAnchor(publicCardBox, guiManager.getFullHeightPixel(12));
-        setRightAnchor(publicCardBox, guiManager.getFullWidthPixel(40));
+        setBottomAnchor(toolBox, guiManager.getGameHeightPixel(12));
+        setRightAnchor(toolBox, guiManager.getGameWidthPixel(20));
+        setBottomAnchor(privateCardBox, guiManager.getGameHeightPixel(12));
+        setRightAnchor(privateCardBox, guiManager.getGameWidthPixel(30));
+        setBottomAnchor(publicCardBox, guiManager.getGameHeightPixel(12));
+        setRightAnchor(publicCardBox, guiManager.getGameWidthPixel(40));
 
     }
 

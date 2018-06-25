@@ -17,9 +17,11 @@ public class GUIManager {
     
     /** The Constant RATIO. */
     private static final double RATIO = 0.76;
+
+    private static final double GAME_RATIO = 1.778;
     
     /** The Constant RELATIVE_DIMENSION. */
-    private static final double RELATIVE_DIMENSION = 0.8;
+    private static final double RELATIVE_DIMENSION = 0.9;
     
     /** The Constant MAIN_TITLE. */
     public static final double MAIN_TITLE = 36;
@@ -82,13 +84,17 @@ public class GUIManager {
         return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION * RATIO;
     }
 
+    public static double getGameWindowWidth() { return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION * GAME_RATIO; }
+
+    public static double getGameWindowHeight() { return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION; }
+
     /**
      * Gets the screen height.
      *
      * @return the screen height
      */
     public static double getScreenHeight() {
-        return gd.getDisplayMode().getHeight()*0.9;
+        return gd.getDisplayMode().getHeight();
     }
 
     /**
@@ -108,6 +114,14 @@ public class GUIManager {
      */
     public static double getHeightPixel(int perc) {
         return perc * getWindowHeight() / 100;
+    }
+
+    public static double getGameHeightPixel(int perc) {
+        return perc * getGameWindowHeight() / 100;
+    }
+
+    public static double getGameWidthPixel(int perc) {
+        return perc * getGameWindowWidth() / 100;
     }
 
     /**
