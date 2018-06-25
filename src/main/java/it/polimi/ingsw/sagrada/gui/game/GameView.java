@@ -35,8 +35,6 @@ public class GameView extends Application {
 
     /** The windows. */
     private static Map<String, WindowView> windows;
-
-    private static Stage stage;
     
     /** The draft view. */
     private DraftView draftView;
@@ -279,7 +277,7 @@ public class GameView extends Application {
             tokenGrid.add(new TokenView(), i, 1); //pay attention : manage click even when all tokens are removed : IndexOutOfBoundException
         }
 
-        AnchorPane.setBottomAnchor(tokenGrid, GUIManager.getGameHeightPixel(80));
+        AnchorPane.setTopAnchor(tokenGrid, GUIManager.getGameHeightPixel(10));
         AnchorPane.setLeftAnchor(tokenGrid, GUIManager.getGameWidthPixel(9));
         anchorPane.getChildren().addAll(tokenGrid);
 
@@ -454,25 +452,26 @@ public class GameView extends Application {
     }
 
 
-    public void setHBox(){
-        anchorPane.setBottomAnchor(hBox, GUIManager.getGameHeightPixel(30));
-        anchorPane.setRightAnchor(hBox, GUIManager.getGameWidthPixel(6));
+    private void setHBox(){
+        AnchorPane.setBottomAnchor(hBox, GUIManager.getGameHeightPixel(30));
+        AnchorPane.setRightAnchor(hBox, GUIManager.getGameWidthPixel(6));
     }
 
-    public void setWindow(){
+    private void setWindow(){
         frame.addWindowToFrame(windows.get(username));
-        anchorPane.setBottomAnchor(frame, GUIManager.getGameHeightPixel(6));
-        anchorPane.setLeftAnchor(frame, GUIManager.getGameWidthPixel(7));
+        AnchorPane.setBottomAnchor(frame, GUIManager.getGameHeightPixel(8));
+        AnchorPane.setLeftAnchor(frame, GUIManager.getGameWidthPixel(4));
         anchorPane.getChildren().addAll(frame);
     }
 
-    public void setRoundtrack(){
+    private void setRoundtrack(){
         AnchorPane.setTopAnchor(roundTrackView, GUIManager.getGameHeightPixel(6));
         AnchorPane.setRightAnchor(roundTrackView, GUIManager.getGameWidthPixel(3));
         anchorPane.getChildren().add(roundTrackView);
 
     }
-    public void setButtons(){
+
+    private void setButtons(){
         Image image = new Image(GameView.class.getResourceAsStream("/images/windowPrev.png"));
         windowButton.setMinHeight(image.getHeight());
         windowButton.setMinWidth(image.getWidth());
@@ -485,9 +484,9 @@ public class GameView extends Application {
         anchorPane.getChildren().addAll(endTurn, windowButton);
     }
 
-    public void setCardBoard(){
-        anchorPane.setBottomAnchor(cardBoard, GUIManager.getGameHeightPixel(0));
-        anchorPane.setRightAnchor(cardBoard, GUIManager.getGameWidthPixel(0));
+    private void setCardBoard(){
+        AnchorPane.setBottomAnchor(cardBoard, GUIManager.getGameHeightPixel(0));
+        AnchorPane.setRightAnchor(cardBoard, GUIManager.getGameWidthPixel(0));
         anchorPane.getChildren().add(cardBoard);
     }
 
@@ -511,19 +510,18 @@ public class GameView extends Application {
         publicObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/publicObj.png")));
         publicObjPrev.setPreserveRatio(true);
         publicObjPrev.setFitWidth(GUIManager.getGameWidthPixel(8));
-        anchorPane.setBottomAnchor(toolcardPrev, GUIManager.getGameHeightPixel(6));
-        anchorPane.setRightAnchor(toolcardPrev, GUIManager.getGameWidthPixel(10));
-        anchorPane.setBottomAnchor(privateObjPrev, GUIManager.getGameHeightPixel(6));
-        anchorPane.setRightAnchor(privateObjPrev, GUIManager.getGameWidthPixel(20));
-        anchorPane.setBottomAnchor(publicObjPrev, GUIManager.getGameHeightPixel(6));
-        anchorPane.setRightAnchor(publicObjPrev, GUIManager.getGameWidthPixel(30));
+        AnchorPane.setBottomAnchor(toolcardPrev, GUIManager.getGameHeightPixel(6));
+        AnchorPane.setRightAnchor(toolcardPrev, GUIManager.getGameWidthPixel(10));
+        AnchorPane.setBottomAnchor(privateObjPrev, GUIManager.getGameHeightPixel(6));
+        AnchorPane.setRightAnchor(privateObjPrev, GUIManager.getGameWidthPixel(20));
+        AnchorPane.setBottomAnchor(publicObjPrev, GUIManager.getGameHeightPixel(6));
+        AnchorPane.setRightAnchor(publicObjPrev, GUIManager.getGameWidthPixel(30));
         anchorPane.getChildren().addAll(toolcardPrev, privateObjPrev, publicObjPrev);
 
     }
 
-    void setToolPreviewListener(EventHandler<MouseEvent> cardHandler){
+    void setToolPreviewListener(EventHandler<MouseEvent> cardHandler) {
         toolcardPrev.setOnMouseClicked(cardHandler);
-
     }
 
     void setPrivatePreviewListener(EventHandler<MouseEvent> cardHandler){

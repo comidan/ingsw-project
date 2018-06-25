@@ -14,6 +14,9 @@ import java.util.List;
  * The Class GUIManager.
  */
 public class GUIManager {
+    private GUIManager() {
+        throw new IllegalStateException("Utility class");
+    }
     
     /** The Constant RATIO. */
     private static final double RATIO = 0.76;
@@ -116,30 +119,22 @@ public class GUIManager {
         return perc * getWindowHeight() / 100;
     }
 
-    public static double getGameHeightPixel(int perc) {
-        return perc * getGameWindowHeight() / 100;
-    }
-
-    public static double getGameWidthPixel(int perc) {
-        return perc * getGameWindowWidth() / 100;
-    }
-
     /**
      * Gets the width pixel.
      *
      * @param perc the perc
      * @return the width pixel
      */
-    public static double getWidthPixel(int perc) {
+    public static double getWidthPixel(double perc) {
             return perc * getWindowWidth() / 100;
     }
 
-    public static double getFullWidthPixel(double perc){
-        return perc * getScreenWidth() / 100;
+    public static double getGameHeightPixel(double perc) {
+        return perc * getGameWindowHeight() / 100;
     }
 
-    public static double getFullHeightPixel(double perc){
-        return perc * getScreenHeight() / 100;
+    public static double getGameWidthPixel(int perc) {
+        return perc * getGameWindowWidth() / 100;
     }
 
     /**

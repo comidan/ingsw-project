@@ -1,14 +1,10 @@
 package it.polimi.ingsw.sagrada.gui.cards;
 
-import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -21,10 +17,10 @@ import java.util.List;
 public class CardBoard extends AnchorPane {
     
     /** The tool card view list. */
-    List<ToolCardView> toolCardViewList;
+    private List<ToolCardView> toolCardViewList;
     
     /** The objective card view list. */
-    List<ObjectiveCardView> objectiveCardViewList;
+    private List<ObjectiveCardView> objectiveCardViewList;
 
     private VBox privateCardBox;
 
@@ -32,24 +28,21 @@ public class CardBoard extends AnchorPane {
 
     private VBox toolBox;
 
-    private GUIManager guiManager;
-
     /**
      * Instantiates a new card board.
      */
     public CardBoard() {
-        guiManager = new GUIManager();
         toolCardViewList = new ArrayList<>();
         objectiveCardViewList = new ArrayList<>();
         privateCardBox = new VBox();
         publicCardBox = new VBox();
         toolBox = new VBox();
-        setBottomAnchor(toolBox, guiManager.getGameHeightPixel(12));
-        setRightAnchor(toolBox, guiManager.getGameWidthPixel(10));
-        setBottomAnchor(privateCardBox, guiManager.getGameHeightPixel(12));
-        setRightAnchor(privateCardBox, guiManager.getGameWidthPixel(20));
-        setBottomAnchor(publicCardBox, guiManager.getGameHeightPixel(12));
-        setRightAnchor(publicCardBox, guiManager.getGameWidthPixel(30));
+        setBottomAnchor(toolBox, GUIManager.getGameHeightPixel(12));
+        setRightAnchor(toolBox, GUIManager.getGameWidthPixel(10));
+        setBottomAnchor(privateCardBox, GUIManager.getGameHeightPixel(12));
+        setRightAnchor(privateCardBox, GUIManager.getGameWidthPixel(20));
+        setBottomAnchor(publicCardBox, GUIManager.getGameHeightPixel(12));
+        setRightAnchor(publicCardBox, GUIManager.getGameWidthPixel(30));
 
     }
 
