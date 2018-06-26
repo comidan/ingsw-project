@@ -62,7 +62,6 @@ public class DataManager {
      * Instantiates a new data manager.
      */
     private DataManager()  {
-
         try {
             database = Database.initSQLiteDatabase(DBMS_USERNAME,
                                                 DBMS_AUTH,
@@ -134,6 +133,66 @@ public class DataManager {
         catch (SQLException exc) {
             LOGGER.log(Level.SEVERE, exc.getMessage());
             return false;
+        }
+    }
+
+    public synchronized int saveGameRecord(Date date, int duration, int playersNumber) {
+        try {
+            PreparedStatement query = database.prepareQuery("INSERT INTO play (Date, Duration, PlayersNumber) VALUES (?, ?, ?)");
+            query.setDate(1, date);
+            query.setInt(2, duration);
+            query.setInt(3, playersNumber);
+            query.executeUpdate();
+            ResultSet queryResult = database.executeRawQuery("SELECT MAX(ID) FROM play");
+            return queryResult.getInt("ID");
+        }
+        catch (SQLException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+            return 0;
+        }
+    }
+
+    public synchronized void savePlayerRecord(String username, int gameID, int score, Date joinDate, int chosenWindowID, byte[] windowEndgameImage) {
+        try {
+            PreparedStatement query = database.prepareQuery("INSERT INTO playrecord (Username, PlayID, Score, PlayJoiningDate, ChoseWinowID, WindowMatrixState) VALUES (?, ?, ?, ?, ?, ?)");
+            query.setString(1, username);
+            query.setInt(2, gameID);
+            query.setInt(3, score);
+            query.setDate(4, joinDate);
+            query.setInt(5, chosenWindowID);
+            query.setBytes(6, windowEndgameImage);
+            query.executeUpdate();
+        }
+        catch (SQLException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+        }
+    }
+
+    public synchronized void saveAssignedObjectCards(String username, int gameID, int objectiveID, int score) {
+        try {
+            PreparedStatement query = database.prepareQuery("INSERT INTO assignedobjectives (Username, PlayID, ObjectiveID, Score) VALUES (?, ?, ?, ?)");
+            query.setString(1, username);
+            query.setInt(2, gameID);
+            query.setInt(3, objectiveID);
+            query.setInt(4, score);
+            query.executeUpdate();
+        }
+        catch (SQLException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+        }
+    }
+
+    public synchronized void saveAssignedToolCards(String username, int gameID, int toolCardID, int timesUsed) {
+        try {
+            PreparedStatement query = database.prepareQuery("INSERT INTO assignedtools (Username, PlayID, ToolID, Used) VALUES (?, ?, ?, ?)");
+            query.setString(1, username);
+            query.setInt(2, gameID);
+            query.setInt(3, toolCardID);
+            query.setInt(4, timesUsed);
+            query.executeUpdate();
+        }
+        catch (SQLException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
         }
     }
 
