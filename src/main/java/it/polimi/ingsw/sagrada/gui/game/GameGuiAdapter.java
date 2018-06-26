@@ -71,7 +71,7 @@ public class GameGuiAdapter {
         setToolHandler();
         setWindowButtonHandler();
         setCardPreviewListener();
-
+        setDraftListener();
     }
 
     /**
@@ -118,7 +118,7 @@ public class GameGuiAdapter {
         Platform.runLater(() -> {
             this.gameView.setCellClickListener(new EventHandler<DragEvent>() {
                 public void handle(DragEvent event) {
-                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);}
+                    event.acceptTransferModes(TransferMode.COPY);}
                     }, new EventHandler<DragEvent>() {
                     public void handle(DragEvent event) {
                       DiceView diceView = clickedObject.getClickedDice();
@@ -139,7 +139,6 @@ public class GameGuiAdapter {
                               DiceEvent diceEvent = new DiceEvent(username, idDice, position, CommandKeyword.DRAFT);
                               try {
                                   client.sendRemoteMessage(diceEvent);
-                                  System.out.println("Notified dice move");
                               } catch (RemoteException e) {
                                   LOGGER.log(Level.SEVERE, e::getMessage);
                               }
@@ -166,7 +165,7 @@ public class GameGuiAdapter {
             {
                 DiceView diceView = (DiceView) event.getSource();
                 clickedObject.setClickedDice(diceView);
-                Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
+                Dragboard db = diceView.startDragAndDrop(TransferMode.COPY);
                 ClipboardContent content = new ClipboardContent();
                 content.putImage(diceView.getImage());
                 db.setContent(content);
@@ -453,6 +452,7 @@ public class GameGuiAdapter {
     public void notifyMoveResponse(RuleResponse ruleResponse) {
         Platform.runLater(() -> {
             if(!ruleResponse.isMoveValid()) {
+                System.out.println("Invalid move removing dice");
                 lastMove.removeMistakenDice();
             }
         });

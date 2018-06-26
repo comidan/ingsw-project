@@ -85,7 +85,7 @@ public class MainGameGuiTest {
 
                 @Override
                 public void sendRemoteMessage(Message message) {
-                    throw new UnsupportedOperationException();
+                    System.out.println(message);
                 }
 
                 @Override

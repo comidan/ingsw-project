@@ -16,19 +16,19 @@ public class CellView extends StackPane {
 
     /** The Constant DICE_IMAGE_ROOT_PATH. */
     private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
-    
+
     /** The row. */
     private int row;
-    
+
     /** The col. */
     private int col;
-    
+
     /** The dice id. */
     private int diceId;
-    
+
     /** The occupied. */
     private boolean occupied;
-    
+
     /** The cell constraint. */
     private Image cellConstraint;
 
@@ -70,7 +70,7 @@ public class CellView extends StackPane {
      * Removes the mistaken dice.
      */
     public void removeMistakenDice(){
-        imageView.setImage(cellConstraint);
+        getChildren().removeAll(diceView);
         occupied = false;
 
     }
@@ -81,11 +81,10 @@ public class CellView extends StackPane {
      * @param diceView the new image cell
      */
     public void setImageCell(DiceView diceView) {
-                this.diceView = diceView;
-                setDiceId(diceView.getDiceID());
-                this.getChildren().add(this.diceView);
-                occupied = true;
-                diceId = diceView.getDiceID();
+        this.diceView = new DiceView(diceView.getColor(), diceView.getValue(), diceId);
+        setDiceId(diceView.getDiceID());
+        this.getChildren().add(this.diceView);
+        occupied = true;
     }
 
     public DiceView getDiceView(){
