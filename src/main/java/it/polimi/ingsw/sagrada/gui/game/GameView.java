@@ -54,8 +54,6 @@ public class GameView extends Application {
     /** The players. */
     private static List<String> players;
 
-    private Button windowButton;
-
     /** The constraints. */
     private static List<Constraint[][]> constraints;
     
@@ -86,6 +84,8 @@ public class GameView extends Application {
 
     /** The preview of private objective cards which are to be shown on click. */
     private ImageView privateObjPrev;
+
+    private ImageView windowPrev;
 
     /**
      * Gets the username.
@@ -250,7 +250,6 @@ public class GameView extends Application {
      * Initialize.
      */
     private void initialize(){
-        windowButton = new Button();
         endTurn = new EndTurn();
         this.frame = new FrameView();
         this.cardBoard = new CardBoard();
@@ -381,7 +380,7 @@ public class GameView extends Application {
         setWindow();
         setCardBoard();
         setCardPreviewButtons();
-        setButtons();
+        setWindowButton();
         setRoundtrack();
         components = new ArrayList<>();
         components.add(endTurn);
@@ -448,7 +447,7 @@ public class GameView extends Application {
     }
 
     public void setWindowButtonHandler(EventHandler<MouseEvent> windowButtonHandler){
-      windowButton.setOnMouseClicked(windowButtonHandler);
+      windowPrev.setOnMouseClicked(windowButtonHandler);
     }
 
 
@@ -471,17 +470,13 @@ public class GameView extends Application {
 
     }
 
-    private void setButtons(){
-        Image image = new Image(GameView.class.getResourceAsStream("/images/windowPrev.png"));
-        windowButton.setMinHeight(image.getHeight());
-        windowButton.setMinWidth(image.getWidth());
-        Background background = new Background(new BackgroundImage( image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
-        windowButton.setBackground(background);
-        AnchorPane.setBottomAnchor(windowButton, GUIManager.getGameHeightPixel(30));
-        AnchorPane.setRightAnchor(windowButton, GUIManager.getGameWidthPixel(3));
-        AnchorPane.setBottomAnchor(endTurn, GUIManager.getGameHeightPixel(6));
-        AnchorPane.setLeftAnchor(endTurn, GUIManager.getGameWidthPixel(36));
-        anchorPane.getChildren().addAll(endTurn, windowButton);
+    private void setWindowButton() {
+        windowPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/windowPrev.png")));
+        windowPrev.setPreserveRatio(true);
+        windowPrev.setFitHeight(GUIManager.getGameHeightPixel(40));
+        AnchorPane.setRightAnchor(windowPrev, GUIManager.getGameHeightPixel(4));
+        AnchorPane.setBottomAnchor(windowPrev, GUIManager.getGameHeightPixel(30));
+        anchorPane.getChildren().add(windowPrev);
     }
 
     private void setCardBoard(){
