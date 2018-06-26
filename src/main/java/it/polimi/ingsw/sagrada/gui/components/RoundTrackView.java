@@ -36,7 +36,7 @@ public class RoundTrackView extends StackPane {
      */
     public RoundTrackView() {
         imageView = new ImageView();
-        imageView.setImage(new Image(RoundTrackView.class.getResourceAsStream("/images/roundtrack.png"), GUIManager.getGameWidthPixel(62), GUIManager.getGameHeightPixel(20), true, false));
+        imageView.setImage(new Image(RoundTrackView.class.getResourceAsStream("/images/roundtrack.png"), GUIManager.getGameWidthPixel(45), GUIManager.getGameHeightPixel(13), true, false));
         this.getChildren().add(imageView);
         this.grid = new GridPane();
         this.diceViewList = new ArrayList<>();

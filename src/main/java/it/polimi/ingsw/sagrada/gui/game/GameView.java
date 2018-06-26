@@ -461,7 +461,7 @@ public class GameView extends Application {
     }
 
     private void setRoundtrack(){
-        AnchorPane.setTopAnchor(roundTrackView, GUIManager.getGameHeightPixel(6));
+        AnchorPane.setTopAnchor(roundTrackView, GUIManager.getGameHeightPixel(2.3));
         AnchorPane.setRightAnchor(roundTrackView, GUIManager.getGameWidthPixel(3));
         anchorPane.getChildren().add(roundTrackView);
 
