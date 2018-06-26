@@ -9,8 +9,6 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
 import it.polimi.ingsw.sagrada.gui.cards.ToolCardView;
 import it.polimi.ingsw.sagrada.gui.components.CellView;
 import it.polimi.ingsw.sagrada.gui.components.DiceView;
-import it.polimi.ingsw.sagrada.gui.components.DraftView;
-import it.polimi.ingsw.sagrada.gui.components.RoundTrackView;
 import it.polimi.ingsw.sagrada.gui.utils.ClickedObject;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
@@ -47,15 +45,6 @@ public class GameGuiAdapter {
      */
     private ClickedObject clickedObject;
 
-    /**
-     * The draft view.
-     */
-    private DraftView draftView;
-
-    /**
-     * The roundtrack view.
-     */
-    private RoundTrackView roundTrackView;
 
     /**
      * The last move.
@@ -92,8 +81,6 @@ public class GameGuiAdapter {
      */
     private void setEndTurnHandler(Client client) {
         Platform.runLater(() -> {
-            this.draftView = this.gameView.getDraftView();
-            this.roundTrackView = this.gameView.getRoundTrackView();
             this.gameView.setEndTurnHandler(event -> {
                 EndTurnEvent endTurnEvent = new EndTurnEvent(this.gameView.getUsername());
                 try {
@@ -108,7 +95,7 @@ public class GameGuiAdapter {
         });
     }
 
-    public void setWindowButtonHandler() {
+    private void setWindowButtonHandler() {
         gameView.setWindowButtonHandler(event -> {
             gameView.showOtherWindows();
             gameView.setWindowButtonHandler(eventDone -> {

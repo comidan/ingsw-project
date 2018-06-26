@@ -1,6 +1,6 @@
 package it.polimi.ingsw.sagrada.gui.cards;
 
-import it.polimi.ingsw.sagrada.gui.utils.Resizer;
+import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -17,19 +17,16 @@ public class PrivateObjectiveView extends ImageView {
     
     /** The id. */
     private int id;
-    
-    /** The resizer. */
-    private Resizer resizer;
+
 
     /**
      * Instantiates a new private objective view.
      *
      * @param id the id
      */
-    public PrivateObjectiveView(int id) {
-        this.resizer = new Resizer();
+    PrivateObjectiveView(int id) {
         this.id = id;
-        this.setImage(new Image(PrivateObjectiveView.class.getResourceAsStream(OBJECTIVE_IMAGE_ROOT_PATH + "privateObjective" + Integer.toString(id) + ".jpg"), resizer.getWidthPixel(15), resizer.getHeightPixel(20), true, false));
+        this.setImage(new Image(PrivateObjectiveView.class.getResourceAsStream(OBJECTIVE_IMAGE_ROOT_PATH + "privateObjective" + Integer.toString(id) + ".jpg"), GUIManager.getGameWidthPixel(19), GUIManager.getGameHeightPixel(25), true, false));
 
     }
 

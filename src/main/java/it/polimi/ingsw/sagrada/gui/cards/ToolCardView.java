@@ -1,19 +1,13 @@
 package it.polimi.ingsw.sagrada.gui.cards;
 
 import it.polimi.ingsw.sagrada.gui.components.TokenView;
-import it.polimi.ingsw.sagrada.gui.utils.Resizer;
-import javafx.event.ActionEvent;
+import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-
-import javax.swing.*;
-
 
 /**
  * The Class ToolCardView.
@@ -25,20 +19,11 @@ public class ToolCardView extends StackPane {
     
     /** The id. */
     private int id;
-    
-    /** The resizer. */
-    private Resizer resizer;
-    
 
-    /** The token grid. */
-    private GridPane tokenGrid;
-    
+
     /** The label. */
     private Label label;
 
-    private Button button;
-
-    private ImageView imageView;
 
     private int currentTokenNumber;
 
@@ -47,14 +32,11 @@ public class ToolCardView extends StackPane {
      *
      * @param id the id
      */
-    public ToolCardView(int id) {
-        tokenGrid = new GridPane();
-        this.resizer = new Resizer();
+    ToolCardView(int id) {
         this.id = id;
-        imageView = new ImageView();
-        imageView.setImage(new Image(ToolCardView.class.getResourceAsStream(TOOL_IMAGE_ROOT_PATH + Integer.toString(id) + ".jpg"), resizer.getWidthPixel(13), resizer.getHeightPixel(20), true, false));
+        ImageView imageView = new ImageView();
+        imageView.setImage(new Image(ToolCardView.class.getResourceAsStream(TOOL_IMAGE_ROOT_PATH + Integer.toString(id) + ".jpg"), GUIManager.getGameWidthPixel(19), GUIManager.getGameHeightPixel(25), true, false));
         this.getChildren().add(imageView);
-        this.getChildren().add(tokenGrid);
         label = new Label();
         this.getChildren().add(label);
 

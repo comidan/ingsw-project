@@ -14,7 +14,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -152,9 +151,6 @@ public class GameView extends Application {
         return draftView;
     }
 
-    CardBoard getCardBoard(){
-        return cardBoard;
-    }
 
     /**
      * Gets the roundtrack view.
@@ -377,11 +373,11 @@ public class GameView extends Application {
         });
         setHBox();
         setWindow();
+        setRoundtrack();
         setCardBoard();
         setEndTurnButton();
         setCardPreviewButtons();
         setWindowButton();
-        setRoundtrack();
         components = new ArrayList<>();
         components.add(endTurn);
         components.add(windows.get(username));
@@ -461,8 +457,8 @@ public class GameView extends Application {
     }
 
     private void setRoundtrack(){
-        AnchorPane.setTopAnchor(roundTrackView, GUIManager.getGameHeightPixel(2.3));
-        AnchorPane.setRightAnchor(roundTrackView, GUIManager.getGameWidthPixel(3));
+        AnchorPane.setTopAnchor(roundTrackView, GUIManager.getGameHeightPixel(6));
+        AnchorPane.setRightAnchor(roundTrackView, GUIManager.getGameWidthPixel(4));
         anchorPane.getChildren().add(roundTrackView);
 
     }
@@ -495,19 +491,16 @@ public class GameView extends Application {
     private void setCardPreviewButtons(){
         toolcardPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/toolCard.png")));
         toolcardPrev.setPreserveRatio(true);
-        toolcardPrev.setFitWidth(GUIManager.getGameWidthPixel(8));
         privateObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/privateObj.png")));
         privateObjPrev.setPreserveRatio(true);
-        privateObjPrev.setFitWidth(GUIManager.getGameWidthPixel(8));
         publicObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/publicObj.png")));
         publicObjPrev.setPreserveRatio(true);
-        publicObjPrev.setFitWidth(GUIManager.getGameWidthPixel(8));
         AnchorPane.setBottomAnchor(toolcardPrev, GUIManager.getGameHeightPixel(6));
         AnchorPane.setRightAnchor(toolcardPrev, GUIManager.getGameWidthPixel(10));
         AnchorPane.setBottomAnchor(privateObjPrev, GUIManager.getGameHeightPixel(6));
-        AnchorPane.setRightAnchor(privateObjPrev, GUIManager.getGameWidthPixel(20));
+        AnchorPane.setRightAnchor(privateObjPrev, GUIManager.getGameWidthPixel(22));
         AnchorPane.setBottomAnchor(publicObjPrev, GUIManager.getGameHeightPixel(6));
-        AnchorPane.setRightAnchor(publicObjPrev, GUIManager.getGameWidthPixel(30));
+        AnchorPane.setRightAnchor(publicObjPrev, GUIManager.getGameWidthPixel(34));
         anchorPane.getChildren().addAll(toolcardPrev, privateObjPrev, publicObjPrev);
 
     }
@@ -561,10 +554,13 @@ public class GameView extends Application {
         windows.get(username).enableWindowDiceDrag(enableWindowDragHandler);
     }
 
-    void setEndTurnButton(){
-        AnchorPane.setLeftAnchor(endTurn, GUIManager.getGameWidthPixel(40));
-        AnchorPane.setBottomAnchor(endTurn, GUIManager.getGameHeightPixel(10));
+    private void setEndTurnButton(){
+        AnchorPane.setLeftAnchor(endTurn, GUIManager.getGameWidthPixel(35));
+        AnchorPane.setBottomAnchor(endTurn, GUIManager.getGameHeightPixel(7));
         anchorPane.getChildren().add(endTurn);
     }
+
+
+
 
 }

@@ -9,11 +9,10 @@ import javafx.scene.layout.StackPane;
 
 public class EndTurn extends StackPane {
 
-    Button button;
 
     public EndTurn(){
         ImageView buttonBackground = new ImageView(new Image(EndTurn.class.getResourceAsStream("/images/button5.png")));
-        button = new Button("END TURN");
+        Button button = new Button("END TURN");
         button.setStyle("-fx-background-color: transparent;");
         button.setMouseTransparent(true);
         buttonBackground.setMouseTransparent(true);

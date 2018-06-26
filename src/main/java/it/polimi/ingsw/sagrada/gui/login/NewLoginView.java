@@ -149,7 +149,7 @@ public class NewLoginView extends Application {
         initialize();
         this.primaryStage = stage;
         primaryStage.setResizable(false);
-        Platform.runLater(() -> this.setRadioGroup());
+        Platform.runLater(() -> setRadioGroup());
         primaryStage.setTitle("SagradaClient");
         primaryStage.setResizable(false);
         devLabel = new Label();

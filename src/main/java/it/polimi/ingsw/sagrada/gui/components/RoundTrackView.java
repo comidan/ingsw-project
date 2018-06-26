@@ -29,24 +29,23 @@ public class RoundTrackView extends StackPane {
     private ArrayList<ArrayList<DiceView>> diceViewList;
 
     private GridPane grid;
-    private ImageView imageView;
 
     /**
      * Instantiates a new roundtrack view.
      */
     public RoundTrackView() {
-        imageView = new ImageView();
+        ImageView imageView = new ImageView();
         imageView.setImage(new Image(RoundTrackView.class.getResourceAsStream("/images/roundtrack.png"), GUIManager.getGameWidthPixel(45), GUIManager.getGameHeightPixel(13), true, false));
-        this.getChildren().add(imageView);
-        this.grid = new GridPane();
-        this.diceViewList = new ArrayList<>();
+        getChildren().add(imageView);
+        grid = new GridPane();
+        diceViewList = new ArrayList<>();
         for (int i = 0; i< MAX_ROUND; i++){
             ArrayList<DiceView> roundDiceList = new ArrayList<>();
             diceViewList.add(roundDiceList);
 
         }
-        this.getChildren().add(grid);
-        this.setMargin(grid, new Insets(60,8,2,10));
+        getChildren().add(grid);
+        setMargin(grid, new Insets(60,8,2,10));
         ColumnConstraints colConstr = new ColumnConstraints();
         colConstr.setPercentWidth(10);
         grid.getColumnConstraints().addAll(colConstr);

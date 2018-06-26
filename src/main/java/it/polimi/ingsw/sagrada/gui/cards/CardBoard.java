@@ -18,9 +18,6 @@ public class CardBoard extends AnchorPane {
     
     /** The tool card view list. */
     private List<ToolCardView> toolCardViewList;
-    
-    /** The objective card view list. */
-    private List<ObjectiveCardView> objectiveCardViewList;
 
     private VBox privateCardBox;
 
@@ -33,16 +30,15 @@ public class CardBoard extends AnchorPane {
      */
     public CardBoard() {
         toolCardViewList = new ArrayList<>();
-        objectiveCardViewList = new ArrayList<>();
         privateCardBox = new VBox();
         publicCardBox = new VBox();
         toolBox = new VBox();
         setBottomAnchor(toolBox, GUIManager.getGameHeightPixel(12));
         setRightAnchor(toolBox, GUIManager.getGameWidthPixel(10));
         setBottomAnchor(privateCardBox, GUIManager.getGameHeightPixel(12));
-        setRightAnchor(privateCardBox, GUIManager.getGameWidthPixel(20));
+        setRightAnchor(privateCardBox, GUIManager.getGameWidthPixel(22));
         setBottomAnchor(publicCardBox, GUIManager.getGameHeightPixel(12));
-        setRightAnchor(publicCardBox, GUIManager.getGameWidthPixel(30));
+        setRightAnchor(publicCardBox, GUIManager.getGameWidthPixel(34));
 
     }
 

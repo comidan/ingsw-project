@@ -1,17 +1,12 @@
 package it.polimi.ingsw.sagrada.gui.components;
 
-import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-
-import java.io.File;
-import java.io.InputStreamReader;
 
 
 /**
@@ -30,9 +25,6 @@ public class CellView extends StackPane {
     
     /** The dice id. */
     private int diceId;
-    
-    /** The constraint. */
-    private Constraint constraint;
     
     /** The occupied. */
     private boolean occupied;
@@ -55,7 +47,6 @@ public class CellView extends StackPane {
 
         this.row = row;
         this.col = col;
-        this.constraint = constraint;
         this.occupied = false;
         cellConstraint = new Image(CellView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getConstraintFileName(constraint)), GUIManager.getGameWidthPixel(8.3), GUIManager.getGameHeightPixel(8.4), true, false);
         imageView = new ImageView();
@@ -90,9 +81,8 @@ public class CellView extends StackPane {
      * @param diceView the new image cell
      */
     public void setImageCell(DiceView diceView) {
-                Constraint color = diceView.getColor();
-                Constraint value = diceView.getValue();
                 this.diceView = diceView;
+                setDiceId(diceView.getDiceID());
                 this.getChildren().add(this.diceView);
                 occupied = true;
                 diceId = diceView.getDiceID();
@@ -149,7 +139,7 @@ public class CellView extends StackPane {
      *
      * @param diceId the new dice id
      */
-    public void setDiceId(int diceId) {
+    private void setDiceId(int diceId) {
         this.diceId = diceId;
     }
 }
