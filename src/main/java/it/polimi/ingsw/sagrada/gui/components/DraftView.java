@@ -47,18 +47,6 @@ public class DraftView extends GridPane {
     }
 
     /**
-     * Removes the dice view.
-     *
-     * @param diceView the dice view
-     */
-    public void removeDiceView(DiceView diceView) {
-
-        draft.remove(diceView);
-        this.getChildren().removeAll(diceView);
-
-    }
-
-    /**
      * Sets the draft listener.
      *
      * @param draftClickHandler the new draft listener

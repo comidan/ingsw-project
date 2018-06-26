@@ -11,7 +11,6 @@ import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.cards.ToolManager;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
-import it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
@@ -20,16 +19,22 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameVisitor;
 import it.polimi.ingsw.sagrada.game.playables.*;
 import it.polimi.ingsw.sagrada.game.rules.ErrorType;
 import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
+import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +47,11 @@ import static it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum.*;
  * Main game class, core class for the model of the main MVC design pattern, manage main and core functions
  */
 
-public class GameManager implements Channel<Message, Message> {
+public class GameManager implements Channel<Message, Message>, BaseGameMessageVisitor {
+
+    private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
+
+    private final long START_TIME = new java.util.Date().getTime();
 
     private List<Player> players;
 
@@ -68,7 +77,9 @@ public class GameManager implements Channel<Message, Message> {
 
     private List<Integer> scores = new ArrayList<>();
 
-    private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
+    private ScoreResponse finalGameResult = null;
+
+    private int gameID;
 
     /**
      * Instantiates a new game manager.
@@ -87,8 +98,9 @@ public class GameManager implements Channel<Message, Message> {
         List<String> playersId = new ArrayList<>();
         players.forEach(p -> playersId.add(p.getId()));
         playerIterator = new PlayerIterator(playersId);
+        dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
+        dynamicRouter.subscribeChannel(ByteStreamWindowEvent.class, this);
         this.dynamicRouter = dynamicRouter;
-        this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
     }
 
     /**
@@ -258,10 +270,24 @@ public class GameManager implements Channel<Message, Message> {
      *  Computer final scores and set them on the score board
      */
     private void scoreState() {
-        players.forEach(player -> scores.add(scoreTrack.calculateScore(player)));
+        players.forEach(player -> scores.add(scoreTrack.calculateScore(player)));  //look out for possible sorting issue
         List<String> usernames = new ArrayList<>();
         players.forEach(player -> usernames.add(player.getId()));
-        sendMessage(new ScoreResponse(usernames, scores));
+        finalGameResult = new ScoreResponse(usernames, scores);
+        DataManager dataManager = DataManager.getDataManager();
+        long currentTime = new java.util.Date().getTime();
+        gameID = dataManager.saveGameRecord(new Date(START_TIME), (int) (currentTime - START_TIME), players.size());
+        sendMessage(finalGameResult);
+    }
+
+    private void saveStats(ByteStreamWindowEvent byteStreamWindowEvent) {
+        DataManager dataManager = DataManager.getDataManager();
+        Optional<Player> optionalPlayer = players.stream().filter(user -> user.getId().equals(byteStreamWindowEvent.getUsername())).findFirst();
+        if(optionalPlayer.isPresent()) {
+            Player player = optionalPlayer.get();
+            dataManager.savePlayerRecord(player.getId(), gameID, finalGameResult.getScore(player.getId()), new Date(START_TIME), player.getWindow().getId(), byteStreamWindowEvent.getImage());
+            dataManager.saveAssignedObjectCards(player.getId(), gameID, player.getPrivateObjectiveCard().getId(), finalGameResult.getScore(player.getId()));
+        }
     }
 
     /**
@@ -323,20 +349,9 @@ public class GameManager implements Channel<Message, Message> {
      */
     @Override
     public void dispatch(Message message) {
-        String eventType = message.getType().getName();
-        System.out.println(eventType);
-        if(eventType.equals(EventTypeEnum.toString(WINDOW_GAME_MANAGER_EVENT))) {
-            WindowGameManagerEvent msgW = (WindowGameManagerEvent) message;
-            dealWindowsToPlayer(idToPlayer(msgW.getIdPlayer()), msgW.getWindow());
-        } else if(eventType.equals(EventTypeEnum.toString(DICE_GAME_MANAGER_EVENT))) {
-            DiceGameManagerEvent msgD = (DiceGameManagerEvent) message;
-            setDiceInWindow(msgD.getIdPlayer(), msgD.getDice(), msgD.getPosition());
-        } else if(eventType.equals(EventTypeEnum.toString(END_TURN_EVENT))) {
-            notifyNextPlayer();
-        }
-        else {
-            LOGGER.log(Level.SEVERE, "GameManager has received a wrong event");
-        }
+        BaseGameVisitor baseGameVisitor = (BaseGameVisitor) message;
+        System.out.println("Received baseGameVisitor");
+        baseGameVisitor.accept(this);
     }
 
     /* (non-Javadoc)
@@ -345,5 +360,55 @@ public class GameManager implements Channel<Message, Message> {
     @Override
     public void sendMessage(Message message) {
         dynamicRouter.dispatch(message);
+    }
+
+    /**
+     * Visit.
+     *
+     * @param message the message
+     */
+    @Override
+    public void visit(Message message) {
+        LOGGER.log(Level.INFO, message::toString);
+    }
+
+    /**
+     * Visit.
+     *
+     * @param message the message
+     */
+    @Override
+    public void visit(ByteStreamWindowEvent message) {
+        saveStats(message);
+    }
+
+    /**
+     * Visit.
+     *
+     * @param message the message
+     */
+    @Override
+    public void visit(WindowGameManagerEvent message) {
+        dealWindowsToPlayer(idToPlayer(message.getIdPlayer()), message.getWindow());
+    }
+
+    /**
+     * Visit.
+     *
+     * @param message the message
+     */
+    @Override
+    public void visit(DiceGameManagerEvent message) {
+        setDiceInWindow(message.getIdPlayer(), message.getDice(), message.getPosition());
+    }
+
+    /**
+     * Visit.
+     *
+     * @param message the message
+     */
+    @Override
+    public void visit(EndTurnEvent message) {
+        notifyNextPlayer();
     }
 }

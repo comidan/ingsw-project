@@ -14,6 +14,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionVisitor;
@@ -347,6 +348,12 @@ public class CommandManager implements MessageVisitor {
      */
     @Override
     public void visit(ScoreResponse scoreResponse) {
+        try {
+            client.sendRemoteMessage(new ByteStreamWindowEvent(username, gameGuiAdapter.getWindowAsByteArray()));
+        }
+        catch (RemoteException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+        }
         Map<String, Integer> ranking = new HashMap<>();
         scoreResponse.getUsernames().forEach(username -> ranking.put(username, scoreResponse.getScore(username)));
         scoreLobbyView = ScoreLobbyView.getInstance(ranking, gameGuiAdapter.getStage());

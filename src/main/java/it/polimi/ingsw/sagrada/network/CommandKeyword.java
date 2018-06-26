@@ -176,4 +176,10 @@ public final class CommandKeyword {
 
   /** The Constant RANKING. */
   public static final String RANKING = "ranking";
+
+  /** The Constant BINARY. */
+  public static final String BINARY = "binary";
+
+  /** The Constant LENGTH. */
+  public static final String LENGTH = "length";
 }

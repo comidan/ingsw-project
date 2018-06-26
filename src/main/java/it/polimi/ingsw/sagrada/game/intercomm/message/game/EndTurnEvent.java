@@ -1,15 +1,13 @@
 package it.polimi.ingsw.sagrada.game.intercomm.message.game;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.*;
 
 
 /**
  * The Class EndTurnEvent.
  */
-public class EndTurnEvent implements Message, ActionVisitor {
+public class EndTurnEvent implements Message, ActionVisitor, BaseGameVisitor {
     
     /** The id player. */
     private String idPlayer;
@@ -54,5 +52,15 @@ public class EndTurnEvent implements Message, ActionVisitor {
     @Override
     public String accept(ActionMessageVisitor actionMessageVisitor) {
         return actionMessageVisitor.visit(this);
+    }
+
+    /**
+     * Visit.
+     *
+     * @param baseGameMessageVisitor the visitor
+     */
+    @Override
+    public void accept(BaseGameMessageVisitor baseGameMessageVisitor) {
+        baseGameMessageVisitor.visit(this);
     }
 }

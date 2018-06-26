@@ -10,27 +10,41 @@ import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import it.polimi.ingsw.sagrada.gui.windows.WindowView;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  * The Class GameView.
  */
 public class GameView extends Application {
+
+    private static final Logger LOGGER = Logger.getLogger(GameView.class.getName());
 
     /** The windows. */
     private static Map<String, WindowView> windows;
@@ -560,7 +574,47 @@ public class GameView extends Application {
         anchorPane.getChildren().add(endTurn);
     }
 
-
+    byte[] getWindowAsByteArray() {
+        File file = new File("window_temp.png");
+        if (!file.exists())
+            try {
+                if (!file.createNewFile())
+                    return new byte[0];
+            } catch (IOException exc) {
+                return new byte[0];
+            }
+        WritableImage writableImage = new WritableImage((int) windows.get(username).getWidth(), (int) windows.get(username).getHeight());
+        Platform.runLater(() -> {
+            synchronized (writableImage) {
+                SnapshotParameters params = new SnapshotParameters();
+                params.setFill(Color.TRANSPARENT);
+                windows.get(username).snapshot(params, writableImage);
+            }
+        });
+        Platform.runLater(() -> {
+            synchronized (writableImage) {
+                try {
+                    RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
+                    ImageIO.write(renderedImage, "png", file);
+                }
+                catch (IOException exc) {
+                    LOGGER.log(Level.SEVERE, exc::getMessage);
+                }
+            }
+        });
+        synchronized (writableImage) {
+            try (FileInputStream fis = new FileInputStream(file)) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buff = new byte[1024];
+                for (int readNum; (readNum = fis.read(buff)) != -1; ) {
+                    baos.write(buff, 0, readNum);
+                }
+                return baos.toByteArray();
+            } catch (IOException exc) {
+                return new byte[0];
+            }
+        }
+    }
 
 
 }

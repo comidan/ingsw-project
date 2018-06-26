@@ -1,13 +1,15 @@
 package it.polimi.ingsw.sagrada.game.intercomm.message.dice;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameVisitor;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 
 /**
  * The Class DiceGameManagerEvent.
  */
-public class DiceGameManagerEvent extends DiceEvent {
+public class DiceGameManagerEvent extends DiceEvent implements BaseGameVisitor {
 
     /** The dice. */
     private Dice dice;
@@ -38,5 +40,15 @@ public class DiceGameManagerEvent extends DiceEvent {
     @Override
     public Class<? extends Message> getType() {
         return  getClass();
+    }
+
+    /**
+     * Visit.
+     *
+     * @param baseGameMessageVisitor the visitor
+     */
+    @Override
+    public void accept(BaseGameMessageVisitor baseGameMessageVisitor) {
+        baseGameMessageVisitor.visit(this);
     }
 }

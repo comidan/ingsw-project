@@ -9,8 +9,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -145,15 +146,11 @@ public class WindowChoiceGuiView extends Application {
      */
     private void initialize() {
         imageViewList = new ArrayList<>();
-
-        //GUI styling
         anchorPane = new AnchorPane();
-        anchorPane.setStyle(
-                "-fx-background-image: url(" +
-                        "images/MatchLobbyBackground.png" +
-                        "); " +
-                        "-fx-background-size: cover;"
-        );
+        Image image = new Image(WindowChoiceGuiView.class.getResourceAsStream("/images/MatchLobbyBackground.png"));
+        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        anchorPane.setBackground(new Background(backgroundImage));
         windowHeight = GUIManager.getWindowHeight();
         windowWidth = GUIManager.getWindowWidth();
 

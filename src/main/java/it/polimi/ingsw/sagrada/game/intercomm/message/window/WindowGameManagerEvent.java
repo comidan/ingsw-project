@@ -1,6 +1,8 @@
 package it.polimi.ingsw.sagrada.game.intercomm.message.window;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 
@@ -8,7 +10,7 @@ import it.polimi.ingsw.sagrada.game.playables.Window;
 /**
  * The Class WindowGameManagerEvent.
  */
-public class WindowGameManagerEvent implements Message {
+public class WindowGameManagerEvent implements Message, BaseGameVisitor {
 
     /** The id player. */
     private String idPlayer;
@@ -59,5 +61,15 @@ public class WindowGameManagerEvent implements Message {
     @Override
     public void accept(MessageVisitor messageVisitor) {
         messageVisitor.visit(this);
+    }
+
+    /**
+     * Visit.
+     *
+     * @param baseGameMessageVisitor the visitor
+     */
+    @Override
+    public void accept(BaseGameMessageVisitor baseGameMessageVisitor) {
+        baseGameMessageVisitor.visit(this);
     }
 }

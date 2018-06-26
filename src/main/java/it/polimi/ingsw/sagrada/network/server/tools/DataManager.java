@@ -144,7 +144,7 @@ public class DataManager {
             query.setInt(3, playersNumber);
             query.executeUpdate();
             ResultSet queryResult = database.executeRawQuery("SELECT MAX(ID) FROM play");
-            return queryResult.getInt("ID");
+            return queryResult.getInt(1);
         }
         catch (SQLException exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);

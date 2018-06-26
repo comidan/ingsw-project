@@ -10,6 +10,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
@@ -103,6 +104,17 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
     @Override
     public String visit(EndTurnEvent endTurnEvent) {
         assertEquals(idPlayer, endTurnEvent.getIdPlayer());
+        return null;
+    }
+
+    /**
+     * Visit.
+     *
+     * @param byteStreamWindowEvent the window image
+     * @return the string
+     */
+    @Override
+    public String visit(ByteStreamWindowEvent byteStreamWindowEvent) {
         return null;
     }
 

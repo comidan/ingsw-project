@@ -375,6 +375,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         while(!checkValidClientLinkState()) {
             try {
                 Thread.sleep(500);
+                System.out.println("Waiting clients stable link...");
             }
             catch (InterruptedException exc) {
                 LOGGER.log(Level.SEVERE, exc::getMessage);
@@ -387,10 +388,12 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             return;
         }
         inGame = true;
+        System.out.println("Initiating game");
         List<Player> players = new ArrayList<>();
         clientIds.forEach(username -> players.add(new Player(username)));
         dynamicRouter = new MessageDispatcher();
         gameDataManager = new GameDataManager(dynamicRouter, clientPool);
+        System.out.println("Starting game...");
         gameManager = new GameManager(players, dynamicRouter);
         gameManager.startGame();
     }

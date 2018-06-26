@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.game.intercomm.visitor;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
 
 
@@ -34,6 +35,14 @@ public interface ActionMessageVisitor {
      * @return the string
      */
     String visit(EndTurnEvent endTurnEvent);
+
+    /**
+     * Visit.
+     *
+     * @param byteStreamWindowEvent the window image
+     * @return the string
+     */
+    String visit(ByteStreamWindowEvent byteStreamWindowEvent);
 
     /**
      * Visit.

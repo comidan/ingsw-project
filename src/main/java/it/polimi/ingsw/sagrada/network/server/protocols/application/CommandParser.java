@@ -7,14 +7,18 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 
 import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.util.stream.IntStream;
 
 
 /**
@@ -63,6 +67,11 @@ public class CommandParser {
                     return new DiceEvent(idPlayerD, idDice, position, source);
                 case END_TURN:
                     return new EndTurnEvent((String)jsonMsg.get(PLAYER_ID));
+                case BINARY:
+                    data = (JSONObject) jsonMsg.get(BINARY);
+                    String username = (String) data.get(USERNAME);
+                    byte[] image = ((String) data.get(BINARY)).getBytes();
+                    return new ByteStreamWindowEvent(username, image);
                 case SETTINGS :  //is settings response useless?
                     return null;
                 default:

@@ -18,6 +18,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.ErrorEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
@@ -34,6 +35,7 @@ import org.json.simple.parser.ParseException;
 import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 
 /**
@@ -180,6 +182,18 @@ public class JsonMessage implements ActionMessageVisitor {
         content.put(COMMAND_TYPE, END_TURN);
         content.put(PLAYER_ID, endTurnEvent.getIdPlayer());
         return content;
+    }
+
+    private JSONObject createByteStreamWindowResponse(ByteStreamWindowEvent byteStreamWindowEvent) {
+        JSONObject content = new JSONObject();
+        content.put(USERNAME, playerId);
+        byte[] image = byteStreamWindowEvent.getImage();
+        content.put(BINARY, new String(image));
+        JSONObject container = new JSONObject();
+        container.put(MESSAGE_TYPE, ACTION);
+        container.put(COMMAND_TYPE, BINARY);
+        container.put(BINARY, content);
+        return container;
     }
 
     /**
@@ -329,6 +343,17 @@ public class JsonMessage implements ActionMessageVisitor {
     @Override
     public String visit(EndTurnEvent endTurnEvent) {
         return createEndTurnEvent(endTurnEvent).toJSONString();
+    }
+
+    /**
+     * Visit.
+     *
+     * @param byteStreamWindowEvent the window image
+     * @return the string
+     */
+    @Override
+    public String visit(ByteStreamWindowEvent byteStreamWindowEvent) {
+        return createByteStreamWindowResponse(byteStreamWindowEvent).toJSONString();
     }
 
     /* (non-Javadoc)

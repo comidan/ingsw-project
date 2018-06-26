@@ -483,4 +483,8 @@ public class GameGuiAdapter {
     public Stage getStage() {
         return gameView.getStage();
     }
+
+    public byte[] getWindowAsByteArray() {
+        return gameView.getWindowAsByteArray();
+    }
 }
