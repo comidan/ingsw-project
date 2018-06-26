@@ -378,6 +378,7 @@ public class GameView extends Application {
         setHBox();
         setWindow();
         setCardBoard();
+        setEndTurnButton();
         setCardPreviewButtons();
         setWindowButton();
         setRoundtrack();
@@ -558,6 +559,12 @@ public class GameView extends Application {
 
     void enableWindowDiceDrag(EventHandler<MouseEvent> enableWindowDragHandler){
         windows.get(username).enableWindowDiceDrag(enableWindowDragHandler);
+    }
+
+    void setEndTurnButton(){
+        AnchorPane.setLeftAnchor(endTurn, GUIManager.getGameWidthPixel(40));
+        AnchorPane.setBottomAnchor(endTurn, GUIManager.getGameHeightPixel(10));
+        anchorPane.getChildren().add(endTurn);
     }
 
 }
