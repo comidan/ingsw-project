@@ -19,11 +19,8 @@ public class FrameView extends StackPane {
     }
 
     public void addWindowToFrame(WindowView windowView){
-
         setAlignment(windowView, Pos.BOTTOM_CENTER);
-        setMargin(windowView, new Insets(GUIManager.getGameHeightPixel(34),GUIManager.getGameWidthPixel(2),GUIManager.getGameHeightPixel(1),GUIManager.getGameWidthPixel(2)));
+        setMargin(windowView, new Insets(GUIManager.getGameHeightPixel(36),GUIManager.getGameWidthPixel(2),GUIManager.getGameHeightPixel(4),GUIManager.getGameWidthPixel(2)));
         getChildren().add(windowView);
     }
-
-
 }

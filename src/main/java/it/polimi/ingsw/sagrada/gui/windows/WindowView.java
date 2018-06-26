@@ -5,10 +5,12 @@ import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.components.CellView;
 import it.polimi.ingsw.sagrada.gui.components.DiceView;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
+import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
@@ -30,14 +32,12 @@ public class WindowView extends GridPane {
      * @param constraints the constraints
      */
     public WindowView(Constraint[][] constraints) {
-
         label = new Label();
         windowDices = new CellView[4][5];
         for (int i = 0; i < constraints.length; i++)
             for (int j = 0; j < constraints[0].length; j++)
                 windowDices[i][j] = new CellView(i, j, constraints[i][j]);
         setGridLinesVisible(true);
-
 
         createGrid();
     }
@@ -47,15 +47,18 @@ public class WindowView extends GridPane {
      */
     private void createGrid() {
         this.setStyle("-fx-border-color:black;-fx-border-width:3px;-fx-border-style:solid;");
-        for (int i = 0; i < windowDices.length; i++)
+        //this.setMinSize(GUIManager.getGameWidthPixel(20), GUIManager.getGameHeightPixel(16));
+        for (int i = 0; i < windowDices.length; i++) {
+            //ColumnConstraints clm = new ColumnConstraints();
+            //clm.setPercentWidth(20);
             for (int j = 0; j < windowDices[0].length; j++) {
-
-
-        StackPane stackPane = new StackPane();
-        stackPane.setStyle("-fx-border-color:black;-fx-border-width:4px;-fx-border-style:solid;");
-        stackPane.getChildren().add(windowDices[i][j]);
-        this.add(stackPane, j, i);
-
+                StackPane stackPane = new StackPane();
+                stackPane.setStyle("-fx-border-color:black;-fx-border-width:4px;-fx-border-style:solid;");
+                windowDices[i][j].resize(100, 100);
+                stackPane.getChildren().add(windowDices[i][j]);
+                add(stackPane, j, i);
+            }
+            //getColumnConstraints().add(clm);
         }
     }
 
