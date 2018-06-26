@@ -82,6 +82,7 @@ public class ScoreLobbyView extends Application{
         anchorPane.setLeftAnchor(fourthPlayer, GUIManager.getWidthPixel(30));
         anchorPane.getChildren().addAll(dice1, firstPlayer, dice2, secondPlayer, dice3, thirdPlayer, dice4, fourthPlayer);
         setScores();
+
     }
 
     public void start(Stage stage){
@@ -91,6 +92,7 @@ public class ScoreLobbyView extends Application{
         primaryStage.setFullScreen(false);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
+        primaryStage.setTitle("Ranking");
         primaryStage.show();
         scoreLobbyView = this;
     }

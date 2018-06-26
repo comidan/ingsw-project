@@ -245,7 +245,6 @@ public class GameView extends Application {
     }
 
 
-
     /**
      * Initialize.
      */
@@ -407,9 +406,6 @@ public class GameView extends Application {
         components.add(draftView);
     }
 
-    public void removeDiceView(DiceView diceView){
-        draftView.removeDiceView(diceView);
-    }
 
     /**
      * Notify turn.
@@ -496,10 +492,10 @@ public class GameView extends Application {
     }
 
     private void setCardPreviewButtons(){
-        toolcardPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/toolCard.jpg")));
+        toolcardPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/toolCard.png")));
         toolcardPrev.setPreserveRatio(true);
         toolcardPrev.setFitWidth(GUIManager.getGameWidthPixel(8));
-        privateObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/privateObj.jpg")));
+        privateObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/privateObj.png")));
         privateObjPrev.setPreserveRatio(true);
         privateObjPrev.setFitWidth(GUIManager.getGameWidthPixel(8));
         publicObjPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/publicObj.png")));
@@ -554,6 +550,14 @@ public class GameView extends Application {
 
     public Stage getStage() {
         return (Stage) anchorPane.getScene().getWindow();
+    }
+
+    void setDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
+        draftView.setDraftChangeValue(changeValueHandler);
+    }
+
+    void enableWindowDiceDrag(EventHandler<MouseEvent> enableWindowDragHandler){
+        windows.get(username).enableWindowDiceDrag(enableWindowDragHandler);
     }
 
 }

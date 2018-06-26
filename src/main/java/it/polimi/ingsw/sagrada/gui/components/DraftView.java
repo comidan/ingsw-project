@@ -67,5 +67,9 @@ public class DraftView extends GridPane {
         draft.forEach(diceView -> diceView.setOnDragDetected(draftClickHandler));
     }
 
+    public void setDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
+        draft.forEach(diceView -> diceView.setOnDragDetected(changeValueHandler));
+    }
+
 
 }

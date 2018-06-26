@@ -1,11 +1,14 @@
 package it.polimi.ingsw.sagrada.gui.components;
 
+import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
+import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 
 import java.io.File;
 import java.io.InputStreamReader;
@@ -14,7 +17,7 @@ import java.io.InputStreamReader;
 /**
  * The Class CellView.
  */
-public class CellView extends ImageView {
+public class CellView extends StackPane {
 
     /** The Constant DICE_IMAGE_ROOT_PATH. */
     private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
@@ -37,6 +40,10 @@ public class CellView extends ImageView {
     /** The cell constraint. */
     private Image cellConstraint;
 
+    private ImageView imageView;
+
+    private DiceView diceView;
+
     /**
      * Instantiates a new cell view.
      *
@@ -45,21 +52,17 @@ public class CellView extends ImageView {
      * @param constraint the constraint
      */
     public CellView(int row, int col, Constraint constraint) {
+
         this.row = row;
         this.col = col;
         this.constraint = constraint;
         this.occupied = false;
-        cellConstraint = new Image(CellView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getConstraintFileName(constraint)), 60, 60, true, false);
-        setImage(cellConstraint);
+        cellConstraint = new Image(CellView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getConstraintFileName(constraint)), GUIManager.getGameWidthPixel(8.3), GUIManager.getGameHeightPixel(8.4), true, false);
+        imageView = new ImageView();
+        imageView.setImage(cellConstraint);
+        this.getChildren().add(imageView);
     }
 
-    /**
-     * Instantiates a new cell view.
-     */
-    public CellView(){
-        ImageView cellImage = new ImageView();
-        cellImage.resize(50,50 );
-    }
 
     /**
      * Sets the cell listener.
@@ -76,7 +79,7 @@ public class CellView extends ImageView {
      * Removes the mistaken dice.
      */
     public void removeMistakenDice(){
-        setImage(cellConstraint);
+        imageView.setImage(cellConstraint);
         occupied = false;
 
     }
@@ -89,11 +92,15 @@ public class CellView extends ImageView {
     public void setImageCell(DiceView diceView) {
                 Constraint color = diceView.getColor();
                 Constraint value = diceView.getValue();
-                setImage(new Image(CellView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)), 60, 60, true, false));
+                this.diceView = diceView;
+                this.getChildren().add(this.diceView);
                 occupied = true;
                 diceId = diceView.getDiceID();
     }
 
+    public DiceView getDiceView(){
+        return diceView;
+    }
     /**
      * Checks if is occupied.
      *
@@ -107,7 +114,7 @@ public class CellView extends ImageView {
      * Removes the image.
      */
     public void removeImage(){
-        setImage(null);
+        diceView.setImage(null);
     }
 
     /**

@@ -29,20 +29,27 @@ public class NewLobbyView extends Application {
     private Label thirdPlayer;
     private Label fourthPlayer;
     private Label timer;
-    private static double windowWidth;
-    private static double windowHeight;
+    private double windowWidth;
+    private double windowHeight;
 
     private List<String> playerShown = new ArrayList<>();
-    private static Stage stage;
+    private Stage stage;
 
-    private static AnchorPane anchorPane;
+    private AnchorPane anchorPane;
+
+    private static NewLobbyView newLobbyView;
 
 
-    public NewLobbyView() {
+    private NewLobbyView() {
         windowWidth = GUIManager.getWindowWidth();
         windowHeight = GUIManager.getWindowHeight();
     }
 
+    public NewLobbyView getInstance(){
+        if(newLobbyView == null)
+            newLobbyView = new NewLobbyView();
+        return newLobbyView;
+    }
 
     public void setPlayer(String username) {
         playerShown.add(username);
@@ -88,7 +95,7 @@ public class NewLobbyView extends Application {
         Platform.runLater(() -> timer.setText(message));
     }
 
-    public static void init(Stage stage) {
+    public void init(Stage stage) {
             initializeScene();
             Scene scene = new Scene(anchorPane, GUIManager.getWindowWidth(), GUIManager.getWindowHeight());
             Label gameLabel = new Label();
@@ -131,14 +138,14 @@ public class NewLobbyView extends Application {
             Label timerLabel = new Label();
             AnchorPane.setBottomAnchor(timerLabel, GUIManager.getHeightPixel(10));
             anchorPane.getChildren().addAll(player1, player2, player3, player4, dice1, dice2, dice3, dice4);
-            NewLobbyView.stage = stage;
+            this.stage = stage;
             stage.setScene(scene);
 
 
     }
 
 
-    private static void initializeScene() {
+    private void initializeScene() {
 
         anchorPane = new AnchorPane();
         anchorPane.setStyle(

@@ -198,31 +198,21 @@ public class GameGuiAdapter {
         Platform.runLater(() -> {
             this.gameView.setToolClickHandler(event -> {
                 ToolCardView toolCardView = (ToolCardView) event.getSource();
-                int tokenNumber;
-                if (toolCardView.getTokenNumber() == 0)
-                    tokenNumber = 1;
-                else tokenNumber = 2;
-                gameView.removeToken(tokenNumber);
-                toolCardView.addToken();
+                // get token number from server
+                //gameView.removeToken(tokenNumber);
+                //toolCardView.addToken(tokenNumber);
                 //client.sendResponse(ToolEvent(toolCardView.getToolId()));
 
             });
             setRoundTrackClick();
-            setToken(3);
+
         });
     }
 
-    /**
-     * Sets the round track click.
-     */
-    private void setRoundTrackClick(){
-        Platform.runLater(() -> {
-            this.gameView.setRoundtrackClickHandler(event -> {
-                DiceView clickedDice = (DiceView) event.getSource();
-                clickedObject.setClickedDice(clickedDice);
-            });
-        });
+    private void setTokenWindow(int tokenNumber){
+        setToken(tokenNumber);
     }
+
 
 
     private void setToolCardPrevListener(){
@@ -267,6 +257,72 @@ public class GameGuiAdapter {
         });
     }
 
+    // Tool effect: change dice value in draft adding one OR rolls again dice, according to value it gets
+    // can be used for toolcards: 1, 6, 10
+
+    public void setDraftChangeValue(){
+
+        this.gameView.setDraftChangeValue(event ->
+        {
+            DiceView diceView = (DiceView) event.getSource();
+            // send message with selected dice
+            // get message with new value
+            //diceView.changeValue(newValue);
+        });
+    }
+
+    // Tool effect: enable moving dice on your own window
+    // can be used for toolcards: 2, 3, 4, 12
+
+    public void enableWindowDiceDrag(){
+
+        this.gameView.enableWindowDiceDrag(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event) {
+                DiceView diceView = (DiceView) event.getSource();
+                clickedObject.setClickedDice(diceView);
+                Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
+                ClipboardContent content = new ClipboardContent();
+                content.putImage(diceView.getImage());
+                db.setContent(content);
+                event.consume();
+                // get from server successul drag ended
+                //if successful, then remove handler
+                diceView.removeEventHandler(MouseEvent.MOUSE_PRESSED, this);
+
+            }
+
+        });
+        }
+
+     /**
+     * Sets the round track click.
+     */
+
+
+     // Tool effect: enable drag on dice in roundtrack
+     // can be used for toolcards: 5
+    private void setRoundTrackClick(){
+        Platform.runLater(() -> {
+            this.gameView.setRoundtrackClickHandler(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(javafx.scene.input.MouseEvent event) {
+                    DiceView diceView = (DiceView) event.getSource();
+                    clickedObject.setClickedDice(diceView);
+                    Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(diceView.getImage());
+                    db.setContent(content);
+                    event.consume();
+                    // get from server successul drag ended
+                    //if successful, then remove handler
+                    diceView.removeEventHandler(MouseEvent.MOUSE_PRESSED, this);
+
+                }
+
+            });
+        });
+    }
 
 
 
@@ -385,6 +441,9 @@ public class GameGuiAdapter {
         setToolHandler();
     }
 
+
+
+
     /**
      * Notify turn.
      */
@@ -431,6 +490,8 @@ public class GameGuiAdapter {
     public void setRound(int round) {
         currentRound = round;
     }
+
+
 
     public Stage getStage() {
         return gameView.getStage();

@@ -133,7 +133,7 @@ public class GUIManager {
         return perc * getGameWindowHeight() / 100;
     }
 
-    public static double getGameWidthPixel(int perc) {
+    public static double getGameWidthPixel(double perc) {
         return perc * getGameWindowWidth() / 100;
     }
 

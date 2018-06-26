@@ -29,9 +29,7 @@ public class ToolCardView extends StackPane {
     /** The resizer. */
     private Resizer resizer;
     
-    /** The token number. */
-    private int tokenNumber = 0;
-    
+
     /** The token grid. */
     private GridPane tokenGrid;
     
@@ -41,6 +39,8 @@ public class ToolCardView extends StackPane {
     private Button button;
 
     private ImageView imageView;
+
+    private int currentTokenNumber;
 
     /**
      * Instantiates a new tool card view.
@@ -52,7 +52,7 @@ public class ToolCardView extends StackPane {
         this.resizer = new Resizer();
         this.id = id;
         imageView = new ImageView();
-        imageView.setImage(new Image(ToolCardView.class.getResourceAsStream(TOOL_IMAGE_ROOT_PATH + Integer.toString(id) + ".jpg"), resizer.getWidthPixel(15), resizer.getHeightPixel(20), true, false));
+        imageView.setImage(new Image(ToolCardView.class.getResourceAsStream(TOOL_IMAGE_ROOT_PATH + Integer.toString(id) + ".jpg"), resizer.getWidthPixel(13), resizer.getHeightPixel(20), true, false));
         this.getChildren().add(imageView);
         this.getChildren().add(tokenGrid);
         label = new Label();
@@ -81,31 +81,14 @@ public class ToolCardView extends StackPane {
     /**
      * Adds the token.
      */
-    public void addToken(){
-        setTokenNumber();
+    public void addToken(int tokenNumber){
         for(int i = 0; i<tokenNumber; i++){
             TokenView tokenView = new TokenView();
             this.getChildren().add(tokenView);
         }
-        label.setText(Integer.toString(tokenNumber));
+        currentTokenNumber += tokenNumber;
+        label.setText(Integer.toString(currentTokenNumber));
     }
 
-    /**
-     * Sets the token number.
-     */
-    public void setTokenNumber(){
-        if(tokenNumber == 0)
-            tokenNumber ++;
-        else tokenNumber +=2;
-    }
-
-    /**
-     * Gets the token number.
-     *
-     * @return the token number
-     */
-    public int getTokenNumber(){
-        return tokenNumber;
-    }
 
 }

@@ -27,7 +27,7 @@ public class MainGameGuiTest {
 
     private static final Logger LOGGER = Logger.getLogger(MainGameGuiTest.class.getName());
     private GameView gameView;
-
+    @Test
     public void testMainGameGui() {
         try {
             List<String> players = new ArrayList<>();
