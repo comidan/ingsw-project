@@ -41,9 +41,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
-import static it.polimi.ingsw.sagrada.game.intercomm.EventTypeEnum.*;
-
-
 /**
  * Main game class, core class for the model of the main MVC design pattern, manage main and core functions
  */

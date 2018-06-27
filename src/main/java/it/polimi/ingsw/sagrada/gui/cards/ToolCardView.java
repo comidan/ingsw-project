@@ -35,7 +35,7 @@ public class ToolCardView extends StackPane {
     ToolCardView(int id) {
         this.id = id;
         ImageView imageView = new ImageView();
-        imageView.setImage(new Image(ToolCardView.class.getResourceAsStream(TOOL_IMAGE_ROOT_PATH + Integer.toString(id) + ".jpg"), GUIManager.getGameWidthPixel(19), GUIManager.getGameHeightPixel(25), true, false));
+        imageView.setImage(new Image(ToolCardView.class.getResourceAsStream(TOOL_IMAGE_ROOT_PATH + id + ".jpg"), GUIManager.getGameWidthPixel(19), GUIManager.getGameHeightPixel(25), true, false));
         this.getChildren().add(imageView);
         label = new Label();
         this.getChildren().add(label);

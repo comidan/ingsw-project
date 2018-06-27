@@ -68,10 +68,9 @@ public class GameGuiAdapter {
         this.gameView = gameView;
         setEndTurnHandler(client);
         setCellHandler(client);
-        setToolHandler();
         setWindowButtonHandler();
         setCardPreviewListener();
-        setDraftListener();
+        setRoundTrackClick();
     }
 
     /**
@@ -190,8 +189,6 @@ public class GameGuiAdapter {
                 //client.sendResponse(ToolEvent(toolCardView.getToolId()));
 
             });
-            setRoundTrackClick();
-
         });
     }
 
