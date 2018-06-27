@@ -89,4 +89,15 @@ public enum Colors {
             default: return "";
         }
     }
+
+    public int toInt() {
+        switch(this) {
+            case RED: return 0;
+            case YELLOW: return 1;
+            case GREEN: return 2;
+            case BLUE: return 3;
+            case PURPLE: return 4;
+            default: return -1;
+        }
+    }
 }

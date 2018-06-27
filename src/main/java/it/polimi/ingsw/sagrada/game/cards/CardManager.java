@@ -89,7 +89,7 @@ public class CardManager {
 				case "setIncrementDiceFeature": toolBuilder.setIncrementDiceFeature(); break;
 				case "setMoveIgnoringColorRuleFeature": toolBuilder.setMoveIgnoringColorRuleFeature(); break;
 				case "setMoveIgnoringValueRuleFeature": toolBuilder.setMoveIgnoringValueRuleFeature(); break;
-				default: LOGGER.log(Level.SEVERE, () -> "JSON is not correct. Check PublicObjective.json id");
+				default: LOGGER.log(Level.SEVERE, () -> "JSON is not correct. Check ToolCard.json Action Array");
 			}
 		});
 		return toolBuilder.build();
@@ -166,7 +166,7 @@ public class CardManager {
 				ObjectiveBuilder objectiveBuilder = ObjectiveRule.builder();
 				Colors color = picker.next();
 				objectiveBuilder.setColorShadeColorObjective(color);
-				cards.add(new ObjectiveCard(i, "Objective "+color.toString(), objectiveBuilder.build()));
+				cards.add(new ObjectiveCard(color.toInt(), "Objective "+color.toString(), objectiveBuilder.build()));
 			}
 		});
 		return cards;
