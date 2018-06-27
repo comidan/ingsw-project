@@ -100,13 +100,6 @@ public class CellView extends StackPane {
     }
 
     /**
-     * Removes the image.
-     */
-    public void removeImage(){
-        diceView.setImage(null);
-    }
-
-    /**
      * Gets the row.
      *
      * @return the row

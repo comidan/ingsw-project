@@ -417,6 +417,10 @@ public class GameView extends Application {
         components.add(draftView);
     }
 
+    void setShowRoundDicesHandler(EventHandler<MouseEvent> showRoundDicesHandler){
+        roundTrackView.setShowRoundDicesHandler(showRoundDicesHandler);
+    }
+
 
     /**
      * Notify turn.
@@ -471,8 +475,13 @@ public class GameView extends Application {
     }
 
     private void setRoundtrack(){
-        AnchorPane.setTopAnchor(roundTrackView, GUIManager.getGameHeightPixel(6));
-        AnchorPane.setRightAnchor(roundTrackView, GUIManager.getGameWidthPixel(4));
+        ImageView roundImage = new ImageView();
+        roundImage.setImage(new Image(RoundTrackView.class.getResourceAsStream("/images/roundtrack.png"), GUIManager.getGameWidthPixel(45), GUIManager.getGameHeightPixel(13), true, false));
+        AnchorPane.setRightAnchor(roundImage, GUIManager.getGameWidthPixel(4) );
+        AnchorPane.setTopAnchor(roundImage, GUIManager.getGameHeightPixel(6));
+        anchorPane.getChildren().add(roundImage);
+        AnchorPane.setTopAnchor(roundTrackView, GUIManager.getGameHeightPixel(9.2));
+        AnchorPane.setRightAnchor(roundTrackView, GUIManager.getGameWidthPixel(4.7));
         anchorPane.getChildren().add(roundTrackView);
 
     }

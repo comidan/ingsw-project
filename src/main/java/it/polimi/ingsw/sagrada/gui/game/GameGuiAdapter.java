@@ -9,6 +9,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
 import it.polimi.ingsw.sagrada.gui.cards.ToolCardView;
 import it.polimi.ingsw.sagrada.gui.components.CellView;
 import it.polimi.ingsw.sagrada.gui.components.DiceView;
+import it.polimi.ingsw.sagrada.gui.components.RoundCellView;
 import it.polimi.ingsw.sagrada.gui.utils.ClickedObject;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
@@ -70,7 +71,7 @@ public class GameGuiAdapter {
         setCellHandler(client);
         setWindowButtonHandler();
         setCardPreviewListener();
-        setRoundTrackClick();
+
     }
 
     /**
@@ -271,7 +272,7 @@ public class GameGuiAdapter {
                 event.consume();
                 // get from server successul drag ended
                 //if successful, then remove handler
-                diceView.removeEventHandler(MouseEvent.MOUSE_PRESSED, this);
+              //  diceView.removeEventHandler(MouseEvent.MOUSE_PRESSED, this);
 
             }
 
@@ -299,7 +300,7 @@ public class GameGuiAdapter {
                     event.consume();
                     // get from server successul drag ended
                     //if successful, then remove handler
-                    diceView.removeEventHandler(MouseEvent.MOUSE_PRESSED, this);
+               //     diceView.removeEventHandler(MouseEvent.MOUSE_PRESSED, this);
 
                 }
 
@@ -320,6 +321,7 @@ public class GameGuiAdapter {
     private void addDiceRoundtrack(List<DiceView> diceViewList, int roundNumber){
         Platform.runLater(() -> {
             this.gameView.setRoundtrackImage(diceViewList, roundNumber);
+
         });
     }
 
@@ -368,7 +370,20 @@ public class GameGuiAdapter {
         if(diceResponse.getDst().equals(CommandKeyword.DRAFT))
             setDraft(diceResponse);
         else if(diceResponse.getDst().equals(CommandKeyword.ROUND_TRACK))
-            setRoundTrack(diceResponse);
+        {setRoundTrack(diceResponse);
+        setShowRoundDicesHandler();}
+    }
+
+    void setShowRoundDicesHandler(){
+        gameView.setShowRoundDicesHandler(event -> {
+            RoundCellView roundCellView = (RoundCellView) event.getSource();
+            roundCellView.showAllDice();
+                    gameView.setShowRoundDicesHandler(eventDone -> {
+                        roundCellView.hideDice();
+                        setShowRoundDicesHandler();
+                    });
+
+        });
     }
 
     /**
@@ -381,7 +396,7 @@ public class GameGuiAdapter {
             List<DiceView> diceViews = new ArrayList<>();
             diceResponse.getDiceList().forEach(dice -> diceViews.add(new DiceView(Constraint.getColorConstraint(dice.getColor()), Constraint.getValueConstraint(dice.getValue()), dice.getId())));
             gameView.setRoundtrackImage(diceViews, currentRound);
-            setDraftListener();
+            setShowRoundDicesHandler();
         });
     }
 
