@@ -41,7 +41,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     private static final int MAX_POOL_SIZE = 4;
 
     /** The Constant TIME_WAIT_UNIT. */
-    private static final int TIME_WAIT_UNIT = 10000;
+    private static final int TIME_WAIT_UNIT = 5000;
 
     /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(MatchLobby.class.getName());

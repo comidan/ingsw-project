@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -99,6 +100,8 @@ public class GameView extends Application {
     private ImageView privateObjPrev;
 
     private ImageView windowPrev;
+
+    private Label notification;
 
     /**
      * Gets the username.
@@ -392,6 +395,7 @@ public class GameView extends Application {
         setEndTurnButton();
         setCardPreviewButtons();
         setWindowButton();
+        setNotification();
         components = new ArrayList<>();
         components.add(endTurn);
         components.add(windows.get(username));
@@ -526,6 +530,17 @@ public class GameView extends Application {
         AnchorPane.setRightAnchor(publicObjPrev, GUIManager.getGameWidthPixel(34));
         anchorPane.getChildren().addAll(toolcardPrev, privateObjPrev, publicObjPrev);
 
+    }
+
+    private void setNotification() {
+        notification = new Label();
+        AnchorPane.setTopAnchor(notification, GUIManager.getGameHeightPixel(10));
+        AnchorPane.setLeftAnchor(notification, GUIManager.getGameWidthPixel(10));
+        anchorPane.getChildren().add(notification);
+    }
+
+    public void setNotification(String message) {
+        notification.setText(message);
     }
 
     void setToolPreviewListener(EventHandler<MouseEvent> cardHandler) {

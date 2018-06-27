@@ -1,12 +1,12 @@
 package it.polimi.ingsw.sagrada.game.cards;
 
+import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 
 import java.util.*;
-import java.util.function.Function;
 
 
 /**
@@ -17,7 +17,7 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 	/** The tool cards. */
 	private List<ToolCard> toolCards;
 
-	private Function<String, Integer> getNumberToken;
+	private  Map<String, Player> players;
 
 	private DynamicRouter dynamicRouter;
 
@@ -26,9 +26,9 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 	 *
 	 * @param toolCards the tool cards
 	 */
-	public ToolManager(List<ToolCard> toolCards, Function<String, Integer>getNumberToken, DynamicRouter dynamicRouter) {
+	public ToolManager(List<ToolCard> toolCards, Map<String, Player> players, DynamicRouter dynamicRouter) {
 		this.toolCards = toolCards;
-		this.getNumberToken = getNumberToken;
+		this.players = players;
 		this.dynamicRouter = dynamicRouter;
 		this.dynamicRouter.subscribeChannel(ToolEvent.class, this);
 	}
@@ -37,30 +37,29 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 	 * Can buy tool.
 	 *
 	 * @param id the id
-	 * @param numToken - available player's tokens
+	 * @param player - player that wants to buy the tool
 	 * @return selected tool card
 	 */
-	private boolean canBuyTool(int id, int numToken) {
-		ToolCard card;
+	private boolean canBuyTool(int id, Player player) {
 		int cost;
-		int i = 0;
 
-		while(i < toolCards.size()) {
-			card = toolCards.get(i);
-			if(card.getId() == id) {
-				if(card.getUsage()==Usage.NEW) cost=1;
-				else cost=2;
+		for (ToolCard card : toolCards) {
+			if (card.getId() == id) {
+				if (card.getUsage() == Usage.NEW) cost = 1;
+				else cost = 2;
 
-				return numToken>=cost;
+				if (player.getTokens() >= cost) {
+					player.spendToken(cost);
+					return true;
+				} else return false;
 			}
-			i++;
 		}
 		return false;
 	}
 
 	@Override
 	public void dispatch(ToolEvent message) {
-		boolean result = canBuyTool(message.getToolId(), getNumberToken.apply(message.getPlayerId()));
+		boolean result = canBuyTool(message.getToolId(), players.get(message.getPlayerId()));
 		sendMessage(new ToolResponse(result, message.getPlayerId()));
 	}
 

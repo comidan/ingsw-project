@@ -128,6 +128,14 @@ public final class CommandKeyword {
   
   /** The Constant WINDOW_OPTION_TWO. */
   public static final String WINDOW_OPTION_TWO = "window_id_2";
+
+  public static final String TOKEN_ONE_FRONT = "token_one_front";
+
+  public static final String TOKEN_ONE_BACK = "token_one_back";
+
+  public static final String TOKEN_TWO_FRONT = "token_two_front";
+
+  public static final String TOKEN_TWO_BACK = "token_two_back";
   
   /** The Constant FRONT. */
   public static final String FRONT = "front";

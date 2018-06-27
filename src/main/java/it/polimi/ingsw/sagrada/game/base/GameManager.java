@@ -31,10 +31,7 @@ import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -154,18 +151,10 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      */
     private void dealToolState() {
         List<ToolCard> tools = cardManager.dealTool();
-        Function<String, Integer> getToken = this::getTokenPlayer;
-        toolManager = new ToolManager(tools, getToken, dynamicRouter);
+        toolManager = new ToolManager(tools, listToMap(players), dynamicRouter);
         List<Integer> toolCardIds = new ArrayList<>();
         tools.forEach(toolCard -> toolCardIds.add(toolCard.getId()));
         sendMessage(new ToolCardResponse(toolCardIds));
-    }
-
-    private Integer getTokenPlayer(String playerId) {
-        for(Player p:players) {
-            if(p.getId().equals(playerId)) return p.getTokens();
-        }
-        return null;
     }
 
     /**
@@ -348,6 +337,14 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             playerIterator.removePlayer(playerId);
             diceManager.setNumberOfPlayers(players.size());
         }
+    }
+
+    private Map<String, Player> listToMap(List<Player> players) {
+        Map<String, Player> map = new HashMap<>();
+        for(Player player:players) {
+            map.put(player.getId(), player);
+        }
+        return map;
     }
 
     /* (non-Javadoc)

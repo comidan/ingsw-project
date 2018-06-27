@@ -267,6 +267,10 @@ public class CommandManager implements MessageVisitor {
         for(String player : players) {
             System.out.println("Window id : " + opponentWindowResponse.getPlayerWindowId(player) + " Window side : " + opponentWindowResponse.getPlayerWindowSide(player));
             windowGameManager.addWindow(opponentWindowResponse.getPlayerWindowId(player), opponentWindowResponse.getPlayerWindowSide(player));
+            if(player.equals(username)) {
+                windowGameManager.setPlayerWindow(opponentWindowResponse.getPlayerWindowId(player), opponentWindowResponse.getPlayerWindowSide(player));
+                System.out.println("Player window");
+            }
         }
     }
 
@@ -280,6 +284,8 @@ public class CommandManager implements MessageVisitor {
                                                                     windowChoiceGuiController.getStage(),
                                                                     playerList,
                                                                     windowGameManager.getWindows()), client);
+            System.out.println("Token dati: " + windowGameManager.getToken());
+            gameGuiAdapter.setToken(windowGameManager.getToken());
             gameGuiAdapter.setToolCards(toolCardResponse.getIds());
             gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
             gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
@@ -363,6 +369,7 @@ public class CommandManager implements MessageVisitor {
 
     @Override
     public void visit(ToolResponse toolResponse) {
-        //Notify view
+        if(toolResponse.isCanBuy()) gameGuiAdapter.setNotification("Tool comprato");
+        else gameGuiAdapter.setNotification("Non hai abbastanza token!");
     }
 }

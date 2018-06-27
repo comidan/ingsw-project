@@ -481,8 +481,8 @@ public class GameGuiAdapter {
                                    opponentDiceMoveResponse.getPosition());
     }
 
-    public void setCanBuyTool() {
-
+    public void setNotification(String message) {
+        gameView.setNotification(message);
     }
 
     /**

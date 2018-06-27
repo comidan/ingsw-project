@@ -112,4 +112,12 @@ public class ConstraintGenerator {
     private boolean isNumeric(String s) {
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }
+
+    public int getToken(int id, WindowSide side) {
+        JSONObject card = (JSONObject) windowsArray.get(id);
+        JSONArray windows = (JSONArray) card.get("windows");
+        JSONObject specificWindow = (JSONObject) windows.get(WindowSide.sideToInt(side));
+        int token = ((Long)specificWindow.get("token")).intValue();
+        return token;
+    }
 }

@@ -19,6 +19,10 @@ public class WindowGameManager {
     /** The constraint generator. */
     private ConstraintGenerator constraintGenerator;
 
+    private int playerWindowId;
+
+    private WindowSide playerWindowSide;
+
     /**
      * Instantiates a new window game manager.
      */
@@ -44,5 +48,14 @@ public class WindowGameManager {
      */
     public List<Constraint[][]> getWindows() {
         return constraints;
+    }
+
+    public int getToken() {
+        return constraintGenerator.getToken(playerWindowId, playerWindowSide);
+    }
+
+    public void setPlayerWindow(int id, WindowSide side) {
+        playerWindowId = id;
+        playerWindowSide = side;
     }
 }
