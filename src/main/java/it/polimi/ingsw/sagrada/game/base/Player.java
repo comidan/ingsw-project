@@ -17,6 +17,8 @@ public class Player {
 
     private boolean connected;
 
+    private int tokens;
+
     /**
      * Instantiates a new player
      *
@@ -34,6 +36,15 @@ public class Player {
      */
     public void setWindow(Window window) {
         this.window = window;
+        tokens = window.getTokenNumber();
+    }
+
+    public int getTokens() {
+        return tokens;
+    }
+
+    public void spendToken(int amount) {
+        tokens -= amount;
     }
 
     /**

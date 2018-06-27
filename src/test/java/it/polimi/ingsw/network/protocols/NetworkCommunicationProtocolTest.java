@@ -16,6 +16,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.LobbyLoginEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
@@ -190,6 +191,11 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
         String json = messageParser.createJsonResponse(scoreResponse);
         ScoreResponse scoreResponseMessage = (ScoreResponse) JsonMessage.parseJsonData(json);
         scoreResponse.getUsernames().forEach(username -> assertEquals(scoreResponseMessage.getScore(username), scoreResponse.getScore(username)));
+        return null;
+    }
+
+    @Override
+    public String visit(ToolResponse toolResponse) {
         return null;
     }
 }

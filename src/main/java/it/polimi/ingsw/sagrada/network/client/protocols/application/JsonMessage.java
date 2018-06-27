@@ -15,6 +15,8 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RegisterEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.ErrorEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
@@ -184,6 +186,16 @@ public class JsonMessage implements ActionMessageVisitor {
         return content;
     }
 
+    private JSONObject createToolChoiceEvent(ToolEvent toolEvent) {
+        JSONObject data = new JSONObject();
+        data.put(TOOL, toolEvent.getToolId()+"");
+        data.put(PLAYER_ID, toolEvent.getPlayerId());
+        JSONObject content = new JSONObject();
+        content.put(MESSAGE_TYPE, ACTION);
+        content.put(COMMAND_TYPE, TOOL_CHOICE);
+        return content;
+    }
+
     private JSONObject createByteStreamWindowResponse(ByteStreamWindowEvent byteStreamWindowEvent) {
         JSONObject content = new JSONObject();
         content.put(USERNAME, playerId);
@@ -312,6 +324,11 @@ public class JsonMessage implements ActionMessageVisitor {
                         ranking.put((String) rank.get(USERNAME), Integer.parseInt((String) rank.get(SCORE)));
                     });
                     return new ScoreResponse(ranking);
+                case TOOL_RESPONSE :
+                    data = (JSONObject) jsonMsg.get(TOOL);
+                    boolean canBuy = Boolean.parseBoolean((String)data.get(CAN_BUY));
+                    String player = (String)data.get(PLAYER_ID);
+                    return new ToolResponse(canBuy, player);
                 default:
                     return null;
             }
@@ -363,4 +380,7 @@ public class JsonMessage implements ActionMessageVisitor {
     public String visit(Message message) {
         return CommandKeyword.ERROR;
     }
+
+    @Override
+    public String visit(ToolEvent toolEvent) { return createToolChoiceEvent(toolEvent).toJSONString();}
 }

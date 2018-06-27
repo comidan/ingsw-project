@@ -10,6 +10,8 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
@@ -124,6 +126,11 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
     }
 
     @Override
+    public String visit(ToolEvent toolEvent) {
+        return null;
+    }
+
+    @Override
     public String visit(DiceResponse diceResponse) {
         assertArrayEquals(diceList.toArray(new Dice[0]), diceResponse.getDiceList().toArray(new Dice[0]));
         assertEquals(source, diceResponse.getDst());
@@ -201,6 +208,11 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
     public String visit(ScoreResponse scoreResponse) {
         assertEquals(players.get(0), scoreResponse.getUsernames().iterator().next());
         assertEquals(score, scoreResponse.getScore(idPlayer));
+        return null;
+    }
+
+    @Override
+    public String visit(ToolResponse toolResponse) {
         return null;
     }
 }

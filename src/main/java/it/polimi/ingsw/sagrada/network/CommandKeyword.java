@@ -171,6 +171,16 @@ public final class CommandKeyword {
   /** The Constant TOOL_CARDS. */
   public static final String TOOL_CARDS = "tool_cards";
 
+  public static final String TOOL_CHOICE = "tool_choice";
+
+  public static final String TOOL_RESPONSE = "tool_response";
+
+  public static final String TOOL = "tool";
+
+  public static final String TOOL_ID = "tool_id";
+
+  public static final String CAN_BUY = "can_buy";
+
   /** The Constant SCORE. */
   public static final String SCORE = "score";
 

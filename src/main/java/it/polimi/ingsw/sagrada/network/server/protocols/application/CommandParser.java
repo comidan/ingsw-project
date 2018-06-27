@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
@@ -74,10 +75,14 @@ public class CommandParser {
                     return new ByteStreamWindowEvent(username, image);
                 case SETTINGS :  //is settings response useless?
                     return null;
+                case TOOL_CHOICE :
+                    data = (JSONObject) jsonMsg.get(TOOL);
+                    String playerId = (String)data.get(PLAYER_ID);
+                    int toolId = Integer.parseInt((String)data.get(TOOL_ID));
+                    return new ToolEvent(playerId, toolId);
                 default:
                     return null;
             }
-
         }
         catch (ParseException exc) {
             return null;

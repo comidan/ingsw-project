@@ -12,6 +12,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
@@ -177,5 +178,10 @@ public class IntercommunicationMessageVisitorTest implements MessageVisitor {
     public void visit(ScoreResponse scoreResponse) {
         assertEquals(players.get(0), scoreResponse.getUsernames().iterator().next());
         assertEquals(score, scoreResponse.getScore(idPlayer));
+    }
+
+    @Override
+    public void visit(ToolResponse toolResponse) {
+
     }
 }

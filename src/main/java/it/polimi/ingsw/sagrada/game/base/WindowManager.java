@@ -8,7 +8,6 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
-import it.polimi.ingsw.sagrada.game.playables.Token;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.game.rules.CellRule;
@@ -103,10 +102,8 @@ public class WindowManager implements Channel<WindowEvent, WindowResponse> {
         JSONObject specificWindow = (JSONObject) windows.get(WindowSide.sideToInt(side));
         String name = (String) specificWindow.get("name");
         int numTokens = ((Long) specificWindow.get("token")).intValue();
-        List<Token> tokens = new ArrayList<>();
-        IntStream.range(0, numTokens).forEach(i -> tokens.add(new Token()));
         Cell[][] cells = createCellMatrix((JSONArray) specificWindow.get("cells"));
-        return new Window(name, cells, tokens, id, side);
+        return new Window(name, cells, numTokens, id, side);
     }
 
     /**

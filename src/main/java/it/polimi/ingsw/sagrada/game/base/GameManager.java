@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -156,10 +157,18 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      */
     private void dealToolState() {
         List<ToolCard> tools = cardManager.dealTool();
-        toolManager = ToolManager.getInstance(tools);
+        Function<String, Integer> getToken = this::getTokenPlayer;
+        toolManager = new ToolManager(tools, getToken, dynamicRouter);
         List<Integer> toolCardIds = new ArrayList<>();
         tools.forEach(toolCard -> toolCardIds.add(toolCard.getId()));
         sendMessage(new ToolCardResponse(toolCardIds));
+    }
+
+    private Integer getTokenPlayer(String playerId) {
+        for(Player p:players) {
+            if(p.getId().equals(playerId)) return p.getTokens();
+        }
+        return null;
     }
 
     /**

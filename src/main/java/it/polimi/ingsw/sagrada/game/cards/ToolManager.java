@@ -1,51 +1,46 @@
 package it.polimi.ingsw.sagrada.game.cards;
 
-import it.polimi.ingsw.sagrada.game.playables.Token;
+import it.polimi.ingsw.sagrada.game.intercomm.Channel;
+import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 
 import java.util.*;
+import java.util.function.Function;
 
 
 /**
  * The Class ToolManager.
  */
-public class ToolManager {
-
-	/** The instance. */
-	private static ToolManager instance;
+public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 	
 	/** The tool cards. */
 	private List<ToolCard> toolCards;
 
+	private Function<String, Integer> getNumberToken;
+
+	private DynamicRouter dynamicRouter;
 
 	/**
 	 * Default constructor.
 	 *
 	 * @param toolCards the tool cards
 	 */
-	private ToolManager(List<ToolCard> toolCards) {
+	public ToolManager(List<ToolCard> toolCards, Function<String, Integer>getNumberToken, DynamicRouter dynamicRouter) {
 		this.toolCards = toolCards;
+		this.getNumberToken = getNumberToken;
+		this.dynamicRouter = dynamicRouter;
+		this.dynamicRouter.subscribeChannel(ToolEvent.class, this);
 	}
-
-	/**
-	 * Gets the single instance of ToolManager.
-	 *
-	 * @param toolCards the tool cards
-	 * @return single instance of ToolManager
-	 */
-	public static ToolManager getInstance(List<ToolCard> toolCards) {
-		if(instance==null) instance = new ToolManager(toolCards);
-		return instance;
-	}
-
-
+	
 	/**
 	 * Can buy tool.
 	 *
 	 * @param id the id
-	 * @param tokens - available player's tokens
+	 * @param numToken - available player's tokens
 	 * @return selected tool card
 	 */
-	public boolean canBuyTool(int id, List<Token> tokens) {
+	private boolean canBuyTool(int id, int numToken) {
 		ToolCard card;
 		int cost;
 		int i = 0;
@@ -56,11 +51,21 @@ public class ToolManager {
 				if(card.getUsage()==Usage.NEW) cost=1;
 				else cost=2;
 
-				return tokens.size()>=cost;
+				return numToken>=cost;
 			}
 			i++;
 		}
 		return false;
 	}
 
+	@Override
+	public void dispatch(ToolEvent message) {
+		boolean result = canBuyTool(message.getToolId(), getNumberToken.apply(message.getPlayerId()));
+		sendMessage(new ToolResponse(result, message.getPlayerId()));
+	}
+
+	@Override
+	public void sendMessage(ToolResponse message) {
+		dynamicRouter.dispatch(message);
+	}
 }

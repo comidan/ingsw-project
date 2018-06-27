@@ -12,7 +12,7 @@ public class Window {
 
     private String name;
     private Cell[][] cellMatrix;
-    private List<Token> tokens;
+    private int tokens;
     private int id;
     private WindowSide side;
 
@@ -25,7 +25,7 @@ public class Window {
      * @param id the id
      * @param side the side
      */
-    public Window(String name, Cell[][] cellMatrix, List<Token> tokens, int id, WindowSide side) {
+    public Window(String name, Cell[][] cellMatrix, int tokens, int id, WindowSide side) {
         this.name = name;
         this.cellMatrix = cellMatrix;
         this.tokens = tokens;
@@ -71,9 +71,7 @@ public class Window {
      *
      * @return the token number
      */
-    public int getTokenNumber() {
-        return tokens.size();
-    }
+    public int getTokenNumber() { return tokens; }
 
     /**
      * Gets the name.

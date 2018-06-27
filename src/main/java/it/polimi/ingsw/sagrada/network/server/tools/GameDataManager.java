@@ -15,6 +15,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
@@ -65,6 +66,7 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         dynamicRouter.subscribeChannel(NewTurnResponse.class, this);
         dynamicRouter.subscribeChannel(ToolCardResponse.class, this);
         dynamicRouter.subscribeChannel(ScoreResponse.class, this);
+        dynamicRouter.subscribeChannel(ToolResponse.class, this);
     }
 
     /* (non-Javadoc)
@@ -260,6 +262,15 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
     @Override
     public void visit(ScoreResponse scoreResponse) {
         sendRemoteMessage(scoreResponse, filter -> anyone());
+    }
+
+    @Override
+    public void visit(ToolResponse toolResponse) {
+        try {
+            getClient(toolResponse.getIdPlayer()).sendResponse(toolResponse);
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong sending tool response");
+        }
     }
 
     /**

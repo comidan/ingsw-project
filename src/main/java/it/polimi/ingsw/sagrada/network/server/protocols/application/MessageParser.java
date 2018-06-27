@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
+import com.sun.org.apache.regexp.internal.RE;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
@@ -10,6 +11,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor;
@@ -254,6 +256,17 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    private String createJsonToolResponse(ToolResponse toolResponse) {
+        JSONObject data = new JSONObject();
+        data.put(PLAYER_ID, toolResponse.getIdPlayer());
+        data.put(CAN_BUY, toolResponse.isCanBuy() + "");
+        JSONObject container = new JSONObject();
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, TOOL_RESPONSE);
+        container.put(TOOL, data);
+        return container.toJSONString();
+    }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */
@@ -349,7 +362,8 @@ public class MessageParser implements ResponseMessageVisitor {
      * @return the string
      */
     @Override
-    public String visit(ScoreResponse scoreResponse) {
-        return createJsonScoreResponse(scoreResponse);
-    }
+    public String visit(ScoreResponse scoreResponse) { return createJsonScoreResponse(scoreResponse); }
+
+    @Override
+    public String visit(ToolResponse toolResponse) { return createJsonToolResponse(toolResponse);}
 }

@@ -469,6 +469,10 @@ public class GameGuiAdapter {
                                    opponentDiceMoveResponse.getPosition());
     }
 
+    public void setCanBuyTool() {
+
+    }
+
     /**
      * Sets the round.
      *
