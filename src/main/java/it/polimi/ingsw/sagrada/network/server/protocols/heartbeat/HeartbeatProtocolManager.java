@@ -51,18 +51,22 @@ public class HeartbeatProtocolManager implements Observer<HeartbeatState, Heartb
      *
      * @param hostId the host id
      * @param port the port
+     * @return true if host added as monitored host
      */
-    public void addHost(String hostId, int port) {
+    public boolean addHost(String hostId, int port) {
         try {
             if (monitoredHosts.get(hostId) == null) {
                 HeartbeatProtocol heartbeatProtocol = new HeartbeatProtocol(port, this, hostId);
                 monitoredHosts.put(hostId, heartbeatProtocol);
                 executor.submit(heartbeatProtocol);
                 listener.onAcquiredCommunication(new HeartbeatEvent(hostId, 0, new Date().getTime()));
+                return true;
             }
+            return false;
         }
         catch (IOException exc) {
-            LOGGER.log(Level.SEVERE, () -> exc.getMessage());
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+            return false;
         }
     }
 

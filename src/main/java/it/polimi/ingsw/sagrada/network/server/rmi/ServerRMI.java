@@ -111,7 +111,7 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private synchronized MatchLobby joinUserLobby(String clientIdToken) throws IOException{
-        availableLobby = lobbyPool.getAvailableLobby();
+        availableLobby = lobbyPool.getAvailableLobby(clientIdToken);
         availableLobby.addClient(clientIdToken);
         return availableLobby;
     }

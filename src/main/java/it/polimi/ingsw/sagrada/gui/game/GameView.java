@@ -410,6 +410,8 @@ public class GameView extends Application {
         components.add(endTurn);
         components.add(windows.get(username));
         Scene scene = new Scene(anchorPane, GUIManager.getGameWindowWidth(), GUIManager.getGameWindowHeight());
+        if(primaryStage == null)
+            primaryStage = new Stage();
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
@@ -474,7 +476,7 @@ public class GameView extends Application {
         windows.get(username).setDice(dice, position);
     }
 
-    public void setWindowButtonHandler(EventHandler<MouseEvent> windowButtonHandler){
+    void setWindowButtonHandler(EventHandler<MouseEvent> windowButtonHandler){
       windowPrev.setOnMouseClicked(windowButtonHandler);
     }
 

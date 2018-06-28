@@ -32,7 +32,7 @@ public class ScoreTrackTest {
         players.add(new Player("Ingconti"));
         players.add(new Player("Izzo"));
         DynamicRouter dynamicRouter = new MessageDispatcher();
-        GameManager gameManager = new GameManager(players, dynamicRouter);
+        GameManager gameManager = new GameManager(players, dynamicRouter, null);
 
         WindowManager windowManager = new WindowManager(gameManager.getDispatchReference(), dynamicRouter);
         Window window = windowManager.generateWindow(0, WindowSide.FRONT);

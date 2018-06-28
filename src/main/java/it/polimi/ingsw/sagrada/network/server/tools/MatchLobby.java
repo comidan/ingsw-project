@@ -24,6 +24,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -110,7 +111,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public MatchLobby(Function<String, Boolean> signOut, String identifier) throws IOException {
-        clientPool = new HashMap<>();
+        clientPool = new ConcurrentHashMap<>();
         clientLinkState = new HashMap<>();
         clientTCPLinkEstablished = new HashMap<>();
         portDiscovery = new PortDiscovery();
@@ -146,6 +147,10 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         return clientPool.size() == MAX_POOL_SIZE;
     }
 
+    boolean wasHere(String username) {
+        return clientIdTokens.contains(username);
+    }
+
     /**
      * Checks if is in game.
      *
@@ -160,7 +165,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      */
     @Override
     public void addClient(String clientID) {
-        clientIdTokens.add(clientID);
+        if(!clientIdTokens.contains(clientID))
+            clientIdTokens.add(clientID);
     }
 
     /**
@@ -202,8 +208,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             gameManager.removePlayer(username);
         clientPool.remove(username);
         clientIds.remove(username);
-        clientIdTokens.remove(username);
-        heartbeatProtocolManager.removeFromMonitoredHost(username);
+        if(clientTCPLinkEstablished.get(username))
+            heartbeatProtocolManager.removeFromMonitoredHost(username);
         System.out.println(username + " disconnected");
         clientIds.forEach(clientId -> {
             try {
@@ -320,6 +326,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             }
         });
         clientTCPLinkEstablished.put(token, true);
+        if(inGame)
+            gameManager.updateClientState(token);
         return true;
     }
 
@@ -333,22 +341,24 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                 Socket client = serverSocket.accept();
                 int tokenIndex = DataManager.tokenAuthentication(clientIdTokens, client);
                 if(tokenIndex != -1) {
-                    String id = clientIdTokens.remove(tokenIndex);
+                    String id = clientIdTokens.get(tokenIndex);
                     Function<String, Boolean> disconnect = this::removePlayer;
                     Function<String, Boolean> fastRecovery = this::fastRecoveryClientConnection;
                     Consumer<Message> sendToModel = this::sendToModel;
                     RemoteSocketClient socketClient = new RemoteSocketClient(client, id, disconnect, fastRecovery, sendToModel);
-                    if(!clientIds.contains(id)) { //in case of communication loss
+                    if(!clientIds.contains(id)) {
                         clientIds.add(id);
                         int heartbeatPort = portDiscovery.obtainAvailableUDPPort();
-                        DataManager.sendLoginLobbyResponse(client, heartbeatPort);
-                        heartbeatProtocolManager.addHost(id, heartbeatPort);
+                        if(heartbeatProtocolManager.addHost(id, heartbeatPort))
+                            DataManager.sendLoginLobbyResponse(client, heartbeatPort);
                     }
                     clientPool.put(id, socketClient);
                     executor.submit(socketClient);
                     for(String username : clientIds)
                         clientPool.get(id).setPlayer(username);
                     clientTCPLinkEstablished.put(id, true);
+                    if(inGame)
+                        gameManager.updateClientState(id);
                 }
                 else
                     DataManager.sendLoginError(client);
@@ -392,7 +402,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         clientIds.forEach(username -> players.add(new Player(username)));
         dynamicRouter = new MessageDispatcher();
         gameDataManager = new GameDataManager(dynamicRouter, clientPool);
-        gameManager = new GameManager(players, dynamicRouter);
+        gameManager = new GameManager(players, dynamicRouter, gameDataManager::fastRecoveryDispatch);
         gameManager.startGame();
     }
 
@@ -449,6 +459,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                 sendPayload("Starting game...\nWaiting players...");
                 startGame();
             }
+            else
+                checkGameStart.submit(new CheckStartGameCondition());
         }
     }
 }

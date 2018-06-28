@@ -475,9 +475,10 @@ public class GameGuiAdapter {
      * @param opponentDiceMoveResponse the new opponent dice response
      */
     public void setOpponentDiceResponse(OpponentDiceMoveResponse opponentDiceMoveResponse) {
-        gameView.setOpponentWindow(opponentDiceMoveResponse.getIdPlayer(),
-                                   opponentDiceMoveResponse.getDice(),
-                                   opponentDiceMoveResponse.getPosition());
+        Platform.runLater(() -> gameView.setOpponentWindow(opponentDiceMoveResponse.getIdPlayer(),
+                                        opponentDiceMoveResponse.getDice(),
+                                        opponentDiceMoveResponse.getPosition()));
+
     }
 
     public void setNotification(String message) {

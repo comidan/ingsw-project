@@ -85,6 +85,10 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         dynamicRouter.dispatch(message);
     }
 
+    public void fastRecoveryDispatch(Message message, String username) {
+        sendRemoteMessage(message, filter -> filter.equals(getClient(username)));
+    }
+
     /**
      * Gets the client.
      *
@@ -101,7 +105,7 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
      * @param message the message
      * @param filter the filter
      */
-    private void sendRemoteMessage(Message message, Function<Client, Boolean> filter) {
+    private synchronized void sendRemoteMessage(Message message, Function<Client, Boolean> filter) {
         Iterator itr = clientMap.entrySet().iterator();
         while(itr.hasNext()) {
             Map.Entry pair = (Map.Entry)itr.next();

@@ -232,6 +232,6 @@ public class LobbyGuiView {
      * @return the stage
      */
     public Stage getStage() {
-        return (Stage) timer.getScene().getWindow();
+        return stage;
     }
 }

@@ -28,7 +28,7 @@ public class GameManagerTest {
 
         players.add(playerOne);
         players.add(playerTwo);
-        gameManager = new GameManager(players, dynamicRouter);
+        gameManager = new GameManager(players, dynamicRouter, null);
         assertTrue(gameManager.getPlayerNumber() > 0);
         gameManager.startGame();
         assertEquals(StateGameEnum.DEAL_WINDOWS, gameManager.getCurrentState());

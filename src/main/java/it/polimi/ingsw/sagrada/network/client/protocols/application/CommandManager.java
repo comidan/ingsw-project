@@ -10,7 +10,6 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -27,6 +26,7 @@ import it.polimi.ingsw.sagrada.gui.windows.WindowChoiceGuiController;
 import it.polimi.ingsw.sagrada.gui.windows.WindowGameManager;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
+import javafx.stage.Stage;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -74,6 +74,8 @@ public class CommandManager implements MessageVisitor {
     
     /** The username. */
     private static String username;
+
+    private static Stage stage;
     
     /** The private objective response. */
     private PrivateObjectiveResponse privateObjectiveResponse;
@@ -96,6 +98,11 @@ public class CommandManager implements MessageVisitor {
      */
     public static void setLobbyGuiView(LobbyGuiView lobbyGuiView) {
         CommandManager.lobbyGuiView = lobbyGuiView;
+        stage = lobbyGuiView.getStage();
+    }
+
+    public static void setFutureStage(Stage stage) {
+        CommandManager.stage = stage;
     }
 
     /**
@@ -206,7 +213,7 @@ public class CommandManager implements MessageVisitor {
     public void visit(BeginTurnEvent beginTurnEvent) {
         if (gameGuiAdapter == null) {
             gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
-                                                                    windowChoiceGuiController.getStage(),
+                                                                    stage,
                                                                     playerList,
                                                                     windowGameManager.getWindows()), client);
             gameGuiAdapter.setToolCards(toolCardResponse.getIds(), client);
@@ -251,6 +258,7 @@ public class CommandManager implements MessageVisitor {
     @Override
     public void visit(WindowResponse windowResponse) {
         windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView(windowResponse, lobbyGuiView.getStage()), client);
+        stage = windowChoiceGuiController.getStage();
     }
 
     /* (non-Javadoc)
@@ -260,6 +268,7 @@ public class CommandManager implements MessageVisitor {
     public void visit(OpponentWindowResponse opponentWindowResponse) {
         if(windowGameManager == null)
             windowGameManager = new WindowGameManager();
+        windowGameManager.getWindows().clear();
         List<String> players = opponentWindowResponse.getPlayers();
         for(String player : players) {
             System.out.println("Window id : " + opponentWindowResponse.getPlayerWindowId(player) + " Window side : " + opponentWindowResponse.getPlayerWindowSide(player));
@@ -278,7 +287,7 @@ public class CommandManager implements MessageVisitor {
     public void visit(DiceResponse diceResponse) {
         if (gameGuiAdapter == null) {
             gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
-                                                                    windowChoiceGuiController.getStage(),
+                                                                    stage,
                                                                     playerList,
                                                                     windowGameManager.getWindows()), client);
             System.out.println("Token dati: " + windowGameManager.getToken());

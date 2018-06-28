@@ -27,7 +27,7 @@ public class PlayerIterator implements Iterator<String> {
      * @param players players list as strings
      */
     public PlayerIterator(List<String> players) {
-        this.players = players;
+        this.players = new ArrayList<>(players);
         turnIteration  = new ArrayList<>();
         int size = players.size();
         IntStream.range(0, size - 1).forEach(i -> this.players.add(players.get(i)));
@@ -83,6 +83,19 @@ public class PlayerIterator implements Iterator<String> {
     public void removePlayer(String playerId) {
         synchronized (players) {
             players.remove(playerId);
+            numPlayer = players.size();
+            getRoundSequence();
+        }
+    }
+
+    /**
+     * Adds player from iteration and coming up rounds. Called only by a direct order from above.
+     *
+     * @param playerId player's id which is going to be added
+     */
+    public void addPlayer(String playerId) {
+        synchronized (players) {
+            players.add(playerId);
             numPlayer = players.size();
             getRoundSequence();
         }

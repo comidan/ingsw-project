@@ -156,7 +156,6 @@ public class LoginGuiView extends Application {
         FXMLLoader loaderLogin = new FXMLLoader(getClass().getResource("/templates/LoginGui.fxml"));
         Parent root = loaderLogin.load();
         LoginGuiView loginGuiView = loaderLogin.getController();
-        new LoginGuiAdapter(loginGuiView);
         loginGuiView.setRadioGroup();
         window.setTitle("SagradaClient");
         window.setResizable(false);
@@ -181,8 +180,8 @@ public class LoginGuiView extends Application {
         AnchorPane.setBottomAnchor(socketRadioButton, getHeightPixel(31));
         rmiRadiobutton = (RadioButton) scene.lookup("#rmiRadiobutton");
         AnchorPane.setBottomAnchor(rmiRadiobutton, getHeightPixel(31));
-
         window.show();
+        new LoginGuiAdapter(loginGuiView);
     }
 
     /**

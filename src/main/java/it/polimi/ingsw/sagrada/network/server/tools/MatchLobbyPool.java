@@ -29,9 +29,9 @@ public class MatchLobbyPool {
      * @return the available lobby
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public MatchLobby getAvailableLobby() throws IOException {
+    public MatchLobby getAvailableLobby(String username) throws IOException {
         MatchLobby availableLobby = null;
-        Optional<MatchLobby> findMatch = lobbyPool.stream().findAny().filter(lobby -> !lobby.isFull()).filter(lobby -> !lobby.isInGame());
+        Optional<MatchLobby> findMatch = lobbyPool.stream().findAny().filter(lobby -> !lobby.isFull()).filter(lobby -> !lobby.isInGame() || lobby.wasHere(username));
         if(findMatch.isPresent())
             availableLobby = findMatch.get();
         if(availableLobby == null) {

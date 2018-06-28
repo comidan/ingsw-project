@@ -32,6 +32,7 @@ import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
 
 import java.sql.Date;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,6 +49,14 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     private final long START_TIME = new java.util.Date().getTime();
 
     private List<Player> players;
+
+    private List<String> playersId;
+
+    private List<ObjectiveCard> privateObjective;
+
+    private List<ToolCard> tools;
+
+    private List<ObjectiveCard> publicObjective;
 
     private DiceManager diceManager;
 
@@ -77,21 +86,24 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
 
     private Timer playTime;
 
+    private BiConsumer<Message, String> fastRecoveryDispatch;
+
     /**
      * Instantiates a new game manager.
      *
      * @param players the players
      * @param dynamicRouter the dynamic router dispatching message
      */
-    public GameManager(List<Player> players, DynamicRouter dynamicRouter) {
+    public GameManager(List<Player> players, DynamicRouter dynamicRouter, BiConsumer<Message, String> fastRecoveryDispatch) {
         Consumer<Message> function = this::dispatch;
         this.players = players;
+        this.fastRecoveryDispatch = fastRecoveryDispatch;
         cardManager = new CardManager();
         diceManager = new DiceManager(players.size(), function, dynamicRouter);
         windowManager = new WindowManager(function, dynamicRouter);
         ruleManager = new RuleManager();
         roundTrack = new RoundTrack(dynamicRouter);
-        List<String> playersId = new ArrayList<>();
+        playersId = new ArrayList<>();
         players.forEach(p -> playersId.add(p.getId()));
         playerIterator = new PlayerIterator(playersId);
         dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
@@ -139,7 +151,6 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      * Distribute private objectives
      */
     private void dealPrivateObjectiveState() {
-        List<ObjectiveCard> privateObjective;
         privateObjective = cardManager.dealPrivateObjective(players.size());
         IntStream.range(0, players.size()).forEach(i -> {
             players.get(i).setPrivateObjectiveCard(privateObjective.get(i));
@@ -151,7 +162,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      * Distribute tools
      */
     private void dealToolState() {
-        List<ToolCard> tools = cardManager.dealTool();
+        tools = cardManager.dealTool();
         toolManager = new ToolManager(tools, listToMap(players), dynamicRouter);
         List<Integer> toolCardIds = new ArrayList<>();
         tools.forEach(toolCard -> toolCardIds.add(toolCard.getId()));
@@ -162,7 +173,6 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      * Distribute public objectives
      */
     private void dealPublicObjectiveState() {
-        List<ObjectiveCard> publicObjective;
         publicObjective = cardManager.dealPublicObjective();
         scoreTrack = ScoreTrack.getScoreTrack(publicObjective);
         List<Integer> publicObjectiveIds = new ArrayList<>();
@@ -337,10 +347,8 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      * @param playerId username
      */
     public void removePlayer(String playerId) {
-        synchronized (players) {
-            players.removeIf(player -> player.getId().equals(playerId));
+        synchronized (playerIterator) {
             playerIterator.removePlayer(playerId);
-            diceManager.setNumberOfPlayers(players.size());
         }
     }
 
@@ -350,6 +358,45 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             map.put(player.getId(), player);
         }
         return map;
+    }
+
+    public void updateClientState(String username) {
+        int index = playersId.indexOf(username);
+        sendMessage(new PrivateObjectiveResponse(privateObjective.get(index).getId(), players.get(index).getId()));
+
+        List<Integer> toolCardIds = new ArrayList<>();
+        tools.forEach(toolCard -> toolCardIds.add(toolCard.getId()));
+        fastRecoveryDispatch.accept(new ToolCardResponse(toolCardIds), username);
+
+        List<Integer> publicObjectiveIds = new ArrayList<>();
+        publicObjective.forEach(objectiveCard -> publicObjectiveIds.add(objectiveCard.getId()));
+        fastRecoveryDispatch.accept(new PublicObjectiveResponse(publicObjectiveIds), username);
+
+        List<Integer> windowsId = new ArrayList<>();
+        List<WindowSide> sides = new ArrayList<>();
+        List<String> usernames = new ArrayList<>();
+        players.forEach(p -> windowsId.add(p.getWindow().getId()));
+        players.forEach(p -> sides.add(p.getWindow().getSide()));
+        players.forEach(p -> usernames.add(p.getId()));
+        fastRecoveryDispatch.accept(new OpponentWindowResponse(usernames, windowsId, sides), username);
+
+        fastRecoveryDispatch.accept(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(diceManager.getDraft())), username);
+
+        sendWindowsState(username);
+
+        synchronized (playerIterator) {
+            playerIterator.addPlayer(username);
+        }
+    }
+
+    private void sendWindowsState(String username) {
+        players.forEach(player -> {
+            Cell[][] matrix = player.getWindow().getCellMatrix();
+            for(int i = 0; i < matrix.length; i++)
+                for(int j = 0; j < matrix[i].length; j++)
+                    if(matrix[i][j].isOccupied())
+                        fastRecoveryDispatch.accept(new OpponentDiceMoveResponse(player.getId(), matrix[i][j].getCurrentDice(), new Position(i, j)), username);
+        });
     }
 
     /* (non-Javadoc)

@@ -166,7 +166,7 @@ public class SocketServer implements Runnable, Server {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private synchronized int joinUserLobby(String clientIdToken) throws IOException{
-        MatchLobby availableLobby = lobbyPool.getAvailableLobby();
+        MatchLobby availableLobby = lobbyPool.getAvailableLobby(clientIdToken);
         availableLobby.addClient(clientIdToken);
         return availableLobby.getPort();
     }

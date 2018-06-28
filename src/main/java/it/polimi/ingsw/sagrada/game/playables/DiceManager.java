@@ -166,8 +166,8 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     }
 
     public void moveDiceFromDraftToBag(Dice diceFromDraft) {
-            draftPool.remove(diceFromDraft);
-            bagPool.add(diceFromDraft);
+        draftPool.remove(diceFromDraft);
+        bagPool.add(diceFromDraft);
     }
 
     public void rollDraft() {

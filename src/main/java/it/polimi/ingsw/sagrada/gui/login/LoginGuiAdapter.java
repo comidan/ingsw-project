@@ -43,6 +43,7 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
      */
     LoginGuiAdapter(LoginGuiView loginGuiView) {
         dynamicRouter.subscribeChannel(LoginState.class, this);
+        CommandManager.setFutureStage(loginGuiView.getWindow());
         LoginGuiAdapter.loginGuiView = loginGuiView;
         LoginGuiAdapter.loginGuiView.addLoginButtonListener(event -> {
             if(loginGuiView.isCredentialCorrect()) {
