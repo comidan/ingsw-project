@@ -485,7 +485,7 @@ public class GameGuiAdapter {
     }
 
     public void removeToken(int num) {
-        gameView.removeToken(num);
+        Platform.runLater(()-> gameView.removeToken(num));
     }
 
     /**

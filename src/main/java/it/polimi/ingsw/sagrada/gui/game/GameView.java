@@ -546,7 +546,7 @@ public class GameView extends Application {
         notification.setFont(Font.font("System", FontWeight.BOLD, GUIManager.getResizedFont(GUIManager.TITLE_2)));
         notification.setStyle("-fx-background-color: #d57322;"
         );
-        AnchorPane.setTopAnchor(notification, GUIManager.getGameHeightPixel(11));
+        AnchorPane.setTopAnchor(notification, GUIManager.getGameHeightPixel(7));
         AnchorPane.setLeftAnchor(notification, GUIManager.getGameWidthPixel(4));
         anchorPane.getChildren().add(notification);
     }

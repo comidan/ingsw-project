@@ -371,7 +371,7 @@ public class CommandManager implements MessageVisitor {
     public void visit(ToolResponse toolResponse) {
         if(toolResponse.isCanBuy()) {
             gameGuiAdapter.setNotification("Tool comprato");
-            //gameGuiAdapter.removeToken(toolResponse.getTokenSpent());
+            gameGuiAdapter.removeToken(toolResponse.getTokenSpent());
         }
         else gameGuiAdapter.setNotification("Non hai abbastanza token!");
     }
