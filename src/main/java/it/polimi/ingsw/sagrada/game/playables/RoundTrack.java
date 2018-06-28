@@ -54,7 +54,7 @@ public class RoundTrack implements Channel<DiceEvent, DiceResponse> {
      * @return the dice from round
      */
     public Dice getDiceFromRound(Colors color, int round) {
-        for (Dice dice : roundDice.get(round)) {
+        for (Dice dice : roundDice.get(round - 1)) {
             if (dice.getColor() == color)
                 return dice;
         }
@@ -69,7 +69,7 @@ public class RoundTrack implements Channel<DiceEvent, DiceResponse> {
      * @param round    - round reference
      */
     public void addDice(List<Dice> diceList, int round) {
-        diceList.forEach(roundDice.get(round)::add);
+        diceList.forEach(roundDice.get(round - 1)::add);
     }
 
     /**
