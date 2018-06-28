@@ -486,6 +486,10 @@ public class GameGuiAdapter {
         Platform.runLater(() -> gameView.setNotification(message));
     }
 
+    public void removeToken(int num) {
+        gameView.removeToken(num);
+    }
+
     /**
      * Sets the round.
      *

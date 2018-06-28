@@ -260,6 +260,7 @@ public class MessageParser implements ResponseMessageVisitor {
         JSONObject data = new JSONObject();
         data.put(PLAYER_ID, toolResponse.getIdPlayer());
         data.put(CAN_BUY, toolResponse.isCanBuy() + "");
+        data.put(COST, toolResponse.getTokenSpent() + "");
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, RESPONSE);
         container.put(COMMAND_TYPE, TOOL_RESPONSE);

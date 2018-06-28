@@ -189,6 +189,8 @@ public final class CommandKeyword {
 
   public static final String CAN_BUY = "can_buy";
 
+  public static final String COST = "cost";
+
   /** The Constant SCORE. */
   public static final String SCORE = "score";
 

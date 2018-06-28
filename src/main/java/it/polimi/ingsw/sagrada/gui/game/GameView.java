@@ -8,6 +8,8 @@ import it.polimi.ingsw.sagrada.gui.components.*;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import it.polimi.ingsw.sagrada.gui.windows.WindowView;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
@@ -24,7 +26,10 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
@@ -44,6 +49,8 @@ import java.util.logging.Logger;
  * The Class GameView.
  */
 public class GameView extends Application {
+    private static final int NOTIFICATION_TIME = 3000;
+    private boolean notifying = false;
 
     private static final Logger LOGGER = Logger.getLogger(GameView.class.getName());
 
@@ -289,7 +296,7 @@ public class GameView extends Application {
         }
 
         AnchorPane.setTopAnchor(tokenGrid, GUIManager.getGameHeightPixel(10));
-        AnchorPane.setLeftAnchor(tokenGrid, GUIManager.getGameWidthPixel(9));
+        AnchorPane.setLeftAnchor(tokenGrid, GUIManager.getGameWidthPixel(15));
         anchorPane.getChildren().addAll(tokenGrid);
 
     }
@@ -534,13 +541,26 @@ public class GameView extends Application {
 
     private void setNotification() {
         notification = new Label();
-        AnchorPane.setTopAnchor(notification, GUIManager.getGameHeightPixel(10));
-        AnchorPane.setLeftAnchor(notification, GUIManager.getGameWidthPixel(10));
+        notification.setAlignment(Pos.CENTER);
+        notification.setTextFill(Color.web("#000000"));
+        notification.setFont(Font.font("System", FontWeight.BOLD, GUIManager.getResizedFont(GUIManager.TITLE_2)));
+        notification.setStyle("-fx-background-color: #d57322;"
+        );
+        AnchorPane.setTopAnchor(notification, GUIManager.getGameHeightPixel(11));
+        AnchorPane.setLeftAnchor(notification, GUIManager.getGameWidthPixel(4));
         anchorPane.getChildren().add(notification);
     }
 
     public void setNotification(String message) {
         notification.setText(message);
+        if(!notifying) {
+            notifying=true;
+            Timeline timeline = new Timeline(new KeyFrame(
+                    Duration.millis(NOTIFICATION_TIME),
+                    ae -> setNotification("")));
+            timeline.play();
+        }
+        else notifying=false;
     }
 
     void setToolPreviewListener(EventHandler<MouseEvent> cardHandler) {

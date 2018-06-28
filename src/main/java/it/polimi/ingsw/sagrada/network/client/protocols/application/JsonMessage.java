@@ -327,9 +327,11 @@ public class JsonMessage implements ActionMessageVisitor {
                     return new ScoreResponse(ranking);
                 case TOOL_RESPONSE :
                     data = (JSONObject) jsonMsg.get(TOOL);
+                    int cost = Integer.parseInt((String)data.get(COST));
+                    System.out.println(cost);
                     boolean canBuy = Boolean.parseBoolean((String)data.get(CAN_BUY));
                     String player = (String)data.get(PLAYER_ID);
-                    return new ToolResponse(canBuy, player);
+                    return new ToolResponse(canBuy, player, cost);
                 default:
                     return null;
             }

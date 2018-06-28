@@ -21,6 +21,8 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 
 	private DynamicRouter dynamicRouter;
 
+	private int cost;
+
 	/**
 	 * Default constructor.
 	 *
@@ -41,7 +43,7 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 	 * @return selected tool card
 	 */
 	private boolean canBuyTool(int id, Player player) {
-		int cost;
+		cost=0;
 
 		for (ToolCard card : toolCards) {
 			if (card.getId() == id) {
@@ -52,7 +54,10 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 					card.setUsage(Usage.USED);
 					player.spendToken(cost);
 					return true;
-				} else return false;
+				} else {
+					cost=0;
+					return false;
+				}
 			}
 		}
 		return false;
@@ -61,7 +66,7 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 	@Override
 	public void dispatch(ToolEvent message) {
 		boolean result = canBuyTool(message.getToolId(), players.get(message.getPlayerId()));
-		sendMessage(new ToolResponse(result, message.getPlayerId()));
+		sendMessage(new ToolResponse(result, message.getPlayerId(), 1));
 	}
 
 	@Override
