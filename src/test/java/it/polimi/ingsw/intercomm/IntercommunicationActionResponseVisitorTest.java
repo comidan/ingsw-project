@@ -215,4 +215,14 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
     public String visit(ToolResponse toolResponse) {
         return null;
     }
+
+    @Override
+    public String visit(EndTurnResponse endTurnResponse) {
+        return null;
+    }
+
+    @Override
+    public String visit(TimeRemainingResponse timeRemainingResponse) {
+        return null;
+    }
 }

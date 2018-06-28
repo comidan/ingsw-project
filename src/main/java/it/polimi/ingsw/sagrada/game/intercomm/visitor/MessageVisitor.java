@@ -6,10 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveRespon
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
@@ -137,5 +134,24 @@ public interface MessageVisitor {
      */
     void visit(ScoreResponse scoreResponse);
 
+    /**
+     * Visit.
+     *
+     * @param toolResponse the tool response
+     */
     void visit(ToolResponse toolResponse);
+
+    /**
+     * Visit.
+     *
+     * @param endTurnResponse the force end turn response
+     */
+    void visit(EndTurnResponse endTurnResponse);
+
+    /**
+     * Visit.
+     *
+     * @param timeRemainingResponse the time remaining response
+     */
+    void visit(TimeRemainingResponse timeRemainingResponse);
 }

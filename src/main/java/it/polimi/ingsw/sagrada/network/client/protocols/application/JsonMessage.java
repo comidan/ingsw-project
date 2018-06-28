@@ -332,6 +332,12 @@ public class JsonMessage implements ActionMessageVisitor {
                     boolean canBuy = Boolean.parseBoolean((String)data.get(CAN_BUY));
                     String player = (String)data.get(PLAYER_ID);
                     return new ToolResponse(canBuy, player, cost);
+                case END_TURN :
+                    data = (JSONObject) jsonMsg.get(END_TURN);
+                    return new EndTurnResponse((String) data.get(USERNAME));
+                case TIME :
+                    data = (JSONObject) jsonMsg.get(TIME);
+                    return new TimeRemainingResponse((String) data.get(USERNAME), Integer.parseInt((String) data.get(TIME)));
                 default:
                     return null;
             }

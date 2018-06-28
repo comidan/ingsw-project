@@ -8,10 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveRespon
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.LobbyLoginEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
@@ -196,6 +193,16 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
 
     @Override
     public String visit(ToolResponse toolResponse) {
+        return null;
+    }
+
+    @Override
+    public String visit(EndTurnResponse endTurnResponse) {
+        return null;
+    }
+
+    @Override
+    public String visit(TimeRemainingResponse timeRemainingResponse) {
         return null;
     }
 }

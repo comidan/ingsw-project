@@ -497,7 +497,9 @@ public class GameGuiAdapter {
         currentRound = round;
     }
 
-
+    public void setTimeRemaining(int time) {
+        Platform.runLater(() -> gameView.setTimeRemaining(time));
+    }
 
     public Stage getStage() {
         return gameView.getStage();

@@ -8,10 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveRespon
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
@@ -67,6 +64,8 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         dynamicRouter.subscribeChannel(ToolCardResponse.class, this);
         dynamicRouter.subscribeChannel(ScoreResponse.class, this);
         dynamicRouter.subscribeChannel(ToolResponse.class, this);
+        dynamicRouter.subscribeChannel(EndTurnResponse.class, this);
+        dynamicRouter.subscribeChannel(TimeRemainingResponse.class, this);
     }
 
     /* (non-Javadoc)
@@ -271,6 +270,16 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, "Something went wrong sending tool response");
         }
+    }
+
+    @Override
+    public void visit(EndTurnResponse endTurnResponse) {
+        sendRemoteMessage(endTurnResponse, filter -> filter.equals(getClient(endTurnResponse.getUsername())));
+    }
+
+    @Override
+    public void visit(TimeRemainingResponse timeRemainingResponse) {
+        sendRemoteMessage(timeRemainingResponse, filter -> filter.equals(getClient(timeRemainingResponse.getUsername())));
     }
 
     /**

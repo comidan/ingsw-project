@@ -110,6 +110,8 @@ public class GameView extends Application {
 
     private Label notification;
 
+    private Label timer;
+
     /**
      * Gets the username.
      *
@@ -403,6 +405,7 @@ public class GameView extends Application {
         setCardPreviewButtons();
         setWindowButton();
         setNotification();
+        setTimer();
         components = new ArrayList<>();
         components.add(endTurn);
         components.add(windows.get(username));
@@ -438,6 +441,7 @@ public class GameView extends Application {
      */
     void notifyTurn() {
         components.forEach(node -> node.setDisable(false));
+        timer.setVisible(true);
     }
 
     /**
@@ -454,6 +458,8 @@ public class GameView extends Application {
      * Notify end turn.
      */
     void notifyEndTurn() {
+        timer.setText("");
+        timer.setVisible(false);
         components.forEach(node -> node.setDisable(true));
     }
 
@@ -551,7 +557,23 @@ public class GameView extends Application {
         anchorPane.getChildren().add(notification);
     }
 
-    public void setNotification(String message) {
+    private void setTimer() {
+        timer = new Label();
+        timer.setAlignment(Pos.CENTER);
+        timer.setTextFill(Color.web("#000000"));
+        timer.setFont(Font.font("System", FontWeight.BOLD, GUIManager.getResizedFont(GUIManager.TITLE_2)));
+        timer.setStyle("-fx-background-color: #d57322;");
+        AnchorPane.setTopAnchor(timer, GUIManager.getGameHeightPixel(11));
+        AnchorPane.setLeftAnchor(timer, GUIManager.getGameWidthPixel(4));
+        anchorPane.getChildren().add(timer);
+    }
+
+    void setTimeRemaining(int time) {
+        if(timer != null)
+            timer.setText("Remaining time : " + time);
+    }
+
+    void setNotification(String message) {
         notification.setText(message);
         if(!notifying) {
             notifying=true;

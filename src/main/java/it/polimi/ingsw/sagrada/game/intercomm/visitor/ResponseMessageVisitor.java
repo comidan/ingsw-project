@@ -6,10 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveRespon
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
@@ -117,4 +114,8 @@ public interface ResponseMessageVisitor {
     String visit(ScoreResponse scoreResponse);
 
     String visit(ToolResponse toolResponse);
+
+    String visit(EndTurnResponse endTurnResponse);
+
+    String visit(TimeRemainingResponse timeRemainingResponse);
 }

@@ -33,7 +33,6 @@ import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
 import java.sql.Date;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -75,6 +74,8 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     private ScoreResponse finalGameResult = null;
 
     private int gameID;
+
+    private Timer playTime;
 
     /**
      * Instantiates a new game manager.
@@ -221,10 +222,14 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      * Notify next player about his current state in this turn
      */
     private void notifyNextPlayer() {
+        if(playTime != null)
+            playTime.cancel();
         if(playerIterator.hasNext()) {
             BeginTurnEvent beginTurnEvent = new BeginTurnEvent(playerIterator.next());
             sendMessage(beginTurnEvent);
             System.out.println("Begin turn sent to " + beginTurnEvent.getIdPlayer());
+            playTime = new Timer();
+            playTime.scheduleAtFixedRate(new GameTimer(beginTurnEvent.getIdPlayer()), 0, 1000L);
         }
         else {
             System.out.println("Ending round...");
@@ -413,5 +418,28 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     @Override
     public void visit(EndTurnEvent message) {
         notifyNextPlayer();
+    }
+
+    public class GameTimer extends TimerTask {
+
+        private static final int MAX_WAITING_TIME = 40;
+
+        private int elapsedTime = 0;
+        private String username;
+
+        GameTimer(String username) {
+            this.username = username;
+        }
+
+        @Override
+        public void run() {
+            if(elapsedTime > MAX_WAITING_TIME) {
+                sendMessage(new EndTurnResponse(username));
+                notifyNextPlayer();
+                cancel();
+            }
+            sendMessage(new TimeRemainingResponse(username, MAX_WAITING_TIME - elapsedTime));
+            elapsedTime++;
+        }
     }
 }

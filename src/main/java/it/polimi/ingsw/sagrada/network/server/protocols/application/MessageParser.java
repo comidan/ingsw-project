@@ -7,10 +7,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveRespon
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
@@ -268,6 +265,27 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    private String createJsonEndTurnResponse(EndTurnResponse endTurnResponse) {
+        JSONObject data = new JSONObject();
+        data.put(USERNAME, endTurnResponse.getUsername());
+        JSONObject container = new JSONObject();
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, END_TURN);
+        container.put(END_TURN, data);
+        return container.toJSONString();
+    }
+
+    private String createJsonTimeRemainingResponse(TimeRemainingResponse timeRemainingResponse) {
+        JSONObject data = new JSONObject();
+        data.put(USERNAME, timeRemainingResponse.getUsername());
+        data.put(TIME, timeRemainingResponse.getRemainingTime() + "");
+        JSONObject container = new JSONObject();
+        container.put(MESSAGE_TYPE, RESPONSE);
+        container.put(COMMAND_TYPE, TIME);
+        container.put(TIME, data);
+        return container.toJSONString();
+    }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */
@@ -367,4 +385,14 @@ public class MessageParser implements ResponseMessageVisitor {
 
     @Override
     public String visit(ToolResponse toolResponse) { return createJsonToolResponse(toolResponse);}
+
+    @Override
+    public String visit(EndTurnResponse endTurnResponse) {
+        return createJsonEndTurnResponse(endTurnResponse);
+    }
+
+    @Override
+    public String visit(TimeRemainingResponse timeRemainingResponse) {
+        return createJsonTimeRemainingResponse(timeRemainingResponse);
+    }
 }

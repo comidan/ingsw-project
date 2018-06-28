@@ -6,10 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveRespon
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.game.ScoreResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
@@ -374,5 +371,15 @@ public class CommandManager implements MessageVisitor {
             gameGuiAdapter.removeToken(toolResponse.getTokenSpent());
         }
         else gameGuiAdapter.setNotification("Non hai abbastanza token!");
+    }
+
+    @Override
+    public void visit(EndTurnResponse endTurnResponse) {
+        gameGuiAdapter.notifyEndTurn();
+    }
+
+    @Override
+    public void visit(TimeRemainingResponse timeRemainingResponse) {
+        gameGuiAdapter.setTimeRemaining(timeRemainingResponse.getRemainingTime());
     }
 }

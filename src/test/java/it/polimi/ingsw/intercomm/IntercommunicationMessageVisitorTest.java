@@ -184,4 +184,14 @@ public class IntercommunicationMessageVisitorTest implements MessageVisitor {
     public void visit(ToolResponse toolResponse) {
 
     }
+
+    @Override
+    public void visit(EndTurnResponse endTurnResponse) {
+
+    }
+
+    @Override
+    public void visit(TimeRemainingResponse timeRemainingResponse) {
+
+    }
 }
