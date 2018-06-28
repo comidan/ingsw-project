@@ -102,7 +102,7 @@ public class MainGameGuiTest {
                     return null;
                 }
             });
-            gameGuiAdapter.setToolCards(Arrays.asList(1,2,3));
+            //gameGuiAdapter.setToolCards(Arrays.asList(1,2,3));
             gameGuiAdapter.setPrivateObjective(1);
             gameGuiAdapter.setPublicObjectives(Arrays.asList(1,2,3));
             Scanner scanner = new Scanner(System.in);

@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.gui.cards.ToolCardView;
 import it.polimi.ingsw.sagrada.gui.components.CellView;
 import it.polimi.ingsw.sagrada.gui.components.DiceView;
@@ -71,7 +72,6 @@ public class GameGuiAdapter {
         setCellHandler(client);
         setWindowButtonHandler();
         setCardPreviewListener();
-
     }
 
     /**
@@ -180,15 +180,16 @@ public class GameGuiAdapter {
     /**
      * Sets the tool handler.
      */
-    private void setToolHandler() {
+    private void setToolHandler(Client client) {
         Platform.runLater(() -> {
             this.gameView.setToolClickHandler(event -> {
                 ToolCardView toolCardView = (ToolCardView) event.getSource();
-                // get token number from server
-                //gameView.removeToken(tokenNumber);
-                //toolCardView.addToken(tokenNumber);
-                //client.sendResponse(ToolEvent(toolCardView.getToolId()));
-
+                ToolEvent toolEvent = new ToolEvent(gameView.getUsername(), toolCardView.getToolId());
+                try {
+                    client.sendRemoteMessage(toolEvent);
+                } catch (RemoteException e) {
+                    LOGGER.log(Level.SEVERE, e::getMessage);
+                }
             });
         });
     }
@@ -434,9 +435,9 @@ public class GameGuiAdapter {
      *
      * @param toolCards the new tool cards
      */
-    public void setToolCards(List<Integer> toolCards) {
+    public void setToolCards(List<Integer> toolCards, Client client) {
         Platform.runLater(() -> gameView.setToolCards(toolCards));
-        setToolHandler();
+        setToolHandler(client);
     }
 
 
@@ -482,7 +483,7 @@ public class GameGuiAdapter {
     }
 
     public void setNotification(String message) {
-        gameView.setNotification(message);
+        Platform.runLater(() -> gameView.setNotification(message));
     }
 
     /**

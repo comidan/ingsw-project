@@ -212,7 +212,7 @@ public class CommandManager implements MessageVisitor {
                                                                     windowChoiceGuiController.getStage(),
                                                                     playerList,
                                                                     windowGameManager.getWindows()), client);
-            gameGuiAdapter.setToolCards(toolCardResponse.getIds());
+            gameGuiAdapter.setToolCards(toolCardResponse.getIds(), client);
             gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
             gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
         }
@@ -286,7 +286,7 @@ public class CommandManager implements MessageVisitor {
                                                                     windowGameManager.getWindows()), client);
             System.out.println("Token dati: " + windowGameManager.getToken());
             gameGuiAdapter.setToken(windowGameManager.getToken());
-            gameGuiAdapter.setToolCards(toolCardResponse.getIds());
+            gameGuiAdapter.setToolCards(toolCardResponse.getIds(), client);
             gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
             gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
             gameGuiAdapter.notifyEndTurn();
@@ -346,7 +346,7 @@ public class CommandManager implements MessageVisitor {
     public void visit(ToolCardResponse toolCardResponse) {
         this.toolCardResponse = toolCardResponse;
         if (gameGuiAdapter != null)
-            gameGuiAdapter.setToolCards(toolCardResponse.getIds());
+            gameGuiAdapter.setToolCards(toolCardResponse.getIds(), client);
     }
 
     /**

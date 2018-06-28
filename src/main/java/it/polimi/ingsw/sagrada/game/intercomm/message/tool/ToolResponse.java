@@ -2,8 +2,10 @@ package it.polimi.ingsw.sagrada.game.intercomm.message.tool;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 
-public class ToolResponse implements Message {
+public class ToolResponse implements Message, ResponseVisitor {
     private boolean canBuy;
 
     private String idPlayer;
@@ -30,4 +32,7 @@ public class ToolResponse implements Message {
     public void accept(MessageVisitor messageVisitor) {
         messageVisitor.visit(this);
     }
+
+    @Override
+    public String accept(ResponseMessageVisitor responseMessageVisitor) { return responseMessageVisitor.visit(this); }
 }

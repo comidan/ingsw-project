@@ -188,11 +188,12 @@ public class JsonMessage implements ActionMessageVisitor {
 
     private JSONObject createToolChoiceEvent(ToolEvent toolEvent) {
         JSONObject data = new JSONObject();
-        data.put(TOOL, toolEvent.getToolId()+"");
+        data.put(TOOL_ID, toolEvent.getToolId()+"");
         data.put(PLAYER_ID, toolEvent.getPlayerId());
         JSONObject content = new JSONObject();
         content.put(MESSAGE_TYPE, ACTION);
         content.put(COMMAND_TYPE, TOOL_CHOICE);
+        content.put(TOOL, data);
         return content;
     }
 

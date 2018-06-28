@@ -33,8 +33,10 @@ public class ToolCard extends Card {
 	 * @return the usage
 	 */
 	public Usage getUsage() {
-		return  usage;
+		return usage;
 	}
+
+	public void setUsage(Usage u) { usage=u; }
 
 	/**
 	 * Gets the name.

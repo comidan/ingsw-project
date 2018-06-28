@@ -49,6 +49,7 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 				else cost = 2;
 
 				if (player.getTokens() >= cost) {
+					card.setUsage(Usage.USED);
 					player.spendToken(cost);
 					return true;
 				} else return false;
