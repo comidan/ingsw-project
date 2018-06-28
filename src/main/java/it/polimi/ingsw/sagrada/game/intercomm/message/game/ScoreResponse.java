@@ -1,34 +1,34 @@
 package it.polimi.ingsw.sagrada.game.intercomm.message.game;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Pair;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ScoreResponse implements Message, ResponseVisitor {
 
-    Map<String, Integer> ranking;
+    private List<Pair<String, Integer>> ranking;
 
     public ScoreResponse(List<String> players, List<Integer> scores) {
-        ranking = new HashMap<>();
-        players.forEach(player -> ranking.put(player, scores.get(players.indexOf(player))));
+        ranking = new ArrayList<>();
+        players.forEach(player -> ranking.add(new Pair<>(player, scores.get(players.indexOf(player)))));
+        ranking.sort(Collections.reverseOrder(Comparator.comparing(Pair::getSecondEntry)));
     }
 
-    public ScoreResponse(Map<String, Integer> ranking) {
+    public ScoreResponse(List<Pair<String, Integer>> ranking) {
         this.ranking = ranking;
     }
 
     public int getScore(String username) {
-        return ranking.get(username);
+        return ranking.stream().filter(pair -> pair.getFirstEntry().equals(username)).mapToInt(Pair::getSecondEntry).toArray()[0];
     }
 
     public Set<String> getUsernames() {
-        return ranking.keySet();
+        return ranking.stream().map(Pair::getFirstEntry).collect(Collectors.toSet());
     }
 
     /**

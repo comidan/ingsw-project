@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.game.intercomm.message.window;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Pair;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor;
@@ -88,49 +89,5 @@ public class OpponentWindowResponse implements Message, ResponseVisitor {
     @Override
     public String accept(ResponseMessageVisitor responseMessageVisitor) {
         return responseMessageVisitor.visit(this);
-    }
-
-    /**
-     * The Class Pair.
-     *
-     * @param <T> the generic type
-     * @param <U> the generic type
-     */
-    private static class Pair<T, U> implements Serializable {
-        
-        /** The t. */
-        private final T t;
-        
-        /** The u. */
-        private final U u;
-
-        /**
-         * Instantiates a new pair.
-         *
-         * @param t the t
-         * @param u the u
-         */
-        Pair(T t, U u) {
-            this.t= t;
-            this.u= u;
-        }
-
-        /**
-         * Gets the first entry.
-         *
-         * @return the first entry
-         */
-        T getFirstEntry() {
-            return t;
-        }
-
-        /**
-         * Gets the second entry.
-         *
-         * @return the second entry
-         */
-        U getSecondEntry() {
-            return u;
-        }
     }
 }

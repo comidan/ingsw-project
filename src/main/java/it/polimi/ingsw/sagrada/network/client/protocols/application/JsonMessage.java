@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Pair;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
@@ -37,7 +38,6 @@ import org.json.simple.parser.ParseException;
 import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 
 /**
@@ -319,10 +319,10 @@ public class JsonMessage implements ActionMessageVisitor {
                     return new ToolCardResponse(toolIds);
                 case RANKING:
                     JSONArray ranks = (JSONArray) jsonMsg.get(RANKING);
-                    Map<String, Integer> ranking = new HashMap<>();
+                    List<Pair<String, Integer>> ranking = new ArrayList<>();
                     ranks.forEach(raw -> {
                         JSONObject rank = (JSONObject) raw;
-                        ranking.put((String) rank.get(USERNAME), Integer.parseInt((String) rank.get(SCORE)));
+                        ranking.add(new Pair<>((String) rank.get(USERNAME), Integer.parseInt((String) rank.get(SCORE))));
                     });
                     return new ScoreResponse(ranking);
                 case TOOL_RESPONSE :
