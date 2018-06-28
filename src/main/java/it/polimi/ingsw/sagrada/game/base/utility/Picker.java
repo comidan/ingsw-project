@@ -67,7 +67,7 @@ public class Picker<T> {
         public T next() {
             int randomNum = ThreadLocalRandom.current().nextInt(0, index.size());
             if(randomNum>=elements.size()) throw new NoSuchElementException();
-            T e = elements.get(index.get(randomNum));
+            T e = elements.remove(randomNum);
             index.remove(randomNum);
             return e;
         }

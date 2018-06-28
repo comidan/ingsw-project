@@ -1,10 +1,17 @@
 package it.polimi.ingsw.gui;
 
+import it.polimi.ingsw.sagrada.game.base.WindowManager;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
+import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
+import it.polimi.ingsw.sagrada.game.rules.ErrorType;
+import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import it.polimi.ingsw.sagrada.gui.components.DiceView;
 import it.polimi.ingsw.sagrada.gui.game.GameGuiAdapter;
 import it.polimi.ingsw.sagrada.gui.game.GameView;
@@ -27,11 +34,13 @@ public class MainGameGuiTest {
 
     private static final Logger LOGGER = Logger.getLogger(MainGameGuiTest.class.getName());
     private GameView gameView;
+    private GameGuiAdapter gameGuiAdapter;
+    @Test
     public void testMainGameGui() {
         try {
             List<String> players = new ArrayList<>();
-            players.add("daniele");
             players.add("test");
+            players.add("daniele");
             players.add("admin");
             List<Dice> diceList = new ArrayList<>();
             Dice dice = new Dice(1, Colors.BLUE);
@@ -55,6 +64,7 @@ public class MainGameGuiTest {
             constraints.add(constraintGenerator.getConstraintMatrix(1, WindowSide.FRONT));
             constraints.add(constraintGenerator.getConstraintMatrix(2, WindowSide.FRONT));
             constraints.add(constraintGenerator.getConstraintMatrix(3, WindowSide.FRONT));
+            final Window window = new WindowManager(null, new MessageDispatcher()).generateWindow(1, WindowSide.FRONT);
             GameView gameView = GameView.getInstance("test", players, constraints);
             DiceView diceView = new DiceView(Constraint.BLUE, Constraint.THREE, 4);
             DiceView diceView2 = new DiceView(Constraint.BLUE, Constraint.THREE, 4);
@@ -62,11 +72,10 @@ public class MainGameGuiTest {
             diceViews.add(diceView);
             diceViews.add(diceView2);
 
-
-            Platform.runLater(() -> gameView.setDraft(diceResponse));
             Platform.runLater(() -> gameView.setRoundtrackImage(diceViews, 3));
 
-            GameGuiAdapter gameGuiAdapter = new GameGuiAdapter(gameView, new Client() {
+            gameGuiAdapter = new GameGuiAdapter(gameView, new Client() {
+
                 @Override
                 public void startHeartbeat(int port) {
                     throw new UnsupportedOperationException();
@@ -85,6 +94,14 @@ public class MainGameGuiTest {
                 @Override
                 public void sendRemoteMessage(Message message) {
                     System.out.println(message);
+                    DiceEvent diceEvent = (DiceEvent) message;
+                    window.setCell(diceList.get(diceEvent.getIdDice() - 1), diceEvent.getPosition().getRow(), diceEvent.getPosition().getCol());
+                    ErrorType errorType = new RuleManager().validateWindow(window.getCellMatrix());
+                    System.out.println(errorType);
+                    if(errorType != ErrorType.NO_ERROR) {
+                        gameGuiAdapter.notifyMoveResponse(new RuleResponse("daniele", false));
+                        window.resetCell(diceEvent.getPosition().getRow(), diceEvent.getPosition().getCol());
+                    }
                 }
 
                 @Override
@@ -102,7 +119,7 @@ public class MainGameGuiTest {
                     return null;
                 }
             });
-            //gameGuiAdapter.setToolCards(Arrays.asList(1,2,3));
+            gameGuiAdapter.setDiceList(diceResponse);
             gameGuiAdapter.setPrivateObjective(1);
             gameGuiAdapter.setPublicObjectives(Arrays.asList(1,2,3));
             Scanner scanner = new Scanner(System.in);
