@@ -2,9 +2,7 @@ package it.polimi.ingsw.sagrada.game.intercomm.message.dice;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.*;
 
 
 /**

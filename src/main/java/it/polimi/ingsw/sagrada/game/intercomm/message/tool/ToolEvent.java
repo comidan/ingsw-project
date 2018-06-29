@@ -1,11 +1,9 @@
 package it.polimi.ingsw.sagrada.game.intercomm.message.tool;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.*;
 
-public class ToolEvent implements Message, ActionVisitor {
+public class ToolEvent implements Message, ActionVisitor, ToolGameVisitor {
     private String playerId;
     private int toolId;
 
@@ -28,10 +26,11 @@ public class ToolEvent implements Message, ActionVisitor {
     }
 
     @Override
-    public void accept(MessageVisitor messageVisitor) {
-        messageVisitor.visit(this);
-    }
+    public void accept(MessageVisitor messageVisitor) { messageVisitor.visit(this); }
 
     @Override
     public String accept(ActionMessageVisitor actionMessageVisitor) { return actionMessageVisitor.visit(this); }
+
+    @Override
+    public void accept(ToolGameMessageVisitor toolGameMessageVisitor) { toolGameMessageVisitor.visit(this); }
 }
