@@ -86,4 +86,8 @@ public class RuleManager {
     public ErrorType validateWindow(Cell[][] cells) {
         return mainGameRule.checkRule(cells);
     }
+
+    public void enableSequenceDiceProtocol() {
+        mainGameRule.enableSequenceDiceProtocol();
+    }
 }

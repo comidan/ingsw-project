@@ -20,12 +20,18 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	/** The ignore value set. */
 	private HashSet<Integer> ignoreValueSet;
 
+	private HashSet<Integer> ignoreFirstRoundeDice;
+
+	private boolean firstRound;
+
 	/**
 	 * Instantiates a new main game rule.
 	 */
 	MainGameRule() {
 		ignoreColorSet = new HashSet<>();
 		ignoreValueSet = new HashSet<>();
+		ignoreFirstRoundeDice = new HashSet<>();
+		firstRound = true;
 	}
 
 	/**
@@ -87,7 +93,8 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 * @return the error type
 	 */
 	private ErrorType checkDicePositioningRule(Cell[][] cells, int row, int col) {
-
+		if(ignoreFirstRoundeDice.contains(cells[row][col].getCurrentDice().getId()))
+			return ErrorType.NO_ERROR;
 		ErrorType errorType1 = checkConsecutiveDicePositioning(cells, row, col);
 		ErrorType errorType2 = checkDiagonalDicePositioning(cells, row, col);
 		if(errorType1 != ErrorType.NO_ERROR && errorType2 != ErrorType.NO_ERROR)
@@ -124,8 +131,10 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 * @return the error type
 	 */
 	private ErrorType checkConsecutiveDicePositioning(Cell[][] cells, int row, int col) {
-		if(row == 0 || col == 0 || row == cells.length - 1 || col == cells[0].length - 1)
+		if(firstRound && (row == 0 || col == 0 || row == cells.length - 1 || col == cells[0].length - 1)) {
+			ignoreFirstRoundeDice.add(cells[row][col].getCurrentDice().getId());
 			return ErrorType.NO_ERROR;
+		}
 		if (row < cells.length - 1 && cells[row + 1][col].isOccupied())
 			return ErrorType.NO_ERROR;
 		if (col < cells[row].length - 1 && cells[row][col + 1].isOccupied())
@@ -203,5 +212,9 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 */
 	Set<Integer> getIgnoreValueSet() {
 		return ignoreValueSet;
+	}
+
+	void enableSequenceDiceProtocol() {
+		firstRound = false;
 	}
 }

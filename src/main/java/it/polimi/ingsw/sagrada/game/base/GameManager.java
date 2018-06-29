@@ -221,6 +221,8 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     private void startRound() {
         if(stateIterator.next() == StateGameEnum.TURN) {
             System.out.println(stateIterator.getRoundNumber() + " turn started");
+            if(stateIterator.getRoundNumber() > 1)
+                ruleManager.enableSequenceDiceProtocol();
             diceManager.bagToDraft();
             sendMessage(new NewTurnResponse(stateIterator.getRoundNumber()));
             notifyNextPlayer();
