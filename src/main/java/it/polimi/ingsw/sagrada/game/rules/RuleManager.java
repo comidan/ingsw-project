@@ -13,7 +13,7 @@ import java.util.Set;
 public class RuleManager {
 
     /** The Constant mainGameRule. */
-    private static final MainGameRule mainGameRule = new MainGameRule();
+    private final MainGameRule mainGameRule = new MainGameRule();
 
     /**
      * Gets the objective builder.

@@ -9,11 +9,12 @@ import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 public class MainGameRuleTest {
+    private RuleManager ruleManager = new RuleManager();
 
     private synchronized ErrorType checkRule(Cell[][] cells) {
-        RuleManager ruleManager = new RuleManager();
         return ruleManager.validateWindow(cells);
     }
 
@@ -123,7 +124,7 @@ public class MainGameRuleTest {
         dice.setValue(1);
         cells[0][0].setDice(dice);
         ErrorType errorType = checkRule(cells);
-        assertSame(ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED, errorType);
+        assertTrue(errorType == ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED || errorType == ErrorType.MATRIX_ERROR);
     }
 
     @Test

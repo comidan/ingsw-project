@@ -13,10 +13,12 @@ import static org.junit.Assert.assertSame;
 
 public class RuleManagerTest {
 
+    private RuleManager ruleManager = new RuleManager();
+
     @Test
     public void testValidateWindowMainRule() throws RuntimeException {
         Cell[][] cells = new Cell[4][5];
-        RuleManager ruleManager = new RuleManager();
+
         for (int i = 0; i < cells.length; i++)
             for (int j = 0; j < cells[i].length; j++) {
                 cells[i][j] = new Cell(CellRule.builder().setColorConstraint(Colors.RED).build());
