@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 
 public class CellViewTest {
 
-    @Test
     public void testCellView() {
         CellView cellView = new CellView(0, 0, Constraint.THREE);
         assertFalse(cellView.isOccupied());
