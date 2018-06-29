@@ -191,11 +191,11 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 			if (col - 1 >= 0 && cells[row][col - 1].isOccupied())
 				return ErrorType.ERROR;
 			cells[row][col].setDice(dice);
-			RuleManager ruleManager = new RuleManager();
-			if(ruleManager.validateWindow(cells) != ErrorType.NO_ERROR) {
+			if(!cells[row][col].getCellRule().checkRule(dice)) {
 				cells[row][col].removeCurrentDice();
 				return ErrorType.ERROR;
 			}
+			dto.getIgnoreSequenceDice().accept(dice.getId());
 			return ErrorType.NO_ERROR;
 		};
 		return this;

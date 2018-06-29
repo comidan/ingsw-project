@@ -87,7 +87,7 @@ public class RuleManager {
         return mainGameRule.checkRule(cells);
     }
 
-    public void enableSequenceDiceProtocol() {
-        mainGameRule.enableSequenceDiceProtocol();
+    public void addIgnoreSequenceDice(int diceId) {
+        mainGameRule.addIgnoreSequenceDice(diceId);
     }
 }

@@ -43,6 +43,8 @@ public class DTO {
 
     private Consumer<Dice> moveDiceFromDraftToBag;
 
+    private Consumer<Integer> ignoreSequenceDice;
+
     /**
      * Gets the set dice
      *
@@ -221,5 +223,13 @@ public class DTO {
 
     public void setSecondCurrentPosition(Position secondCurrentPosition) {
         this.secondCurrentPosition = secondCurrentPosition;
+    }
+
+    public Consumer<Integer> getIgnoreSequenceDice() {
+        return ignoreSequenceDice;
+    }
+
+    public void setIgnoreSequenceDice(Consumer<Integer> ignoreSequenceDice) {
+        this.ignoreSequenceDice = ignoreSequenceDice;
     }
 }

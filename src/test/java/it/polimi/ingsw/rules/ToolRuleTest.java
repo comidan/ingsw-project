@@ -190,22 +190,23 @@ public class ToolRuleTest {
         Dice diceSix = new Dice(6, Colors.BLUE);
         diceSix.setValue(6);
         six.setDice(diceSix);
-        Cell[][] cells = {{five, one, three, six, three},
-                          {two, three, four, five, one},
-                          {six, five, two, one, two},
-                          {one, two, five, six, three}};
+        Cell[][] cells = {{five, two, three, four, three},
+                          {one, three, four, five, four},
+                          {six, five, two, three, two},
+                          {one, two, five, four, three}};
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
         ToolRule toolRule = ToolRule.builder().setAddNewDiceFeature().build();
         DTO dto = new DTO();
-        dto.setDice(diceFour);
+        dto.setDice(diceThree);
         dto.setWindowMatrix(cells);
-        dto.setNewPosition(new Position(1, 2));
-        assertTrue(!four.isOccupied());
+        dto.setNewPosition(new Position(2,3));
+        dto.setIgnoreSequenceDice(ruleManager::addIgnoreSequenceDice);
+        assertTrue(!three.isOccupied());
         toolRule.checkRule(dto);
         errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
-        assertTrue(four.isOccupied());
+        assertTrue(three.isOccupied());
     }
 
     @Test

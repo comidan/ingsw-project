@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,9 +21,7 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	/** The ignore value set. */
 	private HashSet<Integer> ignoreValueSet;
 
-	private HashSet<Integer> ignoreFirstRoundeDice;
-
-	private boolean firstRound;
+	private HashSet<Integer> ignoreFirstRoundDice;
 
 	/**
 	 * Instantiates a new main game rule.
@@ -30,8 +29,7 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	MainGameRule() {
 		ignoreColorSet = new HashSet<>();
 		ignoreValueSet = new HashSet<>();
-		ignoreFirstRoundeDice = new HashSet<>();
-		firstRound = true;
+		ignoreFirstRoundDice = new HashSet<>();
 	}
 
 	/**
@@ -93,7 +91,7 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 * @return the error type
 	 */
 	private ErrorType checkDicePositioningRule(Cell[][] cells, int row, int col) {
-		if(ignoreFirstRoundeDice.contains(cells[row][col].getCurrentDice().getId()))
+		if(ignoreFirstRoundDice.contains(cells[row][col].getCurrentDice().getId()))
 			return ErrorType.NO_ERROR;
 		ErrorType errorType1 = checkConsecutiveDicePositioning(cells, row, col);
 		ErrorType errorType2 = checkDiagonalDicePositioning(cells, row, col);
@@ -131,8 +129,8 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 * @return the error type
 	 */
 	private ErrorType checkConsecutiveDicePositioning(Cell[][] cells, int row, int col) {
-		if(firstRound && (row == 0 || col == 0 || row == cells.length - 1 || col == cells[0].length - 1)) {
-			ignoreFirstRoundeDice.add(cells[row][col].getCurrentDice().getId());
+		if(isEmpty(cells) && (row == 0 || col == 0 || row == cells.length - 1 || col == cells[0].length - 1)) {
+			ignoreFirstRoundDice.add(cells[row][col].getCurrentDice().getId());
 			return ErrorType.NO_ERROR;
 		}
 		if (row < cells.length - 1 && cells[row + 1][col].isOccupied())
@@ -214,7 +212,11 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return ignoreValueSet;
 	}
 
-	void enableSequenceDiceProtocol() {
-		firstRound = false;
+	private boolean isEmpty(Cell[][] cells) {
+		return Arrays.stream(cells).flatMap(Arrays::stream).filter(Cell::isOccupied).count() - 1 == 0;
+	}
+
+	void addIgnoreSequenceDice(int diceId) {
+		ignoreFirstRoundDice.add(diceId);
 	}
 }
