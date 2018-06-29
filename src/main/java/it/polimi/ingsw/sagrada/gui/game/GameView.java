@@ -635,8 +635,12 @@ public class GameView extends Application {
         return (Stage) anchorPane.getScene().getWindow();
     }
 
-    void setDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
-        draftView.setDraftChangeValue(changeValueHandler);
+    void enableDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
+        draftView.enableDraftChangeValue(changeValueHandler);
+    }
+
+    public void disableDraftChangeValue(){
+        draftView.disableDraftChangeValue();
     }
 
     void enableWindowDiceDrag(EventHandler<MouseEvent> enableWindowDragHandler){

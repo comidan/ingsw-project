@@ -21,6 +21,8 @@ public class DraftView extends GridPane {
 
     private EventHandler<MouseEvent> draftClickHandler;
 
+    EventHandler<MouseEvent> changeValueHandler;
+
     /**
      * Instantiates a new draft view.
      *
@@ -59,11 +61,16 @@ public class DraftView extends GridPane {
         draft.forEach(diceView -> diceView.addEventHandler(MouseEvent.DRAG_DETECTED, this.draftClickHandler));
         }
 
-public void setDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
-
+public void enableDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
+        this.changeValueHandler = changeValueHandler;
         if(! (draftClickHandler== null))
         draft.forEach(diceView -> diceView.removeEventHandler(MouseEvent.DRAG_DETECTED, draftClickHandler));
         draft.forEach(diceView -> diceView.setOnMouseClicked(changeValueHandler));
+    }
+
+    public void disableDraftChangeValue(){
+        if(changeValueHandler!= null)
+            draft.forEach(diceView -> diceView.removeEventHandler(MouseEvent.MOUSE_CLICKED, changeValueHandler));
     }
 
 

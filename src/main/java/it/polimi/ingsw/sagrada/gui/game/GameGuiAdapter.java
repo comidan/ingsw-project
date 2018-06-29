@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.gui.game;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
@@ -246,15 +247,23 @@ public class GameGuiAdapter {
     // Tool effect: change dice value in draft adding one OR rolls again dice, according to value it gets
     // can be used for toolcards: 1, 6, 10
 
-    public void setDraftChangeValue(){
-        this.gameView.setDraftChangeValue(event ->
+    public void enableDraftChangeValue(Client client){
+        this.gameView.enableDraftChangeValue(event ->
         {
             DiceView diceView = (DiceView) event.getSource();
+            DiceDraftSelectionEvent diceDraftSelectionEvent = new DiceDraftSelectionEvent(gameView.getUsername(), diceView.getDiceID());
             System.out.print("click");
-            // send message with selected dice
-            // gets new draft
+            try {
+                client.sendRemoteMessage(diceDraftSelectionEvent);
+            } catch (RemoteException e) {
+                LOGGER.log(Level.SEVERE, e::getMessage);
+            }
             // IMPORTANT : model must control that the used dice is actually the chosen dice for toolcard 1 and 10
         });
+    }
+
+    public void disableDraftChangeValue(){
+        this.gameView.disableDraftChangeValue();
     }
 
     // Tool effect: enable moving dice on your own window
@@ -272,13 +281,15 @@ public class GameGuiAdapter {
                 content.putImage(diceView.getImage());
                 db.setContent(content);
                 event.consume();
-                // get from server successul drag ended
-                //if successful, then remove handler
-              //  gameView.disableWindowDiceDrag();
+
 
             }
 
         });
+        }
+
+    public void disableWindowDiceDrag(){
+            gameView.disableWindowDiceDrag();
         }
 
      /**
@@ -288,26 +299,34 @@ public class GameGuiAdapter {
 
      // Tool effect: enable drag on dice in roundtrack
      // can be used for toolcards: 5
-    private void setRoundTrackClick(){
+    public void enableRoundTrackClick(Client client){
         Platform.runLater(() -> {
+
+
+            enableDraftChangeValue(client);
+
             this.gameView.setRoundtrackClickHandler(new EventHandler<MouseEvent>() {
                 @Override
-                public void handle(javafx.scene.input.MouseEvent event) {
+                public void handle(MouseEvent event) {
                     DiceView diceView = (DiceView) event.getSource();
-                    clickedObject.setClickedDice(diceView);
-                    Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
-                    ClipboardContent content = new ClipboardContent();
-                    content.putImage(diceView.getImage());
-                    db.setContent(content);
-                    event.consume();
-                    // get from server successul drag ended
-                    //if successful, then remove handler
-               //     diceView.removeEventHandler(MouseEvent.MOUSE_PRESSED, this);
+                    DiceDraftSelectionEvent diceDraftSelectionEvent = new DiceDraftSelectionEvent(gameView.getUsername(), diceView.getDiceID());
+
+                    try {
+                        client.sendRemoteMessage(diceDraftSelectionEvent);
+                    } catch (RemoteException e) {
+                        LOGGER.log(Level.SEVERE, e::getMessage);
+                    }
 
                 }
-
             });
+
+
+
         });
+    }
+
+    public void disableRoundTrackClick(Client client){
+
     }
 
 
