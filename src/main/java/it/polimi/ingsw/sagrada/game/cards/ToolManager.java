@@ -1,10 +1,17 @@
 package it.polimi.ingsw.sagrada.game.cards;
 
 import it.polimi.ingsw.sagrada.game.base.Player;
+import it.polimi.ingsw.sagrada.game.base.utility.Pair;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameVisitor;
 
 import java.util.*;
 
@@ -12,10 +19,13 @@ import java.util.*;
 /**
  * The Class ToolManager.
  */
-public class ToolManager implements Channel<ToolEvent, ToolResponse> {
-	
+public class ToolManager implements Channel<Message, ToolResponse>, ToolGameMessageVisitor {
+
 	/** The tool cards. */
 	private List<ToolCard> toolCards;
+
+	private String currentToolbuyer;
+	private ToolCard currentSelectedTool;
 
 	private  Map<String, Player> players;
 
@@ -33,6 +43,7 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 		this.players = players;
 		this.dynamicRouter = dynamicRouter;
 		this.dynamicRouter.subscribeChannel(ToolEvent.class, this);
+		this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
 	}
 	
 	/**
@@ -53,6 +64,8 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 				if (player.getTokens() >= cost) {
 					card.setUsage(Usage.USED);
 					player.spendToken(cost);
+					currentToolbuyer = player.getId();
+					currentSelectedTool = card;
 					return true;
 				} else {
 					cost=0;
@@ -64,13 +77,26 @@ public class ToolManager implements Channel<ToolEvent, ToolResponse> {
 	}
 
 	@Override
-	public void dispatch(ToolEvent message) {
-		boolean result = canBuyTool(message.getToolId(), players.get(message.getPlayerId()));
-		sendMessage(new ToolResponse(result, message.getPlayerId(), 1));
+	public void dispatch(Message message) {
+		ToolGameVisitor toolGameVisitor = (ToolGameVisitor) message;
+		System.out.println("Received toolGameVisitor");
+		toolGameVisitor.accept(this);
 	}
 
 	@Override
 	public void sendMessage(ToolResponse message) {
 		dynamicRouter.dispatch(message);
+	}
+
+	@Override
+	public void visit(EndTurnEvent endTurnEvent) {
+		currentToolbuyer = "";
+		currentToolbuyer = null;
+	}
+
+	@Override
+	public void visit(ToolEvent toolEvent) {
+		boolean result = canBuyTool(toolEvent.getToolId(), players.get(toolEvent.getPlayerId()));
+		sendMessage(new ToolResponse(result, toolEvent.getPlayerId(), 1));
 	}
 }
