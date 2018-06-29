@@ -378,6 +378,8 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         players.forEach(p -> windowsId.add(p.getWindow().getId()));
         players.forEach(p -> sides.add(p.getWindow().getSide()));
         players.forEach(p -> usernames.add(p.getId()));
+        OpponentWindowResponse opponentWindowResponse = new OpponentWindowResponse(usernames, windowsId, sides);
+        opponentWindowResponse.getPlayers().forEach(player -> System.out.println(opponentWindowResponse.getPlayerWindowId(player)));
         fastRecoveryDispatch.accept(new OpponentWindowResponse(usernames, windowsId, sides), username);
 
         fastRecoveryDispatch.accept(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(diceManager.getDraft())), username);

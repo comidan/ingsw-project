@@ -34,6 +34,7 @@ import java.util.Random;
 public class IntercommunicationActionResponseVisitorTest implements ActionMessageVisitor, ResponseMessageVisitor {
 
     private static String idPlayer = "test";
+    private static String idPlayer2 = "test2";
     private static int id = 0;
     private static int score = 1;
     private static int round = 1;
@@ -49,9 +50,11 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
 
     static {
         diceList.add(dice);
-        ids.add(0);
-        ids.add(1);
+        ids.add(id);
+        ids.add(id + 1);
         players.add(idPlayer);
+        players.add(idPlayer2);
+        sides.add(side);
         sides.add(side);
     }
 
@@ -83,7 +86,7 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
         privateObjectiveResponse.accept(this);
         ToolCardResponse toolCardResponse = new ToolCardResponse(ids);
         toolCardResponse.accept(this);
-        ScoreResponse scoreResponse = new ScoreResponse(players, Arrays.asList(score));
+        ScoreResponse scoreResponse = new ScoreResponse(players, Arrays.asList(score, score + 1));
         scoreResponse.accept(this);
     }
 
@@ -154,6 +157,7 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
     public String visit(OpponentWindowResponse opponentWindowResponse) {
         assertArrayEquals(players.toArray(new String[0]), opponentWindowResponse.getPlayers().toArray(new String[0]));
         assertEquals(id, opponentWindowResponse.getPlayerWindowId(idPlayer).intValue());
+        assertEquals(id + 1, opponentWindowResponse.getPlayerWindowId(idPlayer2).intValue());
         assertEquals(side, opponentWindowResponse.getPlayerWindowSide(idPlayer));
         return null;
     }
@@ -206,7 +210,7 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
      */
     @Override
     public String visit(ScoreResponse scoreResponse) {
-        assertEquals(players.get(0), scoreResponse.getUsernames().iterator().next());
+        assertEquals(players.get(1), scoreResponse.getUsernames().iterator().next());
         assertEquals(score, scoreResponse.getScore(idPlayer));
         return null;
     }

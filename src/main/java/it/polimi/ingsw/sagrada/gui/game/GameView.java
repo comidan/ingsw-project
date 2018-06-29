@@ -12,12 +12,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,6 +31,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
@@ -447,13 +450,17 @@ public class GameView extends Application {
     }
 
     /**
-     * Removes the player.
+     * Notify player is offline
      *
      * @param playerId the player id
      */
     void removePlayer(String playerId) {
-        players.remove(playerId);
-        hBox.getChildren().removeAll(windows.get(playerId));
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initStyle(StageStyle.UTILITY);
+        alert.setTitle("Game status update");
+        alert.setHeaderText("Player disconnect");
+        alert.setContentText(playerId + " disconnected");
+        alert.showAndWait();
     }
 
     /**

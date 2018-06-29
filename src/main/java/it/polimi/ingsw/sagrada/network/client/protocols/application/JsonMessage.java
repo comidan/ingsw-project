@@ -281,6 +281,8 @@ public class JsonMessage implements ActionMessageVisitor {
                         windowIds.add(Integer.parseInt((String) windowJson.get(WINDOW_ID)));
                         windowSides.add(WindowSide.stringToWindowSide((String) windowJson.get(WINDOW_SIDE)));
                     });
+                    OpponentWindowResponse opponentWindowResponse = new OpponentWindowResponse(players, windowIds, windowSides);
+                    opponentWindowResponse.getPlayers().forEach(player -> System.out.println(opponentWindowResponse.getPlayerWindowId(player)));
                     return new OpponentWindowResponse(players, windowIds, windowSides);
                 case OPPONENT_DICE_RESPONSE:
                     JSONObject dice = (JSONObject)jsonMsg.get(DICE);

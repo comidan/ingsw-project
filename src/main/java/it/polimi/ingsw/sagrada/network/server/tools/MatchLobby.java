@@ -42,7 +42,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     private static final int MAX_POOL_SIZE = 4;
 
     /** The Constant TIME_WAIT_UNIT. */
-    private static final int TIME_WAIT_UNIT = 5000;
+    private static final int TIME_WAIT_UNIT = 10000;
 
     /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(MatchLobby.class.getName());
@@ -207,18 +207,19 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         if(inGame)
             gameManager.removePlayer(username);
         clientPool.remove(username);
-        clientIds.remove(username);
         if(clientTCPLinkEstablished.get(username))
             heartbeatProtocolManager.removeFromMonitoredHost(username);
         System.out.println(username + " disconnected");
-        clientIds.forEach(clientId -> {
-            try {
-                clientPool.get(clientId).sendMessage(username + " disconnected");
-                clientPool.get(clientId).removePlayer(username);
-            } catch (RemoteException exc) {
-                LOGGER.log(Level.SEVERE, exc::getMessage);
-            }
-        });
+        clientIds.stream()
+                 .filter(id -> !id.equals(username))
+                 .forEach(clientId -> {
+                    try {
+                        clientPool.get(clientId).sendMessage(username + " disconnected");
+                        clientPool.get(clientId).removePlayer(username);
+                    } catch (RemoteException exc) {
+                        LOGGER.log(Level.SEVERE, exc::getMessage);
+                    }
+                });
         return true;
     }
 
@@ -237,13 +238,15 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     public void onDeath(HeartbeatEvent event) {
         System.out.println(event.getSource() + " is offline");
         removePlayer(event.getSource());
-        clientIds.forEach(clientId -> {
-            try {
-                clientPool.get(clientId).sendMessage(event.getSource() + " is offline");
-            } catch (RemoteException exc) {
-                LOGGER.log(Level.SEVERE, exc::getMessage);
-            }
-        });
+        clientIds.stream()
+                 .filter(id -> !id.equals(event.getSource()))
+                 .forEach(clientId -> {
+                    try {
+                        clientPool.get(clientId).sendMessage(event.getSource() + " is offline");
+                    } catch (RemoteException exc) {
+                        LOGGER.log(Level.SEVERE, exc::getMessage);
+                    }
+                });
     }
 
     /* (non-Javadoc)
