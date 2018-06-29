@@ -219,4 +219,9 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	void addIgnoreSequenceDice(int diceId) {
 		ignoreFirstRoundDice.add(diceId);
 	}
+
+	void exchangeIgnoreSequenceDice(int oldDice, int newDice) {
+		if(ignoreFirstRoundDice.remove(oldDice))
+			ignoreFirstRoundDice.add(newDice);
+	}
 }

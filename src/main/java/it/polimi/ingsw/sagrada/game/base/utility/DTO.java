@@ -45,6 +45,8 @@ public class DTO {
 
     private Consumer<Integer> ignoreSequenceDice;
 
+    private BiConsumer<Integer, Integer> exchangeIgnoreSequenceDice;
+
     /**
      * Gets the set dice
      *
@@ -231,5 +233,13 @@ public class DTO {
 
     public void setIgnoreSequenceDice(Consumer<Integer> ignoreSequenceDice) {
         this.ignoreSequenceDice = ignoreSequenceDice;
+    }
+
+    public BiConsumer<Integer, Integer> getExchangeIgnoreSequenceDice() {
+        return exchangeIgnoreSequenceDice;
+    }
+
+    public void setExchangeIgnoreSequenceDice(BiConsumer<Integer, Integer> exchangeIgnoreSequenceDice) {
+        this.exchangeIgnoreSequenceDice = exchangeIgnoreSequenceDice;
     }
 }

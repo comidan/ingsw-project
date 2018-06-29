@@ -319,6 +319,7 @@ public class ToolRuleTest {
         dto.setSecondDice(diceSix2);
         dto.setExchangeDraftDice(exchangeDraft);
         dto.setExchangeRoundTrackDice(exchangeRoundTrack);
+        dto.setExchangeIgnoreSequenceDice(ruleManager::exchangeIgnoreSequenceDice);
         ToolRule toolRule = ToolRule.builder().setExchangeDraftRoundTrackDiceFeature().build();
         toolRule.checkRule(dto);
         assertTrue(diceManager.getDraft().contains(diceSix2));

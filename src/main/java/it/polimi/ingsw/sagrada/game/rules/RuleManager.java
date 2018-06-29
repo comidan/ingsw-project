@@ -90,4 +90,8 @@ public class RuleManager {
     public void addIgnoreSequenceDice(int diceId) {
         mainGameRule.addIgnoreSequenceDice(diceId);
     }
+
+    public void exchangeIgnoreSequenceDice(int oldDice, int newDice) {
+        mainGameRule.exchangeIgnoreSequenceDice(oldDice, newDice);
+    }
 }
