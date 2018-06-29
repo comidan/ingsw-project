@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.network.server.tools;
 
 import it.polimi.ingsw.sagrada.database.Database;
 import it.polimi.ingsw.sagrada.network.LoginState;
+import it.polimi.ingsw.sagrada.network.security.Security;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -205,7 +206,7 @@ public class DataManager {
      */
     public String receiveLoginData(Socket clientSocket) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        return input.readLine();
+        return Security.getDecryptedData(input.readLine());
     }
 
     /**
@@ -218,7 +219,7 @@ public class DataManager {
     public static void sendLoginError(Socket clientSocket, String data) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(commandParser.crateJSONMessage(data));
+        output.println(Security.getEncryptedData(commandParser.crateJSONMessage(data)));
         output.flush();
     }
 
@@ -231,7 +232,7 @@ public class DataManager {
     public static void sendLoginError(Socket clientSocket) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(commandParser.crateJSONLoginResponseError());
+        output.println(Security.getEncryptedData(commandParser.crateJSONLoginResponseError()));
         output.flush();
     }
 
@@ -244,7 +245,7 @@ public class DataManager {
     public static void sendLoginSignup(Socket clientSocket) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(commandParser.crateJSONLoginResponseRegister());
+        output.println(Security.getEncryptedData(commandParser.crateJSONLoginResponseRegister()));
         output.flush();
     }
 
@@ -259,7 +260,7 @@ public class DataManager {
     public static void sendLoginResponse(Socket clientSocket, String token, int lobbyPort) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(commandParser.createJSONLoginResponse(token, lobbyPort));
+        output.println(Security.getEncryptedData(commandParser.createJSONLoginResponse(token, lobbyPort)));
         output.flush();
     }
 
@@ -273,7 +274,7 @@ public class DataManager {
     public static void sendLoginLobbyResponse(Socket clientSocket, int heartbeatPort) throws IOException {
         CommandParser commandParser = new CommandParser();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(commandParser.crateJSONLoginLobbyResponse(heartbeatPort));
+        output.println(Security.getEncryptedData(commandParser.crateJSONLoginLobbyResponse(heartbeatPort)));
         output.flush();
     }
 
@@ -287,7 +288,7 @@ public class DataManager {
      */
     public static int tokenAuthentication(List<String> tokens, Socket client) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        String data = input.readLine();
+        String data = Security.getDecryptedData(input.readLine());
         try {
             JSONObject jsonToken = (JSONObject) new JSONParser().parse(data);
             return tokens.indexOf((String)jsonToken.get("token"));

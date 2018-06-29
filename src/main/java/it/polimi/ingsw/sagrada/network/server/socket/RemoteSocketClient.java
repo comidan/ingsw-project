@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.player.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
+import it.polimi.ingsw.sagrada.network.security.Security;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.MessageParser;
 
@@ -93,7 +94,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     @Override
     public void sendMessage(String message) {
         String payload = commandParser.crateJSONMessage(message);
-        output.println(payload);
+        output.println(Security.getEncryptedData(payload));
     }
 
     /* (non-Javadoc)
@@ -120,7 +121,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     @Override
     public void setTimer(String time) {
         String payload = commandParser.createJSONCountdown(time);
-        output.println(payload);
+        output.println(Security.getEncryptedData(payload));
         System.out.println("Sending time...");
     }
 
@@ -139,7 +140,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     public void setPlayer(String playerName) {
         String payload = commandParser.createJSONAddLobbyPlayer(playerName);
         System.out.println("Sending player data...");
-        output.println(payload);
+        output.println(Security.getEncryptedData(payload));
         System.out.println("Sent");
     }
 
@@ -149,7 +150,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     @Override
     public void removePlayer(String playerName) {
         String payload = commandParser.createJSONRemoveLobbyPlayer(playerName);
-        output.println(payload);
+        output.println(Security.getEncryptedData(payload));
     }
 
     /* (non-Javadoc)
@@ -166,7 +167,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     @Override
     public void sendResponse(Message message) {
         String payload = messageParser.createJsonResponse((ResponseVisitor) message);
-        output.println(payload);
+        output.println(Security.getEncryptedData(payload));
     }
 
     /**
@@ -234,7 +235,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     public void run() {
         while (!executor.isShutdown()) {
             try {
-                executePayload(input.readLine());
+                executePayload(Security.getDecryptedData(input.readLine()));
             } catch (IOException exc) {
                 fastRecovery.apply(identifier);
                 executor.shutdown();
