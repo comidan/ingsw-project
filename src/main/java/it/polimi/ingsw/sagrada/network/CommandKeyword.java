@@ -160,6 +160,8 @@ public final class CommandKeyword {
   
   /** The Constant OPPONENT_DICE_RESPONSE. */
   public static final String OPPONENT_DICE_RESPONSE = "opponent_dice_response";
+
+  public static final String DICE_DRAFT = "dice_draft";
   
   /** The Constant DRAFT. */
   public static final String DRAFT = "draft";

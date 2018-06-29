@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
@@ -197,6 +198,17 @@ public class JsonMessage implements ActionMessageVisitor {
         return content;
     }
 
+    private JSONObject createDiceDraftSelectionEvent(DiceDraftSelectionEvent diceDraftSelectionEvent) {
+        JSONObject data = new JSONObject();
+        data.put(PLAYER_ID, diceDraftSelectionEvent.getIdPlayer());
+        data.put(DICE_ID, diceDraftSelectionEvent.getIdDice()+"");
+        JSONObject content = new JSONObject();
+        content.put(MESSAGE_TYPE, ACTION);
+        content.put(COMMAND_TYPE, DICE_DRAFT);
+        content.put(DICE, data);
+        return content;
+    }
+
     private JSONObject createByteStreamWindowResponse(ByteStreamWindowEvent byteStreamWindowEvent) {
         JSONObject content = new JSONObject();
         content.put(USERNAME, playerId);
@@ -357,6 +369,9 @@ public class JsonMessage implements ActionMessageVisitor {
         return createDiceEvent(diceEvent).toJSONString();
     }
 
+    @Override
+    public String visit(DiceDraftSelectionEvent diceDraftSelectionEvent) { return createDiceDraftSelectionEvent(diceDraftSelectionEvent).toJSONString(); }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent)
      */
@@ -394,4 +409,6 @@ public class JsonMessage implements ActionMessageVisitor {
 
     @Override
     public String visit(ToolEvent toolEvent) { return createToolChoiceEvent(toolEvent).toJSONString();}
+
+
 }

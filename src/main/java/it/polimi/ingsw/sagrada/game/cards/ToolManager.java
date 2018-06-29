@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.base.utility.Pair;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
@@ -44,6 +45,7 @@ public class ToolManager implements Channel<Message, ToolResponse>, ToolGameMess
 		this.dynamicRouter = dynamicRouter;
 		this.dynamicRouter.subscribeChannel(ToolEvent.class, this);
 		this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
+		this.dynamicRouter.subscribeChannel(DiceDraftSelectionEvent.class, this);
 	}
 	
 	/**
@@ -99,4 +101,9 @@ public class ToolManager implements Channel<Message, ToolResponse>, ToolGameMess
 		boolean result = canBuyTool(toolEvent.getToolId(), players.get(toolEvent.getPlayerId()));
 		sendMessage(new ToolResponse(result, toolEvent.getPlayerId(), 1));
 	}
+
+    @Override
+    public void visit(DiceDraftSelectionEvent diceDraftSelectionEvent) {
+        //controlla che il messaggio arrivi in un momento sensato TO-DO
+    }
 }

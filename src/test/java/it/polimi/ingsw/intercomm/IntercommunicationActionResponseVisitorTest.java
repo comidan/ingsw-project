@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
@@ -95,6 +96,11 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
         assertEquals(id, diceEvent.getIdDice());
         assertEquals(position, diceEvent.getPosition());
         assertEquals(source, diceEvent.getSrc());
+        return null;
+    }
+
+    @Override
+    public String visit(DiceDraftSelectionEvent diceDraftSelectionEvent) {
         return null;
     }
 

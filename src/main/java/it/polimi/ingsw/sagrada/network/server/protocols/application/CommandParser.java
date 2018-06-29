@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.DisconnectEvent;
@@ -80,6 +81,11 @@ public class CommandParser {
                     String playerId = (String)data.get(PLAYER_ID);
                     int toolId = Integer.parseInt((String)data.get(TOOL_ID));
                     return new ToolEvent(playerId, toolId);
+                case DICE_DRAFT:
+                    data = (JSONObject) jsonMsg.get(DICE);
+                    String idPlayer = (String)data.get(PLAYER_ID);
+                    int diceId = Integer.parseInt((String)data.get(DICE_ID));
+                    return new DiceDraftSelectionEvent(idPlayer, diceId);
                 default:
                     return null;
             }
