@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.gui.components;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import javafx.event.EventHandler;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -17,6 +18,8 @@ public class DraftView extends GridPane {
 
     /** The draft. */
     private List<DiceView> draft;
+
+    private EventHandler<MouseEvent> draftClickHandler;
 
     /**
      * Instantiates a new draft view.
@@ -52,11 +55,15 @@ public class DraftView extends GridPane {
      * @param draftClickHandler the new draft listener
      */
     public void setDraftListener(EventHandler<MouseEvent> draftClickHandler) {
-        draft.forEach(diceView -> diceView.setOnDragDetected(draftClickHandler));
-    }
+        this.draftClickHandler = draftClickHandler;
+        draft.forEach(diceView -> diceView.addEventHandler(MouseEvent.DRAG_DETECTED, this.draftClickHandler));
+        }
 
-   public void setDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
-    draft.forEach(diceView -> diceView.setOnDragDetected(changeValueHandler));
+public void setDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
+
+        if(! (draftClickHandler== null))
+        draft.forEach(diceView -> diceView.removeEventHandler(MouseEvent.DRAG_DETECTED, draftClickHandler));
+        draft.forEach(diceView -> diceView.setOnMouseClicked(changeValueHandler));
     }
 
 

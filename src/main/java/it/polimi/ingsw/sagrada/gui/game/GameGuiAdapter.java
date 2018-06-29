@@ -157,21 +157,24 @@ public class GameGuiAdapter {
     private void setDraftListener() {
         Platform.runLater(() -> {
 
+            EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+
+                    DiceView diceView = (DiceView) event.getSource();
+                    clickedObject.setClickedDice(diceView);
+                    Dragboard db = diceView.startDragAndDrop(TransferMode.COPY);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(diceView.getImage());
+                    db.setContent(content);
+                    event.consume();
+                    System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
+
+                }
+            };
 
 
-            this.gameView.setDraftClickHandler(event ->
-            {
-                DiceView diceView = (DiceView) event.getSource();
-                clickedObject.setClickedDice(diceView);
-                Dragboard db = diceView.startDragAndDrop(TransferMode.COPY);
-                ClipboardContent content = new ClipboardContent();
-                content.putImage(diceView.getImage());
-                db.setContent(content);
-
-                event.consume();
-
-                System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
-            });
+            this.gameView.setDraftClickHandler(eventHandler);
         });
     }
 
@@ -244,13 +247,13 @@ public class GameGuiAdapter {
     // can be used for toolcards: 1, 6, 10
 
     public void setDraftChangeValue(){
-
         this.gameView.setDraftChangeValue(event ->
         {
             DiceView diceView = (DiceView) event.getSource();
+            System.out.print("click");
             // send message with selected dice
-            // get message with new value
-            //diceView.changeValue(newValue);
+            // gets new draft
+            // IMPORTANT : model must control that the used dice is actually the chosen dice for toolcard 1 and 10
         });
     }
 
@@ -271,7 +274,7 @@ public class GameGuiAdapter {
                 event.consume();
                 // get from server successul drag ended
                 //if successful, then remove handler
-              //  diceView.removeEventHandler(MouseEvent.MOUSE_PRESSED, this);
+              //  gameView.disableWindowDiceDrag();
 
             }
 

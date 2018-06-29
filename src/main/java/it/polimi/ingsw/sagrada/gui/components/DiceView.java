@@ -70,9 +70,5 @@ public class DiceView extends ImageView{
         return id;
     }
 
-    public void changeValue(Constraint value){
-        this.value = value;
-        this.setImage(new Image(DiceView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(color, value)), 50, 50, true, false));
-    }
 
 }

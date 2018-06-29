@@ -26,6 +26,9 @@ public class WindowView extends GridPane {
     /** The window dices. */
     private final CellView[][] windowDices;
 
+
+    private EventHandler<MouseEvent> enableWindowDragHandler;
+
     /**
      * Instantiates a new window view.
      *
@@ -110,12 +113,24 @@ public class WindowView extends GridPane {
 
 
     public void enableWindowDiceDrag(EventHandler<MouseEvent> enableWindowDragHandler){
+        this.enableWindowDragHandler = enableWindowDragHandler;
         for (int i = 0; i < windowDices.length; i++)
             for (int j = 0; j < windowDices[0].length; j++)
                 if(windowDices[i][j].isOccupied()){
                     windowDices[i][j].getDiceView().setOnMouseClicked(enableWindowDragHandler);
                 }
     }
+
+    public void disableDiceDrag(){
+        for (int i = 0; i < windowDices.length; i++)
+        for (int j = 0; j < windowDices[0].length; j++)
+            if(windowDices[i][j].isOccupied()){
+            if(enableWindowDragHandler!=null)
+                windowDices[i][j].getDiceView().removeEventHandler(MouseEvent.DRAG_DETECTED, enableWindowDragHandler);
+            }
+
+    }
+
 
 
 }
