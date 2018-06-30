@@ -8,7 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.*;
 /**
  * The Class DiceEvent.
  */
-public class DiceEvent implements Message, ActionVisitor {
+public class DiceEvent implements Message, ActionVisitor, DiceManagerVisitor {
 
     /** The id player. */
     private String idPlayer;
@@ -95,5 +95,10 @@ public class DiceEvent implements Message, ActionVisitor {
     @Override
     public String accept(ActionMessageVisitor actionMessageVisitor) {
         return actionMessageVisitor.visit(this);
+    }
+
+    @Override
+    public void accept(DiceManagerMessageVisitor diceManagerMessageVisitor) {
+        diceManagerMessageVisitor.visit(this);
     }
 }

@@ -379,6 +379,7 @@ public class CommandManager implements MessageVisitor {
     @Override
     public void visit(ToolResponse toolResponse) {
         if(toolResponse.isCanBuy()) {
+            gameGuiAdapter.enableGuiElement(toolResponse.getToolId(), client);
             gameGuiAdapter.setNotification("Tool comprato");
             gameGuiAdapter.removeToken(toolResponse.getTokenSpent());
         }

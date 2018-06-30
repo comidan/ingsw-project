@@ -89,6 +89,9 @@ public class CardManager {
 				case "setIncrementDiceFeature": toolBuilder.setIncrementDiceFeature(); break;
 				case "setMoveIgnoringColorRuleFeature": toolBuilder.setMoveIgnoringColorRuleFeature(); break;
 				case "setMoveIgnoringValueRuleFeature": toolBuilder.setMoveIgnoringValueRuleFeature(); break;
+				case "setAddTwoDiceFeature": toolBuilder.setAddTwoDiceFeature(); break;
+				case "setExchangeDraftRoundTrackDiceFeature": toolBuilder.setExchangeDraftRoundTrackDiceFeature(); break;
+				case "setRollDiceFeature": toolBuilder.setRollDiceFeature(); break;
 				default: LOGGER.log(Level.SEVERE, () -> "JSON is not correct. Check ToolCard.json Action Array");
 			}
 		});

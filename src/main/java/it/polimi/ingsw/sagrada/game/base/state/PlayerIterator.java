@@ -106,6 +106,10 @@ public class PlayerIterator implements Iterator<String> {
         return false;
     }
 
+    public int getCurrentPlayerNumber() {
+        return numPlayer-removedPlayers.size();
+    }
+
     /**
      * Removes player from iteration and coming up rounds. Called only by a direct order from above.
      *

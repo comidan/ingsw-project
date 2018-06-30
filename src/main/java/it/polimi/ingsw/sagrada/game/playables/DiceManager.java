@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 import it.polimi.ingsw.sagrada.game.base.utility.Picker;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
@@ -8,11 +9,12 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.FirstToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerVisitor;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -21,7 +23,7 @@ import java.util.stream.IntStream;
 /**
  * The Class DiceManager.
  */
-public class DiceManager implements Channel<DiceEvent, DiceResponse> {
+public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerMessageVisitor {
     
     /** The draft pool. */
     private List<Dice> draftPool;
@@ -64,6 +66,7 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
         this.dispatchGameManager = dispatchGameManager;
         this.dynamicRouter = dynamicRouter;
         this.dynamicRouter.subscribeChannel(DiceEvent.class, this);
+        this.dynamicRouter.subscribeChannel(FirstToolMessage.class, this);
     }
 
     /**
@@ -138,10 +141,10 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
      * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */
     @Override
-    public void dispatch(DiceEvent message) {
-        Dice dice = getDiceDraft(message.getIdDice());
-        DiceGameManagerEvent diceGameManagerEvent = new DiceGameManagerEvent(dice, message);
-        dispatchGameManager.accept(diceGameManagerEvent);
+    public void dispatch(Message message) {
+        DiceManagerVisitor diceManagerVisitor = (DiceManagerVisitor)message;
+        System.out.println("Received diceManagerVisitor");
+        diceManagerVisitor.accept(this);
     }
 
     /* (non-Javadoc)
@@ -150,6 +153,28 @@ public class DiceManager implements Channel<DiceEvent, DiceResponse> {
     @Override
     public void sendMessage(DiceResponse message) {
         dynamicRouter.dispatch(message);
+    }
+
+
+    @Override
+    public void visit(DiceEvent diceEvent) {
+        Dice dice = getDiceDraft(diceEvent.getIdDice());
+        DiceGameManagerEvent diceGameManagerEvent = new DiceGameManagerEvent(dice, diceEvent);
+        dispatchGameManager.accept(diceGameManagerEvent);
+    }
+
+    @Override
+    public void visit(FirstToolMessage firstToolMessage) {
+        DTO dto = new DTO();
+        dto.setDice(getDiceDraft(firstToolMessage.getDiceId()));
+        dto.setIgnoreValueSet(new HashSet<Integer>());
+        firstToolMessage.getToolCard().getRule().checkRule(dto);
+        putDiceDraft(dto.getDice());
+        sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
+    }
+
+    private void putDiceDraft(Dice dice) {
+        draftPool.add(dice);
     }
 
     /**

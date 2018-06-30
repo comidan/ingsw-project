@@ -38,13 +38,17 @@ public class ToolCard extends Card {
 
 	public void setUsage(Usage u) { usage=u; }
 
+	@Override
+	public ToolRule getRule() {
+		return (ToolRule) super.getRule();
+	}
+
 	/**
 	 * Gets the name.
 	 *
-	 * @param name the name
 	 * @return the name
 	 */
-	public String getName(String name) {
+	public String getName() {
 		return name;
 	}
 }

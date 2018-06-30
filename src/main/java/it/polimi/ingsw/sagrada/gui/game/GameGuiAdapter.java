@@ -252,7 +252,7 @@ public class GameGuiAdapter {
         {
             DiceView diceView = (DiceView) event.getSource();
             DiceDraftSelectionEvent diceDraftSelectionEvent = new DiceDraftSelectionEvent(gameView.getUsername(), diceView.getDiceID());
-            System.out.print("click");
+            System.out.println("click");
             try {
                 client.sendRemoteMessage(diceDraftSelectionEvent);
             } catch (RemoteException e) {
@@ -319,9 +319,6 @@ public class GameGuiAdapter {
 
                 }
             });
-
-
-
         });
     }
 
@@ -530,5 +527,10 @@ public class GameGuiAdapter {
 
     public byte[] getWindowAsByteArray() {
         return gameView.getWindowAsByteArray();
+    }
+
+    public void enableGuiElement(int toolId, Client client) {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA");
+        enableDraftChangeValue(client);
     }
 }

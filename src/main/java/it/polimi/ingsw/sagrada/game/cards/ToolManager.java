@@ -1,16 +1,15 @@
 package it.polimi.ingsw.sagrada.game.cards;
 
 import it.polimi.ingsw.sagrada.game.base.Player;
-import it.polimi.ingsw.sagrada.game.base.utility.Pair;
+import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.FirstToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameVisitor;
 
@@ -20,7 +19,7 @@ import java.util.*;
 /**
  * The Class ToolManager.
  */
-public class ToolManager implements Channel<Message, ToolResponse>, ToolGameMessageVisitor {
+public class ToolManager implements Channel<Message, Message>, ToolGameMessageVisitor {
 
 	/** The tool cards. */
 	private List<ToolCard> toolCards;
@@ -86,7 +85,7 @@ public class ToolManager implements Channel<Message, ToolResponse>, ToolGameMess
 	}
 
 	@Override
-	public void sendMessage(ToolResponse message) {
+	public void sendMessage(Message message) {
 		dynamicRouter.dispatch(message);
 	}
 
@@ -99,11 +98,12 @@ public class ToolManager implements Channel<Message, ToolResponse>, ToolGameMess
 	@Override
 	public void visit(ToolEvent toolEvent) {
 		boolean result = canBuyTool(toolEvent.getToolId(), players.get(toolEvent.getPlayerId()));
-		sendMessage(new ToolResponse(result, toolEvent.getPlayerId(), 1));
+		sendMessage(new ToolResponse(result, toolEvent.getPlayerId(), cost, toolEvent.getToolId()));
 	}
 
     @Override
     public void visit(DiceDraftSelectionEvent diceDraftSelectionEvent) {
         //controlla che il messaggio arrivi in un momento sensato TO-DO
+		sendMessage(new FirstToolMessage(currentSelectedTool, diceDraftSelectionEvent.getIdDice()));
     }
 }

@@ -10,10 +10,13 @@ public class ToolResponse implements Message, ResponseVisitor {
     private String idPlayer;
     private int tokenSpent;
 
-    public ToolResponse(boolean canBuy, String idPlayer, int tokenSpent) {
+    private int toolId;
+
+    public ToolResponse(boolean canBuy, String idPlayer, int tokenSpent, int toolId) {
         this.canBuy = canBuy;
         this.idPlayer = idPlayer;
         this.tokenSpent = tokenSpent;
+        this.toolId = toolId;
     }
 
     public boolean isCanBuy() {
@@ -25,6 +28,8 @@ public class ToolResponse implements Message, ResponseVisitor {
     }
 
     public int getTokenSpent() { return tokenSpent; }
+
+    public int getToolId() { return toolId; }
 
     @Override
     public Class<? extends Message> getType() {

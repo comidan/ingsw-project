@@ -1,11 +1,9 @@
 package it.polimi.ingsw.sagrada.game.intercomm.message.dice;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionVisitor;
-import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.*;
 
-public class DiceDraftSelectionEvent implements Message, ActionVisitor{
+public class DiceDraftSelectionEvent implements Message, ActionVisitor, ToolGameVisitor {
 
     private String idPlayer;
 
@@ -38,4 +36,7 @@ public class DiceDraftSelectionEvent implements Message, ActionVisitor{
     public String accept(ActionMessageVisitor actionMessageVisitor) {
         return actionMessageVisitor.visit(this);
     }
+
+    @Override
+    public void accept(ToolGameMessageVisitor toolGameMessageVisitor) { toolGameMessageVisitor.visit(this); }
 }

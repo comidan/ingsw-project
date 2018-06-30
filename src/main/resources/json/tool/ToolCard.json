@@ -1,14 +1,14 @@
 [
 	{ "id":0, "name":"Pinza Sgrossatrice", "action":["setIncrementDiceFeature"]},
-	{ "id":1, "name":"Pennello per Englomise", "action":["setMoveIgnoringColorRuleFeature"]},
-	{ "id":2, "name":"Alesatore per lamina di rame", "action":["setMoveIgnoringValueRuleFeature"]},
+	{ "id":1, "name":"Pennello per Englomise", "action":["setIncrementDiceFeature"]},
+	{ "id":2, "name":"Alesatore per lamina di rame", "action":["setIncrementDiceFeature"]},
 	{ "id":3, "name":"Lathekin", "action":["setIncrementDiceFeature"]},
-	{ "id":4, "name":"Taglierina circolare", "action":["setMoveIgnoringColorRuleFeature"]},
-	{ "id":5, "name":"Pennello per Pasta Salda", "action":["setMoveIgnoringValueRuleFeature"]},
+	{ "id":4, "name":"Taglierina circolare", "action":["setIncrementDiceFeature"]},
+	{ "id":5, "name":"Pennello per Pasta Salda", "action":["setIncrementDiceFeature"]},
 	{ "id":6, "name":"Martelletto", "action":["setIncrementDiceFeature"]},
-	{ "id":7, "name":"Tenaglia a Rotelle", "action":["setMoveIgnoringColorRuleFeature"]},
-	{ "id":8, "name":"Riga in Sughero", "action":["setMoveIgnoringValueRuleFeature"]},
+	{ "id":7, "name":"Tenaglia a Rotelle", "action":["setIncrementDiceFeature"]},
+	{ "id":8, "name":"Riga in Sughero", "action":["setIncrementDiceFeature"]},
 	{ "id":9, "name":"Tampone Diamantato", "action":["setIncrementDiceFeature"]},
-	{ "id":10, "name":"Diluente per Pasta Salda", "action":["setMoveIgnoringColorRuleFeature"]},
-	{ "id":11, "name":"Taglierina Manuale", "action":["setMoveIgnoringValueRuleFeature"]}
+	{ "id":10, "name":"Diluente per Pasta Salda", "action":["setIncrementDiceFeature"]},
+	{ "id":11, "name":"Taglierina Manuale", "action":["setIncrementDiceFeature"]}
 ]
