@@ -237,4 +237,8 @@ public class LobbyGuiView {
     public Stage getStage() {
         return stage;
     }
+
+    public List<String> getPlayerShown() {
+        return playerShown;
+    }
 }

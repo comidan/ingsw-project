@@ -212,6 +212,8 @@ public class CommandManager implements MessageVisitor {
     @Override
     public void visit(BeginTurnEvent beginTurnEvent) {
         if (gameGuiAdapter == null) {
+            if(lobbyGuiView != null)
+                playerList = new ArrayList<>(lobbyGuiView.getPlayerShown());
             gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
                                                                     stage,
                                                                     playerList,
@@ -286,6 +288,8 @@ public class CommandManager implements MessageVisitor {
     @Override
     public void visit(DiceResponse diceResponse) {
         if (gameGuiAdapter == null) {
+            if(lobbyGuiView != null)
+                playerList = new ArrayList<>(lobbyGuiView.getPlayerShown());
             gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
                                                                     stage,
                                                                     playerList,
