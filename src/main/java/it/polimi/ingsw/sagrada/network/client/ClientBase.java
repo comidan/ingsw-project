@@ -20,9 +20,10 @@ public interface ClientBase extends Client {
      * Sets the player.
      *
      * @param playerName the new player
+     * @param position player's position
      * @throws RemoteException the remote exception
      */
-    void setPlayer(String playerName) throws RemoteException;
+    void setPlayer(String playerName, int position) throws RemoteException;
 
     /**
      * Removes the player.

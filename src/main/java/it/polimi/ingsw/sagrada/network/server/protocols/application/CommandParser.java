@@ -117,9 +117,10 @@ public class CommandParser {
      * @param username the username
      * @return the string
      */
-    public String createJSONAddLobbyPlayer(String username) {
+    public String createJSONAddLobbyPlayer(String username, int position) {
         JSONObject content = new JSONObject();
         content.put(USERNAME, username);
+        content.put(POSITION, position + "");
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, RESPONSE);
         container.put(COMMAND_TYPE, ADD_PLAYER);

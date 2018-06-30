@@ -92,6 +92,11 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
         return identifier;
     }
 
+    @Override
+    public boolean isInFastRecovery() throws RemoteException {
+        return false;
+    }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.network.client.Client#sendResponse(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */

@@ -239,7 +239,7 @@ public class JsonMessage implements ActionMessageVisitor {
                     return new MatchTimeEvent((String)data.get(TIME));
                 case ADD_PLAYER:
                     data = (JSONObject) jsonMsg.get(PLAYER);
-                    return new AddPlayerEvent((String)data.get(USERNAME));
+                    return new AddPlayerEvent((String)data.get(USERNAME), Integer.parseInt((String) data.get(POSITION)));
                 case REMOVE_PLAYER:
                     data = (JSONObject) jsonMsg.get(PLAYER);
                     return new RemovePlayerEvent((String)data.get(USERNAME));

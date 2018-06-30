@@ -12,13 +12,16 @@ public class AddPlayerEvent implements Message {
     /** The username. */
     private String username;
 
+    private int position;
+
     /**
      * Instantiates a new adds the player event.
      *
      * @param username the username
      */
-    public AddPlayerEvent(String username) {
+    public AddPlayerEvent(String username, int position) {
         this.username = username;
+        this.position = position;
     }
 
     /**
@@ -28,6 +31,10 @@ public class AddPlayerEvent implements Message {
      */
     public String getUsername() {
         return username;
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     /* (non-Javadoc)

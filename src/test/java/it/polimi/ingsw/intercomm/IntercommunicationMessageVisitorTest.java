@@ -58,7 +58,7 @@ public class IntercommunicationMessageVisitorTest implements MessageVisitor {
 
     @Test
     public void testIntercommunication() {
-        AddPlayerEvent addPlayerEvent = new AddPlayerEvent(idPlayer);
+        AddPlayerEvent addPlayerEvent = new AddPlayerEvent(idPlayer, 0);
         addPlayerEvent.accept(this);
         BeginTurnEvent beginTurnEvent = new BeginTurnEvent(idPlayer);
         beginTurnEvent.accept(this);

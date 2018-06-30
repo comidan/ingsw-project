@@ -151,10 +151,10 @@ public class CommandManager implements MessageVisitor {
      *
      * @param playerName the new player
      */
-    public static void setPlayer(String playerName) {
+    public static void setPlayer(String playerName, int position) {
         Platform.runLater(() -> {
             if(lobbyGuiView != null) {
-                lobbyGuiView.setPlayer(playerName);
+                lobbyGuiView.setPlayer(playerName, position);
                 if(!playerList.contains(playerName))
                     playerList.add(playerName);
             }
@@ -203,7 +203,7 @@ public class CommandManager implements MessageVisitor {
      */
     @Override
     public void visit(AddPlayerEvent addPlayerEvent) {
-        setPlayer(addPlayerEvent.getUsername());
+        setPlayer(addPlayerEvent.getUsername(), addPlayerEvent.getPosition());
     }
 
     /* (non-Javadoc)

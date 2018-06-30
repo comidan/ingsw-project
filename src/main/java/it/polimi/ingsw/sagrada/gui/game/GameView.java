@@ -312,6 +312,8 @@ public class GameView extends Application {
     @Override
     public void start(Stage primaryStage) {
         initialize();
+        if(primaryStage == null)
+            primaryStage = new Stage();
         createScene(primaryStage);
         primaryStage.setTitle("Sagrada");
         setGameViewInstance(this);
@@ -413,8 +415,6 @@ public class GameView extends Application {
         components.add(endTurn);
         components.add(windows.get(username));
         Scene scene = new Scene(anchorPane, GUIManager.getGameWindowWidth(), GUIManager.getGameWindowHeight());
-        if(primaryStage == null)
-            primaryStage = new Stage();
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();

@@ -21,6 +21,7 @@ import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
 import org.junit.Test;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -117,6 +118,11 @@ public class MainGameGuiTest {
                 @Override
                 public String getId() {
                     return null;
+                }
+
+                @Override
+                public boolean isInFastRecovery() throws RemoteException {
+                    return false;
                 }
             });
             gameGuiAdapter.setDiceList(diceResponse);

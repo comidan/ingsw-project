@@ -55,6 +55,8 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     /** The identifier. */
     private String identifier;
 
+    private boolean isInFastRecovery;
+
     /**
      * Instantiates a new remote socket client.
      *
@@ -67,6 +69,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      */
     public RemoteSocketClient(Socket socket, String identifier, Function disconnect, Function fastRecovery, Consumer sendToModel) throws IOException {
         this.socket = socket;
+        isInFastRecovery = false;
         commandParser = new CommandParser();
         messageParser = new MessageParser();
         executor = Executors.newSingleThreadExecutor();
@@ -137,8 +140,8 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      * @see it.polimi.ingsw.sagrada.network.client.ClientBase#setPlayer(java.lang.String)
      */
     @Override
-    public void setPlayer(String playerName) {
-        String payload = commandParser.createJSONAddLobbyPlayer(playerName);
+    public void setPlayer(String playerName, int position) {
+        String payload = commandParser.createJSONAddLobbyPlayer(playerName, position);
         System.out.println("Sending player data...");
         output.println(Security.getEncryptedData(payload));
         System.out.println("Sent");
@@ -210,6 +213,11 @@ public class RemoteSocketClient implements ClientBase, Runnable {
         System.out.println(message);
     }
 
+    @Override
+    public boolean isInFastRecovery() {
+        return isInFastRecovery;
+    }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.network.client.Client#close()
      */
@@ -237,6 +245,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
             try {
                 executePayload(Security.getDecryptedData(input.readLine()));
             } catch (IOException exc) {
+                isInFastRecovery = true;
                 fastRecovery.apply(identifier);
                 executor.shutdown();
                 close();

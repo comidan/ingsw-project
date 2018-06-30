@@ -78,7 +78,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
         messageList.forEach(message -> message.accept(this));
         CommandParser commandParser = new CommandParser();
         assertTrue(JsonMessage.parseJsonData(commandParser.crateJSONLoginLobbyResponse(port)) instanceof HeartbeatInitEvent);
-        assertTrue(JsonMessage.parseJsonData(commandParser.createJSONAddLobbyPlayer(idPlayer)) instanceof AddPlayerEvent);
+        assertTrue(JsonMessage.parseJsonData(commandParser.createJSONAddLobbyPlayer(idPlayer, 0)) instanceof AddPlayerEvent);
         assertTrue(JsonMessage.parseJsonData(commandParser.createJSONLoginResponse(idPlayer, port)) instanceof LobbyLoginEvent);
         assertTrue(JsonMessage.parseJsonData(commandParser.createJSONCountdown(time)) instanceof MatchTimeEvent);
         assertTrue(JsonMessage.parseJsonData(commandParser.createJSONRemoveLobbyPlayer(idPlayer)) instanceof RemovePlayerEvent);

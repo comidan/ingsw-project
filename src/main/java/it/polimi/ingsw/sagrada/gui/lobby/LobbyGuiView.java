@@ -65,16 +65,18 @@ public class LobbyGuiView {
     private static Timeline thirdPlayerTimeline;
     private static Timeline fourthPlayerTimeline;
 
+    private boolean hasBeenRemoval = false;
+
     /**
      * Sets the player.
      *
      * @param username the new player
      */
-    public void setPlayer(String username) {
-        if(playerShown.contains(username))
-            return;
+    public void setPlayer(String username, int position) {
+        if(playerShown.contains(username)) {
+            playerShown.remove(username);
+        }
         playerShown.add(username);
-        int position = playerShown.indexOf(username);
         switch (position) {
             case 0 : firstPlayerTimeline.stop(); setFirstPlayer(username); break;
             case 1 : secondPlayerTimeline.stop(); setSecondPlayer(username); break;
@@ -92,6 +94,7 @@ public class LobbyGuiView {
     public void removePlayer(String username) {
         int position = playerShown.indexOf(username);
         playerShown.remove(position);
+        hasBeenRemoval = true;
         switch (position) {
             case 0 : setFirstPlayer(WAITING_PLAYER); firstPlayerTimeline.play(); break;
             case 1 : setSecondPlayer(WAITING_PLAYER); secondPlayerTimeline.play(); break;

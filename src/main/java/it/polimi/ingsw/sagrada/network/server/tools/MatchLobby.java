@@ -5,9 +5,11 @@ import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
+import it.polimi.ingsw.sagrada.network.security.Security;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
 import it.polimi.ingsw.sagrada.network.server.rmi.RemoteRMIClient;
 import it.polimi.ingsw.sagrada.network.server.socket.RemoteSocketClient;
@@ -206,15 +208,22 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         }
         if(inGame)
             gameManager.removePlayer(username);
-        clientPool.remove(username);
-        if(clientTCPLinkEstablished.get(username))
-            heartbeatProtocolManager.removeFromMonitoredHost(username);
+        try {
+            if (clientPool.get(username).isInFastRecovery()) {
+                clientPool.remove(username);
+                clientIds.remove(username);
+                heartbeatProtocolManager.removeFromMonitoredHost(username);
+            }
+        }
+        catch (RemoteException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+        }
+        //heartbeatProtocolManager.removeFromMonitoredHost(username); use ONLY on end game
         System.out.println(username + " disconnected");
         clientIds.stream()
                  .filter(id -> !id.equals(username))
                  .forEach(clientId -> {
                     try {
-                        clientPool.get(clientId).sendMessage(username + " disconnected");
                         clientPool.get(clientId).removePlayer(username);
                     } catch (RemoteException exc) {
                         LOGGER.log(Level.SEVERE, exc::getMessage);
@@ -254,7 +263,9 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      */
     @Override
     public void onLossCommunication(HeartbeatEvent event) {
-        clientTCPLinkEstablished.put(event.getSource(), false);
+        synchronized (clientTCPLinkEstablished) {
+            clientTCPLinkEstablished.put(event.getSource(), false);
+        }
         System.out.println(event.getSource() + " maybe offline");
     }
 
@@ -264,6 +275,15 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     @Override
     public void onReacquiredCommunication(HeartbeatEvent event) {
         clientLinkState.put(event.getSource(), event.getBeatTimeStamp());
+        try {
+            clientPool.get(event.getSource()).sendMessage(Security.getEncryptedData(CommandKeyword.MESSAGE));
+            clientTCPLinkEstablished.put(event.getSource(), true);
+            if(inGame)
+                gameManager.updateClientState(event.getSource());
+        }
+        catch (IOException exc) {
+            LOGGER.log(Level.INFO, () -> "TCP not ready yet");
+        }
         System.out.println(event.getSource() + " came back");
 
     }
@@ -273,16 +293,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      */
     @Override
     public void onAcquiredCommunication(HeartbeatEvent event) {
-        clientIds.forEach(clientId -> {
-            if (!clientId.equals(event.getSource()))
-                try {
-                    clientPool.get(clientId).sendMessage(event.getSource() + " is online");
-                    clientPool.get(clientId).setPlayer(event.getSource());
-                }
-                catch (RemoteException exc) {
-                    LOGGER.log(Level.SEVERE, exc::getMessage);
-                }
-        });
+        clientLinkState.put(event.getSource(), event.getBeatTimeStamp());
     }
 
     /**
@@ -320,15 +331,12 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         catch (RemoteException|AlreadyBoundException exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
         }
-        clientIds.forEach(username -> {
-            try {
-                clientPool.get(token).setPlayer(username);
-            }
-            catch (RemoteException exc) {
-                LOGGER.log(Level.SEVERE, exc::getMessage);
-            }
-        });
-        clientTCPLinkEstablished.put(token, true);
+        for(String username : clientIds)
+            for(String receiver : clientIds)
+                clientPool.get(receiver).setPlayer(username, clientIds.indexOf(username));
+        synchronized (clientTCPLinkEstablished) {
+            clientTCPLinkEstablished.put(token, true);
+        }
         if(inGame)
             gameManager.updateClientState(token);
         return true;
@@ -358,8 +366,11 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
                     clientPool.put(id, socketClient);
                     executor.submit(socketClient);
                     for(String username : clientIds)
-                        clientPool.get(id).setPlayer(username);
-                    clientTCPLinkEstablished.put(id, true);
+                        for(String receiver : clientIds)
+                            clientPool.get(receiver).setPlayer(username, clientIds.indexOf(username));
+                    synchronized (clientTCPLinkEstablished) {
+                        clientTCPLinkEstablished.put(id, true);
+                    }
                     if(inGame)
                         gameManager.updateClientState(id);
                 }
@@ -373,10 +384,12 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     }
 
     private boolean checkValidClientLinkState() {
-        for(String id : clientIds)
-            if(new Date().getTime() - clientLinkState.get(id) > 1500 || !clientTCPLinkEstablished.get(id)) {
-                clientTCPLinkEstablished.put(id, false);
-                return false;
+        for(String id : clientIdTokens)
+            synchronized (clientTCPLinkEstablished) {
+                if (new Date().getTime() - clientLinkState.get(id) > 2000 || !clientTCPLinkEstablished.get(id)) {
+                    //clientTCPLinkEstablished.put(id, false);
+                    return false;
+                }
             }
         return true;
     }
@@ -422,9 +435,13 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         clientIds.forEach(username -> new Thread(() -> {
             try {
                 clientPool.get(username).setTimer(payload);
-                clientTCPLinkEstablished.put(username, true); //ignored, as it is supposed to be, if there is some socket related exception, on rmi case is just waiting for the blocking call to remote method setTimer
+                clientTCPLinkEstablished.put(username, true);
             } catch (RemoteException exc) {
+                clientTCPLinkEstablished.put(username, false);
                 LOGGER.log(Level.SEVERE, exc::getMessage);
+            }
+            catch (NullPointerException exc) {
+                clientTCPLinkEstablished.put(username, false);
             }
         }).start());
     }

@@ -332,8 +332,8 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      * @see it.polimi.ingsw.sagrada.network.client.ClientBase#setPlayer(java.lang.String)
      */
     @Override
-    public void setPlayer(String playerName) {
-        CommandManager.setPlayer(playerName);
+    public void setPlayer(String playerName, int position) {
+        CommandManager.setPlayer(playerName, position);
     }
 
     /* (non-Javadoc)
@@ -350,6 +350,11 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public String getId() {
         return username;
+    }
+
+    @Override
+    public boolean isInFastRecovery() throws RemoteException {
+        return false;
     }
 
     /* (non-Javadoc)

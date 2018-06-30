@@ -22,6 +22,7 @@ import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -80,11 +81,14 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     /** The dynamic router. */
     private DynamicRouter dynamicRouter;
 
+    private boolean isInFastRecovery;
+
 
     /**
      * Instantiates a new socket client.
      */
     public SocketClient() {
+        isInFastRecovery = false;
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
         dynamicRouter = LoginGuiAdapter.getDynamicRouter();
         establishServerConnection();
@@ -200,6 +204,11 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     @Override
     public String getId() {
         return username;
+    }
+
+    @Override
+    public boolean isInFastRecovery() throws RemoteException {
+        return isInFastRecovery;
     }
 
     /* (non-Javadoc)
@@ -356,6 +365,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 String json = Security.getDecryptedData(inSocket.readLine());
                 CommandManager.executePayload(json);
             } catch (IOException exc) {
+                isInFastRecovery = true;
                 LOGGER.log(Level.SEVERE, exc::getMessage);
                 executor.shutdown();
                 fastRecovery();
