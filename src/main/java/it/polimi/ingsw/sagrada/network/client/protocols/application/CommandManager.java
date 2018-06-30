@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.application;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Pair;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
@@ -17,6 +18,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
+import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.gui.game.GameGuiAdapter;
 import it.polimi.ingsw.sagrada.gui.game.GameView;
 import it.polimi.ingsw.sagrada.gui.lobby.LobbyGuiView;
@@ -272,14 +274,11 @@ public class CommandManager implements MessageVisitor {
             windowGameManager = new WindowGameManager();
         windowGameManager.getWindows().clear();
         List<String> players = opponentWindowResponse.getPlayers();
+        Map<String, Pair<Integer, WindowSide>> windows = new HashMap<>();
         for(String player : players) {
-            System.out.println("Window id : " + opponentWindowResponse.getPlayerWindowId(player) + " Window side : " + opponentWindowResponse.getPlayerWindowSide(player));
-            windowGameManager.addWindow(opponentWindowResponse.getPlayerWindowId(player), opponentWindowResponse.getPlayerWindowSide(player));
-            if(player.equals(username)) {
-                windowGameManager.setPlayerWindow(opponentWindowResponse.getPlayerWindowId(player), opponentWindowResponse.getPlayerWindowSide(player));
-                System.out.println("Player window");
-            }
+            windows.put(player, new Pair<>(opponentWindowResponse.getPlayerWindowId(player), opponentWindowResponse.getPlayerWindowSide(player)));
         }
+        windowGameManager.setWindows(windows, players);
     }
 
     /* (non-Javadoc)

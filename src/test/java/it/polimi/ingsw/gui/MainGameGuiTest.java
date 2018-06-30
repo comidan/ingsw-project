@@ -22,10 +22,7 @@ import javafx.application.Platform;
 import org.junit.Test;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,11 +57,11 @@ public class MainGameGuiTest {
             dice.setValue(5);
             diceList.add(dice);
             DiceResponse diceResponse = new DiceResponse("draft", diceList);
-            List<Constraint[][]> constraints = new ArrayList<>();
+            Map<String, Constraint[][]> constraints = new HashMap<>();
             ConstraintGenerator constraintGenerator = new ConstraintGenerator();
-            constraints.add(constraintGenerator.getConstraintMatrix(1, WindowSide.FRONT));
-            constraints.add(constraintGenerator.getConstraintMatrix(2, WindowSide.FRONT));
-            constraints.add(constraintGenerator.getConstraintMatrix(3, WindowSide.FRONT));
+            constraints.put("test", constraintGenerator.getConstraintMatrix(1, WindowSide.FRONT));
+            constraints.put("daniele", constraintGenerator.getConstraintMatrix(2, WindowSide.FRONT));
+            constraints.put("admin", constraintGenerator.getConstraintMatrix(3, WindowSide.FRONT));
             final Window window = new WindowManager(null, new MessageDispatcher()).generateWindow(1, WindowSide.FRONT);
             GameView gameView = GameView.getInstance("test", players, constraints);
             DiceView diceView = new DiceView(Constraint.BLUE, Constraint.THREE, 4);

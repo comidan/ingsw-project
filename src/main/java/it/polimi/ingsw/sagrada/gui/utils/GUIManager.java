@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -65,7 +66,7 @@ public class GUIManager {
      * @param constraints the constraints
      * @return the game view
      */
-    public static GameView initGameView(String username, Stage stage, List<String> players, List<Constraint[][]> constraints) {
+    public static GameView initGameView(String username, Stage stage, List<String> players, Map<String, Constraint[][]> constraints) {
         return GameView.getInstance(username, stage, players, constraints);
     }
 

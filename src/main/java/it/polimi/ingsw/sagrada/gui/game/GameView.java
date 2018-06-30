@@ -12,7 +12,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -79,7 +78,7 @@ public class GameView extends Application {
     private static List<String> players;
 
     /** The constraints. */
-    private static List<Constraint[][]> constraints;
+    private static Map<String, Constraint[][]> constraints;
     
     /** The end turn button. */
     private EndTurn endTurn;
@@ -208,7 +207,7 @@ public class GameView extends Application {
      * @param constraints the constraints
      * @return single instance of GameView
      */
-    public static GameView getInstance(String username, List<String> players, List<Constraint[][]> constraints) {
+    public static GameView getInstance(String username, List<String> players, Map<String, Constraint[][]> constraints) {
         if (gameView == null) {
             new Thread(() -> startGameGUI(username, players, constraints)).start(); //)Platform.runLater(() -> startGameGUI(username, stage, player, diceResponse, constraints));
             while (gameView == null)
@@ -344,7 +343,7 @@ public class GameView extends Application {
      * @param players the players
      * @param constraints the constraints
      */
-    private static void startGameGUI(String username, Stage stage, List<String> players, List<Constraint[][]> constraints) {
+    private static void startGameGUI(String username, Stage stage, List<String> players, Map<String, Constraint[][]> constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
         GameView.username = username;
@@ -359,7 +358,7 @@ public class GameView extends Application {
      * @param players the players
      * @param constraints the constraints
      */
-    private static void startGameGUI(String username, List<String> players, List<Constraint[][]> constraints) {
+    private static void startGameGUI(String username, List<String> players, Map<String, Constraint[][]> constraints) {
         GameView.constraints = constraints;
         GameView.players = players;
         GameView.username = username;
@@ -376,7 +375,7 @@ public class GameView extends Application {
      * @param constraints the constraints
      * @return single instance of GameView
      */
-    public static GameView getInstance(String username, Stage stage, List<String> players, List<Constraint[][]> constraints) {
+    public static GameView getInstance(String username, Stage stage, List<String> players, Map<String, Constraint[][]> constraints) {
         if (gameView == null) {
            Platform.runLater(() -> startGameGUI(username, stage, players, constraints));
             while (gameView == null)
@@ -397,7 +396,7 @@ public class GameView extends Application {
      */
     private void createScene(Stage primaryStage) {
 
-        players.forEach(user -> windows.put(user, new WindowView(constraints.get(players.indexOf(user)))));
+        players.forEach(user -> windows.put(user, new WindowView(constraints.get(user))));
         hBox.setSpacing(15);
         players.forEach(plr -> {
             if(!plr.equals(username)) hBox.getChildren().add(windows.get(plr));

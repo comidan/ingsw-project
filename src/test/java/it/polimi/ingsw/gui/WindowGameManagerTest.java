@@ -12,12 +12,12 @@ public class WindowGameManagerTest {
     @Test
     public void testWindowGameManager() {
         WindowGameManager windowGameManager = new WindowGameManager();
-        windowGameManager.addWindow(0, WindowSide.FRONT);
+        windowGameManager.addWindow("test", 0, WindowSide.FRONT);
         Constraint[][] windowConstraints = {{Constraint.YELLOW, Constraint.BLUE, Constraint.WHITE, Constraint.WHITE, Constraint.ONE},
                                             {Constraint.GREEN, Constraint.WHITE, Constraint.FIVE, Constraint.WHITE, Constraint.FOUR},
                                             {Constraint.THREE, Constraint.WHITE, Constraint.RED, Constraint.WHITE, Constraint.GREEN},
                                             {Constraint.TWO, Constraint.WHITE, Constraint.WHITE, Constraint.BLUE, Constraint.YELLOW}};
-        Constraint[][] windowConstraintsCheck = windowGameManager.getWindows().get(0);
+        Constraint[][] windowConstraintsCheck = windowGameManager.getWindows().get("test");
         assertEquals(windowConstraints, windowConstraintsCheck);
     }
 }
