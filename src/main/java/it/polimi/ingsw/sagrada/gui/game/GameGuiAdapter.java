@@ -83,6 +83,7 @@ public class GameGuiAdapter {
     private void setEndTurnHandler(Client client) {
         Platform.runLater(() -> {
             this.gameView.setEndTurnHandler(event -> {
+                disableGuiElement();
                 EndTurnEvent endTurnEvent = new EndTurnEvent(this.gameView.getUsername());
                 try {
                     client.sendRemoteMessage(endTurnEvent);
@@ -247,7 +248,7 @@ public class GameGuiAdapter {
     // Tool effect: change dice value in draft adding one OR rolls again dice, according to value it gets
     // can be used for toolcards: 1, 6, 10
 
-    public void enableDraftChangeValue(Client client){
+    private void enableDraftChangeValue(Client client){
         this.gameView.enableDraftChangeValue(event ->
         {
             DiceView diceView = (DiceView) event.getSource();
@@ -269,24 +270,17 @@ public class GameGuiAdapter {
     // Tool effect: enable moving dice on your own window
     // can be used for toolcards: 2, 3, 4, 12
 
-    public void enableWindowDiceDrag(){
-
-        this.gameView.enableWindowDiceDrag(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(javafx.scene.input.MouseEvent event) {
-                DiceView diceView = (DiceView) event.getSource();
-                clickedObject.setClickedDice(diceView);
-                Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
-                ClipboardContent content = new ClipboardContent();
-                content.putImage(diceView.getImage());
-                db.setContent(content);
-                event.consume();
-
-
-            }
-
+    private void enableWindowDiceDrag() {
+        this.gameView.enableWindowDiceDrag(event -> {
+            DiceView diceView = (DiceView) event.getSource();
+            clickedObject.setClickedDice(diceView);
+            Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(diceView.getImage());
+            db.setContent(content);
+            event.consume();
         });
-        }
+    }
 
     public void disableWindowDiceDrag(){
             gameView.disableWindowDiceDrag();
@@ -532,5 +526,11 @@ public class GameGuiAdapter {
     public void enableGuiElement(int toolId, Client client) {
         System.out.println("---GameGuiAdapter enable GUI element---");
         if(toolId==0 || toolId==5 || toolId==6 || toolId==9) enableDraftChangeValue(client);
+        if(toolId==1 || toolId==2) enableWindowDiceDrag();
+    }
+
+    public void disableGuiElement() {
+        disableDraftChangeValue();
+        disableWindowDiceDrag();
     }
 }
