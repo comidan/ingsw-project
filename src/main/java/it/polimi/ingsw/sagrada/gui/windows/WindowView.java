@@ -126,7 +126,7 @@ public class WindowView extends GridPane {
         for (int j = 0; j < windowDices[0].length; j++)
             if(windowDices[i][j].isOccupied()){
             if(enableWindowDragHandler!=null)
-                windowDices[i][j].getDiceView().removeEventHandler(MouseEvent.DRAG_DETECTED, enableWindowDragHandler);
+                windowDices[i][j].getDiceView().setDisable(true);
             }
 
     }
