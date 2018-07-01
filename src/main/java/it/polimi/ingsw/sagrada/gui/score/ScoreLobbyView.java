@@ -3,11 +3,15 @@ package it.polimi.ingsw.sagrada.gui.score;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -27,6 +31,7 @@ public class ScoreLobbyView extends Application{
     private Label fourthPlayer;
     /** The window height. */
     private double windowHeight;
+    private Label title;
 
     /** The window width. */
     private double windowWidth;
@@ -52,34 +57,40 @@ public class ScoreLobbyView extends Application{
         windowHeight = GUIManager.getWindowHeight();
         windowWidth = GUIManager.getWindowWidth();
         anchorPane.resize(windowWidth, windowHeight);
+        setTitle();
+        anchorPane.getChildren().add(title);
         firstPlayer = new Label();
+        firstPlayer.setFont(Font.font("System", FontWeight.NORMAL, GUIManager.getResizedFont(GUIManager.TITLE_2)));
         secondPlayer = new Label();
+        secondPlayer.setFont(Font.font("System", FontWeight.NORMAL, GUIManager.getResizedFont(GUIManager.TITLE_2)));
         thirdPlayer = new Label();
+        thirdPlayer.setFont(Font.font("System", FontWeight.NORMAL, GUIManager.getResizedFont(GUIManager.TITLE_2)));
         fourthPlayer = new Label();
+        fourthPlayer.setFont(Font.font("System", FontWeight.NORMAL, GUIManager.getResizedFont(GUIManager.TITLE_2)));
         ImageView dice1 = new ImageView();
-        dice1.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice1B.png"), 50, 50, true, true));
+        dice1.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice1B.png"), 70, 70, true, true));
         AnchorPane.setBottomAnchor(dice1, GUIManager.getHeightPixel(62));
         AnchorPane.setLeftAnchor(dice1, GUIManager.getWidthPixel(20));
-        AnchorPane.setLeftAnchor(firstPlayer, GUIManager.getWidthPixel(30));
+        AnchorPane.setLeftAnchor(firstPlayer, GUIManager.getWidthPixel(40));
         AnchorPane.setBottomAnchor(firstPlayer, GUIManager.getHeightPixel(65));
         ImageView dice2 = new ImageView();
-        dice2.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice2Y.png"), 50, 50, true, true));
+        dice2.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice2Y.png"), 70, 70, true, true));
         AnchorPane.setBottomAnchor(dice2, GUIManager.getHeightPixel(47));
         AnchorPane.setLeftAnchor(dice2, GUIManager.getWidthPixel(20));
-        AnchorPane.setLeftAnchor(secondPlayer, GUIManager.getWidthPixel(30));
+        AnchorPane.setLeftAnchor(secondPlayer, GUIManager.getWidthPixel(40));
         AnchorPane.setBottomAnchor(secondPlayer, GUIManager.getHeightPixel(50));
         ImageView dice3 = new ImageView();
-        dice3.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice3P.png"), 50, 50, true, true));
+        dice3.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice3P.png"), 70, 70, true, true));
         AnchorPane.setBottomAnchor(dice3, GUIManager.getHeightPixel(32));
         AnchorPane.setBottomAnchor(thirdPlayer, GUIManager.getHeightPixel(35));
         AnchorPane.setLeftAnchor(dice3, GUIManager.getWidthPixel(20));
-        AnchorPane.setLeftAnchor(thirdPlayer, GUIManager.getWidthPixel(30));
+        AnchorPane.setLeftAnchor(thirdPlayer, GUIManager.getWidthPixel(40));
         ImageView dice4 = new ImageView();
-        dice4.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice4G.png"), 50, 50, true, true));
+        dice4.setImage(new Image(ScoreLobbyView.class.getResourceAsStream("/images/DiceImages/Dice4G.png"), 70, 70, true, true));
         AnchorPane.setBottomAnchor(dice4, GUIManager.getHeightPixel(17));
         AnchorPane.setBottomAnchor(fourthPlayer, GUIManager.getHeightPixel(20));
         AnchorPane.setLeftAnchor(dice4, GUIManager.getWidthPixel(20));
-        AnchorPane.setLeftAnchor(fourthPlayer, GUIManager.getWidthPixel(30));
+        AnchorPane.setLeftAnchor(fourthPlayer, GUIManager.getWidthPixel(40));
         anchorPane.getChildren().addAll(dice1, firstPlayer, dice2, secondPlayer, dice3, thirdPlayer, dice4, fourthPlayer);
         setScores();
 
@@ -115,6 +126,19 @@ public class ScoreLobbyView extends Application{
             case 3:  setFourthPlayer(username, score); break;
             default: break;
         }
+    }
+
+    private void setTitle(){
+        title = new Label("Rankings");
+        title.setAlignment(Pos.CENTER);
+        title.setTextFill(Color.web("#FFFFFF"));
+        title.setFont(Font.font("System", FontWeight.BOLD, GUIManager.getResizedFont(GUIManager.MAIN_TITLE)));
+        title.setStyle("-fx-background-color: #d57322;" +
+                "-fx-border-color: #000000"
+        );
+        AnchorPane.setTopAnchor(title, GUIManager.getHeightPixel(13));
+        AnchorPane.setLeftAnchor(title, GUIManager.getWidthPixel(20));
+        AnchorPane.setRightAnchor(title, GUIManager.getWidthPixel(20));
     }
 
     private void setFirstPlayer(String message, int score) {
