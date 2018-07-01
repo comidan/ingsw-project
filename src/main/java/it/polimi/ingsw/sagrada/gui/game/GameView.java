@@ -650,6 +650,10 @@ public class GameView extends Application {
          windows.get(username).disableDiceDrag();
     }
 
+    void disableToolBuy(){
+        this.cardBoard.disableToolBuy();
+    }
+
     private void setEndTurnButton(){
         AnchorPane.setLeftAnchor(endTurn, GUIManager.getGameWidthPixel(35));
         AnchorPane.setBottomAnchor(endTurn, GUIManager.getGameHeightPixel(7));

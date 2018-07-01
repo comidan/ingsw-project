@@ -118,5 +118,11 @@ public class CardBoard extends AnchorPane {
     }
 
 
+    public void disableToolBuy(){
+        for( ToolCardView toolCardView : toolCardViewList)
+        {
+            toolCardView.setDisable(true);
+        }
+    }
 
 }
