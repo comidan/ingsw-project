@@ -258,23 +258,23 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 	 *
 	 * @return the tool builder
 	 */
-	public ToolBuilder setRollEveryDraftDice() {
-		function = dto -> {
-			dto.getRollDraft().run();
-			return ErrorType.NO_ERROR;
-		};
-		return this;
-	}
+			public ToolBuilder setRollEveryDraftDice() {
+				function = dto -> {
+					dto.getRollDraft().run();
+					return ErrorType.NO_ERROR;
+				};
+				return this;
+			}
 
-	/**
-	 * Sets move from draft to bag and set new dice feature
-	 *
-	 * @return the tool builder
-	 */
-	public ToolBuilder setFromDraftToBagFeature(){
-		function = dto -> {
-			Dice diceFromDraft = dto.getDice();
-			Dice diceFromBag = dto.getSecondDice();
+			/**
+			 * Sets move from draft to bag and set new dice feature
+			 *
+			 * @return the tool builder
+			 */
+			public ToolBuilder setFromDraftToBagFeature(){
+				function = dto -> {
+					Dice diceFromDraft = dto.getDice();
+					Dice diceFromBag = dto.getSecondDice();
 			Cell[][] cells = dto.getWindowMatrix();
 			if(checkIfNull(diceFromBag, diceFromBag, cells) == ErrorType.NULL_DATA)
 				return ErrorType.NULL_DATA;
