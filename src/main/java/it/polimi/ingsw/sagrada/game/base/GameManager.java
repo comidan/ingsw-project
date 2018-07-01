@@ -163,7 +163,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      */
     private void dealToolState() {
         tools = cardManager.dealTool();
-        toolManager = new ToolManager(tools, listToMap(players), dynamicRouter);
+        toolManager = new ToolManager(tools, listToMap(players), ruleManager.getIgnoreValueSet(), dynamicRouter);
         List<Integer> toolCardIds = new ArrayList<>();
         tools.forEach(toolCard -> toolCardIds.add(toolCard.getId()));
         sendMessage(new ToolCardResponse(toolCardIds));

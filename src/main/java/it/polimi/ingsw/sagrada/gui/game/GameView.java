@@ -296,11 +296,11 @@ public class GameView extends Application {
     public void setToken(int tokenNumber) {
         tokenGrid = new GridPane();
         for (int i = 0; i < tokenNumber; i++) {
-            tokenGrid.add(new TokenView(), i, 1); //pay attention : manage click even when all tokens are removed : IndexOutOfBoundException
+            tokenGrid.add(new TokenView(), 1, i); //pay attention : manage click even when all tokens are removed : IndexOutOfBoundException
         }
 
-        AnchorPane.setTopAnchor(tokenGrid, GUIManager.getGameHeightPixel(10));
-        AnchorPane.setLeftAnchor(tokenGrid, GUIManager.getGameWidthPixel(15));
+        AnchorPane.setTopAnchor(tokenGrid, GUIManager.getGameHeightPixel(20));
+        AnchorPane.setLeftAnchor(tokenGrid, GUIManager.getGameWidthPixel(35));
         anchorPane.getChildren().addAll(tokenGrid);
 
     }

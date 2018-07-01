@@ -92,6 +92,8 @@ public class CardManager {
 				case "setAddTwoDiceFeature": toolBuilder.setAddTwoDiceFeature(); break;
 				case "setExchangeDraftRoundTrackDiceFeature": toolBuilder.setExchangeDraftRoundTrackDiceFeature(); break;
 				case "setRollDiceFeature": toolBuilder.setRollDiceFeature(); break;
+				case "setRollEveryDraftDice": toolBuilder.setRollEveryDraftDice(); break;
+				case "setMoveOppositeSideDiceFeature": toolBuilder.setMoveOppositeSideDiceFeature(); break;
 				default: LOGGER.log(Level.SEVERE, () -> "JSON is not correct. Check ToolCard.json Action Array");
 			}
 		});

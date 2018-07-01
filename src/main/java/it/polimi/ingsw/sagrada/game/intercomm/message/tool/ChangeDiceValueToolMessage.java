@@ -6,14 +6,18 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 
-public class FirstToolMessage implements Message, DiceManagerVisitor {
+import java.util.Set;
+
+public class ChangeDiceValueToolMessage implements Message, DiceManagerVisitor {
 
     private ToolCard toolCard;
     private int diceId;
+    private Set<Integer> ignoreValueSet;
 
-    public FirstToolMessage(ToolCard toolCard, int diceId) {
+    public ChangeDiceValueToolMessage(ToolCard toolCard, int diceId, Set<Integer> ignoreValueSet) {
         this.toolCard = toolCard;
         this.diceId = diceId;
+        this.ignoreValueSet = ignoreValueSet;
     }
 
     public ToolCard getToolCard() {
@@ -23,6 +27,8 @@ public class FirstToolMessage implements Message, DiceManagerVisitor {
     public int getDiceId() {
         return diceId;
     }
+
+    public Set<Integer> getIgnoreValueSet() { return ignoreValueSet; }
 
     @Override
     public Class<? extends Message> getType() {

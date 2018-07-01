@@ -1,13 +1,13 @@
 package it.polimi.ingsw.sagrada.game.cards;
 
 import it.polimi.ingsw.sagrada.game.base.Player;
-import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.FirstToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ChangeDiceValueToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RollAllDiceToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor;
@@ -31,6 +31,8 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 
 	private DynamicRouter dynamicRouter;
 
+	private Set<Integer> ignoreValueSet;
+
 	private int cost;
 
 	/**
@@ -38,10 +40,11 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 	 *
 	 * @param toolCards the tool cards
 	 */
-	public ToolManager(List<ToolCard> toolCards, Map<String, Player> players, DynamicRouter dynamicRouter) {
+	public ToolManager(List<ToolCard> toolCards, Map<String, Player> players, Set<Integer> ignoreValueSet, DynamicRouter dynamicRouter) {
 		this.toolCards = toolCards;
 		this.players = players;
 		this.dynamicRouter = dynamicRouter;
+		this.ignoreValueSet = ignoreValueSet;
 		this.dynamicRouter.subscribeChannel(ToolEvent.class, this);
 		this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
 		this.dynamicRouter.subscribeChannel(DiceDraftSelectionEvent.class, this);
@@ -77,6 +80,11 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		return false;
 	}
 
+	private void resetTool() {
+		currentToolbuyer = "";
+		currentToolbuyer = null;
+	}
+
 	@Override
 	public void dispatch(Message message) {
 		ToolGameVisitor toolGameVisitor = (ToolGameVisitor) message;
@@ -91,8 +99,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 
 	@Override
 	public void visit(EndTurnEvent endTurnEvent) {
-		currentToolbuyer = "";
-		currentToolbuyer = null;
+		resetTool();
 	}
 
 	@Override
@@ -103,7 +110,14 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 
     @Override
     public void visit(DiceDraftSelectionEvent diceDraftSelectionEvent) {
-        //controlla che il messaggio arrivi in un momento sensato TO-DO
-		sendMessage(new FirstToolMessage(currentSelectedTool, diceDraftSelectionEvent.getIdDice()));
+		System.out.println("---ToolManager current tool--- "+currentSelectedTool.getId());
+		int id = currentSelectedTool.getId();
+		if(id==0 || id==5 || id==9) {
+			sendMessage(new ChangeDiceValueToolMessage(currentSelectedTool, diceDraftSelectionEvent.getIdDice(), ignoreValueSet));
+		}
+		else if(id==6) {
+			sendMessage(new RollAllDiceToolMessage(currentSelectedTool));
+		}
+		resetTool();
     }
 }

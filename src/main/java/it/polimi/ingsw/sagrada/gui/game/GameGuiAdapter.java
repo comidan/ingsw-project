@@ -530,7 +530,7 @@ public class GameGuiAdapter {
     }
 
     public void enableGuiElement(int toolId, Client client) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA");
-        enableDraftChangeValue(client);
+        System.out.println("---GameGuiAdapter enable GUI element---");
+        if(toolId==0 || toolId==5 || toolId==6 || toolId==9) enableDraftChangeValue(client);
     }
 }

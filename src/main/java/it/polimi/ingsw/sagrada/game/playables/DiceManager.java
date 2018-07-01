@@ -9,7 +9,8 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.FirstToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ChangeDiceValueToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RollAllDiceToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerVisitor;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
@@ -66,7 +67,8 @@ public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerM
         this.dispatchGameManager = dispatchGameManager;
         this.dynamicRouter = dynamicRouter;
         this.dynamicRouter.subscribeChannel(DiceEvent.class, this);
-        this.dynamicRouter.subscribeChannel(FirstToolMessage.class, this);
+        this.dynamicRouter.subscribeChannel(ChangeDiceValueToolMessage.class, this);
+        this.dynamicRouter.subscribeChannel(RollAllDiceToolMessage.class, this);
     }
 
     /**
@@ -164,12 +166,22 @@ public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerM
     }
 
     @Override
-    public void visit(FirstToolMessage firstToolMessage) {
+    public void visit(ChangeDiceValueToolMessage changeDiceValueToolMessage) {
         DTO dto = new DTO();
-        dto.setDice(getDiceDraft(firstToolMessage.getDiceId()));
-        dto.setIgnoreValueSet(new HashSet<Integer>());
-        firstToolMessage.getToolCard().getRule().checkRule(dto);
+        dto.setDice(getDiceDraft(changeDiceValueToolMessage.getDiceId()));
+        dto.setIgnoreValueSet(changeDiceValueToolMessage.getIgnoreValueSet());
+        changeDiceValueToolMessage.getToolCard().getRule().checkRule(dto);
         putDiceDraft(dto.getDice());
+        System.out.println("---DiceManager, sending new draft---");
+        sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
+    }
+
+    @Override
+    public void visit(RollAllDiceToolMessage rollAllDiceToolMessage) {
+        DTO dto = new DTO();
+        dto.setRollDraft(this::rollDraft);
+        rollAllDiceToolMessage.getToolCard().getRule().checkRule(dto);
+        System.out.println("---DiceManager, sending new draft---");
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }
 
