@@ -445,6 +445,7 @@ public class GameView extends Application {
      */
     void notifyTurn() {
         components.forEach(node -> node.setDisable(false));
+        cardBoard.enableToolBuy();
         timer.setVisible(true);
     }
 
@@ -469,6 +470,7 @@ public class GameView extends Application {
         timer.setText("");
         timer.setVisible(false);
         components.forEach(node -> node.setDisable(true));
+        disableToolBuy();
     }
 
     /**
