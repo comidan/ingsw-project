@@ -259,6 +259,7 @@ public class GameGuiAdapter {
             } catch (RemoteException e) {
                 LOGGER.log(Level.SEVERE, e::getMessage);
             }
+            disableGuiElement();
             // IMPORTANT : model must control that the used dice is actually the chosen dice for toolcard 1 and 10
         });
     }
@@ -271,7 +272,9 @@ public class GameGuiAdapter {
     // can be used for toolcards: 2, 3, 4, 12
 
     private void enableWindowDiceDrag() {
+        System.out.println("---EnableDrag---");
         this.gameView.enableWindowDiceDrag(event -> {
+            System.out.println("---Window click---");
             DiceView diceView = (DiceView) event.getSource();
             clickedObject.setClickedDice(diceView);
             Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
@@ -279,6 +282,7 @@ public class GameGuiAdapter {
             content.putImage(diceView.getImage());
             db.setContent(content);
             event.consume();
+            disableGuiElement();
         });
     }
 

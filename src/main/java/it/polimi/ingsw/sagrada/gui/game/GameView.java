@@ -209,7 +209,7 @@ public class GameView extends Application {
      */
     public static GameView getInstance(String username, List<String> players, Map<String, Constraint[][]> constraints) {
         if (gameView == null) {
-            new Thread(() -> startGameGUI(username, players, constraints)).start(); //)Platform.runLater(() -> startGameGUI(username, stage, player, diceResponse, constraints));
+            new Thread(() -> startGameGUI(username, players, constraints)).start();
             while (gameView == null)
                 try {
                     Thread.sleep(100);

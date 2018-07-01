@@ -1,8 +1,5 @@
 [
 	{ "id":0, "name":"Pinza Sgrossatrice", "action":["setIncrementDiceFeature"]},
 	{ "id":1, "name":"Pennello per Englomise", "action":["setMoveIgnoringColorRuleFeature"]},
-	{ "id":2, "name":"Alesatore per lamina di rame", "action":["setMoveIgnoringValueRuleFeature"]},
-	{ "id":5, "name":"Pennello per Pasta Salda", "action":["setRollDiceFeature"]},
-	{ "id":6, "name":"Martelletto", "action":["setRollEveryDraftDice"]},
-	{ "id":9, "name":"Tampone Diamantato", "action":["setMoveOppositeSideDiceFeature"]}
+	{ "id":2, "name":"Alesatore per lamina di rame", "action":["setMoveIgnoringValueRuleFeature"]}
 ]
