@@ -206,7 +206,8 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
      */
     @Override
     public void visit(OpponentDiceMoveResponse opponentDiceMoveResponse) {
-        sendRemoteMessage(opponentDiceMoveResponse, filter -> !filter.equals(getClient(opponentDiceMoveResponse.getIdPlayer())));
+        //sendRemoteMessage(opponentDiceMoveResponse, filter -> !filter.equals(getClient(opponentDiceMoveResponse.getIdPlayer())));
+        sendRemoteMessage(opponentDiceMoveResponse, filter -> anyone());
     }
 
     /* (non-Javadoc)

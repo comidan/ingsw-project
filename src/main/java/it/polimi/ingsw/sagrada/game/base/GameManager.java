@@ -21,6 +21,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceWindowToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
@@ -167,7 +168,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      */
     private void dealToolState() {
         tools = cardManager.dealTool();
-        toolManager = new ToolManager(tools, listToMap(players), ruleManager::addIgnoreValue, dynamicRouter);
+        toolManager = new ToolManager(tools, listToMap(players), ruleManager::addIgnoreValue, ruleManager::addIgnoreColor, dynamicRouter);
         List<Integer> toolCardIds = new ArrayList<>();
         tools.forEach(toolCard -> toolCardIds.add(toolCard.getId()));
         sendMessage(new ToolCardResponse(toolCardIds));
@@ -267,7 +268,9 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             Window window = player.getWindow();
             window.setCell(dice, position.getRow(), position.getCol());
             ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
+            if(player.isTurnPlayed()) errorType = ErrorType.ALREADY_PLAYED;
             if(errorType == ErrorType.NO_ERROR) {
+                player.setIsTurnPlayed(true);
                 sendMessage(new OpponentDiceMoveResponse(idPlayer, dice, position));
                 sendMessage(new DiceResponse(CommandKeyword.DRAFT, diceManager.getDraft()));
             }
@@ -473,6 +476,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      */
     @Override
     public void visit(EndTurnEvent message) {
+        idToPlayer(playerIterator.getCurrentPlayer()).setIsTurnPlayed(false);
         notifyNextPlayer();
     }
 
@@ -486,7 +490,10 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         dto.setCurrentPosition(window.getPositionFromId(id));
         dto.setNewPosition(moveDiceWindowToolMessage.getPosition());
         dto.setWindowMatrix(window.getCellMatrix());
-        dto.setIgnoreValueSet(moveDiceWindowToolMessage.getIgnoredValue());
+        if(moveDiceWindowToolMessage.getToolCard().getId()==2)
+            dto.setIgnoreValueSet(ruleManager::addIgnoreColor);
+        else
+            dto.setIgnoreColorSet(ruleManager::addIgnoreValue);
 
         ErrorType errorTypeRule = moveDiceWindowToolMessage.getToolCard().getRule().checkRule(dto);
         System.out.println("---"+errorTypeRule+"---");
@@ -498,7 +505,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             sendMessage(new OpponentDiceMoveResponse(
                     player.getId(), dice, dto.getNewPosition()));
             sendMessage(new OpponentDiceMoveResponse( //remove dice from window
-                    player.getId(), new Dice(-1, Colors.RED), dto.getCurrentPosition()));
+                    player.getId(), new Dice(-1, Colors.RED), dto.getCurrentPosition())); //id -1 means that is a dice to remove
         }
         else {
             //revert model to the previous move
@@ -510,6 +517,11 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             ruleManager.removeIgnoreValue(dice.getId());
         }
         sendMessage(new RuleResponse(moveDiceWindowToolMessage.getIdPlayer(), errorType == ErrorType.NO_ERROR));
+    }
+
+    @Override
+    public void visit(MoveDiceToolMessage moveDiceToolMessage) {
+
     }
 
     public class GameTimer extends TimerTask {

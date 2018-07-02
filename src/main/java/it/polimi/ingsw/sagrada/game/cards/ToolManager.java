@@ -34,6 +34,8 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 
 	private Consumer<Integer> ignoreValueSet;
 
+	private Consumer<Integer> ignoreColorSet;
+
 	private int cost;
 
 	/**
@@ -41,11 +43,12 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 	 *
 	 * @param toolCards the tool cards
 	 */
-	public ToolManager(List<ToolCard> toolCards, Map<String, Player> players, Consumer<Integer> ignoreValueSet, DynamicRouter dynamicRouter) {
+	public ToolManager(List<ToolCard> toolCards, Map<String, Player> players, Consumer<Integer> ignoreValueSet, Consumer<Integer> ignoreColorSet, DynamicRouter dynamicRouter) {
 		this.toolCards = toolCards;
 		this.players = players;
 		this.dynamicRouter = dynamicRouter;
 		this.ignoreValueSet = ignoreValueSet;
+		this.ignoreColorSet = ignoreColorSet;
 		this.dynamicRouter.subscribeChannel(ToolEvent.class, this);
 		this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
 		this.dynamicRouter.subscribeChannel(DiceDraftSelectionEvent.class, this);
@@ -128,7 +131,13 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		if(diceEvent.getSrc().equals(CommandKeyword.WINDOW)) {
 			int id = currentSelectedTool.getId();
 			if(id == 1) {
-
+				sendMessage(new MoveDiceWindowToolMessage(
+						currentSelectedTool,
+						diceEvent.getIdPlayer(),
+						diceEvent.getIdDice(),
+						diceEvent.getPosition(),
+						ignoreColorSet
+				));
 			} else if(id == 2) {
 				sendMessage(new MoveDiceWindowToolMessage(
 						currentSelectedTool,
@@ -137,6 +146,8 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 						diceEvent.getPosition(),
 						ignoreValueSet
 				));
+			} else if(id == 3) {
+
 			}
 		}
 	}

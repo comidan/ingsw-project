@@ -17,6 +17,8 @@ public class Player {
 
     private boolean connected;
 
+    private boolean isTurnPlayed;
+
     private int tokens;
 
     /**
@@ -27,6 +29,7 @@ public class Player {
     public Player(String id) {
         this.id = id;
         this.connected = true;
+        this.isTurnPlayed = false;
     }
 
     /**
@@ -91,4 +94,8 @@ public class Player {
     public boolean isConnected() {
         return connected;
     }
+
+    public boolean isTurnPlayed() { return isTurnPlayed; }
+
+    public void setIsTurnPlayed(boolean set) { isTurnPlayed=set; }
 }

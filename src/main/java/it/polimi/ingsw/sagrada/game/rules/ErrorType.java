@@ -25,5 +25,8 @@ public enum ErrorType {
     MATRIX_ERROR,
     
     /** The error. */
-    ERROR
+    ERROR,
+
+    /** Player already placed a dice*/
+    ALREADY_PLAYED;
 }

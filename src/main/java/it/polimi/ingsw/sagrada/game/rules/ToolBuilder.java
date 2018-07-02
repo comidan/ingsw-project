@@ -58,10 +58,6 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 				int currentValue = dice.getValue();
 				if(currentValue == 6)
 					return ErrorType.MAX_DICE_VALUE_EXCEEDED;
-				/*Set<Integer> ignoreDiceValueRule = dto.getIgnoreValueSet();
-				if(ignoreDiceValueRule == null)
-					return ErrorType.NULL_DATA;
-				ignoreDiceValueRule.add(dice.getId());*/
 				dice.setValue(currentValue + 1);
 				return ErrorType.NO_ERROR;
 			}

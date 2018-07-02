@@ -500,9 +500,17 @@ public class GameGuiAdapter {
      * @param opponentDiceMoveResponse the new opponent dice response
      */
     public void setOpponentDiceResponse(OpponentDiceMoveResponse opponentDiceMoveResponse) {
-        Platform.runLater(() -> gameView.setOpponentWindow(opponentDiceMoveResponse.getIdPlayer(),
-                                        opponentDiceMoveResponse.getDice(),
-                                        opponentDiceMoveResponse.getPosition()));
+        Platform.runLater(() -> {
+            if(!opponentDiceMoveResponse.getIdPlayer().equals(gameView.getUsername())) {
+                gameView.setOpponentWindow(opponentDiceMoveResponse.getIdPlayer(),
+                        opponentDiceMoveResponse.getDice(),
+                        opponentDiceMoveResponse.getPosition());
+            }
+            else {
+                if(opponentDiceMoveResponse.getDice().getId()==(-1)) //Se è un dado da rimuovere manda anche a se stesso la notifica
+                    gameView.setDiceWindow(opponentDiceMoveResponse.getPosition());
+            }
+        });
 
     }
 

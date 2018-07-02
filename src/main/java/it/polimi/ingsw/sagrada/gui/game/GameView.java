@@ -473,6 +473,10 @@ public class GameView extends Application {
         disableToolBuy();
     }
 
+    void setDiceWindow(Position position) {
+        windows.get(getUsername()).removeMistakenDice(position.getRow(), position.getCol());
+    }
+
     /**
      * Sets the opponent window.
      *

@@ -106,6 +106,7 @@ public class WindowView extends GridPane {
      */
     public void setDice(Dice dice, Position position) {
         if(dice.getId()==(-1)) {
+            System.out.println("Sto per rimuovere il dado");
             windowDices[position.getRow()][position.getCol()].removeMistakenDice();
         }
         else {
