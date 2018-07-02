@@ -67,6 +67,14 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return ignoreValueSet.contains(dice.getId()) || ignoreColorSet.contains(dice.getId());
 	}
 
+	private boolean hasValueDiceClearance(Dice dice) {
+		return ignoreValueSet.contains(dice.getId());
+	}
+
+	private boolean hasColorDiceClearance(Dice dice) {
+		return ignoreColorSet.contains(dice.getId());
+	}
+
 	/**
 	 * Check current cell rule.
 	 *
@@ -76,10 +84,22 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 * @return type of error
 	 */
 	private ErrorType checkCurrentCellRule(Cell[][] cells, int row, int col) {
-		if (!cells[row][col].getCellRule().checkRule(cells[row][col].getCurrentDice()) && !hasDiceClearance(cells[row][col].getCurrentDice()))
-			return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
-		else
-			return ErrorType.NO_ERROR;
+		CellRule cellRule = cells[row][col].getCellRule();
+		boolean checkRule = !cellRule.checkRule(cells[row][col].getCurrentDice());
+		if(cellRule.getValueConstraint()!=0) { //la cella ha un constraint di valore
+			if (checkRule && !hasValueDiceClearance(cells[row][col].getCurrentDice()))
+				return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
+			else
+				return ErrorType.NO_ERROR;
+		} else if(cellRule.getColorConstraint()!=null) { //la cella ha un constraint di colore
+			if (checkRule && !hasColorDiceClearance(cells[row][col].getCurrentDice()))
+				return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
+			else
+				return ErrorType.NO_ERROR;
+		} else {
+			if(checkRule) return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
+			else return ErrorType.NO_ERROR;
+		}
 	}
 
 	/**

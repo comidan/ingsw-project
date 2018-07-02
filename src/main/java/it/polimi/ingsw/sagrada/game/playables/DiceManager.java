@@ -171,7 +171,6 @@ public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerM
     public void visit(ChangeDiceValueToolMessage changeDiceValueToolMessage) {
         DTO dto = new DTO();
         dto.setDice(getDiceDraft(changeDiceValueToolMessage.getDiceId()));
-        dto.setIgnoreValueSet(changeDiceValueToolMessage.getIgnoreValueSet());
         changeDiceValueToolMessage.getToolCard().getRule().checkRule(dto);
         putDiceDraft(dto.getDice());
         System.out.println("---DiceManager, sending new draft---");

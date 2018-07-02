@@ -105,10 +105,15 @@ public class WindowView extends GridPane {
      * @param position the position
      */
     public void setDice(Dice dice, Position position) {
-        windowDices[position.getRow()][position.getCol()].setImageCell(
-                new DiceView(Constraint.getColorConstraint(dice.getColor()),
-                             Constraint.getValueConstraint(dice.getValue()),
-                             dice.getId()));
+        if(dice.getId()==(-1)) {
+            windowDices[position.getRow()][position.getCol()].removeMistakenDice();
+        }
+        else {
+            windowDices[position.getRow()][position.getCol()].setImageCell(
+                    new DiceView(Constraint.getColorConstraint(dice.getColor()),
+                            Constraint.getValueConstraint(dice.getValue()),
+                            dice.getId()));
+        }
     }
 
 
@@ -117,8 +122,8 @@ public class WindowView extends GridPane {
         for (int i = 0; i < windowDices.length; i++)
             for (int j = 0; j < windowDices[0].length; j++)
                 if(windowDices[i][j].isOccupied()){
+                    windowDices[i][j].getDiceView().setDisable(false);
                     windowDices[i][j].getDiceView().setOnDragDetected(enableWindowDragHandler);
-                    System.out.println("WindowView---"+windowDices[i][j].getDiceId()+"---");
                 }
     }
 

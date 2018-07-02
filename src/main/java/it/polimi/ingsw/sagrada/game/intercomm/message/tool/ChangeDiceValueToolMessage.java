@@ -12,12 +12,10 @@ public class ChangeDiceValueToolMessage implements Message, DiceManagerVisitor {
 
     private ToolCard toolCard;
     private int diceId;
-    private Set<Integer> ignoreValueSet;
 
-    public ChangeDiceValueToolMessage(ToolCard toolCard, int diceId, Set<Integer> ignoreValueSet) {
+    public ChangeDiceValueToolMessage(ToolCard toolCard, int diceId) {
         this.toolCard = toolCard;
         this.diceId = diceId;
-        this.ignoreValueSet = ignoreValueSet;
     }
 
     public ToolCard getToolCard() {
@@ -27,8 +25,6 @@ public class ChangeDiceValueToolMessage implements Message, DiceManagerVisitor {
     public int getDiceId() {
         return diceId;
     }
-
-    public Set<Integer> getIgnoreValueSet() { return ignoreValueSet; }
 
     @Override
     public Class<? extends Message> getType() {

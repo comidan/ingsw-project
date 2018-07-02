@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.state.PlayerIterator;
 import it.polimi.ingsw.sagrada.game.base.state.StateGameEnum;
 import it.polimi.ingsw.sagrada.game.base.state.StateIterator;
 import it.polimi.ingsw.sagrada.game.base.state.StateIteratorSingletonPool;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.cards.CardManager;
@@ -496,10 +497,17 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             Dice dice = window.getCellMatrix()[pos.getRow()][pos.getCol()].getCurrentDice();
             sendMessage(new OpponentDiceMoveResponse(
                     player.getId(), dice, dto.getNewPosition()));
+            sendMessage(new OpponentDiceMoveResponse( //remove dice from window
+                    player.getId(), new Dice(-1, Colors.RED), dto.getCurrentPosition()));
         }
         else {
             //revert model to the previous move
-
+            Position prevPos = dto.getCurrentPosition();
+            Position nextPos = dto.getNewPosition();
+            Dice dice = window.getCellMatrix()[nextPos.getRow()][nextPos.getCol()].getCurrentDice();
+            window.resetCell(nextPos.getRow(), nextPos.getCol());
+            window.setCell(dice, prevPos.getRow(), prevPos.getCol());
+            dto.getIgnoreValueSet().remove(dice.getId());
         }
         sendMessage(new RuleResponse(moveDiceWindowToolMessage.getIdPlayer(), errorType == ErrorType.NO_ERROR));
     }

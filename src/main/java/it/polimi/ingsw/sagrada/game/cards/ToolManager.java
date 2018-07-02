@@ -113,7 +113,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		System.out.println("---ToolManager current tool--- "+currentSelectedTool.getId());
 		int id = currentSelectedTool.getId();
 		if(id==0 || id==5 || id==9) {
-			sendMessage(new ChangeDiceValueToolMessage(currentSelectedTool, diceDraftSelectionEvent.getIdDice(), ignoreValueSet));
+			sendMessage(new ChangeDiceValueToolMessage(currentSelectedTool, diceDraftSelectionEvent.getIdDice()));
 		}
 		else if(id==6) {
 			sendMessage(new RollAllDiceToolMessage(currentSelectedTool));
