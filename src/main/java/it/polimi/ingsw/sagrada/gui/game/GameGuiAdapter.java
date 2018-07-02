@@ -161,9 +161,7 @@ public class GameGuiAdapter {
      */
     private void setDraftListener() {
         Platform.runLater(() -> {
-            EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
+            this.gameView.setDraftClickHandler(event ->{
 
                     DiceView diceView = (DiceView) event.getSource();
                     clickedObject.setClickedDice(diceView);
@@ -175,12 +173,9 @@ public class GameGuiAdapter {
                     diceSource = CommandKeyword.DRAFT;
                     System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
 
-                }
-            };
+                });
+            });
 
-
-            this.gameView.setDraftClickHandler(eventHandler);
-        });
     }
 
     /**
