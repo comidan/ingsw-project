@@ -34,24 +34,6 @@ public class RuleManager {
     }
 
     /**
-     * Gets the ignore value set.
-     *
-     * @return the ignore value set
-     */
-    public Set<Integer> getIgnoreValueSet() {
-        return mainGameRule.getIgnoreValueSet();
-    }
-
-    /**
-     * Gets the ignore color set.
-     *
-     * @return the ignore color set
-     */
-    public Set<Integer> getIgnoreColorSet() {
-        return mainGameRule.getIgnoreColorSet();
-    }
-
-    /**
      * Validate rule.
      *
      * @param <P> the generic type
@@ -85,6 +67,34 @@ public class RuleManager {
      */
     public ErrorType validateWindow(Cell[][] cells) {
         return mainGameRule.checkRule(cells);
+    }
+
+    /**
+     * Set new dice to be value ignored
+     */
+    public void addIgnoreValue(int diceId) {
+        mainGameRule.addIgnoreValue(diceId);
+    }
+
+    /**
+     * Remove dice from being color ignored
+     */
+    public void removeIgnoreValue(int diceId) {
+        mainGameRule.removeIgnoreValue(diceId);
+    }
+
+    /**
+     * Remove dice from being value ignored
+     */
+    public void removeIgnoreColor(int diceId) {
+        mainGameRule.removeIgnoreColor(diceId);
+    }
+
+    /**
+     * Set new dice to be color ignored
+     */
+    public void addIgnoreColor(int diceId) {
+        mainGameRule.addIgnoreColor(diceId);
     }
 
     public void addIgnoreSequenceDice(int diceId) {

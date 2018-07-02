@@ -64,7 +64,7 @@ public class ToolRuleTest {
         ToolRule toolRule = ToolRule.builder().setIncrementDiceFeature().build();
         DTO dto = new DTO();
         dto.setDice(diceFour);
-        dto.setIgnoreValueSet(ruleManager.getIgnoreValueSet());
+        dto.setIgnoreValueSet(ruleManager::addIgnoreValue);
         toolRule.checkRule(dto);
         errorType = checkRule(cells);
         assertSame(ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE, errorType);
@@ -103,7 +103,7 @@ public class ToolRuleTest {
         assertSame(ErrorType.NO_ERROR, errorType);
         ToolRule toolRule = ToolRule.builder().setMoveIgnoringColorRuleFeature().build();
         DTO dto = new DTO();
-        dto.setIgnoreColorSet(ruleManager.getIgnoreColorSet());
+        dto.setIgnoreColorSet(ruleManager::addIgnoreColor);
         dto.setCurrentPosition(new Position(1, 2));
         dto.setNewPosition(new Position(0, 3));
         dto.setWindowMatrix(cells);
@@ -145,7 +145,7 @@ public class ToolRuleTest {
         assertSame(ErrorType.NO_ERROR, errorType);
         ToolRule toolRule = ToolRule.builder().setMoveIgnoringValueRuleFeature().build();
         DTO dto = new DTO();
-        dto.setIgnoreValueSet(ruleManager.getIgnoreValueSet());
+        dto.setIgnoreValueSet(ruleManager::addIgnoreValue);
         dto.setCurrentPosition(new Position(1, 2));
         dto.setNewPosition(new Position(0, 3));
         dto.setWindowMatrix(cells);

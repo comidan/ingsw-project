@@ -5,9 +5,7 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -16,12 +14,16 @@ import java.util.Set;
 public class MainGameRule extends Rule<Cell[][], ErrorType> {
 
 	/** The ignore color set. */
-	private HashSet<Integer> ignoreColorSet;
+	private Set<Integer> ignoreColorSet;
 	
 	/** The ignore value set. */
-	private HashSet<Integer> ignoreValueSet;
+	private Set<Integer> ignoreValueSet;
 
-	private HashSet<Integer> ignoreFirstRoundDice;
+	private Set<Integer> ignoreFirstRoundDice;
+
+	private Map<Integer, List<Integer>> ignoreCurrentOrthogonalDice;
+
+	private List<Integer> computingWorkToDo;
 
 	/**
 	 * Instantiates a new main game rule.
@@ -29,6 +31,8 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	MainGameRule() {
 		ignoreColorSet = new HashSet<>();
 		ignoreValueSet = new HashSet<>();
+		ignoreCurrentOrthogonalDice = new HashMap<>();
+		computingWorkToDo = new ArrayList<>();
 		ignoreFirstRoundDice = new HashSet<>();
 	}
 
@@ -40,6 +44,8 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 */
 	@Override
 	ErrorType checkRule(Cell[][] cells) {
+	    computingWorkToDo.forEach(id -> computeWork(cells, id));
+	    computingWorkToDo.clear();
 		ErrorType error;
 		for (int row = 0; row < cells.length; row++)
 			for (int col = 0; col < cells[0].length; col++)
@@ -66,6 +72,11 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	private boolean hasDiceClearance(Dice dice) {
 		return ignoreValueSet.contains(dice.getId()) || ignoreColorSet.contains(dice.getId());
 	}
+
+	private boolean hasIndirectDiceClearance(Dice orthogonalDice, Dice ignoredDice) {
+	    List<Integer> canBeIgnored = ignoreCurrentOrthogonalDice.get(ignoredDice.getId());
+	    return canBeIgnored != null && canBeIgnored.contains(orthogonalDice.getId());
+    }
 
 	private boolean hasValueDiceClearance(Dice dice) {
 		return ignoreValueSet.contains(dice.getId());
@@ -178,16 +189,16 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 */
 	private ErrorType checkSameOrthogonalValueColor(Cell[][] cells, int row, int col) {
 		if (row < cells.length - 1 && cells[row + 1][col].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row + 1][col])) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row + 1][col])))) && !(hasDiceClearance(cells[row][col].getCurrentDice())))
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row + 1][col])))) && !(hasDiceClearance(cells[row][col].getCurrentDice()) || hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row + 1][col].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
 		if (col < cells[row].length - 1 && cells[row][col + 1].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row][col + 1])) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col + 1])))) && !(hasDiceClearance(cells[row][col].getCurrentDice())))
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col + 1])))) && !(hasDiceClearance(cells[row][col].getCurrentDice()) || hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row][col + 1].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
 		if (row - 1 >= 0 && cells[row - 1][col].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row - 1][col])) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row - 1][col])))) && !(hasDiceClearance(cells[row][col].getCurrentDice())))
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row - 1][col])))) && !(hasDiceClearance(cells[row][col].getCurrentDice()) || hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row - 1][col].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
 		if (col - 1 >= 0 && cells[row][col - 1].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row][col - 1])) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col - 1])))) && !(hasDiceClearance(cells[row][col].getCurrentDice())))
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col - 1])))) && !(hasDiceClearance(cells[row][col].getCurrentDice()) || hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row][col - 1].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
 		return ErrorType.NO_ERROR;
 	}
@@ -219,22 +230,53 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	}
 
 	/**
-	 * Gets the ignore color set.
-	 *
-	 * @return the ignore color set
+	 * Set new dice to be color ignored
 	 */
-	Set<Integer> getIgnoreColorSet() {
-		return ignoreColorSet;
-	}
+    void addIgnoreColor(int diceId) {
+        ignoreColorSet.add(diceId);
+        computingWorkToDo.add(diceId);
+    }
 
-	/**
-	 * Gets the ignore value set.
-	 *
-	 * @return the ignore value set
-	 */
-	Set<Integer> getIgnoreValueSet() {
-		return ignoreValueSet;
-	}
+    void addIgnoreValue(int diceId) {
+        ignoreValueSet.add(diceId);
+        computingWorkToDo.add(diceId);
+    }
+
+    /**
+     * Remove dice from being color ignored
+     */
+    void removeIgnoreValue(int diceId) {
+        ignoreValueSet.remove(diceId);
+    }
+
+    /**
+     * Remove dice from being value ignored
+     */
+    void removeIgnoreColor(int diceId) {
+        ignoreColorSet.remove(diceId);
+    }
+
+    private void computeWork(Cell[][] cells, int toDo) {
+        int x = 0;
+        int y = 0;
+        for(int row = 0; row < cells.length; row++)
+            for(int col = 0; col < cells[row].length; col++)
+                if(cells[row][col].isOccupied() && cells[row][col].getCurrentDice().getId() == toDo) {
+                    x = row;
+                    y = col;
+                    break;
+                }
+        List<Integer> toIgnore = new ArrayList<>();
+        if(x - 1 >= 0 && cells[x - 1][y].isOccupied())
+            toIgnore.add(cells[x - 1][y].getCurrentDice().getId());
+        if(x < cells.length - 1 && cells[x + 1][y].isOccupied())
+            toIgnore.add(cells[x + 1][y].getCurrentDice().getId());
+        if(y - 1 >= 0 && cells[x][y - 1].isOccupied())
+            toIgnore.add(cells[x][y - 1].getCurrentDice().getId());
+        if(y < cells[0].length - 1 && cells[x][y - 1].isOccupied())
+            toIgnore.add(cells[x][y + 1].getCurrentDice().getId());
+        ignoreCurrentOrthogonalDice.put(toDo, toIgnore);
+    }
 
 	private boolean isEmpty(Cell[][] cells) {
 		return Arrays.stream(cells).flatMap(Arrays::stream).filter(Cell::isOccupied).count() - 1 == 0;

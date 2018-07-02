@@ -13,6 +13,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameVisitor;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 
 /**
@@ -24,13 +25,14 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 	private List<ToolCard> toolCards;
 
 	private String currentToolbuyer;
+
 	private ToolCard currentSelectedTool;
 
-	private  Map<String, Player> players;
+	private Map<String, Player> players;
 
 	private DynamicRouter dynamicRouter;
 
-	private Set<Integer> ignoreValueSet;
+	private Consumer<Integer> ignoreValueSet;
 
 	private int cost;
 
@@ -39,7 +41,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 	 *
 	 * @param toolCards the tool cards
 	 */
-	public ToolManager(List<ToolCard> toolCards, Map<String, Player> players, Set<Integer> ignoreValueSet, DynamicRouter dynamicRouter) {
+	public ToolManager(List<ToolCard> toolCards, Map<String, Player> players, Consumer<Integer> ignoreValueSet, DynamicRouter dynamicRouter) {
 		this.toolCards = toolCards;
 		this.players = players;
 		this.dynamicRouter = dynamicRouter;

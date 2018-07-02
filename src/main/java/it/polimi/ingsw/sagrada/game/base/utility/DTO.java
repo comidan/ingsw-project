@@ -21,9 +21,9 @@ public class DTO {
 
     private Colors imposedColor;
 
-    private Set<Integer> ignoreColorSet;
+    private Consumer<Integer> ignoreColorSet;
 
-    private Set<Integer> ignoreValueSet;
+    private Consumer<Integer> ignoreValueSet;
 
     private Cell[][] windowMatrix;
 
@@ -70,7 +70,7 @@ public class DTO {
      *
      * @return the ignore color set
      */
-    public Set<Integer> getIgnoreColorSet() {
+    public Consumer<Integer> getIgnoreColorSet() {
         return ignoreColorSet;
     }
 
@@ -79,7 +79,7 @@ public class DTO {
      *
      * @param ignoreColorSet the new ignore color set
      */
-    public void setIgnoreColorSet(Set<Integer> ignoreColorSet) {
+    public void setIgnoreColorSet(Consumer<Integer> ignoreColorSet) {
         this.ignoreColorSet = ignoreColorSet;
     }
 
@@ -88,7 +88,7 @@ public class DTO {
      *
      * @return the ignore value set
      */
-    public Set<Integer> getIgnoreValueSet() {
+    public Consumer<Integer> getIgnoreValueSet() {
         return ignoreValueSet;
     }
 
@@ -97,7 +97,7 @@ public class DTO {
      *
      * @param ignoreValueSet the new ignore value set
      */
-    public void setIgnoreValueSet(Set<Integer> ignoreValueSet) {
+    public void setIgnoreValueSet(Consumer<Integer> ignoreValueSet) {
         this.ignoreValueSet = ignoreValueSet;
     }
 

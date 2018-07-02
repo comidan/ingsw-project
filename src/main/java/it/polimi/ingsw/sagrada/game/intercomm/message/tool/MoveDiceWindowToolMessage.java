@@ -7,16 +7,16 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 
-import java.util.Set;
+import java.util.function.Consumer;
 
 public class MoveDiceWindowToolMessage implements Message, BaseGameVisitor {
     private ToolCard toolCard;
     private String idPlayer;
     private int idDice;
     private Position position;
-    private Set<Integer> ignoredValue;
+    private Consumer<Integer> ignoredValue;
 
-    public MoveDiceWindowToolMessage(ToolCard toolCard, String idPlayer, int idDice, Position position, Set<Integer> ignoredValue) {
+    public MoveDiceWindowToolMessage(ToolCard toolCard, String idPlayer, int idDice, Position position, Consumer<Integer> ignoredValue) {
         this.toolCard = toolCard;
         this.idPlayer = idPlayer;
         this.idDice = idDice;
@@ -40,7 +40,7 @@ public class MoveDiceWindowToolMessage implements Message, BaseGameVisitor {
         return position;
     }
 
-    public Set<Integer> getIgnoredValue() {
+    public Consumer<Integer> getIgnoredValue() {
         return ignoredValue;
     }
 

@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 
@@ -81,7 +82,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 			int newCol = dto.getNewPosition().getCol();
 			int oldRow = dto.getCurrentPosition().getRow();
 			int oldCol = dto.getCurrentPosition().getCol();
-			Set<Integer> ignoreDiceColorRule = dto.getIgnoreColorSet();
+			Consumer<Integer> ignoreDiceColorRule = dto.getIgnoreColorSet();
 			Cell[][] cells = dto.getWindowMatrix();
 			ErrorType nullError = checkIfNull(cells, ignoreDiceColorRule);
 			if(nullError != ErrorType.NO_ERROR)
@@ -95,7 +96,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 				return ErrorType.MATRIX_ERROR;
 			cells[oldRow][oldCol].removeCurrentDice();
 			cells[newRow][newCol].setDice(dice);
-			ignoreDiceColorRule.add(dice.getId());
+			ignoreDiceColorRule.accept(dice.getId());
 			return ErrorType.NO_ERROR;
 		};
 		return this;
@@ -113,7 +114,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 			int newCol = dto.getNewPosition().getCol();
 			int oldRow = dto.getCurrentPosition().getRow();
 			int oldCol = dto.getCurrentPosition().getCol();
-			Set<Integer> ignoreDiceValueSet = dto.getIgnoreValueSet();
+			Consumer<Integer> ignoreDiceValueSet = dto.getIgnoreValueSet();
 			Cell[][] cells = dto.getWindowMatrix();
 			ErrorType nullError = checkIfNull(cells, ignoreDiceValueSet);
 			if(nullError != ErrorType.NO_ERROR)
@@ -127,7 +128,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 				return ErrorType.MATRIX_ERROR;
 			cells[oldRow][oldCol].removeCurrentDice();
 			cells[newRow][newCol].setDice(dice);
-			ignoreDiceValueSet.add(dice.getId());
+			ignoreDiceValueSet.accept(dice.getId());
 			return ErrorType.NO_ERROR;
 		};
 		return this;

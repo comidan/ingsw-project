@@ -167,7 +167,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      */
     private void dealToolState() {
         tools = cardManager.dealTool();
-        toolManager = new ToolManager(tools, listToMap(players), ruleManager.getIgnoreValueSet(), dynamicRouter);
+        toolManager = new ToolManager(tools, listToMap(players), ruleManager::addIgnoreValue, dynamicRouter);
         List<Integer> toolCardIds = new ArrayList<>();
         tools.forEach(toolCard -> toolCardIds.add(toolCard.getId()));
         sendMessage(new ToolCardResponse(toolCardIds));
@@ -507,7 +507,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             Dice dice = window.getCellMatrix()[nextPos.getRow()][nextPos.getCol()].getCurrentDice();
             window.resetCell(nextPos.getRow(), nextPos.getCol());
             window.setCell(dice, prevPos.getRow(), prevPos.getCol());
-            dto.getIgnoreValueSet().remove(dice.getId());
+            ruleManager.removeIgnoreValue(dice.getId());
         }
         sendMessage(new RuleResponse(moveDiceWindowToolMessage.getIdPlayer(), errorType == ErrorType.NO_ERROR));
     }
