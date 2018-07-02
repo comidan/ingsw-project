@@ -5,13 +5,12 @@ import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ChangeDiceValueToolMessage;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RollAllDiceToolMessage;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.*;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameVisitor;
+import it.polimi.ingsw.sagrada.network.CommandKeyword;
 
 import java.util.*;
 
@@ -48,6 +47,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		this.dynamicRouter.subscribeChannel(ToolEvent.class, this);
 		this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
 		this.dynamicRouter.subscribeChannel(DiceDraftSelectionEvent.class, this);
+		this.dynamicRouter.subscribeChannel(DiceEvent.class, this);
 	}
 	
 	/**
@@ -120,4 +120,22 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		}
 		resetTool();
     }
+
+	@Override
+	public void visit(DiceEvent diceEvent) {
+		if(diceEvent.getSrc().equals(CommandKeyword.WINDOW)) {
+			int id = currentSelectedTool.getId();
+			if(id == 1) {
+
+			} else if(id == 2) {
+				sendMessage(new MoveDiceWindowToolMessage(
+						currentSelectedTool,
+						diceEvent.getIdPlayer(),
+						diceEvent.getIdDice(),
+						diceEvent.getPosition(),
+						ignoreValueSet
+				));
+			}
+		}
+	}
 }

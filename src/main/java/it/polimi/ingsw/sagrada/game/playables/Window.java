@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.Position;
 
 import java.util.List;
 
@@ -64,6 +65,17 @@ public class Window {
      */
     public void resetCell(int y, int x) {
         cellMatrix[y][x].removeCurrentDice();
+    }
+
+    public Position getPositionFromId(int diceId) {
+        for(int y=0; y<4; y++) {
+            for(int x=0; x<5; x++) {
+                if(cellMatrix[y][x].getCurrentDice().getId() == diceId) {
+                    return new Position(y, x);
+                }
+            }
+        }
+        return null;
     }
 
     /**

@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.state.PlayerIterator;
 import it.polimi.ingsw.sagrada.game.base.state.StateGameEnum;
 import it.polimi.ingsw.sagrada.game.base.state.StateIterator;
 import it.polimi.ingsw.sagrada.game.base.state.StateIteratorSingletonPool;
+import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.cards.CardManager;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
@@ -19,6 +20,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceWindowToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent;
@@ -108,6 +110,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         playerIterator = new PlayerIterator(playersId);
         dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
         dynamicRouter.subscribeChannel(ByteStreamWindowEvent.class, this);
+        dynamicRouter.subscribeChannel(MoveDiceWindowToolMessage.class, this);
         this.dynamicRouter = dynamicRouter;
     }
 
@@ -470,6 +473,35 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     @Override
     public void visit(EndTurnEvent message) {
         notifyNextPlayer();
+    }
+
+    @Override
+    public void visit(MoveDiceWindowToolMessage moveDiceWindowToolMessage) {
+        System.out.println("---GameManager Tool---");
+        DTO dto = new DTO();
+        int id = moveDiceWindowToolMessage.getIdDice();
+        Player player = idToPlayer(moveDiceWindowToolMessage.getIdPlayer());
+        Window window = player.getWindow();
+        dto.setCurrentPosition(window.getPositionFromId(id));
+        System.out.println("aaaaaaaaaaaaaaaaaaaaa");
+        dto.setNewPosition(moveDiceWindowToolMessage.getPosition());
+        dto.setWindowMatrix(window.getCellMatrix());
+        dto.setIgnoreValueSet(moveDiceWindowToolMessage.getIgnoredValue());
+
+        moveDiceWindowToolMessage.getToolCard().getRule().checkRule(dto);
+
+        ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
+        if(errorType == ErrorType.NO_ERROR) {
+            Position pos = dto.getNewPosition();
+            Dice dice = window.getCellMatrix()[pos.getRow()][pos.getCol()].getCurrentDice();
+            sendMessage(new OpponentDiceMoveResponse(
+                    player.getId(), dice, dto.getNewPosition()));
+        }
+        else {
+            //revert model to the previous move
+
+        }
+        sendMessage(new RuleResponse(moveDiceWindowToolMessage.getIdPlayer(), errorType == ErrorType.NO_ERROR));
     }
 
     public class GameTimer extends TimerTask {

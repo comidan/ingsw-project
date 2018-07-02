@@ -54,6 +54,8 @@ public class GameGuiAdapter {
      */
     private CellView lastMove;
 
+    private String diceSource;
+
 
     /**
      * The current round.
@@ -123,20 +125,21 @@ public class GameGuiAdapter {
                     event.acceptTransferModes(TransferMode.COPY);}
                     }, new EventHandler<DragEvent>() {
                     public void handle(DragEvent event) {
+                        System.out.println("---CellClickEvent---");
                       DiceView diceView = clickedObject.getClickedDice();
+                      System.out.println("---"+diceView.getDiceID()+"---");
                       if (diceView != null) {
                           CellView cellView = (CellView) event.getSource();
                           if (!cellView.isOccupied()) {
                               lastMove = cellView;
                               cellView.setImageCell(diceView);
                               clickedObject.setClickedDice(null);
-
                               String username = self.gameView.getUsername();
                               int idDice = diceView.getDiceID();
                               int row = cellView.getRow();
                               int col = cellView.getCol();
                               Position position = new Position(row, col);
-                              DiceEvent diceEvent = new DiceEvent(username, idDice, position, CommandKeyword.DRAFT);
+                              DiceEvent diceEvent = new DiceEvent(username, idDice, position, diceSource);
                               try {
                                   client.sendRemoteMessage(diceEvent);
                               } catch (RemoteException e) {
@@ -158,7 +161,6 @@ public class GameGuiAdapter {
      */
     private void setDraftListener() {
         Platform.runLater(() -> {
-
             EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -170,6 +172,7 @@ public class GameGuiAdapter {
                     content.putImage(diceView.getImage());
                     db.setContent(content);
                     event.consume();
+                    diceSource = CommandKeyword.DRAFT;
                     System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
 
                 }
@@ -276,12 +279,14 @@ public class GameGuiAdapter {
         this.gameView.enableWindowDiceDrag(event -> {
             System.out.println("---Window click---");
             DiceView diceView = (DiceView) event.getSource();
+            System.out.println(diceView.getDiceID());
             clickedObject.setClickedDice(diceView);
             Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
             content.putImage(diceView.getImage());
             db.setContent(content);
             event.consume();
+            diceSource = CommandKeyword.WINDOW;
             disableGuiElement();
         });
     }

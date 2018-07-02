@@ -160,9 +160,11 @@ public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerM
 
     @Override
     public void visit(DiceEvent diceEvent) {
-        Dice dice = getDiceDraft(diceEvent.getIdDice());
-        DiceGameManagerEvent diceGameManagerEvent = new DiceGameManagerEvent(dice, diceEvent);
-        dispatchGameManager.accept(diceGameManagerEvent);
+        if(diceEvent.getSrc().equals(CommandKeyword.DRAFT)) {
+            Dice dice = getDiceDraft(diceEvent.getIdDice());
+            DiceGameManagerEvent diceGameManagerEvent = new DiceGameManagerEvent(dice, diceEvent);
+            dispatchGameManager.accept(diceGameManagerEvent);
+        }
     }
 
     @Override
