@@ -81,7 +81,7 @@ public class CellView extends StackPane {
      * @param diceView the new image cell
      */
     public void setImageCell(DiceView diceView) {
-        this.diceView = new DiceView(diceView.getColor(), diceView.getValue(), diceId);
+        this.diceView = new DiceView(diceView.getColor(), diceView.getValue(), diceView.getDiceID());
         setDiceId(diceView.getDiceID());
         this.getChildren().add(this.diceView);
         occupied = true;
