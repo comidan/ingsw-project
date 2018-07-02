@@ -53,7 +53,7 @@ public class MatchLobbyPool {
             Registry registry = LocateRegistry.getRegistry(1099);
             registry.unbind(matchLobby.getLobbyIdentifier());
         }
-        catch (RemoteException|NotBoundException exc) {
+        catch (RemoteException|NotBoundException|NullPointerException exc) {
             LOGGER.log(Level.SEVERE, exc.getMessage());
         }
         return lobbyPool.remove(matchLobby);

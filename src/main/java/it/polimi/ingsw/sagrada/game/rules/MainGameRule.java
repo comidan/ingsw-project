@@ -86,20 +86,13 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	private ErrorType checkCurrentCellRule(Cell[][] cells, int row, int col) {
 		CellRule cellRule = cells[row][col].getCellRule();
 		boolean checkRule = !cellRule.checkRule(cells[row][col].getCurrentDice());
-		if(cellRule.getValueConstraint()!=0) { //la cella ha un constraint di valore
-			if (checkRule && !hasValueDiceClearance(cells[row][col].getCurrentDice()))
+		if(cellRule.getValueConstraint()!=0 && checkRule && !hasValueDiceClearance(cells[row][col].getCurrentDice()))
 				return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
-			else
-				return ErrorType.NO_ERROR;
-		} else if(cellRule.getColorConstraint()!=null) { //la cella ha un constraint di colore
-			if (checkRule && !hasColorDiceClearance(cells[row][col].getCurrentDice()))
+		if(cellRule.getColorConstraint()!=null && checkRule && !hasColorDiceClearance(cells[row][col].getCurrentDice())) //la cella ha un constraint di colore
 				return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
-			else
-				return ErrorType.NO_ERROR;
-		} else {
-			if(checkRule) return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
-			else return ErrorType.NO_ERROR;
-		}
+		if(checkRule)
+			return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
+		return ErrorType.NO_ERROR;
 	}
 
 	/**
@@ -174,16 +167,16 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 */
 	private ErrorType checkSameOrthogonalValueColor(Cell[][] cells, int row, int col) {
 		if (row < cells.length - 1 && cells[row + 1][col].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row + 1][col])) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row + 1][col])))) && !(hasDiceClearance(cells[row][col].getCurrentDice()) || hasDiceClearance(cells[row + 1][col].getCurrentDice())))
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row + 1][col])))) && !(hasDiceClearance(cells[row][col].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
 		if (col < cells[row].length - 1 && cells[row][col + 1].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row][col + 1])) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col + 1])))) && !(hasDiceClearance(cells[row][col].getCurrentDice()) || hasDiceClearance(cells[row][col + 1].getCurrentDice())))
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col + 1])))) && !(hasDiceClearance(cells[row][col].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
 		if (row - 1 >= 0 && cells[row - 1][col].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row - 1][col])) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row - 1][col])))) && !(hasDiceClearance(cells[row][col].getCurrentDice()) || hasDiceClearance(cells[row - 1][col].getCurrentDice())))
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row - 1][col])))) && !(hasDiceClearance(cells[row][col].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
 		if (col - 1 >= 0 && cells[row][col - 1].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row][col - 1])) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col - 1])))) && !(hasDiceClearance(cells[row][col].getCurrentDice()) || hasDiceClearance(cells[row][col - 1].getCurrentDice())))
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col - 1])))) && !(hasDiceClearance(cells[row][col].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
 		return ErrorType.NO_ERROR;
 	}
