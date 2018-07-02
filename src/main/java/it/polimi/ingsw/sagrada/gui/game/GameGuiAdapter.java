@@ -127,7 +127,6 @@ public class GameGuiAdapter {
                     public void handle(DragEvent event) {
                         System.out.println("---CellClickEvent---");
                       DiceView diceView = clickedObject.getClickedDice();
-                      System.out.println("---"+diceView.getDiceID()+"---");
                       if (diceView != null) {
                           CellView cellView = (CellView) event.getSource();
                           if (!cellView.isOccupied()) {
@@ -147,6 +146,7 @@ public class GameGuiAdapter {
                               }
 
                               event.consume();
+                              System.out.println("---"+diceView.getDiceID()+"---");
                           }
                       }
              }
@@ -274,7 +274,6 @@ public class GameGuiAdapter {
         this.gameView.enableWindowDiceDrag(event -> {
             System.out.println("---Window click---");
             DiceView diceView = (DiceView) event.getSource();
-            System.out.println(diceView.getDiceID());
             clickedObject.setClickedDice(diceView);
             Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();

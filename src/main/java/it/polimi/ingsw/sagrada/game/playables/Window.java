@@ -70,8 +70,11 @@ public class Window {
     public Position getPositionFromId(int diceId) {
         for(int y=0; y<4; y++) {
             for(int x=0; x<5; x++) {
-                if(cellMatrix[y][x].getCurrentDice().getId() == diceId) {
-                    return new Position(y, x);
+                Dice d = cellMatrix[y][x].getCurrentDice();
+                if(d!=null) {
+                    if(d.getId() == diceId) {
+                        return new Position(y, x);
+                    }
                 }
             }
         }

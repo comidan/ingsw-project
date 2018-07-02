@@ -118,6 +118,7 @@ public class WindowView extends GridPane {
             for (int j = 0; j < windowDices[0].length; j++)
                 if(windowDices[i][j].isOccupied()){
                     windowDices[i][j].getDiceView().setOnDragDetected(enableWindowDragHandler);
+                    System.out.println("WindowView---"+windowDices[i][j].getDiceId()+"---");
                 }
     }
 

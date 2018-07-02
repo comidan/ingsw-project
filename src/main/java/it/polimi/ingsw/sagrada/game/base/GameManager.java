@@ -483,14 +483,14 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         Player player = idToPlayer(moveDiceWindowToolMessage.getIdPlayer());
         Window window = player.getWindow();
         dto.setCurrentPosition(window.getPositionFromId(id));
-        System.out.println("aaaaaaaaaaaaaaaaaaaaa");
         dto.setNewPosition(moveDiceWindowToolMessage.getPosition());
         dto.setWindowMatrix(window.getCellMatrix());
         dto.setIgnoreValueSet(moveDiceWindowToolMessage.getIgnoredValue());
 
-        moveDiceWindowToolMessage.getToolCard().getRule().checkRule(dto);
-
+        ErrorType errorTypeRule = moveDiceWindowToolMessage.getToolCard().getRule().checkRule(dto);
+        System.out.println("---"+errorTypeRule+"---");
         ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
+        System.out.println("---"+errorType+"---");
         if(errorType == ErrorType.NO_ERROR) {
             Position pos = dto.getNewPosition();
             Dice dice = window.getCellMatrix()[pos.getRow()][pos.getCol()].getCurrentDice();
