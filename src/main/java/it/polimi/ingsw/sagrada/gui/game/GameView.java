@@ -648,6 +648,10 @@ public class GameView extends Application {
         windows.get(username).enableWindowDiceDrag(enableWindowDragHandler);
     }
 
+    void disableRoundTrackClick(){
+        roundTrackView.disableClick();
+    }
+
     void disableWindowDiceDrag(){
          windows.get(username).disableDiceDrag();
     }

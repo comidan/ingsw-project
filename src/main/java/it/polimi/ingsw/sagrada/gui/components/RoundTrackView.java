@@ -80,11 +80,21 @@ public class RoundTrackView extends HBox {
     public void setClickHandler(EventHandler<MouseEvent> clickHandler) {
         for(int i = 0; i< diceViewList.size(); i++){
             for (int j = 0; j< diceViewList.get(i).size(); j++){
-                diceViewList.get(i).get(j).setOnDragDetected(clickHandler);
+                setDisable(false);
+                diceViewList.get(i).get(j).setOnMouseClicked(clickHandler);
             }
         }
 
     }
 
+
+    public void disableClick() {
+        for(int i = 0; i< diceViewList.size(); i++){
+            for (int j = 0; j< diceViewList.get(i).size(); j++){
+                diceViewList.get(i).get(j).setDisable(true);
+            }
+        }
+
+    }
 
 }

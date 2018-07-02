@@ -298,16 +298,22 @@ public class GameGuiAdapter {
      // can be used for toolcards: 5
     public void enableRoundTrackClick(Client client){
         Platform.runLater(() -> {
-
-
-            enableDraftChangeValue(client);
+            this.gameView.enableDraftChangeValue(event ->
+            {
+                DiceView diceView = (DiceView) event.getSource();
+                DiceDraftSelectionEvent diceDraftSelectionEvent = new DiceDraftSelectionEvent(gameView.getUsername(), diceView.getDiceID());
+                try {
+                    client.sendRemoteMessage(diceDraftSelectionEvent);
+                } catch (RemoteException e) {
+                    LOGGER.log(Level.SEVERE, e::getMessage);
+                }
+            });
 
             this.gameView.setRoundtrackClickHandler(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
                     DiceView diceView = (DiceView) event.getSource();
                     DiceDraftSelectionEvent diceDraftSelectionEvent = new DiceDraftSelectionEvent(gameView.getUsername(), diceView.getDiceID());
-
                     try {
                         client.sendRemoteMessage(diceDraftSelectionEvent);
                     } catch (RemoteException e) {
@@ -316,10 +322,13 @@ public class GameGuiAdapter {
 
                 }
             });
+
+
         });
     }
 
-    public void disableRoundTrackClick(Client client){
+    public void disableRoundTrackClick(){
+        gameView.disableRoundTrackClick();
 
     }
 
