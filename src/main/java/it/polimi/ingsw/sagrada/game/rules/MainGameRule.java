@@ -86,13 +86,24 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	private ErrorType checkCurrentCellRule(Cell[][] cells, int row, int col) {
 		CellRule cellRule = cells[row][col].getCellRule();
 		boolean checkRule = !cellRule.checkRule(cells[row][col].getCurrentDice());
-		if(cellRule.getValueConstraint()!=0 && checkRule && !hasValueDiceClearance(cells[row][col].getCurrentDice()))
+		if(cellRule.getValueConstraint()!=0) {
+			if (checkRule && !hasValueDiceClearance(cells[row][col].getCurrentDice()))
 				return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
-		if(cellRule.getColorConstraint()!=null && checkRule && !hasColorDiceClearance(cells[row][col].getCurrentDice())) //la cella ha un constraint di colore
+			else
+				return ErrorType.NO_ERROR;
+		}
+		else if(cellRule.getColorConstraint()!=null) {
+			if (checkRule && !hasColorDiceClearance(cells[row][col].getCurrentDice()))
 				return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
-		if(checkRule)
-			return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
-		return ErrorType.NO_ERROR;
+			else
+				return ErrorType.NO_ERROR;
+		}
+		else {
+			if(checkRule)
+				return ErrorType.ERRNO_CELL_RULE_NOT_VALIDATED;
+			else
+				return ErrorType.NO_ERROR;
+		}
 	}
 
 	/**
