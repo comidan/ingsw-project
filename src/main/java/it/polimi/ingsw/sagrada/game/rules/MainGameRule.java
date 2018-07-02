@@ -256,27 +256,37 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
         ignoreColorSet.remove(diceId);
     }
 
-    private void computeWork(Cell[][] cells, int toDo) {
-        int x = 0;
-        int y = 0;
-        for(int row = 0; row < cells.length; row++)
-            for(int col = 0; col < cells[row].length; col++)
-                if(cells[row][col].isOccupied() && cells[row][col].getCurrentDice().getId() == toDo) {
-                    x = row;
-                    y = col;
-                    break;
-                }
-        List<Integer> toIgnore = new ArrayList<>();
-        if(x - 1 >= 0 && cells[x - 1][y].isOccupied())
-            toIgnore.add(cells[x - 1][y].getCurrentDice().getId());
-        if(x < cells.length - 1 && cells[x + 1][y].isOccupied())
-            toIgnore.add(cells[x + 1][y].getCurrentDice().getId());
-        if(y - 1 >= 0 && cells[x][y - 1].isOccupied())
-            toIgnore.add(cells[x][y - 1].getCurrentDice().getId());
-        if(y < cells[0].length - 1 && cells[x][y - 1].isOccupied())
-            toIgnore.add(cells[x][y + 1].getCurrentDice().getId());
-        ignoreCurrentOrthogonalDice.put(toDo, toIgnore);
-    }
+	private void computeWork(Cell[][] cells, int toDo) {
+		int x = 0;
+		int y = 0;
+		boolean stop = false;
+		for(int row = 0; x < cells.length && !stop; row++)
+			for(int col = 0; col < cells[row].length && !stop; col++)
+				if(cells[row][col].isOccupied() && cells[row][col].getCurrentDice().getId() == toDo) {
+					x = row;
+					y = col;
+					stop = true;
+					break;
+				}
+		List<Integer> toIgnore = new ArrayList<>();
+		if(x - 1 >= 0 && cells[x - 1][y].isOccupied())
+			toIgnore.add(cells[x - 1][y].getCurrentDice().getId());
+		if(x < cells.length - 1 && cells[x + 1][y].isOccupied())
+			toIgnore.add(cells[x + 1][y].getCurrentDice().getId());
+		if(y - 1 >= 0 && cells[x][y - 1].isOccupied())
+			toIgnore.add(cells[x][y - 1].getCurrentDice().getId());
+		if(y < cells[0].length - 1 && cells[x][y - 1].isOccupied())
+			toIgnore.add(cells[x][y + 1].getCurrentDice().getId());
+		if (x < cells.length - 1 && y < cells[x].length - 1 && cells[x + 1][x + 1].isOccupied())
+			toIgnore.add(cells[x + 1][y + 1].getCurrentDice().getId());
+		if (x < cells.length - 1 && y > 0 && cells[x + 1][y - 1].isOccupied())
+			toIgnore.add(cells[x + 1][y - 1].getCurrentDice().getId());
+		if (x > 0 && y < cells[x].length - 1 && cells[x - 1][y + 1].isOccupied())
+			toIgnore.add(cells[x - 1][y + 1].getCurrentDice().getId());
+		if (x > 0 && y > 0 && cells[x - 1][y - 1].isOccupied())
+			toIgnore.add(cells[x - 1][y - 1].getCurrentDice().getId());
+		ignoreCurrentOrthogonalDice.put(toDo, toIgnore);
+	}
 
 	private boolean isEmpty(Cell[][] cells) {
 		return Arrays.stream(cells).flatMap(Arrays::stream).filter(Cell::isOccupied).count() - 1 == 0;
