@@ -67,7 +67,7 @@ public class ToolRuleTest {
         dto.setIgnoreValueSet(ruleManager.getIgnoreValueSet());
         toolRule.checkRule(dto);
         errorType = checkRule(cells);
-        assertSame(ErrorType.NO_ERROR, errorType);
+        assertSame(ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE, errorType);
     }
 
     @Test
