@@ -652,8 +652,8 @@ public class GameView extends Application {
         draftView.enableDraftChangeValue(changeValueHandler);
     }
 
-    public void disableDraftChangeValue(){
-        draftView.disableDraftChangeValue();
+    public void disableDraftClick(){
+        draftView.disableDraftClick();
     }
 
     void enableWindowDiceDrag(EventHandler<MouseEvent> enableWindowDragHandler){

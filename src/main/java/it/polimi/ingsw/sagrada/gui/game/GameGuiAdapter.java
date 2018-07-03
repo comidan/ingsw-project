@@ -265,7 +265,7 @@ public class GameGuiAdapter {
     }
 
     public void disableDraftChangeValue(){
-        this.gameView.disableDraftChangeValue();
+        this.gameView.disableDraftClick();
     }
 
     // Tool effect: enable moving dice on your own window
@@ -326,13 +326,17 @@ public class GameGuiAdapter {
                 }
             });
 
-
+            disableRoundTrackClick();
+            disableDraftClick();
         });
     }
 
     public void disableRoundTrackClick(){
         gameView.disableRoundTrackClick();
+    }
 
+    public void disableDraftClick(){
+        gameView.disableDraftClick();
     }
 
 
@@ -545,7 +549,8 @@ public class GameGuiAdapter {
     }
 
     public void disableGuiElement() {
-        disableDraftChangeValue();
+        disableDraftClick();
         disableWindowDiceDrag();
+        disableRoundTrackClick();
     }
 }

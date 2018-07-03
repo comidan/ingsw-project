@@ -68,7 +68,7 @@ public void enableDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
         draft.forEach(diceView -> diceView.setOnMouseClicked(changeValueHandler));
     }
 
-    public void disableDraftChangeValue(){
+    public void disableDraftClick(){
         if(changeValueHandler!= null)
             draft.forEach(diceView -> diceView.removeEventHandler(MouseEvent.MOUSE_CLICKED, changeValueHandler));
     }
