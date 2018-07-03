@@ -1,9 +1,11 @@
 package it.polimi.ingsw.sagrada.gui.game;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
+import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.cards.CardBoard;
+import it.polimi.ingsw.sagrada.gui.cards.ToolCardView;
 import it.polimi.ingsw.sagrada.gui.components.*;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
@@ -266,6 +268,11 @@ public class GameView extends Application {
      */
     void removeToken(int number){
         tokenGrid.getChildren().remove(0, number);
+
+    }
+
+    void addTokenTool(int num, ToolCardView toolCardView){
+        toolCardView.addToken(num);
     }
 
 
@@ -435,9 +442,6 @@ public class GameView extends Application {
         components.add(draftView);
     }
 
-    void setShowRoundDicesHandler(EventHandler<MouseEvent> showRoundDicesHandler){
-        roundTrackView.setShowRoundDicesHandler(showRoundDicesHandler);
-    }
 
 
     /**
