@@ -13,6 +13,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.LobbyLoginEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
@@ -203,6 +204,11 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
 
     @Override
     public String visit(TimeRemainingResponse timeRemainingResponse) {
+        return null;
+    }
+
+    @Override
+    public String visit(EnableWindowToolResponse enableWindowToolResponse) {
         return null;
     }
 }

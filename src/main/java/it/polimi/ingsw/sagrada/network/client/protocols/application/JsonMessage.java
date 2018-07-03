@@ -17,6 +17,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RegisterEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.ErrorEvent;
@@ -352,6 +353,9 @@ public class JsonMessage implements ActionMessageVisitor {
                 case TIME :
                     data = (JSONObject) jsonMsg.get(TIME);
                     return new TimeRemainingResponse((String) data.get(USERNAME), Integer.parseInt((String) data.get(TIME)));
+                case WINDOW_ENABLE:
+                    data = (JSONObject) jsonMsg.get(WINDOW_ENABLE);
+                    return new EnableWindowToolResponse((String) data.get(USERNAME), Integer.parseInt((String)data.get(TOOL_ID)));
                 default:
                     return null;
             }

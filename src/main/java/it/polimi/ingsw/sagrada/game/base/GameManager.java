@@ -529,7 +529,9 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             Position prevPos = window.getPositionFromId(moveDiceToolMessage.getDiceId());
             Position nextPos = moveDiceToolMessage.getPosition();
             window.setCell(dice, nextPos.getRow(), nextPos.getCol());
+            window.resetCell(prevPos.getRow(), prevPos.getCol());
             ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
+            System.out.println(errorType);
             if(errorType == ErrorType.NO_ERROR) {
                 sendMessage(new OpponentDiceMoveResponse(player.getId(), dice, nextPos));
                 sendMessage(new OpponentDiceMoveResponse( //remove dice from window

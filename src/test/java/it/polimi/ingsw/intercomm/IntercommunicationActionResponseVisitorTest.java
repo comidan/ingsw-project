@@ -11,6 +11,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -233,6 +234,11 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
 
     @Override
     public String visit(TimeRemainingResponse timeRemainingResponse) {
+        return null;
+    }
+
+    @Override
+    public String visit(EnableWindowToolResponse enableWindowToolResponse) {
         return null;
     }
 }

@@ -193,6 +193,8 @@ public final class CommandKeyword {
 
   public static final String COST = "cost";
 
+  public static final String WINDOW_ENABLE = "window_enable";
+
   /** The Constant SCORE. */
   public static final String SCORE = "score";
 

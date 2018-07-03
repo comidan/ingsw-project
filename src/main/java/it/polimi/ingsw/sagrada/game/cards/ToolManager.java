@@ -91,6 +91,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 	private void resetTool() {
 		currentToolbuyer = "";
 		currentToolbuyer = null;
+		diceCounter = 0;
 	}
 
 	@Override
@@ -141,6 +142,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 						diceEvent.getPosition(),
 						ignoreColorSet
 				));
+				resetTool();
 			} else if(id == 2) {
 				sendMessage(new MoveDiceWindowToolMessage(
 						currentSelectedTool,
@@ -149,15 +151,24 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 						diceEvent.getPosition(),
 						ignoreValueSet
 				));
+				resetTool();
 			} else if(id == 3) {
 				diceCounter++;
 				if(diceCounter<2) {
-					//abilita window drag TO-DO
+					sendMessage(new EnableWindowToolResponse(currentToolbuyer, currentSelectedTool.getId()));
 					sendMessage(new MoveDiceToolMessage(
 							currentSelectedTool,
 							diceEvent.getIdPlayer(),
 							diceEvent.getIdDice(),
 							diceEvent.getPosition()));
+				}
+				else {
+					sendMessage(new MoveDiceToolMessage(
+							currentSelectedTool,
+							diceEvent.getIdPlayer(),
+							diceEvent.getIdDice(),
+							diceEvent.getPosition()));
+					diceCounter = 0;
 				}
 			}
 		}
