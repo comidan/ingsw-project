@@ -38,6 +38,8 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 
 	private int cost;
 
+	private int diceCounter;
+
 	/**
 	 * Default constructor.
 	 *
@@ -49,6 +51,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		this.dynamicRouter = dynamicRouter;
 		this.ignoreValueSet = ignoreValueSet;
 		this.ignoreColorSet = ignoreColorSet;
+		diceCounter = 0;
 		this.dynamicRouter.subscribeChannel(ToolEvent.class, this);
 		this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
 		this.dynamicRouter.subscribeChannel(DiceDraftSelectionEvent.class, this);
@@ -147,7 +150,15 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 						ignoreValueSet
 				));
 			} else if(id == 3) {
-
+				diceCounter++;
+				if(diceCounter<2) {
+					//abilita window drag TO-DO
+					sendMessage(new MoveDiceToolMessage(
+							currentSelectedTool,
+							diceEvent.getIdPlayer(),
+							diceEvent.getIdDice(),
+							diceEvent.getPosition()));
+				}
 			}
 		}
 	}

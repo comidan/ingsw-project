@@ -113,6 +113,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
         dynamicRouter.subscribeChannel(ByteStreamWindowEvent.class, this);
         dynamicRouter.subscribeChannel(MoveDiceWindowToolMessage.class, this);
+        dynamicRouter.subscribeChannel(MoveDiceToolMessage.class, this);
         this.dynamicRouter = dynamicRouter;
     }
 
@@ -521,7 +522,26 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
 
     @Override
     public void visit(MoveDiceToolMessage moveDiceToolMessage) {
-
+        Player player = idToPlayer(moveDiceToolMessage.getPlayerId());
+        if(player != null) {
+            Window window = player.getWindow();
+            Dice dice = window.getDicefromId(moveDiceToolMessage.getDiceId());
+            Position prevPos = window.getPositionFromId(moveDiceToolMessage.getDiceId());
+            Position nextPos = moveDiceToolMessage.getPosition();
+            window.setCell(dice, nextPos.getRow(), nextPos.getCol());
+            ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
+            if(errorType == ErrorType.NO_ERROR) {
+                sendMessage(new OpponentDiceMoveResponse(player.getId(), dice, nextPos));
+                sendMessage(new OpponentDiceMoveResponse( //remove dice from window
+                        player.getId(), new Dice(-1, Colors.RED), prevPos)); //id -1 means that is a dice to remove
+            }
+            else {
+                //revert model to the previous move
+                window.resetCell(nextPos.getRow(), nextPos.getCol());
+                window.setCell(dice, prevPos.getRow(), prevPos.getCol());
+            }
+            sendMessage(new RuleResponse(moveDiceToolMessage.getPlayerId(), errorType == ErrorType.NO_ERROR));
+        }
     }
 
     public class GameTimer extends TimerTask {

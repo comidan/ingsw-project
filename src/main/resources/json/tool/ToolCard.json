@@ -1,5 +1,5 @@
 [
 	{ "id":0, "name":"Pinza Sgrossatrice", "action":["setIncrementDiceFeature"]},
 	{ "id":1, "name":"Pennello per Englomise", "action":["setMoveIgnoringColorRuleFeature"]},
-	{ "id":2, "name":"Alesatore per lamina di rame", "action":["setMoveIgnoringValueRuleFeature"]}
+	{ "id":3, "name":"Lathekin", "action":["setAddTwoDiceFeature"]}
 ]

@@ -81,6 +81,20 @@ public class Window {
         return null;
     }
 
+    public Dice getDicefromId(int diceId) {
+        for(int y=0; y<4; y++) {
+            for(int x=0; x<5; x++) {
+                Dice d = cellMatrix[y][x].getCurrentDice();
+                if(d!=null) {
+                    if(d.getId() == diceId) {
+                        return d;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Gets the token number.
      *
