@@ -28,6 +28,7 @@ public class RoundCellView extends VBox{
        diceViewList = diceViews;
         for(int i = 0; i<diceViewList.size(); i++ ){
             getChildren().add(diceViewList.get(i));
+            diceViewList.get(i).setRoundNumber(roundNumber);
         }
     }
 

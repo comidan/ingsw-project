@@ -298,6 +298,7 @@ public class GameGuiAdapter {
 
      // Tool effect: enable drag on dice in roundtrack
      // can be used for toolcards: 5
+
     public void enableRoundTrackClick(Client client){
         Platform.runLater(() -> {
             this.gameView.enableDraftChangeValue(event ->
@@ -324,7 +325,7 @@ public class GameGuiAdapter {
 
                 }
             });
-               
+
 
         });
     }

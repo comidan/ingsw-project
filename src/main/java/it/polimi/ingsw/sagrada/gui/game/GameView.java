@@ -406,7 +406,11 @@ public class GameView extends Application {
         players.forEach(user -> windows.put(user, new WindowView(constraints.get(user))));
         hBox.setSpacing(15);
         players.forEach(plr -> {
-            if(!plr.equals(username)) hBox.getChildren().add(windows.get(plr));
+            if(!plr.equals(username)) {
+                windows.get(plr).windowResize();
+                hBox.getChildren().add(windows.get(plr));
+            }
+
         });
         setHBox();
         setWindow();

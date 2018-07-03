@@ -29,6 +29,8 @@ public class DiceView extends ImageView{
     /** The id. */
     private int id;
 
+    private int roundNumber;
+
     /**
      * Instantiates a new dice view.
      *
@@ -68,6 +70,14 @@ public class DiceView extends ImageView{
      */
     public int getDiceID() {
         return id;
+    }
+
+    public int getRoundNumber(){
+        return roundNumber;
+    }
+
+    public void setRoundNumber(int number){
+        this.roundNumber = number;
     }
 
 
