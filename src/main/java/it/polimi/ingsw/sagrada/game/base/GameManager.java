@@ -490,10 +490,10 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         dto.setCurrentPosition(window.getPositionFromId(id));
         dto.setNewPosition(moveDiceWindowToolMessage.getPosition());
         dto.setWindowMatrix(window.getCellMatrix());
-        if(moveDiceWindowToolMessage.getToolCard().getId()==2)
-            dto.setIgnoreValueSet(ruleManager::addIgnoreColor);
+        if(moveDiceWindowToolMessage.getToolCard().getId()==1)
+            dto.setIgnoreColorSet(ruleManager::addIgnoreColor);
         else
-            dto.setIgnoreColorSet(ruleManager::addIgnoreValue);
+            dto.setIgnoreValueSet(ruleManager::addIgnoreValue);
 
         ErrorType errorTypeRule = moveDiceWindowToolMessage.getToolCard().getRule().checkRule(dto);
         System.out.println("---"+errorTypeRule+"---");

@@ -546,7 +546,7 @@ public class GameGuiAdapter {
     public void enableGuiElement(int toolId, Client client) {
         System.out.println("---GameGuiAdapter enable GUI element---");
         if(toolId==0 || toolId==5 || toolId==6 || toolId==9) enableDraftChangeValue(client);
-        if(toolId==1 || toolId==2) enableWindowDiceDrag();
+        if(toolId==1 || toolId==2 || toolId == 3) enableWindowDiceDrag();
     }
 
     public void disableGuiElement() {
