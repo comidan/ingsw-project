@@ -44,11 +44,7 @@ public class RoundTrackView extends HBox {
 
     }
 
-    public void setShowRoundDicesHandler(EventHandler<MouseEvent> showRoundDicesHandler){
-        for(RoundCellView roundCellView : roundCellViewList){
-            roundCellView.setOnMouseClicked(showRoundDicesHandler);
-        }
-    }
+
 
     /**
      * Sets the dice.
@@ -59,7 +55,7 @@ public class RoundTrackView extends HBox {
     public void setDice(List<DiceView> diceViews, int currentRound) {
         RoundCellView roundCellView = new RoundCellView(diceViews);
         roundCellView.setRoundNumber(currentRound);
-        roundCellView.saveDice(diceViews);
+        roundCellView.addDice(diceViews);
 
         for(int i = 0; i< diceViews.size(); i++){
             DiceView diceView = diceViews.get(i);

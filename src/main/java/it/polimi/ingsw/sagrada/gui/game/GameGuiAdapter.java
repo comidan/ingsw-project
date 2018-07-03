@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.gui.game;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
+import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
@@ -21,6 +22,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.*;
 import javafx.stage.Stage;
 
+import javax.tools.Tool;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -322,7 +324,7 @@ public class GameGuiAdapter {
 
                 }
             });
-
+               
 
         });
     }
@@ -393,22 +395,11 @@ public class GameGuiAdapter {
     public void setDiceList(DiceResponse diceResponse) {
         if(diceResponse.getDst().equals(CommandKeyword.DRAFT))
             setDraft(diceResponse);
-        else if(diceResponse.getDst().equals(CommandKeyword.ROUND_TRACK))
-        {setRoundTrack(diceResponse);
-        setShowRoundDicesHandler();}
+        else if(diceResponse.getDst().equals(CommandKeyword.ROUND_TRACK)) {
+            setRoundTrack(diceResponse);
+        }
     }
 
-    void setShowRoundDicesHandler(){
-        gameView.setShowRoundDicesHandler(event -> {
-            RoundCellView roundCellView = (RoundCellView) event.getSource();
-            roundCellView.showAllDice();
-                    gameView.setShowRoundDicesHandler(eventDone -> {
-                        roundCellView.hideDice();
-                        setShowRoundDicesHandler();
-                    });
-
-        });
-    }
 
     /**
      * Sets the round track.
@@ -420,7 +411,6 @@ public class GameGuiAdapter {
             List<DiceView> diceViews = new ArrayList<>();
             diceResponse.getDiceList().forEach(dice -> diceViews.add(new DiceView(Constraint.getColorConstraint(dice.getColor()), Constraint.getValueConstraint(dice.getValue()), dice.getId())));
             gameView.setRoundtrackImage(diceViews, currentRound);
-            setShowRoundDicesHandler();
         });
     }
 
@@ -520,6 +510,10 @@ public class GameGuiAdapter {
 
     public void removeToken(int num) {
         Platform.runLater(()-> gameView.removeToken(num));
+    }
+
+    public void addTokenTool(int num, ToolCardView toolCardView){
+        Platform.runLater(()-> gameView.addTokenTool(num, toolCardView));
     }
 
     /**

@@ -10,7 +10,6 @@ public class RoundCellView extends VBox{
 
     private List<DiceView> diceViewList;
 
-    private  DiceView firstDice;
 
     public RoundCellView(List<DiceView> diceViewList) {
         this.diceViewList = diceViewList;
@@ -24,25 +23,11 @@ public class RoundCellView extends VBox{
         this.roundNumber = roundNumber;
     }
 
-    public void addFirstDice(){
-        getChildren().add(firstDice);
-    }
 
-    public void showAllDice(){
-        for(int i = 1; i<diceViewList.size(); i++ ){
-            getChildren().add(diceViewList.get(i));
-        }
-    }
-
-    public void saveDice(List<DiceView> diceViews){
+    public void addDice(List<DiceView> diceViews){
        diceViewList = diceViews;
-       firstDice = diceViewList.get(0);
-       addFirstDice();
-    }
-
-    public void hideDice(){
-        for(int i = 1; i<diceViewList.size(); i++ ){
-            getChildren().remove(diceViewList.get(i));
+        for(int i = 0; i<diceViewList.size(); i++ ){
+            getChildren().add(diceViewList.get(i));
         }
     }
 
