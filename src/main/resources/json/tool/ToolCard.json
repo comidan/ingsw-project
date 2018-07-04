@@ -1,5 +1,5 @@
 [
-	{ "id":0, "name":"Pinza Sgrossatrice", "action":["setIncrementDiceFeature"]},
 	{ "id":1, "name":"Pennello per Englomise", "action":["setMoveIgnoringColorRuleFeature"]},
-	{ "id":3, "name":"Lathekin", "action":["setAddTwoDiceFeature"]}
+	{ "id":3, "name":"Lathekin", "action":["setAddTwoDiceFeature"]},
+	{ "id":4, "name":"Taglierina circolare", "action":["setExchangeDraftRoundTrackDiceFeature"]}
 ]

@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.*;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor;
@@ -38,7 +39,12 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 
 	private int cost;
 
+
+
 	private int diceCounter;
+
+	private DiceRoundTrackSelectionEvent roundTrackSelectionEvent;
+	private DiceDraftSelectionEvent draftSelectionEvent;
 
 	/**
 	 * Default constructor.
@@ -55,6 +61,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		this.dynamicRouter.subscribeChannel(ToolEvent.class, this);
 		this.dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
 		this.dynamicRouter.subscribeChannel(DiceDraftSelectionEvent.class, this);
+		this.dynamicRouter.subscribeChannel(DiceRoundTrackSelectionEvent.class, this);
 		this.dynamicRouter.subscribeChannel(DiceEvent.class, this);
 	}
 	
@@ -92,6 +99,18 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		currentToolbuyer = "";
 		currentToolbuyer = null;
 		diceCounter = 0;
+		roundTrackSelectionEvent = null;
+		draftSelectionEvent = null;
+	}
+
+	private void swapDiceDraftRoundTrack() {
+		if(draftSelectionEvent!=null && roundTrackSelectionEvent!=null) {
+			sendMessage(new SwapDiceToolMessage(
+					currentSelectedTool,
+					draftSelectionEvent.getIdDice(),
+					roundTrackSelectionEvent.getDiceId(),
+					roundTrackSelectionEvent.getTurn()));
+		}
 	}
 
 	@Override
@@ -124,11 +143,25 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		if(id==0 || id==5 || id==9) {
 			sendMessage(new ChangeDiceValueToolMessage(currentSelectedTool, diceDraftSelectionEvent.getIdDice()));
 		}
+		else if(id==4) {
+			draftSelectionEvent = diceDraftSelectionEvent;
+			swapDiceDraftRoundTrack();
+		}
 		else if(id==6) {
 			sendMessage(new RollAllDiceToolMessage(currentSelectedTool));
 		}
 		resetTool();
     }
+
+	@Override
+	public void visit(DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent) {
+		int id = currentSelectedTool.getId();
+		System.out.println("---ToolManager current tool--- "+currentSelectedTool.getId());
+		if(id==4) {
+			roundTrackSelectionEvent = diceRoundTrackSelectionEvent;
+			swapDiceDraftRoundTrack();
+		}
+	}
 
 	@Override
 	public void visit(DiceEvent diceEvent) {

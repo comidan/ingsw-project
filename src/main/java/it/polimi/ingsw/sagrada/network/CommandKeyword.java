@@ -168,6 +168,10 @@ public final class CommandKeyword {
   
   /** The Constant ROUND_TRACK. */
   public static final String ROUND_TRACK = "roundtrack";
+
+  public static final String ROUND_NUMBER = "round_number";
+
+  public static final String ROUND_TRACK_SELECTION = "round_tack_selection";
   
   /** The Constant NEW_ROUND. */
   public static final String NEW_ROUND = "newround";

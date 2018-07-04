@@ -6,10 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
@@ -102,6 +99,11 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
 
     @Override
     public String visit(DiceDraftSelectionEvent diceDraftSelectionEvent) {
+        return null;
+    }
+
+    @Override
+    public String visit(DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent) {
         return null;
     }
 

@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
@@ -86,6 +87,12 @@ public class CommandParser {
                     String idPlayer = (String)data.get(PLAYER_ID);
                     int diceId = Integer.parseInt((String)data.get(DICE_ID));
                     return new DiceDraftSelectionEvent(idPlayer, diceId);
+                case ROUND_TRACK_SELECTION:
+                    data = (JSONObject) jsonMsg.get(ROUND_TRACK_SELECTION);
+                    String idP = (String)data.get(PLAYER_ID);
+                    int idD = Integer.parseInt((String)data.get(DICE_ID));
+                    int roundNum = Integer.parseInt((String)data.get(ROUND_NUMBER));
+                    return new DiceRoundTrackSelectionEvent(idP, idD, roundNum);
                 default:
                     return null;
             }

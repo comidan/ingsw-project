@@ -1,10 +1,15 @@
 package it.polimi.ingsw.sagrada.game.playables;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
+import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.CompleteSwapDiceToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.RoundTrackMessageVisitor;
+import it.polimi.ingsw.sagrada.game.intercomm.visitor.RoundTrackVisitor;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 
 import java.util.ArrayList;
@@ -16,7 +21,7 @@ import java.util.stream.IntStream;
 /**
  * The Class RoundTrack.
  */
-public class RoundTrack implements Channel<DiceEvent, DiceResponse> {
+public class RoundTrack implements Channel<Message, DiceResponse>, RoundTrackMessageVisitor {
 
     private static final int MAX_ROUND = 10;
 
@@ -31,6 +36,7 @@ public class RoundTrack implements Channel<DiceEvent, DiceResponse> {
     public RoundTrack(DynamicRouter dynamicRouter) {
         roundDice = new ArrayList<>(MAX_ROUND);
         this.dynamicRouter = dynamicRouter;
+        this.dynamicRouter.subscribeChannel(CompleteSwapDiceToolMessage.class, this);
         IntStream.range(0, MAX_ROUND).forEach(v -> roundDice.add(new ArrayList<>()));
     }
 
@@ -59,7 +65,14 @@ public class RoundTrack implements Channel<DiceEvent, DiceResponse> {
                 return dice;
         }
         return null;
+    }
 
+    private Dice getDice(int diceId, int round) {
+        for(Dice dice:roundDice.get(round-1)) {
+            if(diceId==dice.getId())
+                return dice;
+        }
+        return null;
     }
 
     /**
@@ -88,12 +101,32 @@ public class RoundTrack implements Channel<DiceEvent, DiceResponse> {
     }
 
     @Override
-    public void dispatch(DiceEvent message) {
-        throw new UnsupportedOperationException();
+    public void dispatch(Message message) {
+        RoundTrackVisitor roundTrackVisitor = (RoundTrackVisitor) message;
+        System.out.println("Received roundTrackVisitor");
+        roundTrackVisitor.accept(this);
     }
 
     @Override
     public void sendMessage(DiceResponse message) {
         dynamicRouter.dispatch(message);
+    }
+
+    @Override
+    public void visit(DiceEvent diceEvent) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void visit(CompleteSwapDiceToolMessage completeSwapDiceToolMessage) {
+        DTO dto = new DTO();
+        dto.setDice(completeSwapDiceToolMessage.getDraftDice());
+        dto.setSecondDice(
+                getDice(completeSwapDiceToolMessage.getSwapDiceToolMessage().getRoundTrackDiceId(),
+                        completeSwapDiceToolMessage.getSwapDiceToolMessage().getRoundNumber()));
+        dto.setExchangeDraftDice(completeSwapDiceToolMessage.getDraftExchange());
+        dto.setExchangeRoundTrackDice(this::exchangeDice);
+
+        completeSwapDiceToolMessage.getSwapDiceToolMessage().getToolCard().getRule().checkRule(dto);
     }
 }

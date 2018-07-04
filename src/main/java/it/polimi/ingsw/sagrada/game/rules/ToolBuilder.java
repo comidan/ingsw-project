@@ -244,7 +244,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 			BiConsumer<Dice, Dice> exchangeRoundTrackDice = dto.getExchangeRoundTrackDice();
 			exchangeDraftDice.accept(diceFromDraft, diceFromRoundTrack);
 			exchangeRoundTrackDice.accept(diceFromRoundTrack, diceFromDraft);
-			dto.getExchangeIgnoreSequenceDice().accept(diceFromDraft.getId(), diceFromRoundTrack.getId());
+			//dto.getExchangeIgnoreSequenceDice().accept(diceFromDraft.getId(), diceFromRoundTrack.getId());
 			return ErrorType.NO_ERROR;
 		};
 		return this;

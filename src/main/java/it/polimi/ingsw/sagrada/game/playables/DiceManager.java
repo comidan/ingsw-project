@@ -10,7 +10,9 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ChangeDiceValueToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.CompleteSwapDiceToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RollAllDiceToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.SwapDiceToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerVisitor;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
@@ -24,7 +26,7 @@ import java.util.stream.IntStream;
 /**
  * The Class DiceManager.
  */
-public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerMessageVisitor {
+public class DiceManager implements Channel<Message, Message>, DiceManagerMessageVisitor {
     
     /** The draft pool. */
     private List<Dice> draftPool;
@@ -69,6 +71,7 @@ public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerM
         this.dynamicRouter.subscribeChannel(DiceEvent.class, this);
         this.dynamicRouter.subscribeChannel(ChangeDiceValueToolMessage.class, this);
         this.dynamicRouter.subscribeChannel(RollAllDiceToolMessage.class, this);
+        this.dynamicRouter.subscribeChannel(SwapDiceToolMessage.class, this);
     }
 
     /**
@@ -87,7 +90,7 @@ public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerM
     }
 
     /**
-     * Gets the dice draft.
+     * Gets the dice draft and removed it.
      *
      * @param idDice the id dice
      * @return the dice draft
@@ -97,6 +100,21 @@ public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerM
             if (dice.getId() == idDice) {
                 draftPool.remove(dice);
                 diceDraftBackup = dice;
+                return dice;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets the dice draft and removed it.
+     *
+     * @param idDice the id dice
+     * @return the dice draft
+     */
+    private Dice getDiceDraftNoDeletion(int idDice) {
+        for (Dice dice : draftPool) {
+            if (dice.getId() == idDice) {
                 return dice;
             }
         }
@@ -153,7 +171,7 @@ public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerM
      * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */
     @Override
-    public void sendMessage(DiceResponse message) {
+    public void sendMessage(Message message) {
         dynamicRouter.dispatch(message);
     }
 
@@ -184,6 +202,14 @@ public class DiceManager implements Channel<Message, DiceResponse>, DiceManagerM
         rollAllDiceToolMessage.getToolCard().getRule().checkRule(dto);
         System.out.println("---DiceManager, sending new draft---");
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
+    }
+
+    @Override
+    public void visit(SwapDiceToolMessage swapDiceToolMessage) {
+        sendMessage(new CompleteSwapDiceToolMessage(
+                this::exchangeDice,
+                getDiceDraftNoDeletion(swapDiceToolMessage.getDraftDiceId()),
+                swapDiceToolMessage));
     }
 
     private void putDiceDraft(Dice dice) {

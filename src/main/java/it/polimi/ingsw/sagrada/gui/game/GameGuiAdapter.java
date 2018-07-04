@@ -2,10 +2,7 @@ package it.polimi.ingsw.sagrada.gui.game;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.cards.ToolCard;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
@@ -310,24 +307,26 @@ public class GameGuiAdapter {
                 } catch (RemoteException e) {
                     LOGGER.log(Level.SEVERE, e::getMessage);
                 }
+                disableDraftClick();
             });
 
             this.gameView.setRoundtrackClickHandler(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
+                    System.out.println("---RoundTrackClicked---");
                     DiceView diceView = (DiceView) event.getSource();
-                    DiceDraftSelectionEvent diceDraftSelectionEvent = new DiceDraftSelectionEvent(gameView.getUsername(), diceView.getDiceID());
+                    DiceRoundTrackSelectionEvent diceDraftSelectionEvent = new DiceRoundTrackSelectionEvent(
+                            gameView.getUsername(),
+                            diceView.getDiceID(),
+                            diceView.getRoundNumber()-1); //FIX
                     try {
                         client.sendRemoteMessage(diceDraftSelectionEvent);
                     } catch (RemoteException e) {
                         LOGGER.log(Level.SEVERE, e::getMessage);
                     }
-
+                    disableRoundTrackClick();
                 }
             });
-
-            disableRoundTrackClick();
-            disableDraftClick();
         });
     }
 
@@ -543,9 +542,10 @@ public class GameGuiAdapter {
     }
 
     public void enableGuiElement(int toolId, Client client) {
-        System.out.println("---GameGuiAdapter enable GUI element---");
+        System.out.println("---GameGuiAdapter enable GUI element---" + toolId);
         if(toolId==0 || toolId==5 || toolId==6 || toolId==9) enableDraftChangeValue(client);
         if(toolId==1 || toolId==2 || toolId == 3) enableWindowDiceDrag();
+        if(toolId==4) enableRoundTrackClick(client);
     }
 
     public void disableGuiElement() {
