@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.gui.cards.ToolCardView;
 import it.polimi.ingsw.sagrada.gui.components.CellView;
+import it.polimi.ingsw.sagrada.gui.components.DicePrev;
 import it.polimi.ingsw.sagrada.gui.components.DiceView;
 import it.polimi.ingsw.sagrada.gui.components.RoundCellView;
 import it.polimi.ingsw.sagrada.gui.utils.ClickedObject;
@@ -75,6 +76,7 @@ public class GameGuiAdapter {
         setWindowButtonHandler();
         setCardPreviewListener();
     }
+
 
     /**
      * Sets the end turn handler.
@@ -338,7 +340,22 @@ public class GameGuiAdapter {
         gameView.disableDraftClick();
     }
 
+    public void showDicePrevContainer(){
+        Platform.runLater(() -> {
+            gameView.showDicePrevContainer();
+        });
+    }
 
+    public void setChooseValue(){
+    Platform.runLater(() -> {
+        gameView.setChooseValue(event -> {
+            DicePrev dicePrev = (DicePrev) event.getSource();
+            int value = dicePrev.getValue();
+            System.out.println("value:" + value);
+        });
+    });
+
+    }
 
 
     /**

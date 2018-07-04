@@ -32,5 +32,12 @@ public class RoundCellView extends VBox{
         }
     }
 
+    public void removeDice(){
+        for(int i = 0; i< diceViewList.size(); i++){
+            this.getChildren().remove(diceViewList.get(i));
+            diceViewList.remove(diceViewList.get(i));
+        }
+    }
+
 
 }

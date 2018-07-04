@@ -52,21 +52,46 @@ public class RoundTrackView extends HBox {
      * @param diceViews the dice view
      * @param currentRound the current round
      */
+
     public void setDice(List<DiceView> diceViews, int currentRound) {
         RoundCellView roundCellView = new RoundCellView(diceViews);
         roundCellView.setRoundNumber(currentRound);
         roundCellView.addDice(diceViews);
+        if(diceViewList.get(currentRound - 1).size()!= 0){
+            substituteDice(diceViews, currentRound);
+        }
+        else {
 
-        for(int i = 0; i< diceViews.size(); i++){
-            DiceView diceView = diceViews.get(i);
-            diceViewList.get(currentRound - 1).add(diceView);
-            diceViewList.get(currentRound - 1).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
+            for (int i = 0; i < diceViews.size(); i++) {
+                DiceView diceView = diceViews.get(i);
+                diceViewList.get(currentRound - 1).add(diceView);
+                diceViewList.get(currentRound - 1).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
+            }
+            roundCellViewList.add(roundCellView);
+            this.getChildren().add(roundCellView);
+        }
+    }
+
+    private void substituteDice(List<DiceView> diceViews, int currentRound){
+        RoundCellView roundCellView = new RoundCellView(diceViews);
+        roundCellView.setRoundNumber(currentRound);
+        roundCellView.addDice(diceViews);
+
+        for(int i = 0; i< diceViewList.size(); i++) {
+            diceViewList.get(currentRound - 1).remove(i);
+            RoundCellView previousRoundCellView = roundCellViewList.remove(currentRound - 1 );
+            this.getChildren().remove(previousRoundCellView);
 
         }
-        roundCellViewList.add(roundCellView);
-        this.getChildren().add(roundCellView);
 
+        for(int i = 0; i< diceViews.size(); i++) {
+            DiceView diceView = diceViews.get(i);
+             diceViewList.get(currentRound - 1).add(diceView);
+             diceViewList.get(currentRound - 1).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
+            }
+            this.getChildren().add(roundCellView);
     }
+
 
     /**
      * Sets the click handler.

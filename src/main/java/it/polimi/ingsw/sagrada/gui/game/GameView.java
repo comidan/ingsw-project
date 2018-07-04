@@ -34,7 +34,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
@@ -115,6 +114,8 @@ public class GameView extends Application {
     private Label notification;
 
     private Label timer;
+
+    private DicePrevContainer dicePrevContainer;
 
     /**
      * Gets the username.
@@ -201,6 +202,17 @@ public class GameView extends Application {
         this.roundTrackView.setDice(diceViews, currentRound);
     }
 
+    public void showDicePrevContainer(){
+        dicePrevContainer = DicePrevContainer.getDicePrevContainer();
+        AnchorPane.setRightAnchor(dicePrevContainer, GUIManager.getGameWidthPixel(50));
+        AnchorPane.setBottomAnchor(dicePrevContainer, GUIManager.getGameHeightPixel(30));
+        anchorPane.getChildren().add(dicePrevContainer);
+    }
+
+    public void setChooseValue(EventHandler<MouseEvent> chooseValueHandler){
+        dicePrevContainer.setDicePrevHandler(chooseValueHandler);
+    }
+
     /**
      * Gets the single instance of GameView.
      *
@@ -260,7 +272,9 @@ public class GameView extends Application {
         windows.get(username).removeMistakenDice(row, col);
     }
 
+    void showValueChioce(){
 
+    }
     /**
      * Removes the token.
      *
@@ -280,6 +294,7 @@ public class GameView extends Application {
      * Initialize.
      */
     private void initialize(){
+        dicePrevContainer = DicePrevContainer.getDicePrevContainer();
         endTurn = new EndTurn();
         this.frame = new FrameView();
         this.cardBoard = new CardBoard();
