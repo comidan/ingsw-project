@@ -138,9 +138,9 @@ public class ToolRuleTest {
         CellRule cellRulecolor = CellRule.builder().setNumberConstraint(6).build();
         Cell empty = new Cell(cellRulecolor);
         Cell[][] cells = {{__five, __one, __three, empty, __three},
-                {__two, __three, __four, __five, __one},
-                {empty, __five, __two, __one, __two},
-                {__one, __two, __five, empty, __three}};
+                          {__two, __three, __four, __five, __one},
+                          {empty, __five, __two, __one, __two},
+                          {__one, __two, __five, empty, __three}};
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
         ToolRule toolRule = ToolRule.builder().setMoveIgnoringValueRuleFeature().build();
