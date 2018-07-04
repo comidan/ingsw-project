@@ -302,7 +302,9 @@ public class GameGuiAdapter {
         Platform.runLater(() -> {
             this.gameView.enableDraftChangeValue(event ->
             {
+                System.out.println("---DraftClicked---");
                 DiceView diceView = (DiceView) event.getSource();
+                System.out.print("id dado draft" + diceView.getDiceID());
                 DiceDraftSelectionEvent diceDraftSelectionEvent = new DiceDraftSelectionEvent(gameView.getUsername(), diceView.getDiceID());
                 try {
                     client.sendRemoteMessage(diceDraftSelectionEvent);
@@ -317,10 +319,11 @@ public class GameGuiAdapter {
                 public void handle(MouseEvent event) {
                     System.out.println("---RoundTrackClicked---");
                     DiceView diceView = (DiceView) event.getSource();
+                    System.out.print("id dado round" + diceView.getDiceID());
                     DiceRoundTrackSelectionEvent diceDraftSelectionEvent = new DiceRoundTrackSelectionEvent(
                             gameView.getUsername(),
                             diceView.getDiceID(),
-                            diceView.getRoundNumber()-1); //FIX
+                            diceView.getRoundNumber()); //FIX
                     try {
                         client.sendRemoteMessage(diceDraftSelectionEvent);
                     } catch (RemoteException e) {
