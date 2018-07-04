@@ -67,12 +67,15 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     /** The server. */
     private AbstractServerRMI server;
 
+    private final String URL = PROTOCOL + ADDRESS + ":" + 1099 ;
+
     /**
      * Instantiates a new RMI client.
      *
      * @throws RemoteException the remote exception
      */
     public RMIClient() throws RemoteException {
+        System.setProperty("java.rmi.server.codebase", "http://" + ADDRESS + ":8080/");
         establishServerConnection();
     }
 
@@ -83,7 +86,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      */
     private boolean connect() {
         try {
-            server = (AbstractServerRMI) Naming.lookup(PROTOCOL + ADDRESS + ":" + RMI_PORT + "/ServerRMI");
+            server = (AbstractServerRMI) Naming.lookup(URL + "/ServerRMI");
             return true;
         } catch (RemoteException | NotBoundException | MalformedURLException exc) {
             return false;
@@ -232,7 +235,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     public void notifyLobby(String lobbyId) throws RemoteException {
         try {
             System.out.println("Acquiring lobby");
-            lobby = (AbstractMatchLobbyRMI) Naming.lookup(PROTOCOL + ADDRESS + "/" + lobbyId);
+            lobby = (AbstractMatchLobbyRMI) Naming.lookup(URL + "/" + lobbyId);
             System.out.println("Lobby acquired");
             if (lobby.joinLobby(username, this)) {
                 System.out.println("Lobby joined");
@@ -258,7 +261,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public void notifyRemoteClientInterface(String id) {
         try {
-            remoteClient = (Client) Naming.lookup(PROTOCOL + ADDRESS + "/" + id);
+            remoteClient = (Client) Naming.lookup(URL + "/" + id);
         }
         catch (Exception exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
