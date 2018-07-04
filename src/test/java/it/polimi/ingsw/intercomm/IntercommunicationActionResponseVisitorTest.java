@@ -9,6 +9,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -241,6 +242,11 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
 
     @Override
     public String visit(EnableWindowToolResponse enableWindowToolResponse) {
+        return null;
+    }
+
+    @Override
+    public String visit(RoundTrackToolResponse roundTrackToolResponse) {
         return null;
     }
 }

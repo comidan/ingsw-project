@@ -9,6 +9,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
@@ -299,6 +300,27 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    private String createJsonRoundTrackToolResponse(RoundTrackToolResponse roundTrackToolResponse) {
+        DiceResponse diceResponse = roundTrackToolResponse.getDiceResponse();
+        JSONObject message = new JSONObject();
+        message.put(MESSAGE_TYPE, RESPONSE);
+        message.put(COMMAND_TYPE, ROUND_TRACK_RESPONSE);
+        JSONObject diceList = new JSONObject();
+        diceList.put(DESTINATION, diceResponse.getDst());
+        JSONArray diceArray = new JSONArray();
+        diceResponse.getDiceList().forEach(dice -> {
+            JSONObject diceM = new JSONObject();
+            diceM.put(ID, dice.getId()+"");
+            diceM.put(VALUE, dice.getValue()+"");
+            diceM.put(COLOR, dice.getColor().toString());
+            diceArray.add(diceM);
+        });
+        diceList.put(DICE, diceArray);
+        diceList.put(ROUND_NUMBER, roundTrackToolResponse.getRoundNumber()+"");
+        message.put(DICE_LIST, diceList);
+        return message.toJSONString();
+    }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */
@@ -412,5 +434,10 @@ public class MessageParser implements ResponseMessageVisitor {
     @Override
     public String visit(EnableWindowToolResponse enableWindowToolResponse) {
         return createJsonEnableWindowResponse(enableWindowToolResponse);
+    }
+
+    @Override
+    public String visit(RoundTrackToolResponse roundTrackToolResponse) {
+        return createJsonRoundTrackToolResponse(roundTrackToolResponse);
     }
 }

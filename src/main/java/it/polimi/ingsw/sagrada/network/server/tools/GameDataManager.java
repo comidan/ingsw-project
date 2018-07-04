@@ -13,6 +13,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
@@ -68,6 +69,7 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         dynamicRouter.subscribeChannel(EndTurnResponse.class, this);
         dynamicRouter.subscribeChannel(TimeRemainingResponse.class, this);
         dynamicRouter.subscribeChannel(EnableWindowToolResponse.class, this);
+        dynamicRouter.subscribeChannel(RoundTrackToolResponse.class, this);
     }
 
     /* (non-Javadoc)
@@ -75,7 +77,8 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
      */
     @Override
     public void dispatch(Message message) {
-        System.out.println("I received : " + message);
+        if(!(message instanceof TimeRemainingResponse))
+            System.out.println("I received : " + message);
         message.accept(this);
     }
 
@@ -292,6 +295,11 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
     @Override
     public void visit(EnableWindowToolResponse enableWindowToolResponse) {
         sendRemoteMessage(enableWindowToolResponse, filter -> filter.equals(getClient(enableWindowToolResponse.getPlayerId())));
+    }
+
+    @Override
+    public void visit(RoundTrackToolResponse roundTrackToolResponse) {
+        sendRemoteMessage(roundTrackToolResponse, filter -> anyone());
     }
 
     /**

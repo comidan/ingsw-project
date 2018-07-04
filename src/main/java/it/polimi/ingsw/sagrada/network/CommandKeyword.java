@@ -193,6 +193,8 @@ public final class CommandKeyword {
 
   public static final String TOOL_ID = "tool_id";
 
+  public static final String ROUND_TRACK_RESPONSE = "round_track_response";
+
   public static final String CAN_BUY = "can_buy";
 
   public static final String COST = "cost";

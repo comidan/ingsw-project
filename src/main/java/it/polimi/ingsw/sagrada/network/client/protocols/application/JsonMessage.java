@@ -15,6 +15,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RegisterEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.ErrorEvent;
@@ -365,6 +366,18 @@ public class JsonMessage implements ActionMessageVisitor {
                 case WINDOW_ENABLE:
                     data = (JSONObject) jsonMsg.get(WINDOW_ENABLE);
                     return new EnableWindowToolResponse((String) data.get(USERNAME), Integer.parseInt((String)data.get(TOOL_ID)));
+                case ROUND_TRACK_RESPONSE:
+                    data = (JSONObject) jsonMsg.get(DICE_LIST);
+                    diceResponse = new ArrayList<>();
+                    diceArray = (JSONArray)data.get(DICE);
+                    diceArray.forEach(raw -> {
+                        JSONObject diceJson = (JSONObject) raw;
+                        Dice diceR = new Dice(Integer.parseInt((String)(diceJson.get(ID))),
+                                Colors.stringToColor((String)(diceJson.get(COLOR))));
+                        diceR.setValue(Integer.parseInt((String)(diceJson).get(VALUE)));
+                        diceResponse.add(diceR);
+                    });
+                    return new RoundTrackToolResponse(new DiceResponse((String)(data.get(DESTINATION)), diceResponse), Integer.parseInt((String)data.get(ROUND_NUMBER)));
                 default:
                     return null;
             }

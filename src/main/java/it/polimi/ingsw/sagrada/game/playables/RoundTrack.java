@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.CompleteSwapDiceToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.RoundTrackMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.RoundTrackVisitor;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
@@ -21,7 +22,7 @@ import java.util.stream.IntStream;
 /**
  * The Class RoundTrack.
  */
-public class RoundTrack implements Channel<Message, DiceResponse>, RoundTrackMessageVisitor {
+public class RoundTrack implements Channel<Message, Message>, RoundTrackMessageVisitor {
 
     private static final int MAX_ROUND = 10;
 
@@ -67,11 +68,16 @@ public class RoundTrack implements Channel<Message, DiceResponse>, RoundTrackMes
         return null;
     }
 
-    private Dice getDice(int diceId, int round) {
-        for(Dice dice:roundDice.get(round-1)) {
-            if(diceId==dice.getId())
-                return dice;
+    private Dice getDice(int diceId) {
+        Optional<List<Dice>> diceList = roundDice.stream().filter(list -> list.stream().anyMatch(dice -> dice.getId() == diceId)).findFirst();
+        if(diceList.isPresent()) {
+            Optional<Dice> dice = diceList.get().stream().filter(d -> d.getId()==diceId).findFirst();
+            if(dice.isPresent()) {
+                System.out.println("///////////////Dado trovato///////////////////"+dice.get().getId());
+                return dice.get();
+            }
         }
+
         return null;
     }
 
@@ -94,9 +100,11 @@ public class RoundTrack implements Channel<Message, DiceResponse>, RoundTrackMes
     public void exchangeDice(Dice oldDice, Dice newDice) {
         Optional<List<Dice>> diceList = roundDice.stream().filter(list -> list.contains(oldDice)).findFirst();
         if(diceList.isPresent()) {
+            System.out.println("///////////////Sto per inviare il roundTrack///////////////////");
             diceList.get().remove(oldDice);
             diceList.get().add(newDice);
-            sendMessage(new DiceResponse(CommandKeyword.ROUND_TRACK, diceList.get()));
+
+            sendMessage(new RoundTrackToolResponse(new DiceResponse(CommandKeyword.ROUND_TRACK, diceList.get()), roundDice.indexOf(diceList.get())+1));
         }
     }
 
@@ -108,7 +116,7 @@ public class RoundTrack implements Channel<Message, DiceResponse>, RoundTrackMes
     }
 
     @Override
-    public void sendMessage(DiceResponse message) {
+    public void sendMessage(Message message) {
         dynamicRouter.dispatch(message);
     }
 
@@ -119,11 +127,11 @@ public class RoundTrack implements Channel<Message, DiceResponse>, RoundTrackMes
 
     @Override
     public void visit(CompleteSwapDiceToolMessage completeSwapDiceToolMessage) {
+        System.out.println("///////////////RoundTrack ha ricevuto il messaggio///////////////////");
         DTO dto = new DTO();
         dto.setDice(completeSwapDiceToolMessage.getDraftDice());
         dto.setSecondDice(
-                getDice(completeSwapDiceToolMessage.getSwapDiceToolMessage().getRoundTrackDiceId(),
-                        completeSwapDiceToolMessage.getSwapDiceToolMessage().getRoundNumber()));
+                getDice(completeSwapDiceToolMessage.getSwapDiceToolMessage().getRoundTrackDiceId()));
         dto.setExchangeDraftDice(completeSwapDiceToolMessage.getDraftExchange());
         dto.setExchangeRoundTrackDice(this::exchangeDice);
 

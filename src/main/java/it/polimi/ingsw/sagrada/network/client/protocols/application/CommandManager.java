@@ -12,6 +12,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -400,5 +401,10 @@ public class CommandManager implements MessageVisitor {
     @Override
     public void visit(EnableWindowToolResponse enableWindowToolResponse) {
         gameGuiAdapter.enableGuiElement(enableWindowToolResponse.getToolId(), client);
+    }
+
+    @Override
+    public void visit(RoundTrackToolResponse roundTrackToolResponse) {
+        gameGuiAdapter.setRoundTrack(roundTrackToolResponse);
     }
 }

@@ -14,6 +14,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
@@ -209,6 +210,11 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
 
     @Override
     public String visit(EnableWindowToolResponse enableWindowToolResponse) {
+        return null;
+    }
+
+    @Override
+    public String visit(RoundTrackToolResponse roundTrackToolResponse) {
         return null;
     }
 }

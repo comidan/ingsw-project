@@ -104,12 +104,16 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 	}
 
 	private void swapDiceDraftRoundTrack() {
+		System.out.println("///////////////ToolManager///////////////////"+draftSelectionEvent);
+		System.out.println("///////////////ToolManager///////////////////"+roundTrackSelectionEvent);
 		if(draftSelectionEvent!=null && roundTrackSelectionEvent!=null) {
+			System.out.println("///////////////ToolManager ha inviato il messaggio///////////////////");
 			sendMessage(new SwapDiceToolMessage(
 					currentSelectedTool,
 					draftSelectionEvent.getIdDice(),
 					roundTrackSelectionEvent.getDiceId(),
 					roundTrackSelectionEvent.getTurn()));
+			resetTool();
 		}
 	}
 
@@ -143,6 +147,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		int id = currentSelectedTool.getId();
 		if(id==0 || id==5 || id==9) {
 			sendMessage(new ChangeDiceValueToolMessage(currentSelectedTool, diceDraftSelectionEvent.getIdDice()));
+			resetTool();
 		}
 		else if(id==4) {
 			draftSelectionEvent = diceDraftSelectionEvent;
@@ -150,8 +155,8 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		}
 		else if(id==6) {
 			sendMessage(new RollAllDiceToolMessage(currentSelectedTool));
+			resetTool();
 		}
-		resetTool();
     }
 
 	@Override

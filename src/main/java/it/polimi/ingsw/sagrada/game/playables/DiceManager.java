@@ -206,6 +206,7 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
 
     @Override
     public void visit(SwapDiceToolMessage swapDiceToolMessage) {
+        System.out.println("///////////////DiceManager ha ricevuto il messaggio///////////////////");
         sendMessage(new CompleteSwapDiceToolMessage(
                 this::exchangeDice,
                 getDiceDraftNoDeletion(swapDiceToolMessage.getDraftDiceId()),

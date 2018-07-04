@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.gui.cards.ToolCardView;
 import it.polimi.ingsw.sagrada.gui.components.CellView;
@@ -319,13 +320,14 @@ public class GameGuiAdapter {
                 public void handle(MouseEvent event) {
                     System.out.println("---RoundTrackClicked---");
                     DiceView diceView = (DiceView) event.getSource();
-                    System.out.print("id dado round" + diceView.getDiceID());
-                    DiceRoundTrackSelectionEvent diceDraftSelectionEvent = new DiceRoundTrackSelectionEvent(
+                    System.out.println("id dado round" + diceView.getDiceID());
+                    DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent = new DiceRoundTrackSelectionEvent(
                             gameView.getUsername(),
                             diceView.getDiceID(),
                             diceView.getRoundNumber()); //FIX
+                    System.out.println("------------"+diceView.getRoundNumber()+"--------------");
                     try {
-                        client.sendRemoteMessage(diceDraftSelectionEvent);
+                        client.sendRemoteMessage(diceRoundTrackSelectionEvent);
                     } catch (RemoteException e) {
                         LOGGER.log(Level.SEVERE, e::getMessage);
                     }
@@ -435,6 +437,20 @@ public class GameGuiAdapter {
             List<DiceView> diceViews = new ArrayList<>();
             diceResponse.getDiceList().forEach(dice -> diceViews.add(new DiceView(Constraint.getColorConstraint(dice.getColor()), Constraint.getValueConstraint(dice.getValue()), dice.getId())));
             gameView.setRoundtrackImage(diceViews, currentRound);
+        });
+    }
+
+    /**
+     * Sets the round track.
+     *
+     * @param roundTrackToolResponse the new round track
+     */
+    public void setRoundTrack(RoundTrackToolResponse roundTrackToolResponse) {
+        DiceResponse diceResponse = roundTrackToolResponse.getDiceResponse();
+        Platform.runLater(() -> {
+            List<DiceView> diceViews = new ArrayList<>();
+            diceResponse.getDiceList().forEach(dice -> diceViews.add(new DiceView(Constraint.getColorConstraint(dice.getColor()), Constraint.getValueConstraint(dice.getValue()), dice.getId())));
+            gameView.setRoundtrackImage(diceViews, roundTrackToolResponse.getRoundNumber());
         });
     }
 

@@ -57,7 +57,27 @@ public class RoundTrackView extends GridPane {
         RoundCellView roundCellView = new RoundCellView(diceViews);
         roundCellView.setRoundNumber(currentRound - 1);
         roundCellView.addDice(diceViews);
-        if(diceViewList.get(currentRound - 2).size()!= 0){
+        if(diceViewList.get(currentRound - 2).size()!= 0) {
+            substituteDice(diceViews, currentRound);
+        }
+        else {
+
+            for (int i = 0; i < diceViews.size(); i++) {
+                DiceView diceView = diceViews.get(i);
+                diceViewList.get(currentRound - 2).add(diceView);
+                diceViewList.get(currentRound - 2).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
+            }
+            roundCellViewList.add(roundCellView);
+            this.add(roundCellView, currentRound - 2, 1);
+            System.out.print("metto:" + roundCellView.getRoundNumber());
+        }
+    }
+
+    public void setDiceTool(List<DiceView> diceViews, int currentRound) {
+        RoundCellView roundCellView = new RoundCellView(diceViews);
+        roundCellView.setRoundNumber(currentRound);
+        roundCellView.addDice(diceViews);
+        if(diceViewList.get(currentRound).size()!= 0) {
             substituteDice(diceViews, currentRound);
         }
         else {
@@ -105,7 +125,7 @@ public class RoundTrackView extends GridPane {
     public void setClickHandler(EventHandler<MouseEvent> clickHandler) {
         for(int i = 0; i< diceViewList.size(); i++){
             for (int j = 0; j< diceViewList.get(i).size(); j++){
-                setDisable(false);
+                diceViewList.get(i).get(j).setDisable(false);
                 diceViewList.get(i).get(j).setOnMouseClicked(clickHandler);
             }
         }
