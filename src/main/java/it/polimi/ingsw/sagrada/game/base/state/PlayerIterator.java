@@ -55,6 +55,7 @@ public class PlayerIterator implements Iterator<String> {
         if(itr < numP*2 && turnNum < MAX_ROUND) {
             if(checkPlayerLeft(itr)) return true;
             else {
+                momentaryRemovedPlayer.clear();
                 itr=0;
                 turnNum++;
                 getRoundSequence();
@@ -86,6 +87,7 @@ public class PlayerIterator implements Iterator<String> {
      * Gets the round sequence, internal use only
      */
     private void getRoundSequence() {
+        System.out.println("--------NewTurn--------");
         turnIteration.clear();
 
         List<String> currentPlayer = new ArrayList<>();
@@ -98,17 +100,21 @@ public class PlayerIterator implements Iterator<String> {
         int offset = turnNum % numP;
         IntStream.range(0, (numPlayer-removedPlayers.size())*2).forEach(i -> {
             if(i<numP) {
-                turnIteration.add(currentPlayer.get(i+offset));
+                String currentP = currentPlayer.get(i+offset);
+                turnIteration.add(currentP);
             }
             else {
-                turnIteration.add(currentPlayer.get(2*numP-1-i+offset));
+                String currentP2 = currentPlayer.get(2*numP-1-i+offset);
+                turnIteration.add(currentP2);
             }
         });
+        turnIteration.forEach(elem -> System.out.println(elem));
     }
 
     private boolean checkPlayerLeft(int index) {
         for(int i=index; i<turnIteration.size(); i++) {
-            if(!removedPlayers.contains(turnIteration.get(i))) return true;
+            if(!removedPlayers.contains(turnIteration.get(i)) && !momentaryRemovedPlayer.contains(turnIteration.get(i)))
+                return true;
         }
         return false;
     }
@@ -143,7 +149,7 @@ public class PlayerIterator implements Iterator<String> {
     }
 
     public boolean canApplyToolChange(String idPlayer) {
-        if(itr<turnIteration.size()/2) {
+        if(itr<=turnIteration.size()/2) {
             momentaryRemovedPlayer.add(idPlayer);
             return true;
         } else {

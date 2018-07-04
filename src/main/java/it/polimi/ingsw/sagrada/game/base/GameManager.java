@@ -21,6 +21,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableDoubleTurn;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceWindowToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -92,6 +93,10 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
 
     private BiConsumer<Message, String> fastRecoveryDispatch;
 
+    private boolean toolDoubleTurn;
+
+    private int dicePlaced;
+
     /**
      * Instantiates a new game manager.
      *
@@ -110,10 +115,13 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         playersId = new ArrayList<>();
         players.forEach(p -> playersId.add(p.getId()));
         playerIterator = new PlayerIterator(playersId);
+        toolDoubleTurn = false;
+        dicePlaced = 0;
         dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
         dynamicRouter.subscribeChannel(ByteStreamWindowEvent.class, this);
         dynamicRouter.subscribeChannel(MoveDiceWindowToolMessage.class, this);
         dynamicRouter.subscribeChannel(MoveDiceToolMessage.class, this);
+        dynamicRouter.subscribeChannel(EnableDoubleTurn.class, this);
         this.dynamicRouter = dynamicRouter;
     }
 
@@ -269,7 +277,13 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             Window window = player.getWindow();
             window.setCell(dice, position.getRow(), position.getCol());
             ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
-            if(player.isTurnPlayed()) errorType = ErrorType.ALREADY_PLAYED;
+            if(player.isTurnPlayed()) {
+                errorType = ErrorType.ALREADY_PLAYED;
+                if(toolDoubleTurn) {
+                    errorType = ErrorType.NO_ERROR;
+                    toolDoubleTurn = false;
+                }
+            }
             if(errorType == ErrorType.NO_ERROR) {
                 player.setIsTurnPlayed(true);
                 sendMessage(new OpponentDiceMoveResponse(idPlayer, dice, position));
@@ -478,6 +492,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     @Override
     public void visit(EndTurnEvent message) {
         idToPlayer(playerIterator.getCurrentPlayer()).setIsTurnPlayed(false);
+        toolDoubleTurn = false;
         notifyNextPlayer();
     }
 
@@ -544,6 +559,11 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             }
             sendMessage(new RuleResponse(moveDiceToolMessage.getPlayerId(), errorType == ErrorType.NO_ERROR));
         }
+    }
+
+    @Override
+    public void visit(EnableDoubleTurn enableDoubleTurn) {
+        toolDoubleTurn = playerIterator.canApplyToolChange(enableDoubleTurn.getPlayerId());
     }
 
     public class GameTimer extends TimerTask {

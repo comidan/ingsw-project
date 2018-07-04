@@ -134,6 +134,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 	public void visit(ToolEvent toolEvent) {
 		boolean result = canBuyTool(toolEvent.getToolId(), players.get(toolEvent.getPlayerId()));
 		sendMessage(new ToolResponse(result, toolEvent.getPlayerId(), cost, toolEvent.getToolId()));
+		if(toolEvent.getToolId()==7) sendMessage(new EnableDoubleTurn(toolEvent.getPlayerId()));
 	}
 
     @Override
