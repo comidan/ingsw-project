@@ -59,8 +59,8 @@ public class RoundTrackView extends HBox {
 
         for(int i = 0; i< diceViews.size(); i++){
             DiceView diceView = diceViews.get(i);
-            diceViewList.get(currentRound - 1).add(diceView);
-            diceViewList.get(currentRound - 1).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
+            diceViewList.get(currentRound).add(diceView);
+            diceViewList.get(currentRound).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
 
         }
         roundCellViewList.add(roundCellView);
