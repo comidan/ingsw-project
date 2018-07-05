@@ -22,6 +22,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableDoubleTurn;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveAloneDiceTool;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceWindowToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -95,6 +96,8 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
 
     private boolean toolDoubleTurn;
 
+    private boolean toolMoveAlone;
+
     private int dicePlaced;
 
     /**
@@ -116,12 +119,14 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         players.forEach(p -> playersId.add(p.getId()));
         playerIterator = new PlayerIterator(playersId);
         toolDoubleTurn = false;
+        toolMoveAlone = false;
         dicePlaced = 0;
         dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
         dynamicRouter.subscribeChannel(ByteStreamWindowEvent.class, this);
         dynamicRouter.subscribeChannel(MoveDiceWindowToolMessage.class, this);
         dynamicRouter.subscribeChannel(MoveDiceToolMessage.class, this);
         dynamicRouter.subscribeChannel(EnableDoubleTurn.class, this);
+        dynamicRouter.subscribeChannel(MoveAloneDiceTool.class, this);
         this.dynamicRouter = dynamicRouter;
     }
 
@@ -276,7 +281,17 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         Player player = idToPlayer(idPlayer);
         if(player != null) {
             Window window = player.getWindow();
-            window.setCell(dice, position.getRow(), position.getCol());
+            if(toolMoveAlone) {
+                DTO dto = new DTO();
+                dto.setNewPosition(position);
+                dto.setDice(dice);
+                dto.setWindowMatrix(window.getCellMatrix());
+                dto.setIgnoreSequenceDice(ruleManager::addIgnoreSequenceDice);
+                toolManager.getCurrentSelectedTool().getRule().checkRule(dto);
+                toolMoveAlone=false;
+            }
+            else window.setCell(dice, position.getRow(), position.getCol());
+
             ErrorType turnErrorType = ErrorType.NO_ERROR;
             if(player.isTurnPlayed()) {
                 turnErrorType = ErrorType.ALREADY_PLAYED;
@@ -285,6 +300,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
                     toolDoubleTurn = false;
                 }
             }
+
             ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
             if(errorType == ErrorType.NO_ERROR && turnErrorType == ErrorType.NO_ERROR) {
                 player.setIsTurnPlayed(true);
@@ -296,7 +312,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
                 diceManager.revert();
                 window.resetCell(position.getRow(), position.getCol());
             }
-            sendMessage(new RuleResponse(idPlayer, errorType == ErrorType.NO_ERROR));
+            sendMessage(new RuleResponse(idPlayer, errorType == ErrorType.NO_ERROR && turnErrorType == ErrorType.NO_ERROR));
         }
     }
 
@@ -495,6 +511,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     public void visit(EndTurnEvent message) {
         idToPlayer(playerIterator.getCurrentPlayer()).setIsTurnPlayed(false);
         toolDoubleTurn = false;
+        toolMoveAlone = false;
         notifyNextPlayer();
     }
 
@@ -566,6 +583,11 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     @Override
     public void visit(EnableDoubleTurn enableDoubleTurn) {
         toolDoubleTurn = playerIterator.canApplyToolChange(enableDoubleTurn.getPlayerId());
+    }
+
+    @Override
+    public void visit(MoveAloneDiceTool moveAloneDiceTool) {
+        toolMoveAlone = true;
     }
 
     public class GameTimer extends TimerTask {

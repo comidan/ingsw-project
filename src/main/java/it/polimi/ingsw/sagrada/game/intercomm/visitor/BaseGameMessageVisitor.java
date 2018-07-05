@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableDoubleTurn;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveAloneDiceTool;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceWindowToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -51,4 +52,6 @@ public interface BaseGameMessageVisitor {
     void visit(MoveDiceToolMessage moveDiceToolMessage);
 
     void visit(EnableDoubleTurn enableDoubleTurn);
+
+    void visit(MoveAloneDiceTool moveAloneDiceTool);
 }
