@@ -300,31 +300,18 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 		function = dto -> {
 			int row1Old = dto.getCurrentPosition().getRow();
 			int col1Old = dto.getCurrentPosition().getCol();
-			int row2Old = dto.getSecondCurrentPosition().getRow();
-			int col2Old = dto.getSecondCurrentPosition().getCol();
 			int row1 = dto.getNewPosition().getRow();
 			int col1 = dto.getNewPosition().getCol();
-			int row2 = dto.getSecondNewPosition().getRow();
-			int col2 = dto.getSecondNewPosition().getCol();
 			Dice dice1 = dto.getDice();
-			Dice dice2 = dto.getSecondDice();
 			Cell[][] cells = dto.getWindowMatrix();
-			if(checkIfNull(dice1, dice2, cells) == ErrorType.NULL_DATA)
+			if(checkIfNull(dice1, cells) == ErrorType.NULL_DATA)
 				return ErrorType.NULL_DATA;
-			if(!dice1.getColor().equals(dto.getImposedColor()) || !dice2.getColor().equals(dto.getImposedColor()))
+			if(!dice1.getColor().equals(dto.getImposedColor()))
 				return ErrorType.ERROR;
-			RuleManager ruleManager = new RuleManager();
-			if(cells[row1][col1].isOccupied() || cells[row2][col2].isOccupied())
+			if(cells[row1][col1].isOccupied())
 				return ErrorType.ERROR;
 			cells[row1Old][col1Old].removeCurrentDice();
-			cells[row2Old][col2Old].removeCurrentDice();
 			cells[row1][col1].setDice(dice1);
-			cells[row2][col2].setDice(dice2);
-			if(ruleManager.validateWindow(cells) != ErrorType.NO_ERROR) {
-				cells[row1][col1].removeCurrentDice();
-				cells[row2][col2].removeCurrentDice();
-				return ErrorType.MATRIX_ERROR;
-			}
 			return ErrorType.NO_ERROR;
 		};
 		return this;

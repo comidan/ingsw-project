@@ -109,6 +109,11 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
     }
 
     @Override
+    public String visit(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent) {
+        return null;
+    }
+
+    @Override
     public String visit(WindowEvent windowEvent) {
         assertEquals(id, windowEvent.getIdWindow());
         assertEquals(side, windowEvent.getWindowSide());

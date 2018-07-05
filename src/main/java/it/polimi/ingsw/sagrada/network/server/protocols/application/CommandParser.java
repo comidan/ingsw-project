@@ -1,13 +1,16 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackColorSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorConstraintToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -93,6 +96,11 @@ public class CommandParser {
                     int idD = Integer.parseInt((String)data.get(DICE_ID));
                     int roundNum = Integer.parseInt((String)data.get(ROUND_NUMBER));
                     return new DiceRoundTrackSelectionEvent(idP, idD, roundNum);
+                case ROUND_COLOR_SELECTION:
+                    data = (JSONObject) jsonMsg.get(ROUND_COLOR_SELECTION);
+                    playerId = (String)data.get(PLAYER_ID);
+                    Colors color = Colors.stringToColor((String)data.get(COLOR));
+                    return new DiceRoundTrackColorSelectionEvent(playerId, color);
                 default:
                     return null;
             }

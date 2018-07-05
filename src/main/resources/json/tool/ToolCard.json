@@ -1,5 +1,5 @@
 [
-	{ "id":4, "name":"Taglierina circolare", "action":["setExchangeDraftRoundTrackDiceFeature"]},
     { "id":7, "name":"Tenaglia a Rotelle", "action":["setIncrementDiceFeature"]},
-	{ "id":8, "name":"Riga di Sughero", "action":["setAddNewDiceFeature"]}
+	{ "id":8, "name":"Riga di Sughero", "action":["setAddNewDiceFeature"]},
+	{ "id":11, "name":"Taglierina Manuale", "action":["setMoveSameRoundTrackDiceColorFeature"]}
 ]

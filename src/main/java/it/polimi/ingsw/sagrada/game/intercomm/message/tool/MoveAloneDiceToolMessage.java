@@ -5,7 +5,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 
-public class MoveAloneDiceTool implements Message, BaseGameVisitor {
+public class MoveAloneDiceToolMessage implements Message, BaseGameVisitor {
     @Override
     public Class<? extends Message> getType() {
         return getClass();

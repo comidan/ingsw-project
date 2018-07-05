@@ -1,11 +1,13 @@
 package it.polimi.ingsw.sagrada.game.cards;
 
 import it.polimi.ingsw.sagrada.game.base.Player;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackColorSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackSelectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.*;
@@ -43,6 +45,8 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 
 	private int diceCounter;
 
+	private Colors colorConstraint;
+
 	private DiceRoundTrackSelectionEvent roundTrackSelectionEvent;
 	private DiceDraftSelectionEvent draftSelectionEvent;
 
@@ -63,6 +67,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		this.dynamicRouter.subscribeChannel(DiceDraftSelectionEvent.class, this);
 		this.dynamicRouter.subscribeChannel(DiceRoundTrackSelectionEvent.class, this);
 		this.dynamicRouter.subscribeChannel(DiceEvent.class, this);
+		this.dynamicRouter.subscribeChannel(DiceRoundTrackColorSelectionEvent.class, this);
 	}
 
 	public ToolCard getCurrentSelectedTool() {
@@ -103,6 +108,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		currentToolbuyer = "";
 		currentToolbuyer = null;
 		diceCounter = 0;
+		colorConstraint = null;
 		roundTrackSelectionEvent = null;
 		draftSelectionEvent = null;
 	}
@@ -143,8 +149,8 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		boolean result = canBuyTool(toolEvent.getToolId(), players.get(toolEvent.getPlayerId()));
 		sendMessage(new ToolResponse(result, toolEvent.getPlayerId(), cost, toolEvent.getToolId()));
 		if(result) {
-			if(currentSelectedTool.getId()==7) sendMessage(new EnableDoubleTurn(toolEvent.getPlayerId()));
-			else if(currentSelectedTool.getId()==8) sendMessage(new MoveAloneDiceTool());
+			if(currentSelectedTool.getId()==7) sendMessage(new EnableDoubleTurnToolMessage(toolEvent.getPlayerId()));
+			else if(currentSelectedTool.getId()==8) sendMessage(new MoveAloneDiceToolMessage());
 		}
 	}
 
@@ -207,8 +213,7 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 							diceEvent.getIdPlayer(),
 							diceEvent.getIdDice(),
 							diceEvent.getPosition()));
-				}
-				else {
+				} else {
 					sendMessage(new MoveDiceToolMessage(
 							currentSelectedTool,
 							diceEvent.getIdPlayer(),
@@ -216,9 +221,24 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 							diceEvent.getPosition()));
 					diceCounter = 0;
 				}
-			} else if(id == 8) {
-
+			} else if(id == 11) {
+				diceCounter++;
+				if(diceCounter<2) {
+					sendMessage(new EnableWindowToolResponse(currentToolbuyer, currentSelectedTool.getId()));
+					sendMessage(new ColorConstraintToolMessage(currentSelectedTool, diceEvent, colorConstraint));
+				} else {
+					sendMessage(new ColorConstraintToolMessage(currentSelectedTool, diceEvent, colorConstraint));
+					diceCounter = 0;
+				}
 			}
+		}
+	}
+
+	@Override
+	public void visit(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent) {
+		int id = currentSelectedTool.getId();
+		if(id == 11) {
+			colorConstraint=diceRoundTrackColorSelectionEvent.getConstraint();
 		}
 	}
 }

@@ -220,6 +220,17 @@ public class JsonMessage implements ActionMessageVisitor {
         return content;
     }
 
+    private JSONObject createDiceRoundTrackColorSelectionEvent(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent) {
+        JSONObject data = new JSONObject();
+        data.put(PLAYER_ID, diceRoundTrackColorSelectionEvent.getPlayerId());
+        data.put(COLOR, diceRoundTrackColorSelectionEvent.getConstraint().toString());
+        JSONObject content = new JSONObject();
+        content.put(MESSAGE_TYPE, ACTION);
+        content.put(COMMAND_TYPE, ROUND_COLOR_SELECTION);
+        content.put(ROUND_COLOR_SELECTION, data);
+        return content;
+    }
+
     private JSONObject createByteStreamWindowResponse(ByteStreamWindowEvent byteStreamWindowEvent) {
         JSONObject content = new JSONObject();
         content.put(USERNAME, playerId);
@@ -401,6 +412,11 @@ public class JsonMessage implements ActionMessageVisitor {
 
     @Override
     public String visit(DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent) { return createDiceRoundTrackSelectionEvent(diceRoundTrackSelectionEvent).toJSONString(); }
+
+    @Override
+    public String visit(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent) {
+        return createDiceRoundTrackColorSelectionEvent(diceRoundTrackColorSelectionEvent).toJSONString();
+    }
 
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent)

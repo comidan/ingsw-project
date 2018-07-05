@@ -129,6 +129,23 @@ public enum Constraint {
             return Constraint.WHITE;
     }
 
+    public static Colors getColorFromConstraint(Constraint constraint) {
+        switch (constraint) {
+            case GREEN:
+                return Colors.GREEN;
+            case YELLOW:
+                return Colors.YELLOW;
+            case BLUE:
+                return Colors.BLUE;
+            case PURPLE:
+                return Colors.PURPLE;
+            case RED:
+                return Colors.RED;
+            default:
+                return Colors.BLACK;
+        }
+    }
+
     /* (non-Javadoc)
      * @see java.lang.Enum#toString()
      */

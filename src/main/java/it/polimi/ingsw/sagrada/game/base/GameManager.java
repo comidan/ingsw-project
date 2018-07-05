@@ -17,14 +17,12 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableDoubleTurn;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveAloneDiceTool;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceToolMessage;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceWindowToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent;
@@ -125,8 +123,9 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         dynamicRouter.subscribeChannel(ByteStreamWindowEvent.class, this);
         dynamicRouter.subscribeChannel(MoveDiceWindowToolMessage.class, this);
         dynamicRouter.subscribeChannel(MoveDiceToolMessage.class, this);
-        dynamicRouter.subscribeChannel(EnableDoubleTurn.class, this);
-        dynamicRouter.subscribeChannel(MoveAloneDiceTool.class, this);
+        dynamicRouter.subscribeChannel(EnableDoubleTurnToolMessage.class, this);
+        dynamicRouter.subscribeChannel(MoveAloneDiceToolMessage.class, this);
+        dynamicRouter.subscribeChannel(ColorConstraintToolMessage.class, this);
         this.dynamicRouter = dynamicRouter;
     }
 
@@ -581,13 +580,42 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     @Override
-    public void visit(EnableDoubleTurn enableDoubleTurn) {
-        toolDoubleTurn = playerIterator.canApplyToolChange(enableDoubleTurn.getPlayerId());
+    public void visit(EnableDoubleTurnToolMessage enableDoubleTurnToolMessage) {
+        toolDoubleTurn = playerIterator.canApplyToolChange(enableDoubleTurnToolMessage.getPlayerId());
     }
 
     @Override
-    public void visit(MoveAloneDiceTool moveAloneDiceTool) {
+    public void visit(MoveAloneDiceToolMessage moveAloneDiceToolMessage) {
         toolMoveAlone = true;
+    }
+
+    @Override
+    public void visit(ColorConstraintToolMessage colorConstraintToolMessage) {
+        DTO dto = new DTO();
+        DiceEvent diceEvent = colorConstraintToolMessage.getDiceEvent();
+        Player player = idToPlayer(diceEvent.getIdPlayer());
+        if(player!=null) {
+            Window window = player.getWindow();
+            dto.setDice(window.getDicefromId(diceEvent.getIdDice()));
+            dto.setWindowMatrix(window.getCellMatrix());
+            dto.setCurrentPosition(window.getPositionFromId(diceEvent.getIdDice()));
+            dto.setNewPosition(diceEvent.getPosition());
+            dto.setImposedColor(colorConstraintToolMessage.getConstraint());
+            ErrorType errorTool = colorConstraintToolMessage.getToolCard().getRule().checkRule(dto);
+            ErrorType errorWindow = ruleManager.validateWindow(window.getCellMatrix());
+
+            if(errorTool==ErrorType.NO_ERROR && errorWindow==ErrorType.NO_ERROR) {
+                sendMessage(new OpponentDiceMoveResponse(player.getId(), dto.getDice(), dto.getNewPosition()));
+                sendMessage(new OpponentDiceMoveResponse(player.getId(), new Dice(-1, Colors.RED), dto.getCurrentPosition()));
+            }
+            else {
+                window.resetCell(dto.getNewPosition().getRow(), dto.getNewPosition().getCol());
+                window.setCell(dto.getDice(), dto.getCurrentPosition().getRow(), dto.getCurrentPosition().getCol());
+            }
+
+            sendMessage(new RuleResponse(player.getId(), errorTool==ErrorType.NO_ERROR && errorWindow==ErrorType.NO_ERROR));
+        }
+
     }
 
     public class GameTimer extends TimerTask {

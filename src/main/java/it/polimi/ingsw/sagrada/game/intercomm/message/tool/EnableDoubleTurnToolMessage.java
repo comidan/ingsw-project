@@ -5,10 +5,10 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 
-public class EnableDoubleTurn implements Message, BaseGameVisitor {
+public class EnableDoubleTurnToolMessage implements Message, BaseGameVisitor {
     private String playerId;
 
-    public EnableDoubleTurn(String playerId) {
+    public EnableDoubleTurnToolMessage(String playerId) {
         this.playerId = playerId;
     }
 

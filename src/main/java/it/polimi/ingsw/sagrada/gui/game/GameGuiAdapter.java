@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.gui.game;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
@@ -296,7 +297,7 @@ public class GameGuiAdapter {
      // Tool effect: enable drag on dice in roundtrack
      // can be used for toolcards: 5
 
-    public void enableRoundTrackClick(Client client){
+    private void enableRoundTrackClick(Client client){
         Platform.runLater(() -> {
             this.gameView.enableDraftChangeValue(event ->
             {
@@ -331,6 +332,21 @@ public class GameGuiAdapter {
                     disableRoundTrackClick();
                 }
             });
+        });
+    }
+
+    private void enableRoundTrack(Client client) {
+        this.gameView.setRoundtrackClickHandler(event -> {
+            DiceView diceView = (DiceView) event.getSource();
+            DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent = new DiceRoundTrackColorSelectionEvent(
+                    gameView.getUsername(),
+                    Constraint.getColorFromConstraint(diceView.getColor()));
+            try {
+                client.sendRemoteMessage(diceRoundTrackColorSelectionEvent);
+            } catch (RemoteException e) {
+                LOGGER.log(Level.SEVERE, e::getMessage);
+            }
+            disableRoundTrackClick();
         });
     }
 
@@ -563,8 +579,9 @@ public class GameGuiAdapter {
     public void enableGuiElement(int toolId, Client client) {
         System.out.println("---GameGuiAdapter enable GUI element---" + toolId);
         if(toolId==0 || toolId==5 || toolId==6 || toolId==9) enableDraftChangeValue(client);
-        if(toolId==1 || toolId==2 || toolId == 3) enableWindowDiceDrag();
+        if(toolId==1 || toolId==2 || toolId == 3 || toolId == 11) enableWindowDiceDrag();
         if(toolId==4) enableRoundTrackClick(client);
+        if(toolId==11) enableRoundTrack(client);
     }
 
     public void disableGuiElement() {

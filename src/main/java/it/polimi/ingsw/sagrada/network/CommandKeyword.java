@@ -171,7 +171,9 @@ public final class CommandKeyword {
 
   public static final String ROUND_NUMBER = "round_number";
 
-  public static final String ROUND_TRACK_SELECTION = "round_tack_selection";
+  public static final String ROUND_TRACK_SELECTION = "round_track_selection";
+
+  public static final String ROUND_COLOR_SELECTION = "round_color_selection";
   
   /** The Constant NEW_ROUND. */
   public static final String NEW_ROUND = "newround";
