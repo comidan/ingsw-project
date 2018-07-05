@@ -21,7 +21,7 @@ public class RoundTrackView extends GridPane {
     private static final int MAX_ROUND = 10;
 
     private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
-    
+
     /** The cell view list. */
     private ArrayList<ArrayList<DiceView>> diceViewList;
 
@@ -40,7 +40,7 @@ public class RoundTrackView extends GridPane {
             diceViewList.add(roundDiceList);
 
         }
-       setMinSize(GUIManager.getGameWidthPixel(35), GUIManager.getGameHeightPixel(23));
+        setMinSize(GUIManager.getGameWidthPixel(35), GUIManager.getGameHeightPixel(23));
 
     }
 
@@ -53,71 +53,46 @@ public class RoundTrackView extends GridPane {
      * @param currentRound the current round
      */
 
-    public void setDice(List<DiceView> diceViews, int currentRound) {
-        int currentRoundCell = currentRound;
-        int roundIndex = currentRound - 1;
+    public void setRoundTrackEndTurn(List<DiceView> diceViews, int currentRound) {
         RoundCellView roundCellView = new RoundCellView(diceViews);
-        roundCellView.setRoundNumber(currentRoundCell);
+        roundCellView.setRoundNumber(currentRound - 1);
         roundCellView.addDice(diceViews);
-        if(diceViewList.get(roundIndex).size()!= 0) {
-            substituteDice(diceViews, currentRound);
+        for (int i = 0; i < diceViews.size(); i++) {
+            DiceView diceView = diceViews.get(i);
+            diceViewList.get(currentRound - 1).add(diceView);
+            diceViewList.get(currentRound - 1).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
         }
-        else {
+        roundCellViewList.add(roundCellView);
+        this.add(roundCellView, currentRound - 2, 1);
+        System.out.print("metto:" + roundCellView.getRoundNumber());
 
-            for (int i = 0; i < diceViews.size(); i++) {
-                DiceView diceView = diceViews.get(i);
-                diceViewList.get(roundIndex).add(diceView);
-                diceViewList.get(roundIndex).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
-            }
-            roundCellViewList.add(roundCellView);
-            this.add(roundCellView, roundIndex, 1);
-            System.out.print("metto:" + roundCellView.getRoundNumber());
-        }
     }
 
-    public void setDiceTool(List<DiceView> diceViews, int currentRound) {
-        int roundIndex = currentRound -1;
-        RoundCellView roundCellView = new RoundCellView(diceViews);
-        roundCellView.setRoundNumber(currentRound);
-        roundCellView.addDice(diceViews);
-        if(diceViewList.get(currentRound).size()!= 0) {
-            substituteDice(diceViews, currentRound);
-        }
-        else {
-
-            for (int i = 0; i < diceViews.size(); i++) {
-                DiceView diceView = diceViews.get(i);
-                diceViewList.get(roundIndex).add(diceView);
-                diceViewList.get(roundIndex).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
-            }
-            roundCellViewList.add(roundCellView);
-            this.add(roundCellView, roundIndex, 1);
-            System.out.print("metto:" + roundCellView.getRoundNumber());
-        }
+    public void setDiceTool(List<DiceView> diceViews, int roundNum) {
+        substituteDice(diceViews, roundNum);
     }
 
-    private void substituteDice(List<DiceView> diceViews, int currentRound){
-        int roundIndex = currentRound -1;
-        System.out.print("arriva:" + currentRound);
+    private void substituteDice(List<DiceView> diceViews, int roundNum){
+        System.out.print("arriva:" + roundNum);
         RoundCellView roundCellView = new RoundCellView(diceViews);
-        roundCellView.setRoundNumber(currentRound);
+        roundCellView.setRoundNumber(roundNum -1);
         roundCellView.addDice(diceViews);
-        RoundCellView previousRoundCellView = roundCellViewList.remove(roundIndex);
+        RoundCellView previousRoundCellView = roundCellViewList.remove(roundNum - 1 );
         this.getChildren().remove(previousRoundCellView);
 
         for(int i = 0; i< diceViews.size(); i++) {
             DiceView diceView = diceViews.get(i);
-            diceViewList.get(roundIndex).remove(diceView);
+            diceViewList.get(roundNum - 1).remove(diceView);
         }
 
 
         for(int i = 0; i< diceViews.size(); i++) {
             DiceView diceView = diceViews.get(i);
-             diceViewList.get(roundIndex).add(diceView);
-             diceViewList.get(roundIndex).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
-            }
+            diceViewList.get(roundNum - 1).add(diceView);
+            diceViewList.get(roundNum - 1).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
+        }
         roundCellViewList.add(roundCellView);
-        this.add(roundCellView, roundIndex, 1);
+        this.add(roundCellView, roundNum - 1, 1);
     }
 
 

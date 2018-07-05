@@ -19,7 +19,6 @@ import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.ConstraintGenerator;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
-import org.junit.Test;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -70,7 +69,7 @@ public class MainGameGuiTest {
             diceViews.add(diceView);
             diceViews.add(diceView2);
 
-            Platform.runLater(() -> gameView.setRoundtrackImage(diceViews, 3));
+            Platform.runLater(() -> gameView.setRoundTrackImage(diceViews, 3, false));
 
             gameGuiAdapter = new GameGuiAdapter(gameView, new Client() {
 

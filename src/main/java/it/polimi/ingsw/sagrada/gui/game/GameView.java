@@ -1,7 +1,6 @@
 package it.polimi.ingsw.sagrada.gui.game;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
-import it.polimi.ingsw.sagrada.game.cards.ToolCard;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.cards.CardBoard;
@@ -198,8 +197,9 @@ public class GameView extends Application {
      * @param diceViews the dice views
      * @param currentRound the current round
      */
-    public void setRoundtrackImage(List<DiceView> diceViews, int currentRound){
-        this.roundTrackView.setDice(diceViews, currentRound);
+    public void setRoundTrackImage(List<DiceView> diceViews, int currentRound, boolean isTool) {
+        if(isTool) this.roundTrackView.setDiceTool(diceViews, currentRound);
+        else this.roundTrackView.setRoundTrackEndTurn(diceViews, currentRound);
     }
 
     public void showDicePrevContainer(){
