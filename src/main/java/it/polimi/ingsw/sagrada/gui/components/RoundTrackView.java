@@ -54,9 +54,9 @@ public class RoundTrackView extends GridPane {
      */
 
     public void setRoundTrackEndTurn(List<DiceView> diceViews, int currentRound) {
+        System.out.println("Setting round dices at round number : " + currentRound);
         RoundCellView roundCellView = new RoundCellView(diceViews);
         roundCellView.setRoundNumber(currentRound - 1);
-        roundCellView.addDice(diceViews);
         for (int i = 0; i < diceViews.size(); i++) {
             DiceView diceView = diceViews.get(i);
             diceViewList.get(currentRound - 1).add(diceView);
@@ -64,7 +64,7 @@ public class RoundTrackView extends GridPane {
         }
         roundCellViewList.add(roundCellView);
         this.add(roundCellView, currentRound - 2, 1);
-        System.out.print("metto:" + roundCellView.getRoundNumber());
+        System.out.println("metto:" + roundCellView.getRoundNumber());
 
     }
 
@@ -73,26 +73,8 @@ public class RoundTrackView extends GridPane {
     }
 
     private void substituteDice(List<DiceView> diceViews, int roundNum){
-        System.out.print("arriva:" + roundNum);
-        RoundCellView roundCellView = new RoundCellView(diceViews);
-        roundCellView.setRoundNumber(roundNum -1);
-        roundCellView.addDice(diceViews);
-        RoundCellView previousRoundCellView = roundCellViewList.remove(roundNum - 1 );
-        this.getChildren().remove(previousRoundCellView);
-
-        for(int i = 0; i< diceViews.size(); i++) {
-            DiceView diceView = diceViews.get(i);
-            diceViewList.get(roundNum - 1).remove(diceView);
-        }
-
-
-        for(int i = 0; i< diceViews.size(); i++) {
-            DiceView diceView = diceViews.get(i);
-            diceViewList.get(roundNum - 1).add(diceView);
-            diceViewList.get(roundNum - 1).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
-        }
-        roundCellViewList.add(roundCellView);
-        this.add(roundCellView, roundNum - 1, 1);
+        RoundCellView choseRound = roundCellViewList.get(roundNum - 1);
+        choseRound.addDicePerRound(diceViews);
     }
 
 

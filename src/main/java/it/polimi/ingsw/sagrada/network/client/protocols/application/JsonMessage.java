@@ -320,6 +320,7 @@ public class JsonMessage implements ActionMessageVisitor {
                     return new RuleResponse((String)ruleResponse.get(PLAYER_ID), Boolean.parseBoolean((String)ruleResponse.get(VALID_MOVE)));
                 case NEW_ROUND:
                     JSONObject newRoundResponse = (JSONObject)jsonMsg.get(NEW_ROUND);
+                    System.out.println("Round received and parsed from json : " + Integer.parseInt((String) newRoundResponse.get(NEW_ROUND)));
                     return new NewTurnResponse(Integer.parseInt((String) newRoundResponse.get(NEW_ROUND)));
                 case PUBLIC_OBJECTIVES:
                     JSONArray publicObjectives = (JSONArray) jsonMsg.get(PUBLIC_OBJECTIVES);

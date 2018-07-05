@@ -11,21 +11,27 @@ public class RoundCellView extends VBox{
     private List<DiceView> diceViewList;
 
 
-    public RoundCellView(List<DiceView> diceViewList) {
+    RoundCellView(List<DiceView> diceViewList) {
         this.diceViewList = diceViewList;
+        addDicePerRound(diceViewList);
     }
 
     public int getRoundNumber() {
         return roundNumber;
     }
 
-    public void setRoundNumber(int roundNumber) {
+    void setRoundNumber(int roundNumber) {
         this.roundNumber = roundNumber;
     }
 
 
-    public void addDice(List<DiceView> diceViews){
-       diceViewList = diceViews;
+    void addDicePerRound(List<DiceView> diceViews) {
+        diceViewList.forEach(diceView -> getChildren().remove(diceView));
+        diceViewList = diceViews;
+        addDicePerRound();
+    }
+
+    private void addDicePerRound() {
         for(int i = 0; i<diceViewList.size(); i++ ){
             getChildren().add(diceViewList.get(i));
             diceViewList.get(i).setRoundNumber(roundNumber);
