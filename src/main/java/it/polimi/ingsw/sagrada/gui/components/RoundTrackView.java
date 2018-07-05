@@ -54,16 +54,16 @@ public class RoundTrackView extends GridPane {
      */
 
     public void setRoundTrackEndTurn(List<DiceView> diceViews, int currentRound) {
-        System.out.println("Setting round dices at round number : " + currentRound);
+        System.out.println("Setting round dices at round number : " + roundCellViewList.size());
         RoundCellView roundCellView = new RoundCellView(diceViews);
-        roundCellView.setRoundNumber(currentRound - 1);
+        roundCellView.setRoundNumber(roundCellViewList.size());
         for (int i = 0; i < diceViews.size(); i++) {
             DiceView diceView = diceViews.get(i);
-            diceViewList.get(currentRound - 1).add(diceView);
-            diceViewList.get(currentRound - 1).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
+            diceViewList.get(roundCellViewList.size()).add(diceView);
+            diceViewList.get(roundCellViewList.size()).get(i).setImage(new Image(RoundTrackView.class.getResourceAsStream(DICE_IMAGE_ROOT_PATH + Constraint.getDiceFileName(diceView.getColor(), diceView.getValue())), 50, 50, true, false));
         }
         roundCellViewList.add(roundCellView);
-        this.add(roundCellView, currentRound - 2, 1);
+        this.add(roundCellView, roundCellViewList.size(), 1);
         System.out.println("metto:" + roundCellView.getRoundNumber());
 
     }

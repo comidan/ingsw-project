@@ -545,6 +545,7 @@ public class GameGuiAdapter {
      */
     public void setRound(int round) {
         currentRound = round;
+        System.out.println("New round: "+currentRound);
     }
 
     public void setTimeRemaining(int time) {

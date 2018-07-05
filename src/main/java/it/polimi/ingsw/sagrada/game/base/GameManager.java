@@ -277,15 +277,16 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         if(player != null) {
             Window window = player.getWindow();
             window.setCell(dice, position.getRow(), position.getCol());
-            ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
+            ErrorType turnErrorType = ErrorType.NO_ERROR;
             if(player.isTurnPlayed()) {
-                errorType = ErrorType.ALREADY_PLAYED;
+                turnErrorType = ErrorType.ALREADY_PLAYED;
                 if(toolDoubleTurn) {
-                    errorType = ErrorType.NO_ERROR;
+                    turnErrorType = ErrorType.NO_ERROR;
                     toolDoubleTurn = false;
                 }
             }
-            if(errorType == ErrorType.NO_ERROR) {
+            ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
+            if(errorType == ErrorType.NO_ERROR && turnErrorType == ErrorType.NO_ERROR) {
                 player.setIsTurnPlayed(true);
                 sendMessage(new OpponentDiceMoveResponse(idPlayer, dice, position));
                 sendMessage(new DiceResponse(CommandKeyword.DRAFT, diceManager.getDraft()));
