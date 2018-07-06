@@ -261,6 +261,7 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
             Dice diceBag = getDiceFromBag();
             draftPool.add(diceBag);
             sendMessage(new ColorBagToolResponse(playerId, diceBag.getColor(), diceBag.getId()));
+            sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
         }
     }
 
