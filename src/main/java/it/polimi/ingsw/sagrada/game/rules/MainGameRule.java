@@ -70,7 +70,7 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	 * @return true, if successful
 	 */
 	private boolean hasDiceColorClearance(Dice dice) {
-		return ignoreValueSet.contains(dice.getId());
+		return ignoreColorSet.contains(dice.getId());
 	}
 
 	/**
@@ -201,14 +201,14 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		if (row < cells.length - 1 && cells[row + 1][col].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row + 1][col]) && !hasDiceValueClearance(cells[row][col].getCurrentDice())) ||
 				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row + 1][col])) &&  !hasDiceColorClearance(cells[row][col].getCurrentDice()))) && !(hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row + 1][col].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
-		if (col < cells[row].length - 1 && cells[row][col + 1].isOccupied() && (getDiceValue(cells[row][col]) == getDiceValue(cells[row][col + 1]) && !hasDiceValueClearance(cells[row][col].getCurrentDice()) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col + 1])) &&  !hasDiceColorClearance(cells[row][col].getCurrentDice())) && !(hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row][col + 1].getCurrentDice()))))
+		if (col < cells[row].length - 1 && cells[row][col + 1].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row][col + 1]) && !hasDiceValueClearance(cells[row][col].getCurrentDice())) ||
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col + 1])) &&  !hasDiceColorClearance(cells[row][col].getCurrentDice()))) && !(hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row][col + 1].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
-		if (row - 1 >= 0 && cells[row - 1][col].isOccupied() && (getDiceValue(cells[row][col]) == getDiceValue(cells[row - 1][col]) && !hasDiceValueClearance(cells[row][col].getCurrentDice()) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row - 1][col])) &&  !hasDiceColorClearance(cells[row][col].getCurrentDice())) && !(hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row - 1][col].getCurrentDice()))))
+		if (row - 1 >= 0 && cells[row - 1][col].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row - 1][col]) && !hasDiceValueClearance(cells[row][col].getCurrentDice())) ||
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row - 1][col])) &&  !hasDiceColorClearance(cells[row][col].getCurrentDice()))) && !(hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row - 1][col].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
-		if (col - 1 >= 0 && cells[row][col - 1].isOccupied() && (getDiceValue(cells[row][col]) == getDiceValue(cells[row][col - 1]) && !hasDiceValueClearance(cells[row][col].getCurrentDice()) ||
-				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col - 1])) && !hasDiceColorClearance(cells[row][col].getCurrentDice())) && !(hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row][col - 1].getCurrentDice()))))
+		if (col - 1 >= 0 && cells[row][col - 1].isOccupied() && ((getDiceValue(cells[row][col]) == getDiceValue(cells[row][col - 1]) && !hasDiceValueClearance(cells[row][col].getCurrentDice())) ||
+				(getDiceColor(cells[row][col]).equals(getDiceColor(cells[row][col - 1])) && !hasDiceColorClearance(cells[row][col].getCurrentDice()))) && !(hasIndirectDiceClearance(cells[row][col].getCurrentDice(), cells[row][col - 1].getCurrentDice())))
 			return ErrorType.ERRNO_SAME_ORTOGONAL_COLOR_VALUE;
 		return ErrorType.NO_ERROR;
 	}
