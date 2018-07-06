@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorBagToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
@@ -124,4 +125,6 @@ public interface ResponseMessageVisitor {
     String visit(EnableWindowToolResponse enableWindowToolResponse);
 
     String visit(RoundTrackToolResponse roundTrackToolResponse);
+
+    String visit(ColorBagToolResponse colorBagToolResponse);
 }

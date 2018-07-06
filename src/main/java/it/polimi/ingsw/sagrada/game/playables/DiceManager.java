@@ -9,10 +9,8 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ChangeDiceValueToolMessage;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.CompleteSwapDiceToolMessage;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RollAllDiceToolMessage;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.SwapDiceToolMessage;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceValueEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.*;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerVisitor;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
@@ -72,6 +70,7 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
         this.dynamicRouter.subscribeChannel(ChangeDiceValueToolMessage.class, this);
         this.dynamicRouter.subscribeChannel(RollAllDiceToolMessage.class, this);
         this.dynamicRouter.subscribeChannel(SwapDiceToolMessage.class, this);
+        this.dynamicRouter.subscribeChannel(DiceValueEvent.class, this);
     }
 
     /**
@@ -89,6 +88,10 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }
 
+    private Dice getDiceFromBag() {
+        return bagPool.remove(new Random().nextInt(bagPool.size()));
+    }
+
     /**
      * Gets the dice draft and removed it.
      *
@@ -100,6 +103,16 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
             if (dice.getId() == idDice) {
                 draftPool.remove(dice);
                 diceDraftBackup = dice;
+                return dice;
+            }
+        }
+        return null;
+    }
+
+    private Dice getDiceDraftNoBackup(int idDice) {
+        for (Dice dice : draftPool) {
+            if (dice.getId() == idDice) {
+                draftPool.remove(dice);
                 return dice;
             }
         }
@@ -125,8 +138,10 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
      * Revert.
      */
     public void revert() {
-        draftPool.add(diceDraftBackup);
-        diceDraftBackup = null;
+        if(diceDraftBackup != null) {
+            draftPool.add(diceDraftBackup);
+            diceDraftBackup = null;
+        }
     }
 
     /**
@@ -213,6 +228,15 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
                 swapDiceToolMessage));
     }
 
+    @Override
+    public void visit(DiceValueEvent diceValueEvent) {
+        DiceEvent diceEvent = diceValueEvent.getDiceEvent();
+        Dice dice = getDiceDraftNoBackup(diceEvent.getIdDice());
+        dice.setValue(diceValueEvent.getValue());
+        DiceGameManagerEvent diceGameManagerEvent = new DiceGameManagerEvent(dice, diceEvent);
+        dispatchGameManager.accept(diceGameManagerEvent);
+    }
+
     private void putDiceDraft(Dice dice) {
         draftPool.add(dice);
     }
@@ -230,9 +254,14 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
         }
     }
 
-    public void moveDiceFromDraftToBag(Dice diceFromDraft) {
-        draftPool.remove(diceFromDraft);
-        bagPool.add(diceFromDraft);
+    public void moveDiceFromDraftToBag(String playerId, int diceId) {
+        Dice dice = getDiceDraftNoBackup(diceId);
+        if(dice!= null){
+            bagPool.add(dice);
+            Dice diceBag = getDiceFromBag();
+            draftPool.add(diceBag);
+            sendMessage(new ColorBagToolResponse(playerId, diceBag.getColor(), diceBag.getId()));
+        }
     }
 
     public void rollDraft() {

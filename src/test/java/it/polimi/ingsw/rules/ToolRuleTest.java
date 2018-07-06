@@ -364,7 +364,7 @@ public class ToolRuleTest {
         DiceManager diceManager = new DiceManager(2, null, new MessageDispatcher());
         diceManager.bagToDraft();
         Dice dice = diceManager.getDraft().get(0);
-        Consumer<Dice> fromDraftToBag = diceManager::moveDiceFromDraftToBag;
+        BiConsumer<String, Integer> fromDraftToBag = diceManager::moveDiceFromDraftToBag;
         DTO dto = new DTO();
         dto.setMoveDiceFromDraftToBag(fromDraftToBag);
         dto.setDice(dice);
@@ -374,8 +374,7 @@ public class ToolRuleTest {
         dto.setWindowMatrix(cells);
         ToolRule toolRule = ToolRule.builder().setFromDraftToBagFeature().build();
         toolRule.checkRule(dto);
-        assertTrue(!diceManager.getDraft().contains(dice));
-        assertEquals(cells[0][3].getCurrentDice(), diceSix);
+        assertTrue(diceManager.getDraft().contains(dice));
     }
 
     @Test

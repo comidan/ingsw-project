@@ -20,6 +20,8 @@ public final class CommandKeyword {
   
   /** The Constant WINDOW. */
   public static final String WINDOW = "windows";
+
+  public static final String VALUE_CHOOSER = "value_chooser";
   
   /** The Constant WINDOW_ID. */
   public static final String WINDOW_ID = "window_id";
@@ -53,6 +55,8 @@ public final class CommandKeyword {
   
   /** The Constant MOVE_DICE_CHOICE. */
   public static final String MOVE_DICE_CHOICE = "choice_move_dice";
+
+  public static final String MOVE_DICE_VALUE = "move_dice_value";
   
   /** The Constant MOVE_DICE. */
   public static final String MOVE_DICE = "move_dice";
@@ -162,6 +166,8 @@ public final class CommandKeyword {
   public static final String OPPONENT_DICE_RESPONSE = "opponent_dice_response";
 
   public static final String DICE_DRAFT = "dice_draft";
+
+  public static final String COLOR_SELECTION = "color_selection";
   
   /** The Constant DRAFT. */
   public static final String DRAFT = "draft";

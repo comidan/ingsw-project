@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.gui.game;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
+import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
@@ -116,45 +117,52 @@ public class GameGuiAdapter {
          *
          * @param client the new cell handler
          */
-    private void setCellHandler(Client client) {
+        private void setCellHandler(Client client) {
 
-        GameGuiAdapter self = this;
-        Platform.runLater(() -> {
-            this.gameView.setCellClickListener(new EventHandler<DragEvent>() {
-                public void handle(DragEvent event) {
-                    event.acceptTransferModes(TransferMode.COPY);}
-                    }, new EventHandler<DragEvent>() {
+            GameGuiAdapter self = this;
+            Platform.runLater(() -> {
+                this.gameView.setCellClickListener(new EventHandler<DragEvent>() {
+                    public void handle(DragEvent event) {
+                        event.acceptTransferModes(TransferMode.COPY);}
+                }, new EventHandler<DragEvent>() {
                     public void handle(DragEvent event) {
                         System.out.println("---CellClickEvent---");
-                      DiceView diceView = clickedObject.getClickedDice();
-                      if (diceView != null) {
-                          CellView cellView = (CellView) event.getSource();
-                          if (!cellView.isOccupied()) {
-                              lastMove = cellView;
-                              cellView.setImageCell(diceView);
-                              clickedObject.setClickedDice(null);
-                              String username = self.gameView.getUsername();
-                              int idDice = diceView.getDiceID();
-                              int row = cellView.getRow();
-                              int col = cellView.getCol();
-                              Position position = new Position(row, col);
-                              DiceEvent diceEvent = new DiceEvent(username, idDice, position, diceSource);
-                              try {
-                                  client.sendRemoteMessage(diceEvent);
-                              } catch (RemoteException e) {
-                                  LOGGER.log(Level.SEVERE, e::getMessage);
-                              }
+                        DiceView diceView = clickedObject.getClickedDice();
+                        if (diceView != null) {
+                            CellView cellView = (CellView) event.getSource();
+                            if (!cellView.isOccupied()) {
+                                lastMove = cellView;
+                                cellView.setImageCell(diceView);
+                                clickedObject.setClickedDice(null);
+                                String username = self.gameView.getUsername();
+                                int idDice = diceView.getDiceID();
+                                int row = cellView.getRow();
+                                int col = cellView.getCol();
+                                Position position = new Position(row, col);
+                                Message message;
+                                if(!diceSource.equals(CommandKeyword.VALUE_CHOOSER))
+                                    message = new DiceEvent(username, idDice, position, diceSource);
+                                else {
+                                    message = new DiceValueEvent(new DiceEvent(username, idDice, position, diceSource),
+                                            Constraint.getValueFromConstraint(diceView.getValue()));
+                                    gameView.removeDicePrevContainer();
+                                }
+                                try {
+                                    client.sendRemoteMessage(message);
+                                } catch (RemoteException e) {
+                                    LOGGER.log(Level.SEVERE, e::getMessage);
+                                }
 
-                              event.consume();
-                              System.out.println("---"+diceView.getDiceID()+"---");
-                          }
-                      }
-             }
+                                event.consume();
+                                System.out.println("---"+diceView.getDiceID()+"---");
+                            }
+                        }
+                    }
 
-             });
+                });
 
-        });
-    }
+            });
+        }
 
     /**
      * Sets the draft listener.
@@ -246,7 +254,7 @@ public class GameGuiAdapter {
     // Tool effect: change dice value in draft adding one OR rolls again dice, according to value it gets
     // can be used for toolcards: 1, 6, 10
 
-    private void enableDraftChangeValue(Client client){
+    private void enableDraftClick(Client client){
         this.gameView.enableDraftChangeValue(event ->
         {
             DiceView diceView = (DiceView) event.getSource();
@@ -358,18 +366,20 @@ public class GameGuiAdapter {
         gameView.disableDraftClick();
     }
 
-    public void showDicePrevContainer(){
-        Platform.runLater(() -> {
-            gameView.showDicePrevContainer();
-        });
-    }
-
-    public void setChooseValue(){
+    public void enableChooseValue(Colors color, int diceId){
     Platform.runLater(() -> {
+        gameView.showDicePrevContainer(color, diceId);
+
         gameView.setChooseValue(event -> {
-            DicePrev dicePrev = (DicePrev) event.getSource();
-            int value = dicePrev.getValue();
-            System.out.println("value:" + value);
+            DiceView diceView = (DiceView) event.getSource();
+            clickedObject.setClickedDice(diceView);
+            Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(diceView.getImage());
+            db.setContent(content);
+            event.consume();
+            diceSource = CommandKeyword.VALUE_CHOOSER;
+            disableGuiElement();
         });
     });
 
@@ -578,9 +588,10 @@ public class GameGuiAdapter {
 
     public void enableGuiElement(int toolId, Client client) {
         System.out.println("---GameGuiAdapter enable GUI element---" + toolId);
-        if(toolId==0 || toolId==5 || toolId==6 || toolId==9) enableDraftChangeValue(client);
+        if(toolId==0 || toolId==5 || toolId==6 || toolId==9) enableDraftClick(client);
         if(toolId==1 || toolId==2 || toolId == 3 || toolId == 11) enableWindowDiceDrag();
         if(toolId==4) enableRoundTrackClick(client);
+        if(toolId==10) enableDraftClick(client);
         if(toolId==11) enableRoundTrack(client);
     }
 

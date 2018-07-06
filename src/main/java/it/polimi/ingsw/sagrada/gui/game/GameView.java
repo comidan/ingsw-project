@@ -1,5 +1,6 @@
 package it.polimi.ingsw.sagrada.gui.game;
 
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
@@ -202,11 +203,15 @@ public class GameView extends Application {
         else this.roundTrackView.setRoundTrackEndTurn(diceViews, currentRound);
     }
 
-    public void showDicePrevContainer(){
-        dicePrevContainer = DicePrevContainer.getDicePrevContainer();
+    public void showDicePrevContainer(Colors color, int diceId){
+        dicePrevContainer = new DicePrevContainer(color, diceId);
         AnchorPane.setRightAnchor(dicePrevContainer, GUIManager.getGameWidthPixel(50));
         AnchorPane.setBottomAnchor(dicePrevContainer, GUIManager.getGameHeightPixel(30));
         anchorPane.getChildren().add(dicePrevContainer);
+    }
+
+    public void removeDicePrevContainer() {
+        anchorPane.getChildren().remove(dicePrevContainer);
     }
 
     public void setChooseValue(EventHandler<MouseEvent> chooseValueHandler){
@@ -294,7 +299,6 @@ public class GameView extends Application {
      * Initialize.
      */
     private void initialize(){
-        dicePrevContainer = DicePrevContainer.getDicePrevContainer();
         endTurn = new EndTurn();
         this.frame = new FrameView();
         this.cardBoard = new CardBoard();
@@ -494,6 +498,7 @@ public class GameView extends Application {
         timer.setVisible(false);
         components.forEach(node -> node.setDisable(true));
         disableToolBuy();
+        removeDicePrevContainer();
     }
 
     void setDiceWindow(Position position) {

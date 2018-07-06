@@ -12,6 +12,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorBagToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
@@ -204,6 +205,11 @@ public class IntercommunicationMessageVisitorTest implements MessageVisitor {
 
     @Override
     public void visit(RoundTrackToolResponse roundTrackToolResponse) {
+
+    }
+
+    @Override
+    public void visit(ColorBagToolResponse colorBagToolResponse) {
 
     }
 }

@@ -269,27 +269,11 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 			 */
 			public ToolBuilder setFromDraftToBagFeature(){
 				function = dto -> {
-					Dice diceFromDraft = dto.getDice();
-					Dice diceFromBag = dto.getSecondDice();
-			Cell[][] cells = dto.getWindowMatrix();
-			if(checkIfNull(diceFromBag, diceFromBag, cells) == ErrorType.NULL_DATA)
-				return ErrorType.NULL_DATA;
-			diceFromBag.setValue(dto.getImposedDiceValue());
-			int row = dto.getNewPosition().getRow();
-			int col = dto.getNewPosition().getCol();
-			if(cells[row][col].isOccupied())
-				return ErrorType.ERROR;
-			dto.getMoveDiceFromDraftToBag().accept(diceFromDraft);
-			cells[row][col].setDice(diceFromBag);
-			RuleManager ruleManager = new RuleManager();
-			if(ruleManager.validateWindow(cells) != ErrorType.NO_ERROR) {
-				cells[row][col].removeCurrentDice();
-				return ErrorType.ERROR;
+					dto.getMoveDiceFromDraftToBag().accept(dto.getPlayerId() ,dto.getDiceId());
+					return ErrorType.NO_ERROR;
+				};
+				return this;
 			}
-			return ErrorType.NO_ERROR;
-		};
-		return this;
-	}
 
 	/**
 	 * Sets move up to two dice of the same color of one Round Track's dice to new positions

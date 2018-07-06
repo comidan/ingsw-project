@@ -1,10 +1,7 @@
 package it.polimi.ingsw.sagrada.game.intercomm.visitor;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackColorSelectionEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackSelectionEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -35,6 +32,8 @@ public interface ActionMessageVisitor {
     String visit(DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent);
 
     String visit(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent);
+
+    String visit(DiceValueEvent diceValueEvent);
 
     /**
      * Visit.

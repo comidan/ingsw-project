@@ -14,10 +14,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RegisterEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.ErrorEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.HeartbeatInitEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
@@ -231,6 +228,24 @@ public class JsonMessage implements ActionMessageVisitor {
         return content;
     }
 
+    private JSONObject createDiceValueEvent(DiceValueEvent diceValueEvent) {
+        DiceEvent diceEvent = diceValueEvent.getDiceEvent();
+        JSONObject content = new JSONObject();
+        content.put(PLAYER_ID, diceEvent.getIdPlayer());
+        content.put(DICE_ID, diceEvent.getIdDice()+"");
+        content.put("source", diceEvent.getSrc());
+        content.put(VALUE, diceValueEvent.getValue()+"");
+        JSONObject position = new JSONObject();
+        position.put("y", diceEvent.getPosition().getRow()+"");
+        position.put("x", diceEvent.getPosition().getCol()+"");
+        content.put(POSITION, position);
+        JSONObject container = new JSONObject();
+        container.put(MESSAGE_TYPE, ACTION);
+        container.put(COMMAND_TYPE, MOVE_DICE_VALUE);
+        container.put(MOVE_DICE_VALUE, content);
+        return container;
+    }
+
     private JSONObject createByteStreamWindowResponse(ByteStreamWindowEvent byteStreamWindowEvent) {
         JSONObject content = new JSONObject();
         content.put(USERNAME, playerId);
@@ -390,6 +405,12 @@ public class JsonMessage implements ActionMessageVisitor {
                         diceResponse.add(diceR);
                     });
                     return new RoundTrackToolResponse(new DiceResponse((String)(data.get(DESTINATION)), diceResponse), Integer.parseInt((String)data.get(ROUND_NUMBER)));
+                case COLOR_SELECTION:
+                    data = (JSONObject) jsonMsg.get(COLOR_SELECTION);
+                    player = (String)data.get(PLAYER_ID);
+                    Colors color = Colors.stringToColor((String)data.get(COLOR));
+                    int diceId = Integer.parseInt((String)data.get(DICE_ID));
+                    return new ColorBagToolResponse(player, color, diceId);
                 default:
                     return null;
             }
@@ -416,6 +437,11 @@ public class JsonMessage implements ActionMessageVisitor {
     @Override
     public String visit(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent) {
         return createDiceRoundTrackColorSelectionEvent(diceRoundTrackColorSelectionEvent).toJSONString();
+    }
+
+    @Override
+    public String visit(DiceValueEvent diceValueEvent) {
+        return createDiceValueEvent(diceValueEvent).toJSONString();
     }
 
     /* (non-Javadoc)

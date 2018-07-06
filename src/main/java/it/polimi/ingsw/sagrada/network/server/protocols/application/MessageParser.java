@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorBagToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
@@ -321,6 +322,18 @@ public class MessageParser implements ResponseMessageVisitor {
         return message.toJSONString();
     }
 
+    private String createJsonColorBagToolResponse(ColorBagToolResponse colorBagToolResponse) {
+        JSONObject data = new JSONObject();
+        data.put(USERNAME, colorBagToolResponse.getPlayerId());
+        data.put(COLOR, colorBagToolResponse.getColor().toString());
+        data.put(DICE_ID, colorBagToolResponse.getDiceId()+"");
+        JSONObject message = new JSONObject();
+        message.put(MESSAGE_TYPE, RESPONSE);
+        message.put(COMMAND_TYPE, COLOR_SELECTION);
+        message.put(COLOR_SELECTION, data);
+        return message.toJSONString();
+    }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */
@@ -439,5 +452,10 @@ public class MessageParser implements ResponseMessageVisitor {
     @Override
     public String visit(RoundTrackToolResponse roundTrackToolResponse) {
         return createJsonRoundTrackToolResponse(roundTrackToolResponse);
+    }
+
+    @Override
+    public String visit(ColorBagToolResponse colorBagToolResponse) {
+        return createJsonColorBagToolResponse(colorBagToolResponse);
     }
 }

@@ -8,10 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveRespon
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
@@ -110,6 +107,11 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
 
     @Override
     public String visit(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent) {
+        return null;
+    }
+
+    @Override
+    public String visit(DiceValueEvent diceValueEvent) {
         return null;
     }
 
@@ -252,6 +254,11 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
 
     @Override
     public String visit(RoundTrackToolResponse roundTrackToolResponse) {
+        return null;
+    }
+
+    @Override
+    public String visit(ColorBagToolResponse colorBagToolResponse) {
         return null;
     }
 }

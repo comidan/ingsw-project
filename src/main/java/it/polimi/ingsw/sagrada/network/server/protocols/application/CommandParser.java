@@ -3,10 +3,7 @@ package it.polimi.ingsw.sagrada.network.server.protocols.application;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackColorSelectionEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackSelectionEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
@@ -101,6 +98,18 @@ public class CommandParser {
                     playerId = (String)data.get(PLAYER_ID);
                     Colors color = Colors.stringToColor((String)data.get(COLOR));
                     return new DiceRoundTrackColorSelectionEvent(playerId, color);
+                case MOVE_DICE_VALUE:
+                    data = (JSONObject) jsonMsg.get(MOVE_DICE_VALUE);
+                    int value = Integer.parseInt((String)data.get(VALUE));
+                    idPlayerD = (String)data.get(PLAYER_ID);
+                    idDice = Integer.parseInt((String)data.get(DICE_ID));
+                    source = (String)data.get("source");
+                    pos = (JSONObject)data.get(POSITION);
+                    row = Integer.parseInt((String)pos.get("y"));
+                    col = Integer.parseInt((String)pos.get("x"));
+                    position = new Position(row, col);
+                    DiceEvent diceEvent = new DiceEvent(idPlayerD, idDice, position, source);
+                    return new DiceValueEvent(diceEvent, value);
                 default:
                     return null;
             }

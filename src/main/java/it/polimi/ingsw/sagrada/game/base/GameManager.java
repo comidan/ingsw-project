@@ -126,6 +126,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         dynamicRouter.subscribeChannel(EnableDoubleTurnToolMessage.class, this);
         dynamicRouter.subscribeChannel(MoveAloneDiceToolMessage.class, this);
         dynamicRouter.subscribeChannel(ColorConstraintToolMessage.class, this);
+        dynamicRouter.subscribeChannel(DraftToBagToolMessage.class, this);
         this.dynamicRouter = dynamicRouter;
     }
 
@@ -616,6 +617,15 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             sendMessage(new RuleResponse(player.getId(), errorTool==ErrorType.NO_ERROR && errorWindow==ErrorType.NO_ERROR));
         }
 
+    }
+
+    @Override
+    public void visit(DraftToBagToolMessage draftToBagToolMessage) {
+        DTO dto = new DTO();
+        dto.setPlayerId(draftToBagToolMessage.getPlayerId());
+        dto.setDiceId(draftToBagToolMessage.getDiceId());
+        dto.setMoveDiceFromDraftToBag(diceManager::moveDiceFromDraftToBag);
+        draftToBagToolMessage.getToolCard().getRule().checkRule(dto);
     }
 
     public class GameTimer extends TimerTask {

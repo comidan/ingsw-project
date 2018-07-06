@@ -161,13 +161,17 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		if(id==0 || id==5 || id==9) {
 			sendMessage(new ChangeDiceValueToolMessage(currentSelectedTool, diceDraftSelectionEvent.getIdDice()));
 			resetTool();
-		}
-		else if(id==4) {
+		} else if(id==4) {
 			draftSelectionEvent = diceDraftSelectionEvent;
 			swapDiceDraftRoundTrack();
-		}
-		else if(id==6) {
+		} else if(id==6) {
 			sendMessage(new RollAllDiceToolMessage(currentSelectedTool));
+			resetTool();
+		} else if(id==10) {
+			sendMessage(new DraftToBagToolMessage(
+					currentSelectedTool,
+					diceDraftSelectionEvent.getIdPlayer(),
+					diceDraftSelectionEvent.getIdDice()));
 			resetTool();
 		}
     }

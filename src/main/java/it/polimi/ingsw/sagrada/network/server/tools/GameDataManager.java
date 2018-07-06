@@ -12,6 +12,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.AddPlayerEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.RemovePlayerEvent;
+import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorBagToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse;
@@ -70,6 +71,7 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         dynamicRouter.subscribeChannel(TimeRemainingResponse.class, this);
         dynamicRouter.subscribeChannel(EnableWindowToolResponse.class, this);
         dynamicRouter.subscribeChannel(RoundTrackToolResponse.class, this);
+        dynamicRouter.subscribeChannel(ColorBagToolResponse.class, this);
     }
 
     /* (non-Javadoc)
@@ -300,6 +302,11 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
     @Override
     public void visit(RoundTrackToolResponse roundTrackToolResponse) {
         sendRemoteMessage(roundTrackToolResponse, filter -> anyone());
+    }
+
+    @Override
+    public void visit(ColorBagToolResponse colorBagToolResponse) {
+        sendRemoteMessage(colorBagToolResponse, filter -> filter.equals(getClient(colorBagToolResponse.getPlayerId())));
     }
 
     /**

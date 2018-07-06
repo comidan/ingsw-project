@@ -53,4 +53,6 @@ public interface BaseGameMessageVisitor {
     void visit(MoveAloneDiceToolMessage moveAloneDiceToolMessage);
 
     void visit(ColorConstraintToolMessage colorConstraintToolMessage);
+
+    void visit(DraftToBagToolMessage draftToBagToolMessage);
 }

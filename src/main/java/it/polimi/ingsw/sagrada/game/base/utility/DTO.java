@@ -17,6 +17,10 @@ public class DTO {
 
     private Dice secondDice;
 
+    private int diceId;
+
+    private String playerId;
+
     private int imposedDiceValue;
 
     private Colors imposedColor;
@@ -41,7 +45,7 @@ public class DTO {
 
     private BiConsumer<Dice, Dice> exchangeRoundTrackDice;
 
-    private Consumer<Dice> moveDiceFromDraftToBag;
+    private BiConsumer<String, Integer> moveDiceFromDraftToBag;
 
     private Consumer<Integer> ignoreSequenceDice;
 
@@ -65,6 +69,21 @@ public class DTO {
         this.dice = dice;
     }
 
+    public int getDiceId() {
+        return diceId;
+    }
+
+    public String getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
+    }
+
+    public void setDiceId(int diceId) {
+        this.diceId = diceId;
+    }
     /**
      * Gets the ignore color set based on tool cards usages
      *
@@ -203,11 +222,11 @@ public class DTO {
         this.imposedDiceValue = imposedDiceValue;
     }
 
-    public Consumer<Dice> getMoveDiceFromDraftToBag() {
+    public BiConsumer<String, Integer> getMoveDiceFromDraftToBag() {
         return moveDiceFromDraftToBag;
     }
 
-    public void setMoveDiceFromDraftToBag(Consumer<Dice> moveDiceFromDraftToBag) {
+    public void setMoveDiceFromDraftToBag(BiConsumer<String, Integer> moveDiceFromDraftToBag) {
         this.moveDiceFromDraftToBag = moveDiceFromDraftToBag;
     }
 
