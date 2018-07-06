@@ -17,14 +17,16 @@ import java.util.List;
  */
 public class RoundTrackView extends GridPane {
 
-    /** The Constant MAX_ROUND. */
+    /** The constant MAX_ROUND. */
     private static final int MAX_ROUND = 10;
 
+    /** The path constant MAX_ROUND. */
     private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
 
-    /** The cell view list. */
+    /** The list of dice view lists. */
     private ArrayList<ArrayList<DiceView>> diceViewList;
 
+    /** the list of round boxes*/
     private List<RoundCellView> roundCellViewList;
 
 
@@ -47,10 +49,10 @@ public class RoundTrackView extends GridPane {
 
 
     /**
-     * Sets the dice.
+     * Sets the dice on the roundtrack at the end of the turn
      *
-     * @param diceViews the dice view
-     * @param currentRound the current round
+     * @param diceViews the dice view to be added
+     * @param currentRound the round to add the dices on
      */
 
     public void setRoundTrackEndTurn(List<DiceView> diceViews, int currentRound) {
@@ -68,10 +70,15 @@ public class RoundTrackView extends GridPane {
 
     }
 
+    /**
+     * sets the dice on toolcard usage
+     * @param diceViews the list of dice views to be added, roundNum the number of the round to add dice views on
+     */
     public void setDiceTool(List<DiceView> diceViews, int roundNum) {
         substituteDice(diceViews, roundNum);
     }
 
+    /** the private methos to set dice views on toolcard usage */
     private void substituteDice(List<DiceView> diceViews, int roundNum){
         RoundCellView choseRound = roundCellViewList.get(roundNum - 1);
         choseRound.addDicePerRound(diceViews);
@@ -79,7 +86,7 @@ public class RoundTrackView extends GridPane {
 
 
     /**
-     * Sets the click handler.
+     * Sets the handler to handle click on dice on the roundtrack
      *
      * @param clickHandler the new click handler
      */
@@ -93,7 +100,9 @@ public class RoundTrackView extends GridPane {
 
     }
 
-
+    /**
+     * disables the handler to handle click on the round track dice
+     */
     public void disableClick() {
         for(int i = 0; i< diceViewList.size(); i++){
             for (int j = 0; j< diceViewList.get(i).size(); j++){

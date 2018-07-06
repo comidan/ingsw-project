@@ -72,10 +72,20 @@ public class DiceView extends ImageView{
         return id;
     }
 
+    /**
+     * Gets the round number associated to the dice (if present).
+     *
+     * @return the round number
+     */
     public int getRoundNumber(){
         return roundNumber;
     }
 
+    /**
+     * Sets the round number associated to the dice (if present).
+     *
+     * @param number the round number
+     */
     public void setRoundNumber(int number){
         this.roundNumber = number;
     }

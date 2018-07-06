@@ -8,10 +8,11 @@ import javafx.scene.image.ImageView;
 
 /**
  * The Class ObjectiveCardView.
+ * @author Valentina
  */
 class ObjectiveCardView extends ImageView {
 
-    /** The Constant OBJECTIVE_IMAGE_ROOT_PATH. */
+    /** The path constant */
     private static final String OBJECTIVE_IMAGE_ROOT_PATH = "/images/ObjectiveImages/";
     
     /** The id. */
@@ -20,7 +21,7 @@ class ObjectiveCardView extends ImageView {
     /**
      * Instantiates a new objective card view.
      *
-     * @param id the id
+     * @param id the objective card id
      */
     ObjectiveCardView(int id) {
         this.id = id;
@@ -28,9 +29,9 @@ class ObjectiveCardView extends ImageView {
     }
 
     /**
-     * Gets the objective id.
+     * Gets the objective card id.
      *
-     * @return the objective id
+     * @return the objective card id
      */
     int getObjectiveId() {
         return id;

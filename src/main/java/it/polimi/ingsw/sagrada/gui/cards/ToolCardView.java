@@ -24,13 +24,13 @@ public class ToolCardView extends StackPane {
     /** The label. */
     private Label label;
 
-
+    /** The number of tokens currently on the card. */
     private int currentTokenNumber;
 
     /**
      * Instantiates a new tool card view.
      *
-     * @param id the id
+     * @param id the toolcard id
      */
     ToolCardView(int id) {
         this.id = id;
@@ -43,7 +43,7 @@ public class ToolCardView extends StackPane {
     }
 
     /**
-     * Sets the tool click handler.
+     * Sets the tool click handler to handle the possibility to buy the toolcard
      *
      * @param toolClickHandler the new tool click handler
      */
@@ -54,14 +54,14 @@ public class ToolCardView extends StackPane {
     /**
      * Gets the tool id.
      *
-     * @return the tool id
+     * @return the toolcard id
      */
     public int getToolId(){
         return id;
     }
 
     /**
-     * Adds the token.
+     * Adds the token on the toolcard when it's used
      */
     public void addToken(int tokenNumber){
         for(int i = 0; i<tokenNumber; i++){

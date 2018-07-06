@@ -11,40 +11,43 @@ import javafx.scene.layout.StackPane;
 
 /**
  * The Class CellView.
+ * @author Valentina, Daniele
  */
+
 public class CellView extends StackPane {
 
-    /** The Constant DICE_IMAGE_ROOT_PATH. */
+    /** The path constant DICE_IMAGE_ROOT_PATH. */
     private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
 
-    /** The row. */
+    /** The row the cell is on. */
     private int row;
 
-    /** The col. */
+    /** The column the cell is on. */
     private int col;
 
-    /** The dice id. */
+    /** The id of the dice contained in the cell */
     private int diceId;
 
-    /** The occupied. */
+    /** The flag to show if the cell is occupied */
     private boolean occupied;
 
-    /** The cell constraint. */
+    /** The cell constraint (value or color or blank). */
     private Image cellConstraint;
 
+    /** The cell image */
     private ImageView imageView;
 
+    /** the diceview corresponding to the dice in the cell (if present) */
     private DiceView diceView;
 
     /**
      * Instantiates a new cell view.
      *
      * @param row the row
-     * @param col the col
+     * @param col the column
      * @param constraint the constraint
      */
     public CellView(int row, int col, Constraint constraint) {
-
         this.row = row;
         this.col = col;
         this.occupied = false;
@@ -56,7 +59,7 @@ public class CellView extends StackPane {
 
 
     /**
-     * Sets the cell listener.
+     * Sets the cell listener to handle dice dropped on cell
      *
      * @param cellDragOver, cellDragDone the new cell listener
      */
@@ -67,7 +70,7 @@ public class CellView extends StackPane {
     }
 
     /**
-     * Removes the mistaken dice.
+     * Removes the dice placed mistakenly.
      */
     public void removeMistakenDice(){
         getChildren().removeAll(diceView);
@@ -76,7 +79,7 @@ public class CellView extends StackPane {
     }
 
     /**
-     * Sets the image cell.
+     * Sets the dice image in the cell.
      *
      * @param diceView the new image cell
      */
@@ -87,20 +90,25 @@ public class CellView extends StackPane {
         occupied = true;
     }
 
+    /**
+     * Gets the diceview contained in the cell
+     *
+     * @return the diceView
+     */
     public DiceView getDiceView(){
         return diceView;
     }
     /**
-     * Checks if is occupied.
+     * Checks if cell is occupied.
      *
-     * @return true, if is occupied
+     * @return true, if cell is occupied
      */
     public boolean isOccupied(){
         return occupied;
     }
 
     /**
-     * Gets the row.
+     * Gets the cell row.
      *
      * @return the row
      */
@@ -109,16 +117,16 @@ public class CellView extends StackPane {
     }
 
     /**
-     * Gets the col.
+     * Gets the cell column.
      *
-     * @return the col
+     * @return the column
      */
     public int getCol() {
         return col;
     }
 
     /**
-     * Gets the dice id.
+     * Gets the id of the dice in the cell.
      *
      * @return the dice id
      */
@@ -127,7 +135,7 @@ public class CellView extends StackPane {
     }
 
     /**
-     * Sets the dice id.
+     * Sets the id of the dice in the cell
      *
      * @param diceId the new dice id
      */

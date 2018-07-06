@@ -9,10 +9,12 @@ import java.io.File;
 
 /**
  * The Class PrivateObjectiveView.
+ * @author Valentina
  */
+
 public class PrivateObjectiveView extends ImageView {
 
-    /** The Constant OBJECTIVE_IMAGE_ROOT_PATH. */
+    /** The path constant OBJECTIVE_IMAGE_ROOT_PATH. */
     private static final String OBJECTIVE_IMAGE_ROOT_PATH = "/images/ObjectiveImages/";
     
     /** The id. */
@@ -22,7 +24,7 @@ public class PrivateObjectiveView extends ImageView {
     /**
      * Instantiates a new private objective view.
      *
-     * @param id the id
+     * @param id the private objective card id
      */
     PrivateObjectiveView(int id) {
         this.id = id;

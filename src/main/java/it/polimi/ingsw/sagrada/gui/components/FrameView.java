@@ -10,6 +10,10 @@ import javafx.scene.layout.StackPane;
 
 public class FrameView extends StackPane {
 
+
+    /**
+     * Instantiates a new frame view
+     */
     public FrameView(){
         ImageView imageView = new ImageView(new Image(FrameView.class.getResourceAsStream("/images/frame.png")));
         imageView.setPreserveRatio(true);
@@ -18,6 +22,10 @@ public class FrameView extends StackPane {
         setAlignment(imageView, Pos.BOTTOM_CENTER);
     }
 
+    /**
+     * sets the window view inside the frame image
+     * @param windowView the window view
+     */
     public void addWindowToFrame(WindowView windowView){
         setAlignment(windowView, Pos.BOTTOM_CENTER);
         setMargin(windowView, new Insets(GUIManager.getGameHeightPixel(36),GUIManager.getGameWidthPixel(2),GUIManager.getGameHeightPixel(4),GUIManager.getGameWidthPixel(2)));

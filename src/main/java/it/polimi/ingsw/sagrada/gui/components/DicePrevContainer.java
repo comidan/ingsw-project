@@ -9,11 +9,25 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DicePrevContainer extends VBox{
+/**
+ * The Class DicePrevContainer.
+ * @author Valentina
+ */
 
+public class DicePrevContainer extends VBox{
+    /**
+     * the list of dice previews
+     */
     List<DicePrev> dicePrevList;
+
+    /**
+     * the instance of the dice preview container
+     */
     private static DicePrevContainer dicePrevContainer;
 
+    /**
+     * instantiates a new dice preview container
+     */
     private DicePrevContainer(){
         dicePrevList = new ArrayList<>();
         for(int i = 0; i<6; i++){
@@ -24,12 +38,20 @@ public class DicePrevContainer extends VBox{
 
     }
 
+    /**
+     * @return the instance of the dice preview container
+     */
     public static DicePrevContainer getDicePrevContainer(){
         if(dicePrevContainer == null)
             dicePrevContainer = new DicePrevContainer();
         return dicePrevContainer;
     }
 
+    /**
+     * Sets the click handler on the preview
+     *
+     * @param dicePrevHandler the handler to handler click to choose a value
+     */
     public void setDicePrevHandler(EventHandler<MouseEvent> dicePrevHandler){
         for(int i = 0; i<6; i++){
             dicePrevList.get(i).setOnMouseClicked(dicePrevHandler);
