@@ -15,7 +15,7 @@ public class FrameView extends StackPane {
      * Instantiates a new frame view
      */
     public FrameView(){
-        ImageView imageView = new ImageView(new Image(FrameView.class.getResourceAsStream("/images/frame.png")));
+        ImageView imageView = new ImageView(new Image(FrameView.class.getResourceAsStream("/images/gameGuiImages/frame.png")));
         imageView.setPreserveRatio(true);
         imageView.setFitWidth(GUIManager.getGameWidthPixel(30));
         getChildren().add(imageView);

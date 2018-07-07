@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 public class TokenView extends ImageView {
     
     /** The path constant TOKEN_IMAGE_ROOT_PATH. */
-    private static final String TOKEN_IMAGE_ROOT_PATH = "/images/";
+    private static final String TOKEN_IMAGE_ROOT_PATH = "/images/gameGuiImages/";
 
     /**
      * Instantiates a new token view.
