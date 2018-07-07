@@ -303,4 +303,20 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		if(ignoreFirstRoundDice.remove(oldDice))
 			ignoreFirstRoundDice.add(newDice);
 	}
+
+	void addignoreCurrentOrthogonalDice(int id, List<Integer> list) {
+		ignoreCurrentOrthogonalDice.put(id, list);
+	}
+
+	Boolean[] removeDiceFromSet(int id) {
+		Boolean[] setIndex = new Boolean[3];
+		setIndex[0] = ignoreValueSet.remove(id);
+		setIndex[1] = ignoreColorSet.remove(id);
+		setIndex[2] = ignoreFirstRoundDice.remove(id);
+		return setIndex;
+	}
+
+	List<Integer> removeDiceFromMap(int id) {
+		return ignoreCurrentOrthogonalDice.remove(id);
+	}
 }

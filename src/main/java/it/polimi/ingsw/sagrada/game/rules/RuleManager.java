@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 
 /**
@@ -14,6 +15,10 @@ public class RuleManager {
 
     /** The Constant mainGameRule. */
     private final MainGameRule mainGameRule = new MainGameRule();
+
+    private Boolean[] setIndex;
+
+    private List<Integer> mapIndex;
 
     /**
      * Gets the objective builder.
@@ -103,5 +108,25 @@ public class RuleManager {
 
     public void exchangeIgnoreSequenceDice(int oldDice, int newDice) {
         mainGameRule.exchangeIgnoreSequenceDice(oldDice, newDice);
+    }
+
+    public void removeDiceFromSet(int id) {
+        setIndex = mainGameRule.removeDiceFromSet(id);
+        mapIndex = mainGameRule.removeDiceFromMap(id);
+    }
+
+    public void revert(int id) {
+        IntStream.range(0, setIndex.length).filter(index -> setIndex[index]).forEach(index -> {
+            switch (index) {
+                case 0: mainGameRule.addIgnoreValue(id); break;
+                case 1: mainGameRule.addIgnoreColor(id); break;
+                case 2: mainGameRule.addIgnoreSequenceDice(id); break;
+            }
+        });
+
+        if(mapIndex!=null) mainGameRule.addignoreCurrentOrthogonalDice(id, mapIndex);
+
+        IntStream.range(0, setIndex.length).forEach(index -> setIndex[index]=false);
+        mapIndex = null;
     }
 }

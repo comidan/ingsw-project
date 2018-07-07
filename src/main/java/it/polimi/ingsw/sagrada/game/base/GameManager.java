@@ -280,6 +280,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     private void setDiceInWindow(String idPlayer, Dice dice, Position position) {
         Player player = idToPlayer(idPlayer);
         if(player != null) {
+            ruleManager.removeDiceFromSet(dice.getId());
             Window window = player.getWindow();
             if(toolMoveAlone) {
                 DTO dto = new DTO();
@@ -309,6 +310,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             }
             else {
                 //revert model to the previous move
+                ruleManager.revert(dice.getId());
                 diceManager.revert();
                 window.resetCell(position.getRow(), position.getCol());
             }
@@ -518,8 +520,9 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     @Override
     public void visit(MoveDiceWindowToolMessage moveDiceWindowToolMessage) {
         System.out.println("---GameManager Tool---");
-        DTO dto = new DTO();
         int id = moveDiceWindowToolMessage.getIdDice();
+        ruleManager.removeDiceFromSet(id);
+        DTO dto = new DTO();
         Player player = idToPlayer(moveDiceWindowToolMessage.getIdPlayer());
         Window window = player.getWindow();
         dto.setCurrentPosition(window.getPositionFromId(id));
@@ -544,6 +547,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         }
         else {
             //revert model to the previous move
+            ruleManager.revert(id);
             Position prevPos = dto.getCurrentPosition();
             Position nextPos = dto.getNewPosition();
             Dice dice = window.getCellMatrix()[nextPos.getRow()][nextPos.getCol()].getCurrentDice();
@@ -558,6 +562,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     public void visit(MoveDiceToolMessage moveDiceToolMessage) {
         Player player = idToPlayer(moveDiceToolMessage.getPlayerId());
         if(player != null) {
+            ruleManager.removeDiceFromSet(moveDiceToolMessage.getDiceId());
             Window window = player.getWindow();
             Dice dice = window.getDicefromId(moveDiceToolMessage.getDiceId());
             Position prevPos = window.getPositionFromId(moveDiceToolMessage.getDiceId());
@@ -573,6 +578,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             }
             else {
                 //revert model to the previous move
+                ruleManager.revert(moveDiceToolMessage.getDiceId());
                 window.resetCell(nextPos.getRow(), nextPos.getCol());
                 window.setCell(dice, prevPos.getRow(), prevPos.getCol());
             }
@@ -596,6 +602,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         DiceEvent diceEvent = colorConstraintToolMessage.getDiceEvent();
         Player player = idToPlayer(diceEvent.getIdPlayer());
         if(player!=null) {
+            ruleManager.removeDiceFromSet(diceEvent.getIdDice());
             Window window = player.getWindow();
             dto.setDice(window.getDicefromId(diceEvent.getIdDice()));
             dto.setWindowMatrix(window.getCellMatrix());
@@ -610,6 +617,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
                 sendMessage(new OpponentDiceMoveResponse(player.getId(), new Dice(-1, Colors.RED), dto.getCurrentPosition()));
             }
             else {
+                ruleManager.revert(diceEvent.getIdDice());
                 window.resetCell(dto.getNewPosition().getRow(), dto.getNewPosition().getCol());
                 window.setCell(dto.getDice(), dto.getCurrentPosition().getRow(), dto.getCurrentPosition().getCol());
             }
