@@ -21,5 +21,5 @@ public interface Channel<R extends Message, T extends Message> {
      *
      * @param message the message
      */
-    void sendMessage(T message); //da rivedere, qualcuno potrebbe mandare messagi per conto di altri
+    void sendMessage(T message);
 }

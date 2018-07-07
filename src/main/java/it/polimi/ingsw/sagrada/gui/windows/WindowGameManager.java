@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.utility.Pair;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.ConstraintGenerator;
+import javafx.geometry.Side;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,13 +19,11 @@ public class WindowGameManager {
 
     /** The constraints. */
     private Map<String, Constraint[][]> constraints;
+
+    private Map<String, Pair<Integer, WindowSide>> windowInfo;
     
     /** The constraint generator. */
     private ConstraintGenerator constraintGenerator;
-
-    private int playerWindowId;
-
-    private WindowSide playerWindowSide;
 
     /**
      * Instantiates a new window game manager.
@@ -53,16 +52,16 @@ public class WindowGameManager {
         return constraints;
     }
 
-    public int getToken() {
-        return constraintGenerator.getToken(playerWindowId, playerWindowSide);
-    }
+    public int getToken(String username) {
+        Pair<Integer, WindowSide> pair = windowInfo.get(username);
+        int playerWindowId = pair.getFirstEntry();;
+        WindowSide playerWindowSide = pair.getSecondEntry();
 
-    public void setPlayerWindow(int id, WindowSide side) {
-        playerWindowId = id;
-        playerWindowSide = side;
+        return constraintGenerator.getToken(playerWindowId, playerWindowSide);
     }
 
     public void setWindows(Map<String, Pair<Integer, WindowSide>> windows, List<String> players) {
         players.forEach(player -> addWindow(player, windows.get(player).getFirstEntry(), windows.get(player).getSecondEntry()));
+        windowInfo = windows;
     }
 }

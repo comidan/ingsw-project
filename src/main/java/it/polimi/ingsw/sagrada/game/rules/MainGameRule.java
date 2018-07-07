@@ -19,6 +19,7 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	/** The ignore value set. */
 	private Set<Integer> ignoreValueSet;
 
+	/** The ignore position set**/
 	private Set<Integer> ignoreFirstRoundDice;
 
 	private Map<Integer, List<Integer>> ignoreCurrentOrthogonalDice;

@@ -296,8 +296,8 @@ public class CommandManager implements MessageVisitor {
                                                                     stage,
                                                                     playerList,
                                                                     windowGameManager.getWindows()), client);
-            System.out.println("Token dati: " + windowGameManager.getToken());
-            gameGuiAdapter.setToken(windowGameManager.getToken());
+            System.out.println("Token dati: " + windowGameManager.getToken(username));
+            gameGuiAdapter.setToken(windowGameManager.getToken(username));
             gameGuiAdapter.setToolCards(toolCardResponse.getIds(), client);
             gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
             gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
