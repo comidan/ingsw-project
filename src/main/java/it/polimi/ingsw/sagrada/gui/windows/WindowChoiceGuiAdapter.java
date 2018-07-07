@@ -11,12 +11,12 @@ import java.util.logging.Logger;
 
 
 /**
- * The Class WindowChoiceGuiController.
+ * The Class WindowChoiceGuiAdapter.
  */
-public class WindowChoiceGuiController {
+public class WindowChoiceGuiAdapter {
     
     /** The Constant LOGGER. */
-    private static final Logger LOGGER = Logger.getLogger(WindowChoiceGuiController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(WindowChoiceGuiAdapter.class.getName());
     
     /** The view. */
     private WindowChoiceGuiView view;
@@ -39,7 +39,7 @@ public class WindowChoiceGuiController {
      * @param view the view
      * @param client the client
      */
-    public WindowChoiceGuiController(WindowChoiceGuiView view, Client client) {
+    public WindowChoiceGuiAdapter(WindowChoiceGuiView view, Client client) {
         this.chosen = false;
         this.view = view;
         this.client = client;

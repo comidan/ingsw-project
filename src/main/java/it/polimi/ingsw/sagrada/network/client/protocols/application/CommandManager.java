@@ -27,7 +27,7 @@ import it.polimi.ingsw.sagrada.gui.game.GameView;
 import it.polimi.ingsw.sagrada.gui.lobby.LobbyGuiView;
 import it.polimi.ingsw.sagrada.gui.score.ScoreLobbyView;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
-import it.polimi.ingsw.sagrada.gui.windows.WindowChoiceGuiController;
+import it.polimi.ingsw.sagrada.gui.windows.WindowChoiceGuiAdapter;
 import it.polimi.ingsw.sagrada.gui.windows.WindowGameManager;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import javafx.application.Platform;
@@ -57,7 +57,7 @@ public class CommandManager implements MessageVisitor {
     private static Client client;
     
     /** The window choice gui controller. */
-    private static WindowChoiceGuiController windowChoiceGuiController;
+    private static WindowChoiceGuiAdapter windowChoiceGuiAdapter;
     
     /** The game gui adapter. */
     private static GameGuiAdapter gameGuiAdapter;
@@ -264,8 +264,8 @@ public class CommandManager implements MessageVisitor {
      */
     @Override
     public void visit(WindowResponse windowResponse) {
-        windowChoiceGuiController = new WindowChoiceGuiController(GUIManager.initWindowChoiceGuiView(windowResponse, lobbyGuiView.getStage()), client);
-        stage = windowChoiceGuiController.getStage();
+        windowChoiceGuiAdapter = new WindowChoiceGuiAdapter(GUIManager.initWindowChoiceGuiView(windowResponse, lobbyGuiView.getStage()), client);
+        stage = windowChoiceGuiAdapter.getStage();
     }
 
     /* (non-Javadoc)

@@ -293,7 +293,7 @@ public class GameGuiAdapter {
         });
     }
 
-    public void disableWindowDiceDrag(){
+    private void disableWindowDiceDrag(){
             gameView.disableWindowDiceDrag();
         }
 

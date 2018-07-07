@@ -1,7 +1,7 @@
 package it.polimi.ingsw.gui;
 
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
-import it.polimi.ingsw.sagrada.gui.windows.WindowChoiceGuiController;
+import it.polimi.ingsw.sagrada.gui.windows.WindowChoiceGuiAdapter;
 import it.polimi.ingsw.sagrada.gui.windows.WindowChoiceGuiView;
 import javafx.stage.Stage;
 
@@ -16,7 +16,7 @@ public class WindowChoiceGuiTest {
         ids.add(1);
         WindowResponse windowResponse = new WindowResponse("Gianni", ids);
         WindowChoiceGuiView windowChoiceGuiView = WindowChoiceGuiView.getInstance(windowResponse, new Stage());
-        new WindowChoiceGuiController(windowChoiceGuiView, null);
+        new WindowChoiceGuiAdapter(windowChoiceGuiView, null);
         Scanner scanner = new Scanner(System.in);
         scanner.nextInt();
     }
