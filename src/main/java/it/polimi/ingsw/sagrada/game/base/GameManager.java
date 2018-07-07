@@ -529,7 +529,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             dto.setIgnoreColorSet(ruleManager::addIgnoreColor);
         else
             dto.setIgnoreValueSet(ruleManager::addIgnoreValue);
-
+        System.out.println("----------"+dto.getDice()+"------------");
         ErrorType errorTypeRule = moveDiceWindowToolMessage.getToolCard().getRule().checkRule(dto);
         System.out.println("---"+errorTypeRule+"---");
         ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
