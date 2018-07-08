@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.network.client.rmi.ClientRMI;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -20,7 +21,7 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
     private String identifier;
     
     /** The disconnect. */
-    private Function disconnect;
+    private BiFunction disconnect;
     
     /** The client RMI. */
     private ClientRMI clientRMI;
@@ -37,7 +38,7 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
      * @param sendToModel the send to model
      * @throws RemoteException the remote exception
      */
-    public RemoteRMIClient(String identifier, Function disconnect, ClientRMI clientRMI, Consumer<Message> sendToModel) throws RemoteException{
+    public RemoteRMIClient(String identifier, BiFunction disconnect, ClientRMI clientRMI, Consumer<Message> sendToModel) throws RemoteException{
         this.identifier = identifier;
         this.disconnect = disconnect;
         this.clientRMI = clientRMI;
@@ -81,7 +82,7 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
      */
     @Override
     public void disconnect() throws RemoteException {
-        disconnect.apply(identifier);
+        disconnect.apply(identifier, true);
     }
 
     /* (non-Javadoc)

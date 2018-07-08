@@ -150,7 +150,7 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
      * @return the draft
      */
     public List<Dice> getDraft() {
-        return draftPool.subList(0, draftPool.size());
+        return new ArrayList<>(draftPool.subList(0, draftPool.size()));
     }
 
     /**

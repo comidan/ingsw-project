@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -44,7 +45,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     private ExecutorService executor;
     
     /** The disconnect. */
-    private Function disconnect;
+    private BiFunction disconnect;
     
     /** The fast recovery. */
     private Function fastRecovery;
@@ -67,7 +68,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      * @param sendToModel the send to model
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public RemoteSocketClient(Socket socket, String identifier, Function disconnect, Function fastRecovery, Consumer sendToModel) throws IOException {
+    public RemoteSocketClient(Socket socket, String identifier, BiFunction disconnect, Function fastRecovery, Consumer sendToModel) throws IOException {
         this.socket = socket;
         isInFastRecovery = false;
         commandParser = new CommandParser();
@@ -113,7 +114,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      */
     @Override
     public void disconnect() {
-        disconnect.apply(identifier);
+        disconnect.apply(identifier, true);
         close();
         executor.shutdown();
     }

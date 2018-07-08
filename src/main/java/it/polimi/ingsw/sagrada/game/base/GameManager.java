@@ -252,6 +252,8 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      * Notify next player about his current state in this turn
      */
     private void notifyNextPlayer() {
+        if(playerIterator.getCurrentPlayerNumber() <= 1)
+            scoreState();
         if(playTime != null)
             playTime.cancel();
         if(playerIterator.hasNext()) {
@@ -382,6 +384,10 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         return null;
     }
 
+    public String getCurrentPlayer() {
+        return playerIterator.getCurrentPlayer();
+    }
+
     /**
      * Removes the player from the current game by its username
      * Warning : this is not a retroactive operation, canNOT be undone
@@ -390,7 +396,10 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      */
     public void removePlayer(String playerId) {
         synchronized (playerIterator) {
+            while(playerIterator.getCurrentPlayer().equals(playerId))
+                notifyNextPlayer();
             playerIterator.removePlayer(playerId);
+
         }
     }
 
