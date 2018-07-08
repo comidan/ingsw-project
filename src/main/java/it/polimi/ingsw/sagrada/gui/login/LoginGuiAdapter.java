@@ -90,7 +90,7 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
     }
 
     /**
-     * Notify error.
+     * Notify error on wrong login.
      *
      * @param message the message
      */
@@ -99,7 +99,7 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
     }
 
     /**
-     * Change scene.
+     * Changes scene, moving on to match lobby
      */
     private void changeScene() {
         Platform.runLater(() -> {
@@ -117,8 +117,8 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
         return dynamicRouter;
     }
 
-    /* (non-Javadoc)
-     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+    /*
+     * handles login responses
      */
     @Override
     public void dispatch(LoginState message) {
@@ -144,8 +144,8 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
         }
     }
 
-    /* (non-Javadoc)
-     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+    /*
+    *
      */
     @Override
     public void sendMessage(Message message) {

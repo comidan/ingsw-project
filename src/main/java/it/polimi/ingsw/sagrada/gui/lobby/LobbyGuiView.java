@@ -72,11 +72,11 @@ public class LobbyGuiView {
     /** The fourth player timeline. */
     private static Timeline fourthPlayerTimeline;
 
-    /** The has been removal. */
+    /** The has been removed flag. */
     private boolean hasBeenRemoval = false;
 
     /**
-     * Sets the player.
+     * Sets the player who joins the lobby.
      *
      * @param username the new player
      * @param position the position
@@ -96,7 +96,7 @@ public class LobbyGuiView {
     }
 
     /**
-     * Removes the player.
+     * Removes the player on lobby exited
      *
      * @param username the username
      */
@@ -152,14 +152,14 @@ public class LobbyGuiView {
     /**
      * Sets the timer.
      *
-     * @param message the new timer
+     * @param message the timer
      */
     public void setTimer(String message) {
         Platform.runLater(() -> timer.setText(message));
     }
 
     /**
-     * Inits the.
+     * Inits the lobby.
      *
      * @param stage the stage
      * @return the lobby gui view
@@ -229,10 +229,10 @@ public class LobbyGuiView {
     }
 
     /**
-     * Gets the height pixel.
+     * Gets the relative height
      *
-     * @param perc the perc
-     * @return the height pixel
+     * @param perc the percentage
+     * @return the relative height
      */
     private static double getHeightPixel(int perc) {
         return (perc * GUIManager.getWindowHeight() / 100);
@@ -248,9 +248,9 @@ public class LobbyGuiView {
     }
 
     /**
-     * Gets the player shown.
+     * Gets the shown player.
      *
-     * @return the player shown
+     * @return the shown player
      */
     public List<String> getPlayerShown() {
         return playerShown;

@@ -24,7 +24,7 @@ public class ClickedObject {
     /**
      * Sets the clicked dice.
      *
-     * @param diceView the new clicked dice
+     * @param diceView the currently clicked dice
      */
     public void setClickedDice(DiceView diceView) {
         this.clickedDice = diceView;

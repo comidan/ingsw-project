@@ -77,32 +77,32 @@ public class GUIManager {
     }
 
     /**
-     * Gets the window height.
+     * Gets the window height for lobbys.
      *
-     * @return the window height
+     * @return the window height for lobbys
      */
     public static double getWindowHeight() {
         return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION;
     }
 
     /**
-     * Gets the window width.
+     * Gets the window width for lobbys
      *
-     * @return the window width
+     * @return the window width for lobbys
      */
     public static double getWindowWidth() {
         return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION * RATIO;
     }
 
     /**
-     * Gets the game window width.
+     * Gets the window width for the game.
      *
      * @return the game window width
      */
     public static double getGameWindowWidth() { return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION * GAME_RATIO; }
 
     /**
-     * Gets the game window height.
+     * Gets the game window height for the game
      *
      * @return the game window height
      */
@@ -127,40 +127,40 @@ public class GUIManager {
     }
 
     /**
-     * Gets the height pixel.
+     * Gets the relative height for the lobbys
      *
-     * @param perc the perc
-     * @return the height pixel
+     * @param perc the percentage
+     * @return the height
      */
     public static double getHeightPixel(int perc) {
         return perc * getWindowHeight() / 100;
     }
 
     /**
-     * Gets the width pixel.
+     * Gets the relative width for the lobbys.
      *
-     * @param perc the perc
-     * @return the width pixel
+     * @param perc the percentage
+     * @return the width
      */
     public static double getWidthPixel(double perc) {
             return perc * getWindowWidth() / 100;
     }
 
     /**
-     * Gets the game height pixel.
+     * Gets the relative height for the game
      *
      * @param perc the perc
-     * @return the game height pixel
+     * @return the game height
      */
     public static double getGameHeightPixel(double perc) {
         return perc * getGameWindowHeight() / 100;
     }
 
     /**
-     * Gets the game width pixel.
+     * Gets the relative width for the game.
      *
      * @param perc the perc
-     * @return the game width pixel
+     * @return the game width
      */
     public static double getGameWidthPixel(double perc) {
         return perc * getGameWindowWidth() / 100;

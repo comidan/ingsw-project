@@ -82,7 +82,7 @@ public class LoginGuiView extends Application {
     /**
      * Sets the error text.
      *
-     * @param message the new error text
+     * @param message the error text
      */
     public void setErrorText(String message) {
         Platform.runLater(() -> {
@@ -91,18 +91,18 @@ public class LoginGuiView extends Application {
     }
 
     /**
-     * Checks if is credential correct.
+     * Checks if credential is correct.
      *
-     * @return true, if is credential correct
+     * @return true, if credential is correct
      */
     public boolean isCredentialCorrect() {
         return (usernameField.getText().length() != 0 && passwordField.getText().length() != 0);
     }
 
     /**
-     * Gets the selected communication.
+     * Gets the selected communication method
      *
-     * @return the selected communication
+     * @return the selected communication method
      */
     public String getSelectedCommunication() {
         if (socketRadioButton.isSelected()) return "Socket";
@@ -146,8 +146,8 @@ public class LoginGuiView extends Application {
         return (Stage) loginButton.getScene().getWindow();
     }
 
-    /* (non-Javadoc)
-     * @see javafx.application.Application#start(javafx.stage.Stage)
+    /*
+     *  starts login lobby
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -185,7 +185,7 @@ public class LoginGuiView extends Application {
     }
 
     /**
-     * Change scene.
+     * Change scene, moving on to match lobby
      *
      * @return the lobby gui view
      */
@@ -231,9 +231,9 @@ public class LoginGuiView extends Application {
     }
 
     /**
-     * Gets the height pixel.
+     * Gets the relative height
      *
-     * @param perc the perc
+     * @param perc the percentage
      * @return the height pixel
      */
     private double getHeightPixel(int perc) {

@@ -57,28 +57,28 @@ public class GameView extends Application {
     /** The Constant NOTIFICATION_TIME. */
     private static final int NOTIFICATION_TIME = 3000;
     
-    /** The notifying. */
+    /** The notifying flag. */
     private boolean notifying = false;
 
     /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(GameView.class.getName());
 
-    /** The windows. */
+    /** The map of the windows. */
     private static Map<String, WindowView> windows;
     
     /** The draft view. */
     private DraftView draftView;
     
-    /** The vertical box. */
+    /** The horizontal box containing opponents' windows. */
     private HBox hBox;
 
-    /** The frame view. */
+    /** The frame view containing one's own window. */
     private FrameView frame;
 
-    /** The anchor pane. */
+    /** The anchor pane containing the main components. */
     private AnchorPane anchorPane;
     
-    /** The username. */
+    /** The username of the player seeing the view. */
     private static String username;
     
     /** The players. */
@@ -128,7 +128,7 @@ public class GameView extends Application {
     private DicePrevContainer dicePrevContainer;
 
     /**
-     * Gets the username.
+     * Gets the username of the player associated to the view.
      *
      * @return the username
      */
@@ -137,10 +137,10 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the cell click listener.
+     * Sets the cell click listener to one's own window
      *
-     * @param cellDragOver the cell drag over
-     * @param cellDragDone the cell drag done
+     * @param cellDragOver the cell drag over handler
+     * @param cellDragDone the cell drag done handler
      */
     void setCellClickListener(EventHandler<DragEvent> cellDragOver,EventHandler<DragEvent> cellDragDone) {
         windows.get(username).setWindowDiceListener(cellDragOver, cellDragDone);
@@ -149,7 +149,7 @@ public class GameView extends Application {
 
 
     /**
-     * Sets the roundtrack click handler.
+     * Sets the roundtrack click handler on relative toolcard usage
      *
      * @param diceClickHandler the new roundtrack click handler
      */
@@ -158,16 +158,16 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the tool click handler.
+     * Sets the tool click handler to handle tool buy
      *
-     * @param toolClickHandler the new tool click handler
+     * @param toolClickHandler the tool click handler
      */
     void setToolClickHandler(EventHandler<MouseEvent> toolClickHandler){
         cardBoard.setToolClickHandler(toolClickHandler);
     }
 
     /**
-     * Disable the tool click handler.
+     * Disable the tool click handler when a toolcard has already been bought in the current turn
      */
 
     void disableToolClickHandler() {
@@ -175,18 +175,18 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the draft click handler.
+     * Sets the draft click handler to handle drag from draft.
      *
-     * @param draftClickHandler the new draft click handler
+     * @param draftClickHandler the draft click handler
      */
     void setDraftClickHandler(EventHandler<MouseEvent> draftClickHandler) {
         draftView.setDraftListener(draftClickHandler);
     }
 
     /**
-     * Sets the end turn handler.
+     * Sets the end turn handler to handle end turn click.
      *
-     * @param endTurnEventHandler the new end turn handler
+     * @param endTurnEventHandler the end turn handler
      */
     void setEndTurnHandler(EventHandler<MouseEvent> endTurnEventHandler){
         endTurn.setEndTurnHandler(endTurnEventHandler);
@@ -212,7 +212,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the roundtrack image.
+     * Sets the roundtrack background image.
      *
      * @param diceViews the dice views
      * @param currentRound the current round
@@ -233,7 +233,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Show dice prev container.
+     * Show dice prev container when relative toolcard is used
      *
      * @param color the color
      * @param diceId the dice id
@@ -246,16 +246,16 @@ public class GameView extends Application {
     }
 
     /**
-     * Removes the dice prev container.
+     * Removes the dice prev container on usage over.
      */
     public void removeDicePrevContainer() {
         anchorPane.getChildren().remove(dicePrevContainer);
     }
 
     /**
-     * Sets the choose value.
+     * Sets the choose value when relative toolcard is used.
      *
-     * @param chooseValueHandler the new choose value
+     * @param chooseValueHandler the choose value handler
      */
     public void setChooseValue(EventHandler<MouseEvent> chooseValueHandler){
         dicePrevContainer.setDicePrevHandler(chooseValueHandler);
@@ -284,18 +284,18 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the private objective.
+     * Sets the private objective cards.
      *
-     * @param id the new private objective
+     * @param id the new private objective cards
      */
     void setPrivateObjective(int id) {
         cardBoard.setPrivateObjective(id);
     }
 
     /**
-     * Sets the public objectives.
+     * Sets the public objectives cards
      *
-     * @param publicObjectives the new public objectives
+     * @param publicObjectives the new public objectives cards
      */
     void setPublicObjectives(List<Integer> publicObjectives) {
         cardBoard.setPublicObjectives(publicObjectives);
@@ -311,7 +311,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Removes the mistaken dice.
+     * Removes dice on mistaken placement
      *
      * @param row the row
      * @param col the col
@@ -320,16 +320,11 @@ public class GameView extends Application {
         windows.get(username).removeMistakenDice(row, col);
     }
 
-    /**
-     * Show value chioce.
-     */
-    void showValueChioce(){
 
-    }
     /**
      * Removes the token.
      *
-     * @param number the number
+     * @param number the number of tokens to remove
      */
     void removeToken(int number){
         tokenGrid.getChildren().remove(0, number);
@@ -337,9 +332,9 @@ public class GameView extends Application {
     }
 
     /**
-     * Adds the token tool.
+     * Adds the token to tool
      *
-     * @param num the num
+     * @param num the num of token to add
      * @param toolCardView the tool card view
      */
     void addTokenTool(int num, ToolCardView toolCardView){
@@ -348,7 +343,7 @@ public class GameView extends Application {
 
 
     /**
-     * Initialize.
+     * Initialize game scene
      */
     private void initialize(){
         endTurn = new EndTurn();
@@ -367,7 +362,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the token.
+     * Sets the token associated to the window
      *
      * @param tokenNumber the new token
      */
@@ -383,8 +378,8 @@ public class GameView extends Application {
 
     }
 
-    /* (non-Javadoc)
-     * @see javafx.application.Application#start(javafx.stage.Stage)
+    /*
+     * starts the game scene
      */
     @Override
     public void start(Stage primaryStage) {
@@ -468,7 +463,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Creates the scene.
+     * Creates the scene, adding main graphic elements.
      *
      * @param primaryStage the primary stage
      */
@@ -520,7 +515,7 @@ public class GameView extends Application {
 
 
     /**
-     * Notify turn.
+     * Notify turn begun
      */
     void notifyTurn() {
         components.forEach(node -> node.setDisable(false));
@@ -543,7 +538,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Notify end turn.
+     * Notify end of turn.
      */
     void notifyEndTurn() {
         timer.setText("");
@@ -554,7 +549,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the dice window.
+     * Sets the dice on window.
      *
      * @param position the new dice window
      */
@@ -563,7 +558,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the opponent window.
+     * Sets the dice on opponent window when opponent places dice.
      *
      * @param username the username
      * @param dice the dice
@@ -574,7 +569,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the window button handler.
+     * Sets the window button handler to show opponents' windows on click
      *
      * @param windowButtonHandler the new window button handler
      */
@@ -584,7 +579,7 @@ public class GameView extends Application {
 
 
     /**
-     * Sets the H box.
+     * Sets the horizontal box containing opponents' windows.
      */
     private void setHBox(){
         AnchorPane.setBottomAnchor(hBox, GUIManager.getGameHeightPixel(30));
@@ -592,7 +587,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the window.
+     * Sets the window associated to the player.
      */
     private void setWindow(){
         frame.addWindowToFrame(windows.get(username));
@@ -602,7 +597,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the roundtrack.
+     * Sets the roundtrack graphic elements.
      */
     private void setRoundtrack(){
         ImageView roundImage = new ImageView();
@@ -617,7 +612,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the window button.
+     * Sets the window preview button.
      */
     private void setWindowButton() {
         windowPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/gameGuiImages/windowPrev.png")));
@@ -629,7 +624,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the card board.
+     * Sets the card board containing the various cards.
      */
     private void setCardBoard(){
         AnchorPane.setBottomAnchor(cardBoard, GUIManager.getGameHeightPixel(0));
@@ -640,14 +635,14 @@ public class GameView extends Application {
 
 
     /**
-     * Show other windows.
+     * Shows opponents' windows.
      */
     void showOtherWindows(){
         anchorPane.getChildren().addAll(hBox);
     }
 
     /**
-     * Hide other windows.
+     * Hide opponents' windows.
      */
     void hideOtherWindows(){
         anchorPane.getChildren().remove(hBox);
@@ -674,7 +669,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the notification.
+     * Sets the notification graphic style.
      */
     private void setNotification() {
         notification = new Label();
@@ -689,7 +684,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the timer.
+     * Sets the timer graphic style.
      */
     private void setTimer() {
         timer = new Label();
@@ -703,9 +698,9 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the time remaining.
+     * Sets the remaining time.
      *
-     * @param time the new time remaining
+     * @param time the current remaining time
      */
     void setTimeRemaining(int time) {
         if(timer != null)
@@ -730,18 +725,18 @@ public class GameView extends Application {
     }
 
     /**
-     * Sets the tool preview listener.
+     * Sets the tool preview listener to show toolcards on click
      *
-     * @param cardHandler the new tool preview listener
+     * @param cardHandler the tool preview listener
      */
     void setToolPreviewListener(EventHandler<MouseEvent> cardHandler) {
         toolcardPrev.setOnMouseClicked(cardHandler);
     }
 
     /**
-     * Sets the private preview listener.
+     * Sets the private preview listener to show private objectives on click
      *
-     * @param cardHandler the new private preview listener
+     * @param cardHandler the private preview listener
      */
     void setPrivatePreviewListener(EventHandler<MouseEvent> cardHandler){
         privateObjPrev.setOnMouseClicked(cardHandler);
@@ -749,9 +744,9 @@ public class GameView extends Application {
     }
     
     /**
-     * Sets the public preview listener.
+     * Sets the public preview listener to show public objectives on click
      *
-     * @param cardHandler the new public preview listener
+     * @param cardHandler the public preview listener
      */
     void setPublicPreviewListener(EventHandler<MouseEvent> cardHandler){
         publicObjPrev.setOnMouseClicked(cardHandler);
@@ -759,14 +754,14 @@ public class GameView extends Application {
     }
 
     /**
-     * Show public card.
+     * Show public objectives card.
      */
     void showPublicCard(){
         cardBoard.showPublicCards();
     }
 
     /**
-     * Show private card.
+     * Show private objectives card.
      */
     void showPrivateCard(){
         cardBoard.showPrivateCards();
@@ -780,14 +775,14 @@ public class GameView extends Application {
     }
 
     /**
-     * Hide public card.
+     * Hide public objectives card.
      */
     void hidePublicCard(){
         cardBoard.hidePublicCards();
     }
 
     /**
-     * Hide private card.
+     * Hide private objectives card.
      */
     void hidePrivateCard(){
         cardBoard.hidePrivateCards();
@@ -810,7 +805,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Enable draft change value.
+     * Enable draft change value on relative toolcard usage
      *
      * @param changeValueHandler the change value handler
      */
@@ -819,14 +814,14 @@ public class GameView extends Application {
     }
 
     /**
-     * Disable draft click.
+     * Disable draft click on already placed dice
      */
     public void disableDraftClick(){
         draftView.disableDraftClick();
     }
 
     /**
-     * Enable window dice drag.
+     * Enable window dice drag on relative toolcard usage
      *
      * @param enableWindowDragHandler the enable window drag handler
      */
@@ -835,14 +830,14 @@ public class GameView extends Application {
     }
 
     /**
-     * Disable round track click.
+     * Disable round track click on toolcard usage ended
      */
     void disableRoundTrackClick(){
         roundTrackView.disableClick();
     }
 
     /**
-     * Disable window dice drag.
+     * Disable window dice drag on toolcard usage ended.
      */
     void disableWindowDiceDrag(){
          windows.get(username).disableDiceDrag();

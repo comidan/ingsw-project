@@ -46,7 +46,7 @@ public class GameGuiAdapter {
     private GameView gameView;
 
     /**
-     * The clicked object.
+     * The clicked object where the dragged dice is saved.
      */
     private ClickedObject clickedObject;
 
@@ -56,7 +56,7 @@ public class GameGuiAdapter {
      */
     private CellView lastMove;
 
-    /** The dice source. */
+    /** The source of the clicked dice. */
     private String diceSource;
 
 
@@ -82,7 +82,7 @@ public class GameGuiAdapter {
 
 
     /**
-     * Sets the end turn handler.
+     * Sets the end turn handler to notify end of turn when end turn button is clicked.
      *
      * @param client the new end turn handler
      */
@@ -105,7 +105,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the window button handler.
+     * Sets the window button handler to show other windows on preview click.
      */
     private void setWindowButtonHandler() {
         gameView.setWindowButtonHandler(event -> {
@@ -120,9 +120,9 @@ public class GameGuiAdapter {
 
 
         /**
-         * Sets the cell handler.
+         * Sets the cell handler to handle dice drop.
          *
-         * @param client the new cell handler
+         * @param client the new handler
          */
         private void setCellHandler(Client client) {
 
@@ -170,7 +170,7 @@ public class GameGuiAdapter {
         }
 
     /**
-     * Sets the draft listener.
+     * Sets the draft listener to handle drag from draft.
      */
     private void setDraftListener() {
         Platform.runLater(() -> {
@@ -192,9 +192,9 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the tool handler.
+     * Sets the tool handler to handle tool buy
      *
-     * @param client the new tool handler
+     * @param client the new handler
      */
     public void setToolHandler(Client client) {
         Platform.runLater(() -> {
@@ -212,7 +212,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the token window.
+     * Sets the token associated to the window
      *
      * @param tokenNumber the new token window
      */
@@ -223,7 +223,7 @@ public class GameGuiAdapter {
 
 
     /**
-     * Sets the tool card prev listener.
+     * Sets the tool card prev listener to show the toolcard when the preview is clicked
      */
     private void setToolCardPrevListener(){
             gameView.setToolPreviewListener(event -> {
@@ -237,7 +237,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the private prev listener.
+     * Sets the private prev listener to show the private obj card when the preview is clicked
      */
     private void setPrivatePrevListener(){
             gameView.setPrivatePreviewListener(event -> {
@@ -251,7 +251,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the public prev listener.
+     * Sets the public prev listener to show the public obj card when the preview is clicked
      */
     private void setPublicPrevListener(){
             gameView.setPublicPreviewListener(event -> {
@@ -264,9 +264,8 @@ public class GameGuiAdapter {
     }
 
 
-
     /**
-     * Sets the card preview listener.
+     * Sets all card preview listener to show the cards when the preview is clicked
      */
     private void setCardPreviewListener(){
         Platform.runLater(() -> {
@@ -276,12 +275,10 @@ public class GameGuiAdapter {
         });
     }
 
-    // Tool effect: change dice value in draft adding one OR rolls again dice, according to value it gets
-    // can be used for toolcards: 1, 6, 10
-
     /**
-     * Enable draft click.
-     *
+     * Enable draft click when relative toolcard is bought.
+     * Tool effect: change dice value in draft adding one OR rolls again dice, according to value it gets;
+     * can be used for toolcards: 1, 6, 10
      * @param client the client
      */
     private void enableDraftClick(Client client){
@@ -300,17 +297,17 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Disable draft change value.
+     * Disable draft change value after relative tool has been used.
      */
     public void disableDraftChangeValue(){
         this.gameView.disableDraftClick();
     }
 
-    // Tool effect: enable moving dice on your own window
-    // can be used for toolcards: 2, 3, 4, 12
 
     /**
-     * Enable window dice drag.
+     * Enable window dice drag whenn toolcard is bought.
+     * Tool effect: enable moving dice on your own window;
+     * can be used for toolcards: 2, 3, 4, 12
      */
     private void enableWindowDiceDrag() {
         this.gameView.enableWindowDiceDrag(event -> {
@@ -334,14 +331,12 @@ public class GameGuiAdapter {
         }
 
      /**
-      * Sets the round track click.
+      * Sets the round track click when relative toolcard is used.
+      * Tool effect: enable drag on dice in roundtrack
+      * can be used for toolcards: 5
       *
       * @param client the client
       */
-
-
-     // Tool effect: enable drag on dice in roundtrack
-     // can be used for toolcards: 5
 
     private void enableRoundTrackClick(Client client){
         Platform.runLater(() -> {
@@ -377,8 +372,8 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Enable round track.
-     *
+     * Enable round track click to get color when allowed.
+     * can be used for toolcards: 12
      * @param client the client
      */
     private void enableRoundTrack(Client client) {
@@ -426,10 +421,10 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Enable choose value.
-     *
-     * @param color the color
-     * @param diceId the dice id
+     * Enable choose value for dice when relative toolcard is used.
+     * can be used for toolcards: 11
+     * @param color the color of the chosen dice
+     * @param diceId the dice id of the chosen dice
      */
     public void enableChooseValue(Colors color, int diceId){
     Platform.runLater(() -> {
@@ -453,7 +448,7 @@ public class GameGuiAdapter {
     /**
      * Sets the token.
      *
-     * @param tokenNumber the new token
+     * @param tokenNumber the token number
      */
     public void setToken(int tokenNumber){
         Platform.runLater(() -> {
@@ -467,7 +462,6 @@ public class GameGuiAdapter {
      * @param row the row
      * @param col the col
      */
-    //method to call this on server demand must be created
     public void removeMistakenDice(int row, int col){
         Platform.runLater(() -> {
             this.gameView.removeMistakenDice(row, col);
@@ -475,7 +469,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the draft.
+     * Sets the draft at the beginning of the turn or on events involving the draft
      *
      * @param diceResponse the new draft
      */
@@ -487,7 +481,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the dice list.
+     * Sets the dice list for draft or roundtrack
      *
      * @param diceResponse the new dice list
      */
@@ -501,7 +495,7 @@ public class GameGuiAdapter {
 
 
     /**
-     * Sets the round track.
+     * Sets the round track at the end of the round
      *
      * @param diceResponse the new round track
      */
@@ -514,7 +508,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the round track.
+     * Sets the round track on tool use
      *
      * @param roundTrackToolResponse the new round track
      */
@@ -530,25 +524,25 @@ public class GameGuiAdapter {
 
 
     /**
-     * Sets the private objective.
+     * Sets the private objective cards drawn for the game.
      *
-     * @param id the new private objective
+     * @param id the new private objective cards
      */
     public void setPrivateObjective(int id){
         Platform.runLater(() -> gameView.setPrivateObjective(id));
     }
 
     /**
-     * Sets the public objectives.
+     * Sets the public objectives cards drawn for the game.
      *
-     * @param publicObjectives the new public objectives
+     * @param publicObjectives the new public objectives cards
      */
     public void setPublicObjectives(List<Integer> publicObjectives) {
         Platform.runLater(() -> gameView.setPublicObjectives(publicObjectives));
     }
 
     /**
-     * Removes the player.
+     * Removes the player on disconnection.
      *
      * @param playerId the player id
      */
@@ -557,7 +551,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the tool cards.
+     * Sets the tool cards drawn for the game..
      *
      * @param toolCards the new tool cards
      * @param client the client
@@ -568,21 +562,21 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Notify turn.
+     * Notify turn begun.
      */
     public void notifyTurn() {
         Platform.runLater(gameView::notifyTurn);
     }
 
     /**
-     * Notify end turn.
+     * Notify end turn over.
      */
     public void notifyEndTurn() {
         Platform.runLater(gameView::notifyEndTurn);
     }
 
     /**
-     * Notify move response.
+     * Notify response to dice move.
      *
      * @param ruleResponse the rule response
      */
@@ -616,7 +610,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the notification.
+     * Sets the notification message.
      *
      * @param message the new notification
      */
@@ -625,18 +619,18 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Removes the token.
+     * Removes the token when toolcard is bought.
      *
-     * @param num the num
+     * @param num the number of token to be removed
      */
     public void removeToken(int num) {
         Platform.runLater(()-> gameView.removeToken(num));
     }
 
     /**
-     * Adds the token tool.
+     * Adds the token to the tool.
      *
-     * @param num the num
+     * @param num the num of token to be added
      * @param toolCardView the tool card view
      */
     public void addTokenTool(int num, ToolCardView toolCardView){
@@ -644,9 +638,9 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the round.
+     * Sets the current round.
      *
-     * @param round the new round
+     * @param round the current round
      */
     public void setRound(int round) {
         currentRound = round;
@@ -654,9 +648,9 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Sets the time remaining.
+     * Sets the remaining time .
      *
-     * @param time the new time remaining
+     * @param time the current remaining time
      */
     public void setTimeRemaining(int time) {
         Platform.runLater(() -> gameView.setTimeRemaining(time));
@@ -681,7 +675,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Enable gui element.
+     * Enable gui element on toolcard usage.
      *
      * @param toolId the tool id
      * @param client the client
@@ -695,7 +689,7 @@ public class GameGuiAdapter {
     }
 
     /**
-     * Disable gui element.
+     * Disable gui element on toolcard used.
      */
     public void disableGuiElement() {
         disableDraftClick();

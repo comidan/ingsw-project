@@ -9,40 +9,40 @@ import it.polimi.ingsw.sagrada.game.base.utility.Colors;
  */
 public enum Constraint {
     
-    /** The one. */
+    /** The constraint one. */
     ONE,
     
-    /** The two. */
+    /** The constraint two. */
     TWO,
     
-    /** The three. */
+    /** The constraint three. */
     THREE,
     
-    /** The four. */
+    /** The constraint four. */
     FOUR,
     
-    /** The five. */
+    /** The constraint five. */
     FIVE,
     
-    /** The six. */
+    /** The constraint six. */
     SIX,
     
-    /** The red. */
+    /** The constraint red. */
     RED,
     
-    /** The green. */
+    /** The constraint green. */
     GREEN,
     
-    /** The yellow. */
+    /** The constraint yellow. */
     YELLOW,
     
-    /** The blue. */
+    /** The constraint blue. */
     BLUE,
     
-    /** The purple. */
+    /** The constraint purple. */
     PURPLE,
     
-    /** The white. */
+    /** The constraint white. */
     WHITE;
 
     /** The Constant DEFAULT_CONSTRAINT_INIT_NAME. */
@@ -178,8 +178,8 @@ public enum Constraint {
         }
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Enum#toString()
+    /*
+     * returns constraints in string form
      */
     @Override
     public String toString() {

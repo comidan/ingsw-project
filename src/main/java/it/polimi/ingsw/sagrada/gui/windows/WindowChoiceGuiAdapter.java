@@ -37,7 +37,7 @@ public class WindowChoiceGuiAdapter {
     /**
      * Instantiates a new window choice gui controller.
      *
-     * @param view the view
+     * @param view the window choice view
      * @param client the client
      */
     public WindowChoiceGuiAdapter(WindowChoiceGuiView view, Client client) {

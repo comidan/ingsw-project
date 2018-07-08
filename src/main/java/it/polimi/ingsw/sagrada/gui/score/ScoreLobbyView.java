@@ -50,13 +50,13 @@ public class ScoreLobbyView extends Application{
     /** The window height. */
     private double windowHeight;
     
-    /** The title. */
+    /** The scene title. */
     private Label title;
 
     /** The window width. */
     private double windowWidth;
 
-    /** The player shown. */
+    /** The shown players. */
     private final List<String> playerShown = new ArrayList<>();
 
     /**
@@ -69,7 +69,7 @@ public class ScoreLobbyView extends Application{
     }
 
     /**
-     * Initialize.
+     * Initialize the score lobby.
      */
     public void initialize(){
 
@@ -125,8 +125,7 @@ public class ScoreLobbyView extends Application{
 
     }
 
-    /* (non-Javadoc)
-     * @see javafx.application.Application#start(javafx.stage.Stage)
+    /* starts the score lobby scene
      */
     public void start(Stage stage){
         initialize();
@@ -141,7 +140,7 @@ public class ScoreLobbyView extends Application{
     }
 
     /**
-     * Sets the scores.
+     * Sets the scores for each player
      */
     private void setScores(){
         ranking.entrySet().forEach(entry -> {
@@ -152,7 +151,7 @@ public class ScoreLobbyView extends Application{
     }
 
     /**
-     * Sets the player.
+     * Sets the player with relative score
      *
      * @param username the username
      * @param score the score
@@ -170,7 +169,7 @@ public class ScoreLobbyView extends Application{
     }
 
     /**
-     * Sets the title.
+     * Sets the title for the score lobby
      */
     private void setTitle(){
         title = new Label("Rankings");
@@ -226,7 +225,7 @@ public class ScoreLobbyView extends Application{
     }
 
     /**
-     * Start score view.
+     * Start score lobby.
      *
      * @param ranking the ranking
      * @param stage the stage

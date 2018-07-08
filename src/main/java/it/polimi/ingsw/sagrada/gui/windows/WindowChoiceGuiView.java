@@ -97,8 +97,7 @@ public class WindowChoiceGuiView extends Application {
         return instance;
     }
 
-    /* (non-Javadoc)
-     * @see javafx.application.Application#start(javafx.stage.Stage)
+    /* start the window choice scene
      */
     @Override
     public void start(Stage primaryStage) {
@@ -134,7 +133,7 @@ public class WindowChoiceGuiView extends Application {
     }
 
     /**
-     * Sets the w indow choice view instance.
+     * Sets the window choice view instance.
      *
      * @param wIndowChoiceViewInstance the new w indow choice view instance
      */
@@ -143,7 +142,7 @@ public class WindowChoiceGuiView extends Application {
     }
 
     /**
-     * Initialize.
+     * Initialize the window choice lobby
      */
     private void initialize() {
         imageViewList = new ArrayList<>();

@@ -115,8 +115,6 @@
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.gui.GUIManagerTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 sec
-    Running it.polimi.ingsw.gui.ResizerTest
-    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.gui.WindowGameManagerTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
     Running it.polimi.ingsw.gui.WindowImageTest

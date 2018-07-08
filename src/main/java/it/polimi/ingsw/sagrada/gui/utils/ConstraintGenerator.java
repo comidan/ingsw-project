@@ -58,7 +58,7 @@ public class ConstraintGenerator {
     }
     
     /**
-     * Gets the matrix.
+     * Gets the cell matrix for the window.
      *
      * @param cells the cells
      * @return the matrix
@@ -105,17 +105,17 @@ public class ConstraintGenerator {
     }
 
     /**
-     * Checks if is numeric.
+     * Checks if input is numeric.
      *
-     * @param s the s
-     * @return true, if is numeric
+     * @param s the input
+     * @return true, if input is numeric
      */
     private boolean isNumeric(String s) {
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }
 
     /**
-     * Gets the token.
+     * Gets the token associated to the window.
      *
      * @param id the id
      * @param side the side
