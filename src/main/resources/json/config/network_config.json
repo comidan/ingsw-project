@@ -1,5 +1,5 @@
 {
-  "ip_address": "192.168.1.7",
+  "ip_address": "localhost",
   "port": 49152,
   "rmi_port": 1099
 }

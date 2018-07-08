@@ -2,6 +2,7 @@ package it.polimi.ingsw.intercomm;
 
 import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Player;
+import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
@@ -20,10 +21,7 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,7 +40,6 @@ public class RouterTest {
 
     @Test
     public void routerTest() {
-        DiceResponse diceResponse;
         DynamicRouter dynamicRouter = new MessageDispatcher();
         List<Dice> draft = new ArrayList<>();
         List<Player> players = new ArrayList<>();
@@ -62,19 +59,19 @@ public class RouterTest {
 
         assertEquals(playerOne.getWindow().getName(), idWindowToName(windowController.getMessage().get(FIRST_USER).get(0), WindowSide.FRONT));
         assertEquals(playerTwo.getWindow().getName(),idWindowToName(windowController.getMessage().get(SECOND_USER).get(0), WindowSide.REAR));
-        draft.addAll(diceController.getDiceResponse().getDiceList());
+        draft.clear();
+        copyList(draft, diceController.getDiceResponse().getDiceList());
 
         msgs = messageGenerator("dice");
         for(Message message:msgs) {
             dynamicRouter.dispatch(message);
         }
 
-        /*assertEquals(draft.get(0), playerOne.getWindow().getCellMatrix()[0][0].getCurrentDice());
-        assertEquals(draft.get(1), playerTwo.getWindow().getCellMatrix()[0][0].getCurrentDice());
-        assertEquals(draft.get(2), playerTwo.getWindow().getCellMatrix()[1][0].getCurrentDice());
-        assertEquals(draft.get(3), playerOne.getWindow().getCellMatrix()[1][0].getCurrentDice());*/
-
         dynamicRouter.dispatch(new EndTurnEvent( FIRST_USER));
+    }
+
+    private void copyList(List<Dice> receiver, List<Dice> sender) {
+        sender.forEach(dice -> receiver.add(new Dice(dice.getId(), dice.getColor())));
     }
 
     private List<Message> messageGenerator(String type) {
@@ -119,5 +116,55 @@ public class RouterTest {
         }
 
         return null;
+    }
+
+    private class WindowController implements Channel<WindowResponse, Message> {
+
+        /** The windows id. */
+        private Map<String, List<Integer>>windowsId = new HashMap<>();
+
+        @Override
+        public void dispatch(WindowResponse message) {
+            windowsId.put(message.getPlayerId(), message.getIds());
+        }
+
+        /**
+         * Gets the message.
+         *
+         * @return the message
+         */
+        public Map<String, List<Integer>> getMessage() {
+            return windowsId;
+        }
+
+        @Override
+        public void sendMessage(Message message) {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private class DiceController implements Channel<DiceResponse, Message> {
+
+        /** The dice response. */
+        private DiceResponse diceResponse;
+
+        @Override
+        public void dispatch(DiceResponse message) {
+            diceResponse = message;
+        }
+
+        @Override
+        public void sendMessage(Message message) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * Gets the dice response.
+         *
+         * @return the dice response
+         */
+        public DiceResponse getDiceResponse() {
+            return diceResponse;
+        }
     }
 }
