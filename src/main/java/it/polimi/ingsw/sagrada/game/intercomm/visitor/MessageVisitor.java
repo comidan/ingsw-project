@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackReconnectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
@@ -159,4 +160,6 @@ public interface MessageVisitor {
     void visit(RoundTrackToolResponse roundTrackToolResponse);
 
     void visit(ColorBagToolResponse colorBagToolResponse);
+
+    void visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent);
 }

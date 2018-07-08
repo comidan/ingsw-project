@@ -261,4 +261,9 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
     public String visit(ColorBagToolResponse colorBagToolResponse) {
         return null;
     }
+
+    @Override
+    public String visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
+        return null;
+    }
 }

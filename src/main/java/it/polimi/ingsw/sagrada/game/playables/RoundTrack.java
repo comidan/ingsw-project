@@ -52,6 +52,9 @@ public class RoundTrack implements Channel<Message, Message>, RoundTrackMessageV
         return colorList;
     }
 
+    public List<List<Dice>> getRoundDice() {
+        return roundDice;
+    }
 
     /**
      * Gets the dice from round.

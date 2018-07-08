@@ -17,10 +17,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
-import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -252,8 +249,6 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      * Notify next player about his current state in this turn
      */
     private void notifyNextPlayer() {
-        if(playerIterator.getCurrentPlayerNumber() <= 1)
-            scoreState();
         if(playTime != null)
             playTime.cancel();
         if(playerIterator.hasNext()) {
@@ -399,7 +394,8 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             while(playerIterator.getCurrentPlayer().equals(playerId))
                 notifyNextPlayer();
             playerIterator.removePlayer(playerId);
-
+            if(playerIterator.getCurrentPlayerNumber() <= 1)
+                scoreState();
         }
     }
 
@@ -434,6 +430,8 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             fastRecoveryDispatch.accept(new OpponentWindowResponse(usernames, windowsId, sides), username);
 
             fastRecoveryDispatch.accept(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(diceManager.getDraft())), username);
+
+            fastRecoveryDispatch.accept(new DiceRoundTrackReconnectionEvent(roundTrack.getRoundDice(), username), username);
 
             sendWindowsState(username);
         }

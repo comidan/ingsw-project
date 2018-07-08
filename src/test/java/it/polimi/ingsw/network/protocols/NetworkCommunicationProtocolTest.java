@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackReconnectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.LobbyLoginEvent;
@@ -221,6 +222,11 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
 
     @Override
     public String visit(ColorBagToolResponse colorBagToolResponse) {
+        return null;
+    }
+
+    @Override
+    public String visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
         return null;
     }
 }

@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackReconnectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.lobby.MatchTimeEvent;
@@ -307,6 +308,11 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
     @Override
     public void visit(ColorBagToolResponse colorBagToolResponse) {
         sendRemoteMessage(colorBagToolResponse, filter -> filter.equals(getClient(colorBagToolResponse.getPlayerId())));
+    }
+
+    @Override
+    public void visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
+        sendRemoteMessage(diceRoundTrackReconnectionEvent, filter -> filter.equals((getClient(diceRoundTrackReconnectionEvent.getPlayerId()))));
     }
 
     /**

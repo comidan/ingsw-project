@@ -55,7 +55,7 @@ public class RoundTrackView extends GridPane {
      * @param currentRound the round to add the dices on
      */
 
-    public void setRoundTrackEndTurn(List<DiceView> diceViews, int currentRound) {
+    public void setRoundTrackEndTurn(List<DiceView> diceViews) {
         System.out.println("Setting round dices at round number : " + roundCellViewList.size());
         RoundCellView roundCellView = new RoundCellView(diceViews);
         roundCellView.setRoundNumber(roundCellViewList.size());
@@ -76,6 +76,14 @@ public class RoundTrackView extends GridPane {
      */
     public void setDiceTool(List<DiceView> diceViews, int roundNum) {
         substituteDice(diceViews, roundNum);
+    }
+
+    public void setDiceReconnection(List<List<DiceView>> roundTrack) {
+        roundTrack.forEach(list->{
+            int index = roundTrack.indexOf(list);
+            if(index<roundCellViewList.size()) substituteDice(list, index + 1);
+            else setRoundTrackEndTurn(list);
+        });
     }
 
     /** the private methos to set dice views on toolcard usage */

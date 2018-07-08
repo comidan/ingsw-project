@@ -265,7 +265,7 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
         }
     }
 
-    public void rollDraft() {
+    private void rollDraft() {
         draftPool.forEach(Dice::roll);
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }

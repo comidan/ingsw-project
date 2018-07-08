@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
+import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackReconnectionEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorBagToolResponse;
@@ -334,6 +335,30 @@ public class MessageParser implements ResponseMessageVisitor {
         return message.toJSONString();
     }
 
+    private String createJsonDiceRoundTrackReconnectionEvent(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
+        JSONObject message = new JSONObject();
+        message.put(MESSAGE_TYPE, RESPONSE);
+        message.put(COMMAND_TYPE, ROUND_TRACK_RECONNECT);
+        JSONObject data = new JSONObject();
+        data.put(PLAYER_ID, diceRoundTrackReconnectionEvent.getPlayerId());
+        JSONArray list = new JSONArray();
+        diceRoundTrackReconnectionEvent.getRoundTrack().forEach(round -> {
+            JSONArray singleRound = new JSONArray();
+            round.forEach(dice -> {
+                JSONObject diceM = new JSONObject();
+                diceM.put(ID, dice.getId()+"");
+                diceM.put(VALUE, dice.getValue()+"");
+                diceM.put(COLOR, dice.getColor().toString());
+                singleRound.add(diceM);
+            });
+            list.add(singleRound);
+        });
+        data.put(ROUND_TRACK, list);
+        message.put(ROUND_TRACK_RECONNECT, data);
+
+        return message.toJSONString();
+    }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */
@@ -457,5 +482,10 @@ public class MessageParser implements ResponseMessageVisitor {
     @Override
     public String visit(ColorBagToolResponse colorBagToolResponse) {
         return createJsonColorBagToolResponse(colorBagToolResponse);
+    }
+
+    @Override
+    public String visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
+        return createJsonDiceRoundTrackReconnectionEvent(diceRoundTrackReconnectionEvent);
     }
 }

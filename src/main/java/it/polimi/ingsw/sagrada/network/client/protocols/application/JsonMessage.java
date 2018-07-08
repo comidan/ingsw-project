@@ -273,52 +273,52 @@ public class JsonMessage implements ActionMessageVisitor {
             switch ((String)jsonMsg.get(COMMAND_TYPE)) {
                 case LOBBY_TIME:
                     data = (JSONObject) jsonMsg.get(TIME);
-                    return new MatchTimeEvent((String)data.get(TIME));
+                    return new MatchTimeEvent((String) data.get(TIME));
                 case ADD_PLAYER:
                     data = (JSONObject) jsonMsg.get(PLAYER);
-                    return new AddPlayerEvent((String)data.get(USERNAME), Integer.parseInt((String) data.get(POSITION)));
+                    return new AddPlayerEvent((String) data.get(USERNAME), Integer.parseInt((String) data.get(POSITION)));
                 case REMOVE_PLAYER:
                     data = (JSONObject) jsonMsg.get(PLAYER);
-                    return new RemovePlayerEvent((String)data.get(USERNAME));
+                    return new RemovePlayerEvent((String) data.get(USERNAME));
                 case MESSAGE:
                     data = (JSONObject) jsonMsg.get(MESSAGE);
-                    return new MessageEvent((String)data.get(METADATA));
+                    return new MessageEvent((String) data.get(METADATA));
                 case ERROR:
                     data = (JSONObject) jsonMsg.get(ERROR);
-                    return new ErrorEvent((String)data.get(ERROR));
+                    return new ErrorEvent((String) data.get(ERROR));
                 case "login_register":
                     return new RegisterEvent();
-                case "login_heartbeat" :
+                case "login_heartbeat":
                     data = (JSONObject) jsonMsg.get(HEARTBEAT);
                     return new HeartbeatInitEvent(
-                               Integer.parseInt((String)data.get(HEARTBEAT_PORT)));
-                case LOGIN :
+                            Integer.parseInt((String) data.get(HEARTBEAT_PORT)));
+                case LOGIN:
                     data = (JSONObject) jsonMsg.get(LOGIN);
-                    return new LobbyLoginEvent((String)data.get(TOKEN),
-                               Integer.parseInt((String)data.get(LOBBY_PORT)));
-                case BEGIN_TURN :
+                    return new LobbyLoginEvent((String) data.get(TOKEN),
+                            Integer.parseInt((String) data.get(LOBBY_PORT)));
+                case BEGIN_TURN:
                     data = (JSONObject) jsonMsg.get(BEGIN_TURN);
-                    return new BeginTurnEvent((String)data.get(PLAYER_ID));
-                case WINDOW_LIST :
+                    return new BeginTurnEvent((String) data.get(PLAYER_ID));
+                case WINDOW_LIST:
 
                     data = (JSONObject) jsonMsg.get(WINDOW_LIST);
-                    WindowResponse windowResponse =  new WindowResponse((String)data.get(PLAYER_ID),
-                                              Arrays.asList(Integer.parseInt((String)data.get(WINDOW_OPTION_ONE)),
-                                                            Integer.parseInt((String)data.get(WINDOW_OPTION_TWO))));
+                    WindowResponse windowResponse = new WindowResponse((String) data.get(PLAYER_ID),
+                            Arrays.asList(Integer.parseInt((String) data.get(WINDOW_OPTION_ONE)),
+                                    Integer.parseInt((String) data.get(WINDOW_OPTION_TWO))));
 
                     return windowResponse;
-                case DICE_LIST :
+                case DICE_LIST:
                     data = (JSONObject) jsonMsg.get(DICE_LIST);
                     List<Dice> diceResponse = new ArrayList<>();
-                    JSONArray diceArray = (JSONArray)data.get(DICE);
+                    JSONArray diceArray = (JSONArray) data.get(DICE);
                     diceArray.forEach(raw -> {
                         JSONObject diceJson = (JSONObject) raw;
-                        Dice dice = new Dice(Integer.parseInt((String)(diceJson.get(ID))),
-                                Colors.stringToColor((String)(diceJson.get(COLOR))));
-                        dice.setValue(Integer.parseInt((String)(diceJson).get(VALUE)));
+                        Dice dice = new Dice(Integer.parseInt((String) (diceJson.get(ID))),
+                                Colors.stringToColor((String) (diceJson.get(COLOR))));
+                        dice.setValue(Integer.parseInt((String) (diceJson).get(VALUE)));
                         diceResponse.add(dice);
                     });
-                    return new DiceResponse((String)(data.get(DESTINATION)), diceResponse);
+                    return new DiceResponse((String) (data.get(DESTINATION)), diceResponse);
                 case OPPONENT_WINDOW_LIST:
                     JSONArray array = (JSONArray) jsonMsg.get(OPPONENT_WINDOW_LIST);
                     List<Integer> windowIds = new ArrayList<>();
@@ -334,18 +334,18 @@ public class JsonMessage implements ActionMessageVisitor {
                     opponentWindowResponse.getPlayers().forEach(player -> System.out.println(opponentWindowResponse.getPlayerWindowId(player)));
                     return new OpponentWindowResponse(players, windowIds, windowSides);
                 case OPPONENT_DICE_RESPONSE:
-                    JSONObject dice = (JSONObject)jsonMsg.get(DICE);
-                    String idPlayer = (String)dice.get(PLAYER_ID);
-                    Dice diceOpponent = new Dice(Integer.parseInt((String)dice.get(DICE_ID)), Colors.stringToColor((String)dice.get(COLOR)));
-                    diceOpponent.setValue(Integer.parseInt((String)dice.get(VALUE)));
-                    JSONObject pos = (JSONObject)dice.get(POSITION);
-                    Position position = new Position(Integer.parseInt((String)pos.get("y")), Integer.parseInt((String)pos.get("x")));
+                    JSONObject dice = (JSONObject) jsonMsg.get(DICE);
+                    String idPlayer = (String) dice.get(PLAYER_ID);
+                    Dice diceOpponent = new Dice(Integer.parseInt((String) dice.get(DICE_ID)), Colors.stringToColor((String) dice.get(COLOR)));
+                    diceOpponent.setValue(Integer.parseInt((String) dice.get(VALUE)));
+                    JSONObject pos = (JSONObject) dice.get(POSITION);
+                    Position position = new Position(Integer.parseInt((String) pos.get("y")), Integer.parseInt((String) pos.get("x")));
                     return new OpponentDiceMoveResponse(idPlayer, diceOpponent, position);
                 case RULE_RESPONSE:
-                    JSONObject ruleResponse = (JSONObject)jsonMsg.get(RULE_RESPONSE);
-                    return new RuleResponse((String)ruleResponse.get(PLAYER_ID), Boolean.parseBoolean((String)ruleResponse.get(VALID_MOVE)));
+                    JSONObject ruleResponse = (JSONObject) jsonMsg.get(RULE_RESPONSE);
+                    return new RuleResponse((String) ruleResponse.get(PLAYER_ID), Boolean.parseBoolean((String) ruleResponse.get(VALID_MOVE)));
                 case NEW_ROUND:
-                    JSONObject newRoundResponse = (JSONObject)jsonMsg.get(NEW_ROUND);
+                    JSONObject newRoundResponse = (JSONObject) jsonMsg.get(NEW_ROUND);
                     System.out.println("Round received and parsed from json : " + Integer.parseInt((String) newRoundResponse.get(NEW_ROUND)));
                     return new NewTurnResponse(Integer.parseInt((String) newRoundResponse.get(NEW_ROUND)));
                 case PUBLIC_OBJECTIVES:
@@ -377,40 +377,57 @@ public class JsonMessage implements ActionMessageVisitor {
                         ranking.add(new Pair<>((String) rank.get(USERNAME), Integer.parseInt((String) rank.get(SCORE))));
                     });
                     return new ScoreResponse(ranking);
-                case TOOL_RESPONSE :
+                case TOOL_RESPONSE:
                     data = (JSONObject) jsonMsg.get(TOOL);
-                    int cost = Integer.parseInt((String)data.get(COST));
-                    boolean canBuy = Boolean.parseBoolean((String)data.get(CAN_BUY));
-                    int toolId = Integer.parseInt((String)data.get(TOOL_ID));
-                    String player = (String)data.get(PLAYER_ID);
+                    int cost = Integer.parseInt((String) data.get(COST));
+                    boolean canBuy = Boolean.parseBoolean((String) data.get(CAN_BUY));
+                    int toolId = Integer.parseInt((String) data.get(TOOL_ID));
+                    String player = (String) data.get(PLAYER_ID);
                     return new ToolResponse(canBuy, player, cost, toolId);
-                case END_TURN :
+                case END_TURN:
                     data = (JSONObject) jsonMsg.get(END_TURN);
                     return new EndTurnResponse((String) data.get(USERNAME));
-                case TIME :
+                case TIME:
                     data = (JSONObject) jsonMsg.get(TIME);
                     return new TimeRemainingResponse((String) data.get(USERNAME), Integer.parseInt((String) data.get(TIME)));
                 case WINDOW_ENABLE:
                     data = (JSONObject) jsonMsg.get(WINDOW_ENABLE);
-                    return new EnableWindowToolResponse((String) data.get(USERNAME), Integer.parseInt((String)data.get(TOOL_ID)));
+                    return new EnableWindowToolResponse((String) data.get(USERNAME), Integer.parseInt((String) data.get(TOOL_ID)));
                 case ROUND_TRACK_RESPONSE:
                     data = (JSONObject) jsonMsg.get(DICE_LIST);
                     diceResponse = new ArrayList<>();
-                    diceArray = (JSONArray)data.get(DICE);
+                    diceArray = (JSONArray) data.get(DICE);
                     diceArray.forEach(raw -> {
                         JSONObject diceJson = (JSONObject) raw;
-                        Dice diceR = new Dice(Integer.parseInt((String)(diceJson.get(ID))),
-                                Colors.stringToColor((String)(diceJson.get(COLOR))));
-                        diceR.setValue(Integer.parseInt((String)(diceJson).get(VALUE)));
+                        Dice diceR = new Dice(Integer.parseInt((String) (diceJson.get(ID))),
+                                Colors.stringToColor((String) (diceJson.get(COLOR))));
+                        diceR.setValue(Integer.parseInt((String) (diceJson).get(VALUE)));
                         diceResponse.add(diceR);
                     });
-                    return new RoundTrackToolResponse(new DiceResponse((String)(data.get(DESTINATION)), diceResponse), Integer.parseInt((String)data.get(ROUND_NUMBER)));
+                    return new RoundTrackToolResponse(new DiceResponse((String) (data.get(DESTINATION)), diceResponse), Integer.parseInt((String) data.get(ROUND_NUMBER)));
                 case COLOR_SELECTION:
                     data = (JSONObject) jsonMsg.get(COLOR_SELECTION);
-                    player = (String)data.get(PLAYER_ID);
-                    Colors color = Colors.stringToColor((String)data.get(COLOR));
-                    int diceId = Integer.parseInt((String)data.get(DICE_ID));
+                    player = (String) data.get(PLAYER_ID);
+                    Colors color = Colors.stringToColor((String) data.get(COLOR));
+                    int diceId = Integer.parseInt((String) data.get(DICE_ID));
                     return new ColorBagToolResponse(player, color, diceId);
+                case ROUND_TRACK_RECONNECT:
+                    List<List<Dice>> roundTrackRecovery = new ArrayList<>();
+                    data = (JSONObject) jsonMsg.get(ROUND_TRACK_RECONNECT);
+                    playerId = (String) data.get(PLAYER_ID);
+                    JSONArray roundTrack = (JSONArray) data.get(ROUND_TRACK);
+                    roundTrack.forEach(round -> {
+                        List<Dice> list = new ArrayList<>();
+                        ((JSONArray) round).forEach(diceRoundTrack -> {
+                            JSONObject diceR = (JSONObject) diceRoundTrack;
+                            Dice diceRound = new Dice(Integer.parseInt((String) (diceR.get(ID))),
+                                    Colors.stringToColor((String) (diceR.get(COLOR))));
+                            diceRound.setValue(Integer.parseInt((String) (diceR).get(VALUE)));
+                            list.add(diceRound);
+                        });
+                        roundTrackRecovery.add(list);
+                    });
+                    return new DiceRoundTrackReconnectionEvent(roundTrackRecovery, playerId);
                 default:
                     return null;
             }

@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
+import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.gui.cards.ToolCardView;
 import it.polimi.ingsw.sagrada.gui.components.CellView;
 import it.polimi.ingsw.sagrada.gui.components.DicePrev;
@@ -361,6 +362,16 @@ public class GameGuiAdapter {
 
     public void disableRoundTrackClick(){
         gameView.disableRoundTrackClick();
+    }
+
+    public void setRoundTrackReconnection(List<List<Dice>> roundTrack) {
+        List<List<DiceView>> roundTrackView = new ArrayList<>();
+        roundTrack.forEach(round -> {
+            List<DiceView> roundView = new ArrayList<>();
+            round.forEach(dice -> roundView.add(new DiceView(Constraint.getColorConstraint(dice.getColor()), Constraint.getValueConstraint(dice.getValue()), dice.getId())));
+            roundTrackView.add(roundView);
+        });
+        Platform.runLater(() -> gameView.setRoundTrackReconnection(roundTrackView));
     }
 
     public void disableDraftClick(){

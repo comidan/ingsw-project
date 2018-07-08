@@ -200,7 +200,11 @@ public class GameView extends Application {
      */
     public void setRoundTrackImage(List<DiceView> diceViews, int currentRound, boolean isTool) {
         if(isTool) this.roundTrackView.setDiceTool(diceViews, currentRound);
-        else this.roundTrackView.setRoundTrackEndTurn(diceViews, currentRound);
+        else this.roundTrackView.setRoundTrackEndTurn(diceViews);
+    }
+
+    void setRoundTrackReconnection(List<List<DiceView>> roundTrack) {
+        roundTrackView.setDiceReconnection(roundTrack);
     }
 
     public void showDicePrevContainer(Colors color, int diceId){
