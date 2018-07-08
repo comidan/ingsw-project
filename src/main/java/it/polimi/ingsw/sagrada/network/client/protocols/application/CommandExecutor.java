@@ -141,7 +141,7 @@ public class CommandExecutor implements MessageVisitor {
      * @param json the json
      */
     public static void executePayload(String json) {
-        Message message = JsonToMessageConverter.parseJsonData(json);
+        Message message = JsonMessageBidirectionalConverter.parseJsonData(json);
         message.accept(COMMAND_EXECUTOR);
     }
 
@@ -161,8 +161,8 @@ public class CommandExecutor implements MessageVisitor {
      * @return the string
      */
     public static String createPayload(Message message) {
-        JsonToMessageConverter jsonToMessageConverter = new JsonToMessageConverter(username);
-        return jsonToMessageConverter.getMessage((ActionVisitor) message);
+        JsonMessageBidirectionalConverter jsonMessageBidirectionalConverter = new JsonMessageBidirectionalConverter(username);
+        return jsonMessageBidirectionalConverter.getMessage((ActionVisitor) message);
     }
 
     /**
@@ -434,12 +434,12 @@ public class CommandExecutor implements MessageVisitor {
     public void visit(ToolResponse toolResponse) {
         if(toolResponse.isCanBuy()) {
             gameGuiAdapter.enableGuiElement(toolResponse.getToolId(), client);
-            gameGuiAdapter.setNotification("Tool comprato");
+            gameGuiAdapter.setNotification("Tool bought");
             gameGuiAdapter.removeToken(toolResponse.getTokenSpent());
         }
         else {
             gameGuiAdapter.setToolHandler(client);
-            gameGuiAdapter.setNotification("Non hai abbastanza token!");
+            gameGuiAdapter.setNotification("Not enough tokens!");
         }
     }
 

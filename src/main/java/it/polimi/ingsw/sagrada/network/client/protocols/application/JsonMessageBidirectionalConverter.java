@@ -39,9 +39,9 @@ import java.util.*;
 
 
 /**
- * The Class JsonToMessageConverter.
+ * The Class JsonMessageBidirectionalConverter.
  */
-public class JsonToMessageConverter implements ActionMessageVisitor {
+public class JsonMessageBidirectionalConverter implements ActionMessageVisitor {
 
     /** The player id. */
     private String playerId;
@@ -51,7 +51,7 @@ public class JsonToMessageConverter implements ActionMessageVisitor {
      *
      * @param playerId the player id
      */
-    public JsonToMessageConverter(String playerId) {
+    public JsonMessageBidirectionalConverter(String playerId) {
         this.playerId = playerId;
     }
 

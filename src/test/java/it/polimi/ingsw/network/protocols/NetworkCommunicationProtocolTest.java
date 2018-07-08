@@ -26,6 +26,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessageBidirectionalConverter;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.JsonToMessageConverter;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.MessageToJsonConverter;
 import org.junit.Test;
@@ -89,11 +90,11 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
         List<ResponseVisitor> messageList = Arrays.asList(messages);
         messageList.forEach(message -> message.accept(this));
         JsonToMessageConverter jsonToMessageConverter = new JsonToMessageConverter();
-        assertTrue(it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(jsonToMessageConverter.crateJSONLoginLobbyResponse(port)) instanceof HeartbeatInitEvent);
-        assertTrue(it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(jsonToMessageConverter.createJSONAddLobbyPlayer(idPlayer, 0)) instanceof AddPlayerEvent);
-        assertTrue(it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(jsonToMessageConverter.createJSONLoginResponse(idPlayer, port)) instanceof LobbyLoginEvent);
-        assertTrue(it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(jsonToMessageConverter.createJSONCountdown(time)) instanceof MatchTimeEvent);
-        assertTrue(it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(jsonToMessageConverter.createJSONRemoveLobbyPlayer(idPlayer)) instanceof RemovePlayerEvent);
+        assertTrue(JsonMessageBidirectionalConverter.parseJsonData(jsonToMessageConverter.crateJSONLoginLobbyResponse(port)) instanceof HeartbeatInitEvent);
+        assertTrue(JsonMessageBidirectionalConverter.parseJsonData(jsonToMessageConverter.createJSONAddLobbyPlayer(idPlayer, 0)) instanceof AddPlayerEvent);
+        assertTrue(JsonMessageBidirectionalConverter.parseJsonData(jsonToMessageConverter.createJSONLoginResponse(idPlayer, port)) instanceof LobbyLoginEvent);
+        assertTrue(JsonMessageBidirectionalConverter.parseJsonData(jsonToMessageConverter.createJSONCountdown(time)) instanceof MatchTimeEvent);
+        assertTrue(JsonMessageBidirectionalConverter.parseJsonData(jsonToMessageConverter.createJSONRemoveLobbyPlayer(idPlayer)) instanceof RemovePlayerEvent);
     }
 
     @Override
@@ -104,7 +105,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(DiceResponse diceResponse) {
         String json = messageToJsonConverter.createJsonResponse(diceResponse);
-        DiceResponse diceResponseMessage = (DiceResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        DiceResponse diceResponseMessage = (DiceResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertArrayEquals(diceResponseMessage.getDiceList().toArray(new Dice[0]), diceResponse.getDiceList().toArray(new Dice[0]));
         assertEquals(diceResponseMessage.getDst(), diceResponse.getDst());
         return null;
@@ -113,7 +114,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(WindowResponse windowResponse) {
         String json = messageToJsonConverter.createJsonResponse(windowResponse);
-        WindowResponse windowResponseMessage = (WindowResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        WindowResponse windowResponseMessage = (WindowResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertArrayEquals(windowResponseMessage.getIds().toArray(new Integer[0]), windowResponse.getIds().toArray(new Integer[0]));
         assertEquals(windowResponseMessage.getPlayerId(), windowResponse.getPlayerId());
         return null;
@@ -122,7 +123,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(BeginTurnEvent beginTurnEvent) {
         String json = messageToJsonConverter.createJsonResponse(beginTurnEvent);
-        BeginTurnEvent beginTurnEventMessage = (BeginTurnEvent) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        BeginTurnEvent beginTurnEventMessage = (BeginTurnEvent) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertEquals(beginTurnEventMessage.getIdPlayer(), beginTurnEvent.getIdPlayer());
         return null;
     }
@@ -130,7 +131,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(OpponentWindowResponse opponentWindowResponse) {
         String json = messageToJsonConverter.createJsonResponse(opponentWindowResponse);
-        OpponentWindowResponse opponentWindowResponseMessage = (OpponentWindowResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        OpponentWindowResponse opponentWindowResponseMessage = (OpponentWindowResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertArrayEquals(opponentWindowResponse.getPlayers().toArray(new String[0]), opponentWindowResponseMessage.getPlayers().toArray(new String[0]));
         assertEquals(opponentWindowResponseMessage.getPlayerWindowId(idPlayer), opponentWindowResponse.getPlayerWindowId(idPlayer));
         assertEquals(opponentWindowResponseMessage.getPlayerWindowSide(idPlayer), opponentWindowResponse.getPlayerWindowSide(idPlayer));
@@ -140,7 +141,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(OpponentDiceMoveResponse opponentDiceMoveResponse) {
         String json = messageToJsonConverter.createJsonResponse(opponentDiceMoveResponse);
-        OpponentDiceMoveResponse opponentDiceMoveResponseMessage = (OpponentDiceMoveResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        OpponentDiceMoveResponse opponentDiceMoveResponseMessage = (OpponentDiceMoveResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertEquals(opponentDiceMoveResponseMessage.getDice(), opponentDiceMoveResponse.getDice());
         assertEquals(opponentDiceMoveResponseMessage.getIdPlayer(), opponentDiceMoveResponse.getIdPlayer());
         assertEquals(opponentDiceMoveResponseMessage.getPosition(), opponentDiceMoveResponse.getPosition());
@@ -150,7 +151,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(NewTurnResponse newTurnResponse) {
         String json = messageToJsonConverter.createJsonResponse(newTurnResponse);
-        NewTurnResponse newTurnResponseMessage = (NewTurnResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        NewTurnResponse newTurnResponseMessage = (NewTurnResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertEquals(newTurnResponseMessage.getRound(), newTurnResponse.getRound());
         return null;
     }
@@ -158,7 +159,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(RuleResponse ruleResponse) {
         String json = messageToJsonConverter.createJsonResponse(ruleResponse);
-        RuleResponse ruleResponseMessage = (RuleResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        RuleResponse ruleResponseMessage = (RuleResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertEquals(ruleResponseMessage.getPlayerId(), ruleResponse.getPlayerId());
         assertEquals(ruleResponseMessage.isMoveValid(), ruleResponse.isMoveValid());
         return null;
@@ -167,7 +168,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(PublicObjectiveResponse publicObjectiveResponse) {
         String json = messageToJsonConverter.createJsonResponse(publicObjectiveResponse);
-        PublicObjectiveResponse publicObjectiveResponseMessage = (PublicObjectiveResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        PublicObjectiveResponse publicObjectiveResponseMessage = (PublicObjectiveResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertArrayEquals(publicObjectiveResponse.getIdObjective().toArray(new Integer[0]), publicObjectiveResponseMessage.getIdObjective().toArray(new Integer[0]));
         return null;
     }
@@ -175,7 +176,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(PrivateObjectiveResponse privateObjectiveResponse) {
         String json = messageToJsonConverter.createJsonResponse(privateObjectiveResponse);
-        PrivateObjectiveResponse privateObjectiveResponseMessage = (PrivateObjectiveResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        PrivateObjectiveResponse privateObjectiveResponseMessage = (PrivateObjectiveResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertEquals(privateObjectiveResponseMessage.getIdObjective(), privateObjectiveResponse.getIdObjective());
         assertEquals(privateObjectiveResponseMessage.getIdPlayer(), privateObjectiveResponse.getIdPlayer());
         return null;
@@ -184,7 +185,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(ToolCardResponse toolCardResponse) {
         String json = messageToJsonConverter.createJsonResponse(toolCardResponse);
-        ToolCardResponse toolCardResponseMessage = (ToolCardResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        ToolCardResponse toolCardResponseMessage = (ToolCardResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertArrayEquals(toolCardResponse.getIds().toArray(new Integer[0]), toolCardResponseMessage.getIds().toArray(new Integer[0]));
         return null;
     }
@@ -198,7 +199,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(ScoreResponse scoreResponse) {
         String json = messageToJsonConverter.createJsonResponse(scoreResponse);
-        ScoreResponse scoreResponseMessage = (ScoreResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        ScoreResponse scoreResponseMessage = (ScoreResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         scoreResponse.getUsernames().forEach(username -> assertEquals(scoreResponseMessage.getScore(username), scoreResponse.getScore(username)));
         return null;
     }
@@ -206,7 +207,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(ToolResponse toolResponse) {
         String json = messageToJsonConverter.createJsonResponse(toolResponse);
-        ToolResponse toolResponseMessage = (ToolResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        ToolResponse toolResponseMessage = (ToolResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertEquals(toolResponse.getIdPlayer(), toolResponseMessage.getIdPlayer());
         assertEquals(toolResponse.getTokenSpent(), toolResponseMessage.getTokenSpent());
         assertEquals(toolResponse.getToolId(), toolResponseMessage.getToolId());
@@ -217,7 +218,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(EndTurnResponse endTurnResponse) {
         String json = messageToJsonConverter.createJsonResponse(endTurnResponse);
-        EndTurnResponse endTurnResponseMessage = (EndTurnResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        EndTurnResponse endTurnResponseMessage = (EndTurnResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertEquals(endTurnResponse.getUsername(), endTurnResponseMessage.getUsername());
         return null;
     }
@@ -225,7 +226,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(TimeRemainingResponse timeRemainingResponse) {
         String json = messageToJsonConverter.createJsonResponse(timeRemainingResponse);
-        TimeRemainingResponse timeRemainingResponseMessage = (TimeRemainingResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        TimeRemainingResponse timeRemainingResponseMessage = (TimeRemainingResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertEquals(timeRemainingResponse.getRemainingTime(), timeRemainingResponseMessage.getRemainingTime());
         assertEquals(timeRemainingResponse.getUsername(), timeRemainingResponseMessage.getUsername());
         return null;
@@ -234,7 +235,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(EnableWindowToolResponse enableWindowToolResponse) {
         String json = messageToJsonConverter.createJsonResponse(enableWindowToolResponse);
-        EnableWindowToolResponse enableWindowToolResponseMessage = (EnableWindowToolResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        EnableWindowToolResponse enableWindowToolResponseMessage = (EnableWindowToolResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertEquals(enableWindowToolResponse.getPlayerId(), enableWindowToolResponseMessage.getPlayerId());
         assertEquals(enableWindowToolResponse.getToolId(), enableWindowToolResponseMessage.getToolId());
         return null;
@@ -243,7 +244,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(RoundTrackToolResponse roundTrackToolResponse) {
         String json = messageToJsonConverter.createJsonResponse(roundTrackToolResponse);
-        RoundTrackToolResponse roundTrackToolResponseMessage = (RoundTrackToolResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        RoundTrackToolResponse roundTrackToolResponseMessage = (RoundTrackToolResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         IntStream.range(0, roundTrackToolResponse.getDiceResponse().getDiceList().size()).forEach(index -> roundTrackToolResponse.getDiceResponse().getDiceList()
                                                                                                             .get(index).equals(roundTrackToolResponseMessage
                                                                                                             .getDiceResponse().getDiceList().get(index)));
@@ -254,7 +255,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(ColorBagToolResponse colorBagToolResponse) {
         String json = messageToJsonConverter.createJsonResponse(colorBagToolResponse);
-        ColorBagToolResponse colorBagToolResponseMessage = (ColorBagToolResponse) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        ColorBagToolResponse colorBagToolResponseMessage = (ColorBagToolResponse) JsonMessageBidirectionalConverter.parseJsonData(json);
         assertEquals(colorBagToolResponse.getColor(), colorBagToolResponseMessage.getColor());
         assertEquals(colorBagToolResponse.getDiceId(), colorBagToolResponseMessage.getDiceId());
         assertEquals(colorBagToolResponse.getPlayerId(), colorBagToolResponseMessage.getPlayerId());
@@ -264,7 +265,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     @Override
     public String visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
         String json = messageToJsonConverter.createJsonResponse(diceRoundTrackReconnectionEvent);
-        DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEventMessage = (DiceRoundTrackReconnectionEvent) it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter.parseJsonData(json);
+        DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEventMessage = (DiceRoundTrackReconnectionEvent) JsonMessageBidirectionalConverter.parseJsonData(json);
         diceRoundTrackReconnectionEvent.getRoundTrack().get(0).
                 forEach(dice -> assertEquals(dice, diceRoundTrackReconnectionEventMessage.getRoundTrack().get(0).get(diceRoundTrackReconnectionEvent.getRoundTrack().get(0).indexOf(dice))));
         assertEquals(diceRoundTrackReconnectionEventMessage.getPlayerId(), diceRoundTrackReconnectionEvent.getPlayerId());

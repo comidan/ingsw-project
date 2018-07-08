@@ -201,7 +201,7 @@
     Type : login
     Type : error
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
-    Running it.polimi.ingsw.network.JsonToMessageConverterTest
+    Running it.polimi.ingsw.network.JsonMessageBidirectionalConverterTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.network.MatchLobbyPoolTest
     1

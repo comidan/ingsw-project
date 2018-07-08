@@ -26,7 +26,7 @@ import java.util.stream.IntStream;
 
 
 /**
- * The Class JsonToMessageConverter.
+ * The Class JsonMessageBidirectionalConverter.
  */
 public class JsonToMessageConverter {
 

@@ -10,7 +10,7 @@ import it.polimi.ingsw.sagrada.gui.login.LoginGuiAdapter;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandExecutor;
-import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessageBidirectionalConverter;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.security.Security;
@@ -150,7 +150,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
      * @return the JSON object
      */
     private JSONObject createMessage(String userName, String auth) {
-        return JsonToMessageConverter.createLoginMessage(userName, auth);
+        return JsonMessageBidirectionalConverter.createLoginMessage(userName, auth);
     }
 
     /**
@@ -204,7 +204,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
      */
     @Override
     public void disconnect() {
-        outSocket.println(Security.getEncryptedData(JsonToMessageConverter.createDisconnectMessage(username).toJSONString()));
+        outSocket.println(Security.getEncryptedData(JsonMessageBidirectionalConverter.createDisconnectMessage(username).toJSONString()));
         heartbeatProtocolManager.kill();
         executor.shutdown();
         close();
@@ -256,7 +256,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 initializeConnectionStream();
                 outSocket.println(Security.getEncryptedData(message.toJSONString()));
                 String jsonResponse = Security.getDecryptedData(inSocket.readLine());
-                Message response = JsonToMessageConverter.parseJsonData(jsonResponse);
+                Message response = JsonMessageBidirectionalConverter.parseJsonData(jsonResponse);
                 if (response instanceof LobbyLoginEvent) {
                     lobbyPort = ((LobbyLoginEvent)response).getLobbyPort();
                     socket.close();
@@ -267,7 +267,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 }
                 else if (response instanceof RegisterEvent) {
                     jsonResponse = Security.getDecryptedData(inSocket.readLine());
-                    response = JsonToMessageConverter.parseJsonData(jsonResponse);
+                    response = JsonMessageBidirectionalConverter.parseJsonData(jsonResponse);
                     if (response instanceof LobbyLoginEvent) {
                         outVideo.println("Registering...");
                         outVideo.println("Connecting to lobby");
@@ -303,7 +303,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     private void initializeLobbyLink(String identifier) throws IOException {
         socket = new Socket(ADDRESS, lobbyPort);
         initializeConnectionStream();
-        outSocket.println(Security.getEncryptedData(JsonToMessageConverter.createTokenMessage(identifier).toJSONString()));
+        outSocket.println(Security.getEncryptedData(JsonMessageBidirectionalConverter.createTokenMessage(identifier).toJSONString()));
         isInFastRecovery = false;
         System.out.println("Waiting lobby response");
         executor = Executors.newCachedThreadPool();

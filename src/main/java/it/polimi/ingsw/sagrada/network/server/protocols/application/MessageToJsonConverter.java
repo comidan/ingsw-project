@@ -1,6 +1,5 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.application;
 
-import com.sun.org.apache.regexp.internal.RE;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse;
