@@ -30,6 +30,8 @@ import it.polimi.ingsw.sagrada.game.rules.ErrorType;
 import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
+import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
+import it.polimi.ingsw.sagrada.network.server.tools.MatchLobbyPool;
 
 import java.sql.Date;
 import java.util.*;
@@ -95,13 +97,15 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
 
     private int dicePlaced;
 
+    private String lobbyId;
+
     /**
      * Instantiates a new game manager.
      *
      * @param players the players
      * @param dynamicRouter the dynamic router dispatching message
      */
-    public GameManager(List<Player> players, DynamicRouter dynamicRouter, BiConsumer<Message, String> fastRecoveryDispatch) {
+    public GameManager(List<Player> players, DynamicRouter dynamicRouter, BiConsumer<Message, String> fastRecoveryDispatch, String lobbyId) {
         Consumer<Message> function = this::dispatch;
         this.players = players;
         this.fastRecoveryDispatch = fastRecoveryDispatch;
@@ -115,6 +119,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         playerIterator = new PlayerIterator(playersId);
         toolDoubleTurn = false;
         toolMoveAlone = false;
+        this.lobbyId = lobbyId;
         dicePlaced = 0;
         dynamicRouter.subscribeChannel(EndTurnEvent.class, this);
         dynamicRouter.subscribeChannel(ByteStreamWindowEvent.class, this);
@@ -242,7 +247,10 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             sendMessage(new NewTurnResponse(stateIterator.getRoundNumber()));
             notifyNextPlayer();
         }
-        else scoreState();
+        else {
+            scoreState();
+            new MatchLobbyPool().releaseLobby(lobbyId);
+        }
     }
 
     /**
@@ -394,8 +402,10 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             while(playerIterator.getCurrentPlayer().equals(playerId))
                 notifyNextPlayer();
             playerIterator.removePlayer(playerId);
-            if(playerIterator.getCurrentPlayerNumber() <= 1)
+            if(playerIterator.getCurrentPlayerNumber() <= 1) {
                 scoreState();
+                new MatchLobbyPool().releaseLobby(lobbyId);
+            }
         }
     }
 

@@ -50,7 +50,7 @@ public class RouterTest {
         Player playerTwo = new Player(SECOND_USER);
         players.add(playerOne);
         players.add(playerTwo);
-        GameManager gameManager = new GameManager(players, dynamicRouter, null);
+        GameManager gameManager = new GameManager(players, dynamicRouter, null, "");
         dynamicRouter.subscribeChannel(WindowResponse.class, windowController);
         dynamicRouter.subscribeChannel(DiceResponse.class, diceController);
         gameManager.startGame();

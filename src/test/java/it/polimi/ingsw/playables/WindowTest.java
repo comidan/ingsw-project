@@ -26,7 +26,7 @@ public class WindowTest {
         players.add(new Player("IngConti"));
         players.add(new Player("Izzo"));
         DynamicRouter dynamicRouter = new MessageDispatcher();
-        GameManager gameManager = new GameManager(players, dynamicRouter, null);
+        GameManager gameManager = new GameManager(players, dynamicRouter, null, "");
 
         WindowManager windowManager = new WindowManager(gameManager.getDispatchReference(), dynamicRouter);
         Window window = windowManager.generateWindow(0, WindowSide.FRONT);

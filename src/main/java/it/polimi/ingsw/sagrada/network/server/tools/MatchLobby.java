@@ -91,6 +91,8 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     /** The identifier. */
     private String identifier;
 
+    private String internalIdentifier;
+
     /** The port. */
     private int port;
 
@@ -121,6 +123,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         clientIds = new ArrayList<>();
         clientIdTokens = new ArrayList<>();
         this.signOut = signOut;
+        this.internalIdentifier = identifier;
         inGame = false;
         port = portDiscovery.obtainAvailableTCPPort();
         serverSocket = new ServerSocket(port);
@@ -204,7 +207,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      * @param username the username
      * @return true, if successful
      */
-    private boolean removePlayer(String username, boolean hashBeenRequested) {
+    private synchronized boolean removePlayer(String username, boolean hashBeenRequested) {
         synchronized (signOut) {
             signOut.apply(username);
         }
@@ -427,7 +430,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         clientIds.forEach(username -> players.add(new Player(username)));
         dynamicRouter = new MessageDispatcher();
         gameDataManager = new GameDataManager(dynamicRouter, clientPool);
-        gameManager = new GameManager(players, dynamicRouter, gameDataManager::fastRecoveryDispatch);
+        gameManager = new GameManager(players, dynamicRouter, gameDataManager::fastRecoveryDispatch, internalIdentifier);
         gameManager.startGame();
     }
 

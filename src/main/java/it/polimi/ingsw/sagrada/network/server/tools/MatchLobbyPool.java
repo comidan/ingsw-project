@@ -5,9 +5,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,6 +17,8 @@ public class MatchLobbyPool {
 
     /** The Constant lobbyPool. */
     private static final List<MatchLobby> lobbyPool = new ArrayList<>();
+
+    private static final Map<String, MatchLobby> lobbyPoolMap = new HashMap<>();
     
     /** The Constant LOGGER. */
     private static final Logger LOGGER  = Logger.getLogger(MatchLobbyPool.class.getName());
@@ -37,6 +37,7 @@ public class MatchLobbyPool {
             availableLobby = findMatch.get();
         if(availableLobby == null) {
             availableLobby = new MatchLobby(DataManager.getSignOut(), lobbyPool.size() + "");
+            lobbyPoolMap.put(lobbyPool.size() + "", availableLobby);
             lobbyPool.add(availableLobby);
         }
         return availableLobby;
@@ -49,6 +50,27 @@ public class MatchLobbyPool {
      * @return true, if successful
      */
     public boolean releaseLobby(MatchLobby matchLobby) {
+        matchLobby.closeLobby();
+        try {
+            Registry registry = LocateRegistry.getRegistry(1099);
+            registry.unbind(matchLobby.getLobbyIdentifier());
+        }
+        catch (RemoteException|NotBoundException|NullPointerException exc) {
+            LOGGER.log(Level.SEVERE, exc.getMessage());
+        }
+        return lobbyPool.remove(matchLobby);
+    }
+
+    /**
+     * Release lobby.
+     *
+     * @param matchLobbyId the match lobby id
+     * @return true, if successful
+     */
+    public boolean releaseLobby(String matchLobbyId) {
+        MatchLobby matchLobby = lobbyPoolMap.remove(matchLobbyId);
+        if(matchLobby == null)
+            return false;
         matchLobby.closeLobby();
         try {
             Registry registry = LocateRegistry.getRegistry(1099);
