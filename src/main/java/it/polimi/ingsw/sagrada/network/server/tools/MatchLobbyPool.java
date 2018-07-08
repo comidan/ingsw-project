@@ -31,7 +31,8 @@ public class MatchLobbyPool {
      */
     public MatchLobby getAvailableLobby(String username) throws IOException {
         MatchLobby availableLobby = null;
-        Optional<MatchLobby> findMatch = lobbyPool.stream().findAny().filter(lobby -> !lobby.isFull()).filter(lobby -> !lobby.isInGame() || lobby.wasHere(username));
+        Optional<MatchLobby> findMatch = lobbyPool.stream().filter(lobby -> !lobby.isFull() && (!lobby.isInGame() || lobby.wasHere(username))).findFirst();
+
         if(findMatch.isPresent())
             availableLobby = findMatch.get();
         if(availableLobby == null) {

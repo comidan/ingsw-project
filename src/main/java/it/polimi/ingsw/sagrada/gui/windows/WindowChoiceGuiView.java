@@ -172,7 +172,7 @@ public class WindowChoiceGuiView extends Application {
 
         //Title styling
         title = new Label();
-        title.setText("Choose a windows");
+        title.setText("Choose a window");
         title.setAlignment(Pos.CENTER);
         title.setTextFill(Color.web("#FFFFFF"));
         title.setFont(Font.font("System", FontWeight.BOLD, GUIManager.getResizedFont(GUIManager.MAIN_TITLE)));
