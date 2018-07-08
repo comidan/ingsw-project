@@ -46,15 +46,15 @@ import java.util.logging.Logger;
 
 
 /**
- * The Class CommandManager.
+ * The Class CommandExecutor.
  */
-public class CommandManager implements MessageVisitor {
+public class CommandExecutor implements MessageVisitor {
 
-    /** The Constant commandManager. */
-    private static final CommandManager commandManager = new CommandManager();
+    /** The Constant COMMAND_EXECUTOR. */
+    private static final CommandExecutor COMMAND_EXECUTOR = new CommandExecutor();
 
     /** The Constant LOGGER. */
-    private static final Logger LOGGER = Logger.getLogger(CommandManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(CommandExecutor.class.getName());
 
     /** The client. */
     private static Client client;
@@ -101,7 +101,7 @@ public class CommandManager implements MessageVisitor {
     /**
      * Instantiates a new command manager.
      */
-    private CommandManager() {
+    private CommandExecutor() {
         waiting = new Semaphore(1);
     }
 
@@ -111,7 +111,7 @@ public class CommandManager implements MessageVisitor {
      * @param lobbyGuiView the new lobby gui view
      */
     public static void setLobbyGuiView(LobbyGuiView lobbyGuiView) {
-        CommandManager.lobbyGuiView = lobbyGuiView;
+        CommandExecutor.lobbyGuiView = lobbyGuiView;
         stage = lobbyGuiView.getStage();
     }
 
@@ -121,7 +121,7 @@ public class CommandManager implements MessageVisitor {
      * @param stage the new future stage
      */
     public static void setFutureStage(Stage stage) {
-        CommandManager.stage = stage;
+        CommandExecutor.stage = stage;
     }
 
     /**
@@ -131,8 +131,8 @@ public class CommandManager implements MessageVisitor {
      * @param client the client
      */
     public static void setClientData(String username, Client client) {
-        CommandManager.username = username;
-        CommandManager.client = client;
+        CommandExecutor.username = username;
+        CommandExecutor.client = client;
     }
 
     /**
@@ -141,8 +141,8 @@ public class CommandManager implements MessageVisitor {
      * @param json the json
      */
     public static void executePayload(String json) {
-        Message message = JsonMessage.parseJsonData(json);
-        message.accept(commandManager);
+        Message message = JsonToMessageConverter.parseJsonData(json);
+        message.accept(COMMAND_EXECUTOR);
     }
 
     /**
@@ -151,7 +151,7 @@ public class CommandManager implements MessageVisitor {
      * @param message the message
      */
     public static void executePayload(Message message) {
-        message.accept(commandManager);
+        message.accept(COMMAND_EXECUTOR);
     }
 
     /**
@@ -161,8 +161,8 @@ public class CommandManager implements MessageVisitor {
      * @return the string
      */
     public static String createPayload(Message message) {
-        JsonMessage jsonMessage = new JsonMessage(username);
-        return jsonMessage.getMessage((ActionVisitor) message);
+        JsonToMessageConverter jsonToMessageConverter = new JsonToMessageConverter(username);
+        return jsonToMessageConverter.getMessage((ActionVisitor) message);
     }
 
     /**

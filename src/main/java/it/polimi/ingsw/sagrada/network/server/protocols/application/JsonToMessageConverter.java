@@ -26,9 +26,9 @@ import java.util.stream.IntStream;
 
 
 /**
- * The Class CommandParser.
+ * The Class JsonToMessageConverter.
  */
-public class CommandParser {
+public class JsonToMessageConverter {
 
     /**
      * Parses the.

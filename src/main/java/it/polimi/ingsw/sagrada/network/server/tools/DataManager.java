@@ -4,7 +4,7 @@ package it.polimi.ingsw.sagrada.network.server.tools;
 import it.polimi.ingsw.sagrada.database.Database;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.security.Security;
-import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
+import it.polimi.ingsw.sagrada.network.server.protocols.application.JsonToMessageConverter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -252,9 +252,9 @@ public class DataManager {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static void sendLoginError(Socket clientSocket, String data) throws IOException {
-        CommandParser commandParser = new CommandParser();
+        JsonToMessageConverter jsonToMessageConverter = new JsonToMessageConverter();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(Security.getEncryptedData(commandParser.crateJSONMessage(data)));
+        output.println(Security.getEncryptedData(jsonToMessageConverter.crateJSONMessage(data)));
         output.flush();
     }
 
@@ -265,9 +265,9 @@ public class DataManager {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static void sendLoginError(Socket clientSocket) throws IOException {
-        CommandParser commandParser = new CommandParser();
+        JsonToMessageConverter jsonToMessageConverter = new JsonToMessageConverter();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(Security.getEncryptedData(commandParser.crateJSONLoginResponseError()));
+        output.println(Security.getEncryptedData(jsonToMessageConverter.crateJSONLoginResponseError()));
         output.flush();
     }
 
@@ -278,9 +278,9 @@ public class DataManager {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static void sendLoginSignup(Socket clientSocket) throws IOException {
-        CommandParser commandParser = new CommandParser();
+        JsonToMessageConverter jsonToMessageConverter = new JsonToMessageConverter();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(Security.getEncryptedData(commandParser.crateJSONLoginResponseRegister()));
+        output.println(Security.getEncryptedData(jsonToMessageConverter.crateJSONLoginResponseRegister()));
         output.flush();
     }
 
@@ -293,9 +293,9 @@ public class DataManager {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static void sendLoginResponse(Socket clientSocket, String token, int lobbyPort) throws IOException {
-        CommandParser commandParser = new CommandParser();
+        JsonToMessageConverter jsonToMessageConverter = new JsonToMessageConverter();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(Security.getEncryptedData(commandParser.createJSONLoginResponse(token, lobbyPort)));
+        output.println(Security.getEncryptedData(jsonToMessageConverter.createJSONLoginResponse(token, lobbyPort)));
         output.flush();
     }
 
@@ -307,9 +307,9 @@ public class DataManager {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static void sendLoginLobbyResponse(Socket clientSocket, int heartbeatPort) throws IOException {
-        CommandParser commandParser = new CommandParser();
+        JsonToMessageConverter jsonToMessageConverter = new JsonToMessageConverter();
         PrintWriter output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
-        output.println(Security.getEncryptedData(commandParser.crateJSONLoginLobbyResponse(heartbeatPort)));
+        output.println(Security.getEncryptedData(jsonToMessageConverter.crateJSONLoginLobbyResponse(heartbeatPort)));
         output.flush();
     }
 

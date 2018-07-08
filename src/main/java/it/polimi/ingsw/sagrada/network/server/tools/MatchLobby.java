@@ -4,7 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Player;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import it.polimi.ingsw.sagrada.network.client.Client;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
@@ -443,7 +443,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         inGame = true;
         List<Player> players = new ArrayList<>();
         clientIds.forEach(username -> players.add(new Player(username)));
-        dynamicRouter = new MessageDispatcher();
+        dynamicRouter = new MessageControllerDispatcher();
         gameDataManager = new GameDataManager(dynamicRouter, clientPool);
         gameManager = new GameManager(players, dynamicRouter, gameDataManager::fastRecoveryDispatch, internalIdentifier);
         gameManager.startGame();

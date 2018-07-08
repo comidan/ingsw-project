@@ -3,12 +3,12 @@ package it.polimi.ingsw.sagrada.gui.login;
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher;
 import it.polimi.ingsw.sagrada.gui.lobby.LobbyGuiView;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.ClientManager;
-import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandManager;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandExecutor;
 import it.polimi.ingsw.sagrada.network.security.Security;
 import javafx.application.Platform;
 
@@ -35,7 +35,7 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
     private static LoginGuiView loginGuiView;
     
     /** The Constant dynamicRouter. */
-    private static final DynamicRouter dynamicRouter = new MessageDispatcher();
+    private static final DynamicRouter dynamicRouter = new MessageControllerDispatcher();
 
     /**
      * Instantiates a new login gui adapter.
@@ -44,7 +44,7 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
      */
     LoginGuiAdapter(LoginGuiView loginGuiView) {
         dynamicRouter.subscribeChannel(LoginState.class, this);
-        CommandManager.setFutureStage(loginGuiView.getWindow());
+        CommandExecutor.setFutureStage(loginGuiView.getWindow());
         LoginGuiAdapter.loginGuiView = loginGuiView;
         LoginGuiAdapter.loginGuiView.addLoginButtonListener(event -> {
             if(loginGuiView.isCredentialCorrect()) {
@@ -104,7 +104,7 @@ public class LoginGuiAdapter implements Channel<LoginState, Message> {
     private void changeScene() {
         Platform.runLater(() -> {
             LobbyGuiView lobbyGuiView = GUIManager.initLobbyGuiView(loginGuiView.getWindow());
-            CommandManager.setLobbyGuiView(lobbyGuiView);
+            CommandExecutor.setLobbyGuiView(lobbyGuiView);
         });
     }
 

@@ -10,20 +10,20 @@ import java.util.logging.Logger;
 
 
 /**
- * The Class MessageDispatcher is an implementation of DynamicRouter
+ * The Class MessageControllerDispatcher is an implementation of DynamicRouter
  */
-public class MessageDispatcher implements DynamicRouter<Message> {
+public class MessageControllerDispatcher implements DynamicRouter<Message> {
 
     /** The handlers. Links a message type to all the Channel that have registered. */
     private Map<Class<? extends Message>, List<Channel>> handlers;
 
     /** The logger. */
-    private Logger logger = Logger.getLogger(MessageDispatcher.class.getName());
+    private Logger logger = Logger.getLogger(MessageControllerDispatcher.class.getName());
 
     /**
      * Instantiates a new message dispatcher.
      */
-    public MessageDispatcher() {
+    public MessageControllerDispatcher() {
         handlers = new HashMap<>();
     }
 

@@ -2,7 +2,7 @@ package it.polimi.ingsw.base;
 
 import it.polimi.ingsw.sagrada.game.intercomm.Channel;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
-import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.playables.*;
@@ -18,7 +18,7 @@ public class DiceManagerTest implements Channel<DiceResponse, DiceEvent> {
 
     @Test
     public void testDicePick() {
-        DynamicRouter dynamicRouter = new MessageDispatcher();
+        DynamicRouter dynamicRouter = new MessageControllerDispatcher();
         dynamicRouter.subscribeChannel(DiceResponse.class, this);
         diceManager = new DiceManager(numberOfPlayers, null, dynamicRouter);
         diceManager.bagToDraft();

@@ -39,7 +39,13 @@ public final class CommandKeyword {
   
   /** The Constant LOGIN. */
   public static final String LOGIN = "login";
-  
+
+  /** The Constant LOGIN_REGISTER. */
+  public static final String LOGIN_REGISTER = "login_register";
+
+  /** The Constant LOGIN_HEARTBEAT. */
+  public static final String LOGIN_HEARTBEAT = "login_heartbeat";
+
   /** The Constant MESSAGE. */
   public static final String MESSAGE = "message";
   

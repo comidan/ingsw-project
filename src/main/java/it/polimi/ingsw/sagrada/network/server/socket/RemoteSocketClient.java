@@ -6,8 +6,8 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import it.polimi.ingsw.sagrada.network.security.Security;
-import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
-import it.polimi.ingsw.sagrada.network.server.protocols.application.MessageParser;
+import it.polimi.ingsw.sagrada.network.server.protocols.application.JsonToMessageConverter;
+import it.polimi.ingsw.sagrada.network.server.protocols.application.MessageToJsonConverter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,10 +38,10 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     private PrintWriter output;
     
     /** The command parser. */
-    private CommandParser commandParser;
+    private JsonToMessageConverter jsonToMessageConverter;
     
     /** The message parser. */
-    private MessageParser messageParser;
+    private MessageToJsonConverter messageToJsonConverter;
     
     /** The executor. */
     private ExecutorService executor;
@@ -74,8 +74,8 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     public RemoteSocketClient(Socket socket, String identifier, BiFunction disconnect, Function fastRecovery, Consumer sendToModel) throws IOException {
         this.socket = socket;
         isInFastRecovery = false;
-        commandParser = new CommandParser();
-        messageParser = new MessageParser();
+        jsonToMessageConverter = new JsonToMessageConverter();
+        messageToJsonConverter = new MessageToJsonConverter();
         executor = Executors.newSingleThreadExecutor();
         this.disconnect = disconnect;
         this.fastRecovery = fastRecovery;
@@ -100,7 +100,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      */
     @Override
     public void sendMessage(String message) {
-        String payload = commandParser.crateJSONMessage(message);
+        String payload = jsonToMessageConverter.crateJSONMessage(message);
         output.println(Security.getEncryptedData(payload));
     }
 
@@ -127,7 +127,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      */
     @Override
     public void setTimer(String time) {
-        String payload = commandParser.createJSONCountdown(time);
+        String payload = jsonToMessageConverter.createJSONCountdown(time);
         output.println(Security.getEncryptedData(payload));
         System.out.println("Sending time...");
     }
@@ -145,7 +145,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      */
     @Override
     public void setPlayer(String playerName, int position) {
-        String payload = commandParser.createJSONAddLobbyPlayer(playerName, position);
+        String payload = jsonToMessageConverter.createJSONAddLobbyPlayer(playerName, position);
         output.println(Security.getEncryptedData(payload));
     }
 
@@ -154,7 +154,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      */
     @Override
     public void removePlayer(String playerName) {
-        String payload = commandParser.createJSONRemoveLobbyPlayer(playerName);
+        String payload = jsonToMessageConverter.createJSONRemoveLobbyPlayer(playerName);
         output.println(Security.getEncryptedData(payload));
     }
 
@@ -171,7 +171,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      */
     @Override
     public void sendResponse(Message message) {
-        String payload = messageParser.createJsonResponse((ResponseVisitor) message);
+        String payload = messageToJsonConverter.createJsonResponse((ResponseVisitor) message);
         output.println(Security.getEncryptedData(payload));
     }
 
@@ -182,7 +182,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      */
     private void executePayload(String json) {
         System.out.println("Receiving : " + json);
-        Message parsedMessage = commandParser.parse(json);
+        Message parsedMessage = jsonToMessageConverter.parse(json);
         System.out.println(parsedMessage.getType().getName());
         if(parsedMessage instanceof DisconnectEvent) {
             disconnect();

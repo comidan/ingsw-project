@@ -4,17 +4,15 @@ import it.polimi.ingsw.sagrada.game.base.Cell;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
-import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 import it.polimi.ingsw.sagrada.game.playables.DiceManager;
 import it.polimi.ingsw.sagrada.game.playables.RoundTrack;
 import it.polimi.ingsw.sagrada.game.rules.*;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -307,8 +305,8 @@ public class ToolRuleTest {
                 {one, two, five, empty, three}};
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
-        RoundTrack roundTrack = new RoundTrack(new MessageDispatcher());
-        DiceManager diceManager = new DiceManager(2, null, new MessageDispatcher());
+        RoundTrack roundTrack = new RoundTrack(new MessageControllerDispatcher());
+        DiceManager diceManager = new DiceManager(2, null, new MessageControllerDispatcher());
         diceManager.bagToDraft();
         Dice dice = diceManager.getDraft().get(0);
         roundTrack.addDice(Arrays.asList(diceSix2), 1);
@@ -361,7 +359,7 @@ public class ToolRuleTest {
                 {one, two, five, empty, three}};
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
-        DiceManager diceManager = new DiceManager(2, null, new MessageDispatcher());
+        DiceManager diceManager = new DiceManager(2, null, new MessageControllerDispatcher());
         diceManager.bagToDraft();
         Dice dice = diceManager.getDraft().get(0);
         BiConsumer<String, Integer> fromDraftToBag = diceManager::moveDiceFromDraftToBag;
@@ -412,7 +410,7 @@ public class ToolRuleTest {
                             {one, two, five, empty, three}};
         ErrorType errorType = checkRule(cells);
         assertSame(ErrorType.NO_ERROR, errorType);
-        RoundTrack roundTrack = new RoundTrack(new MessageDispatcher());
+        RoundTrack roundTrack = new RoundTrack(new MessageControllerDispatcher());
         roundTrack.addDice(Arrays.asList(diceSix), 1);
         DTO dto = new DTO();
         dto.setDice(diceTwo);

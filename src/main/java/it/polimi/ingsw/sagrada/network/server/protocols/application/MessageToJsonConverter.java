@@ -30,9 +30,9 @@ import java.util.Set;
 
 
 /**
- * The Class MessageParser.
+ * The Class MessageToJsonConverter.
  */
-public class MessageParser implements ResponseMessageVisitor {
+public class MessageToJsonConverter implements ResponseMessageVisitor {
 
     /**
      * Creates the json response.

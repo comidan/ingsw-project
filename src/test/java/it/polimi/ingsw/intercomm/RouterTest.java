@@ -2,7 +2,6 @@ package it.polimi.ingsw.intercomm;
 
 import it.polimi.ingsw.sagrada.game.base.GameManager;
 import it.polimi.ingsw.sagrada.game.base.Player;
-import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.base.utility.Position;
 import it.polimi.ingsw.sagrada.game.intercomm.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
@@ -40,7 +39,7 @@ public class RouterTest {
 
     @Test
     public void routerTest() {
-        DynamicRouter dynamicRouter = new MessageDispatcher();
+        DynamicRouter dynamicRouter = new MessageControllerDispatcher();
         List<Dice> draft = new ArrayList<>();
         List<Player> players = new ArrayList<>();
         Player playerOne = new Player(FIRST_USER);

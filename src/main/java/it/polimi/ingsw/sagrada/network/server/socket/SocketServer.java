@@ -4,7 +4,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.server.Server;
-import it.polimi.ingsw.sagrada.network.server.protocols.application.CommandParser;
+import it.polimi.ingsw.sagrada.network.server.protocols.application.JsonToMessageConverter;
 import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
 import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
 import it.polimi.ingsw.sagrada.network.server.tools.PortDiscovery;
@@ -40,7 +40,7 @@ public class SocketServer implements Runnable, Server {
     private ExecutorService executor, cachedExecutor;
     
     /** The command parser. */
-    private CommandParser commandParser;
+    private JsonToMessageConverter jsonToMessageConverter;
     
     /** The port discovery. */
     private PortDiscovery portDiscovery;
@@ -59,7 +59,7 @@ public class SocketServer implements Runnable, Server {
         portDiscovery = new PortDiscovery();
         dataManager = DataManager.getDataManager();
         Future<Integer> discoveringPort = portDiscovery.obtainAvailablePortOnTCPAsync();
-        commandParser = new CommandParser();
+        jsonToMessageConverter = new JsonToMessageConverter();
         port = discoveringPort.get();
         if((serverSocket = createServerSocket()) == null)
             throw new SocketException("Could not create server");
@@ -121,7 +121,7 @@ public class SocketServer implements Runnable, Server {
             try {
                 int lobbyPort;
                 String action = dataManager.receiveLoginData(clientSocket);
-                Message requestData = commandParser.parse(action);
+                Message requestData = jsonToMessageConverter.parse(action);
                 if (requestData instanceof LoginEvent) {
                     LoginEvent loginEvent = (LoginEvent)requestData;
                     LoginState loginState = dataManager.authenticate(loginEvent.getUsername(), loginEvent.getPassword());

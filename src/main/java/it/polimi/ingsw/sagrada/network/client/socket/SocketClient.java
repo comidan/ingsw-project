@@ -9,11 +9,10 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.util.ErrorEvent;
 import it.polimi.ingsw.sagrada.gui.login.LoginGuiAdapter;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
-import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandManager;
-import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonMessage;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandExecutor;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.JsonToMessageConverter;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
-import it.polimi.ingsw.sagrada.network.client.protocols.networklink.discoverinternet.DiscoverInternet;
 import it.polimi.ingsw.sagrada.network.security.Security;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -151,7 +150,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
      * @return the JSON object
      */
     private JSONObject createMessage(String userName, String auth) {
-        return JsonMessage.createLoginMessage(userName, auth);
+        return JsonToMessageConverter.createLoginMessage(userName, auth);
     }
 
     /**
@@ -184,7 +183,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
      */
     @Override
     public void sendRemoteMessage(Message message) {
-        outSocket.println(Security.getEncryptedData(CommandManager.createPayload(message)));
+        outSocket.println(Security.getEncryptedData(CommandExecutor.createPayload(message)));
     }
 
     /* (non-Javadoc)
@@ -205,7 +204,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
      */
     @Override
     public void disconnect() {
-        outSocket.println(Security.getEncryptedData(JsonMessage.createDisconnectMessage(username).toJSONString()));
+        outSocket.println(Security.getEncryptedData(JsonToMessageConverter.createDisconnectMessage(username).toJSONString()));
         heartbeatProtocolManager.kill();
         executor.shutdown();
         close();
@@ -257,18 +256,18 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 initializeConnectionStream();
                 outSocket.println(Security.getEncryptedData(message.toJSONString()));
                 String jsonResponse = Security.getDecryptedData(inSocket.readLine());
-                Message response = JsonMessage.parseJsonData(jsonResponse);
+                Message response = JsonToMessageConverter.parseJsonData(jsonResponse);
                 if (response instanceof LobbyLoginEvent) {
                     lobbyPort = ((LobbyLoginEvent)response).getLobbyPort();
                     socket.close();
                     sendMessage(LoginState.AUTH_OK);
                     loginSuccessful = true;
-                    CommandManager.setClientData(username, this);
+                    CommandExecutor.setClientData(username, this);
                     initializeLobbyLink(username);
                 }
                 else if (response instanceof RegisterEvent) {
                     jsonResponse = Security.getDecryptedData(inSocket.readLine());
-                    response = JsonMessage.parseJsonData(jsonResponse);
+                    response = JsonToMessageConverter.parseJsonData(jsonResponse);
                     if (response instanceof LobbyLoginEvent) {
                         outVideo.println("Registering...");
                         outVideo.println("Connecting to lobby");
@@ -277,7 +276,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                         sendMessage(LoginState.AUTH_OK);
                         outVideo.println("Login successful");
                         loginSuccessful = true;
-                        CommandManager.setClientData(username, this);
+                        CommandExecutor.setClientData(username, this);
                         initializeLobbyLink(username);
                     }
                     else {
@@ -304,7 +303,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     private void initializeLobbyLink(String identifier) throws IOException {
         socket = new Socket(ADDRESS, lobbyPort);
         initializeConnectionStream();
-        outSocket.println(Security.getEncryptedData(JsonMessage.createTokenMessage(identifier).toJSONString()));
+        outSocket.println(Security.getEncryptedData(JsonToMessageConverter.createTokenMessage(identifier).toJSONString()));
         isInFastRecovery = false;
         System.out.println("Waiting lobby response");
         executor = Executors.newCachedThreadPool();
@@ -411,7 +410,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         while (!executor.isShutdown()) {
             try {
                 String json = Security.getDecryptedData(inSocket.readLine());
-                CommandManager.executePayload(json);
+                CommandExecutor.executePayload(json);
             } catch (IOException exc) {
                 exc.printStackTrace();
                 if (recoverying.tryAcquire()) {

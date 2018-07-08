@@ -39,9 +39,9 @@ import java.util.*;
 
 
 /**
- * The Class JsonMessage.
+ * The Class JsonToMessageConverter.
  */
-public class JsonMessage implements ActionMessageVisitor {
+public class JsonToMessageConverter implements ActionMessageVisitor {
 
     /** The player id. */
     private String playerId;
@@ -51,7 +51,7 @@ public class JsonMessage implements ActionMessageVisitor {
      *
      * @param playerId the player id
      */
-    public JsonMessage(String playerId) {
+    public JsonToMessageConverter(String playerId) {
         this.playerId = playerId;
     }
 
@@ -323,9 +323,9 @@ public class JsonMessage implements ActionMessageVisitor {
                 case ERROR:
                     data = (JSONObject) jsonMsg.get(ERROR);
                     return new ErrorEvent((String) data.get(ERROR));
-                case "login_register":
+                case LOGIN_REGISTER:
                     return new RegisterEvent();
-                case "login_heartbeat":
+                case LOGIN_HEARTBEAT:
                     data = (JSONObject) jsonMsg.get(HEARTBEAT);
                     return new HeartbeatInitEvent(
                             Integer.parseInt((String) data.get(HEARTBEAT_PORT)));

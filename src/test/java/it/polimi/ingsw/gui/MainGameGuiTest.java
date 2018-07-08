@@ -3,7 +3,7 @@ package it.polimi.ingsw.gui;
 import it.polimi.ingsw.sagrada.game.base.WindowManager;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
-import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse;
@@ -61,7 +61,7 @@ public class MainGameGuiTest {
             constraints.put("test", constraintGenerator.getConstraintMatrix(1, WindowSide.FRONT));
             constraints.put("daniele", constraintGenerator.getConstraintMatrix(2, WindowSide.FRONT));
             constraints.put("admin", constraintGenerator.getConstraintMatrix(3, WindowSide.FRONT));
-            final Window window = new WindowManager(null, new MessageDispatcher()).generateWindow(1, WindowSide.FRONT);
+            final Window window = new WindowManager(null, new MessageControllerDispatcher()).generateWindow(1, WindowSide.FRONT);
             GameView gameView = GameView.getInstance("test", players, constraints);
             DiceView diceView = new DiceView(Constraint.BLUE, Constraint.THREE, 4);
             DiceView diceView2 = new DiceView(Constraint.BLUE, Constraint.THREE, 4);

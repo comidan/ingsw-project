@@ -68,17 +68,17 @@
     Running it.polimi.ingsw.base.DiceManagerTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.131 sec
     Running it.polimi.ingsw.base.GameManagerTest
-    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse
-    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse
-    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse
-    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse
-    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse
-    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:40:59 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.228 sec
     Running it.polimi.ingsw.base.PickerTest
@@ -123,61 +123,61 @@
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.intercomm.IntercommunicationMessageVisitorTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     Running it.polimi.ingsw.intercomm.RouterTest
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PrivateObjectiveResponse
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.ToolCardResponse
     it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     Window player Mottola : Aurorae Magnificus 5
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.card.PublicObjectiveResponse
     it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowGameManagerEvent
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     Window player ingconti : Comitas 10
     Initializing opponents windows message
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowResponse
     1 turn started
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     Printing
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse
     9
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     42
     2
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent
     61
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     71
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse
     End print
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     Begin turn sent to Mottola
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent
     it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent
     Begin turn sent to ingconti
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse
     it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.dice.OpponentDiceMoveResponse
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.RuleResponse
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.NewTurnResponse
-    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher dispatch
+    giu 13, 2018 12:41:00 AM it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher dispatch
     GRAVE: Handler not found for class it.polimi.ingsw.sagrada.game.intercomm.message.game.BeginTurnEvent
     Begin turn sent to ingconti
     it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceGameManagerEvent
@@ -201,7 +201,7 @@
     Type : login
     Type : error
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
-    Running it.polimi.ingsw.network.CommandParserTest
+    Running it.polimi.ingsw.network.JsonToMessageConverterTest
     Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
     Running it.polimi.ingsw.network.MatchLobbyPoolTest
     1

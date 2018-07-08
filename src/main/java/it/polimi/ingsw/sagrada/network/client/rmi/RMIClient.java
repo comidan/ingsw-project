@@ -5,7 +5,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.gui.login.LoginGuiAdapter;
 import it.polimi.ingsw.sagrada.network.LoginState;
 import it.polimi.ingsw.sagrada.network.client.Client;
-import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandManager;
+import it.polimi.ingsw.sagrada.network.client.protocols.application.CommandExecutor;
 import it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan.DiscoverLan;
 import it.polimi.ingsw.sagrada.network.client.protocols.heartbeat.HeartbeatProtocolManager;
 import it.polimi.ingsw.sagrada.network.server.rmi.AbstractMatchLobbyRMI;
@@ -24,7 +24,6 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -166,7 +165,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                         lobby = (AbstractMatchLobbyRMI) Naming.lookup(PROTOCOL + ADDRESS + "/" + lobbyId);
                         System.out.println("Lobby acquired");
                         if (lobby.joinLobby(username, this)) {
-                            CommandManager.setClientData(username, this);
+                            CommandExecutor.setClientData(username, this);
                             System.out.println("Lobby joined");
                         } else
                             System.out.println("Error");
@@ -347,7 +346,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      */
     @Override
     public void setTimer(String time) {
-        CommandManager.setTimer(time);
+        CommandExecutor.setTimer(time);
 
     }
 
@@ -364,7 +363,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      */
     @Override
     public void setPlayer(String playerName, int position) {
-        CommandManager.setPlayer(playerName, position);
+        CommandExecutor.setPlayer(playerName, position);
     }
 
     /* (non-Javadoc)
@@ -372,7 +371,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      */
     @Override
     public void removePlayer(String playerName) {
-        CommandManager.removePlayer(playerName);
+        CommandExecutor.removePlayer(playerName);
     }
 
     /* (non-Javadoc)
@@ -404,7 +403,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      */
     @Override
     public void sendResponse(Message message) {
-        CommandManager.executePayload(message);
+        CommandExecutor.executePayload(message);
     }
 
     /* (non-Javadoc)

@@ -4,7 +4,7 @@ import it.polimi.ingsw.sagrada.game.base.*;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.cards.ObjectiveCard;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
-import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher;
 import it.polimi.ingsw.sagrada.game.playables.*;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
@@ -31,7 +31,7 @@ public class ScoreTrackTest {
         players.add(playerOne);
         players.add(new Player("Ingconti"));
         players.add(new Player("Izzo"));
-        DynamicRouter dynamicRouter = new MessageDispatcher();
+        DynamicRouter dynamicRouter = new MessageControllerDispatcher();
         GameManager gameManager = new GameManager(players, dynamicRouter, null, "");
 
         WindowManager windowManager = new WindowManager(gameManager.getDispatchReference(), dynamicRouter);

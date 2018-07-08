@@ -5,7 +5,7 @@ package it.polimi.ingsw.base;
 import it.polimi.ingsw.sagrada.game.base.*;
 import it.polimi.ingsw.sagrada.game.base.state.StateGameEnum;
 import it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter;
-import it.polimi.ingsw.sagrada.game.intercomm.MessageDispatcher;
+import it.polimi.ingsw.sagrada.game.intercomm.MessageControllerDispatcher;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class GameManagerTest {
     @Test
     public void testGameController() {
         GameManager gameManager;
-        DynamicRouter dynamicRouter = new MessageDispatcher();
+        DynamicRouter dynamicRouter = new MessageControllerDispatcher();
 
         players.add(playerOne);
         players.add(playerTwo);
