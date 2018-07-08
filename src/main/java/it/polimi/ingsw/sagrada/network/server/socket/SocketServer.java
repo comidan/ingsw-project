@@ -36,8 +36,10 @@ public class SocketServer implements Runnable, Server {
     /** The server socket. */
     private ServerSocket serverSocket;
     
+    /** The executor. */
+    private ExecutorService executor;
     /** The cached executor. */
-    private ExecutorService executor, cachedExecutor;
+    private ExecutorService cachedExecutor;
     
     /** The command parser. */
     private JsonToMessageConverter jsonToMessageConverter;
@@ -74,7 +76,7 @@ public class SocketServer implements Runnable, Server {
         executor = Executors.newSingleThreadExecutor();
         cachedExecutor = Executors.newCachedThreadPool();
         executor.submit(this);
-        System.out.println("Server correctly initialized and running on port " + port);
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Server correctly initialized and running on port " + port);
     }
 
     /**
@@ -101,7 +103,7 @@ public class SocketServer implements Runnable, Server {
         while (!executor.isShutdown()) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("Received new login request");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Received new login request");
                 cachedExecutor.submit(initializeUserSession(clientSocket));
             }
             catch (IOException exc) {
@@ -129,27 +131,27 @@ public class SocketServer implements Runnable, Server {
                         case AUTH_OK:
                             lobbyPort = joinUserLobby(loginEvent.getUsername());
                             DataManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
-                            System.out.println(loginEvent.getUsername() + " correctly logged, migrating client to lobby server");
+                            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->loginEvent.getUsername() + " correctly logged, migrating client to lobby server");
                             clientSocket.close();
                             break;
                         case AUTH_FAILED_USER_ALREADY_LOGGED:
                             DataManager.sendLoginError(clientSocket,"User already logged on");
-                            System.out.println(loginState);
+                            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->loginState + "");
                             break;
                         case AUTH_FAILED_USER_NOT_EXIST:
                             DataManager.sendLoginSignup(clientSocket);
                             if (dataManager.signUp(loginEvent.getUsername(), loginEvent.getPassword())) {
                                 lobbyPort = joinUserLobby(loginEvent.getUsername());
                                 DataManager.sendLoginResponse(clientSocket, loginEvent.getUsername(), lobbyPort);
-                                System.out.println(loginEvent.getUsername() + "correctly signed up, migrating client to lobby server");
+                                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->loginEvent.getUsername() + "correctly signed up, migrating client to lobby server");
                                 clientSocket.close();
                             }
                             else {
-                                System.out.println("Wrong password");
+                                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Wrong password");
                                 DataManager.sendLoginError(clientSocket);
                             }
                             break;
-                        default: System.out.println("No correct command was found"); DataManager.sendLoginError(clientSocket); break;
+                        default: Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"No correct command was found"); DataManager.sendLoginError(clientSocket); break;
                     }
                 }
             }

@@ -20,7 +20,8 @@ import java.util.concurrent.Executors;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -129,7 +130,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     public void setTimer(String time) {
         String payload = jsonToMessageConverter.createJSONCountdown(time);
         output.println(Security.getEncryptedData(payload));
-        System.out.println("Sending time...");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Sending time...");
     }
 
     /* (non-Javadoc)
@@ -181,9 +182,9 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      * @param json the json
      */
     private void executePayload(String json) {
-        System.out.println("Receiving : " + json);
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Receiving : " + json);
         Message parsedMessage = jsonToMessageConverter.parse(json);
-        System.out.println(parsedMessage.getType().getName());
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->parsedMessage.getType().getName());
         if(parsedMessage instanceof DisconnectEvent) {
             disconnect();
         }
@@ -191,7 +192,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
             notifyMessage(((MessageEvent) parsedMessage).getMessage());
         }
         else {
-            System.out.println(parsedMessage);
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->parsedMessage + "");
             sendToModel(parsedMessage);
         }
     }
@@ -211,7 +212,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
      * @param message the message
      */
     private void notifyMessage(String message) {
-        System.out.println(message);
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->message);
     }
 
     /* (non-Javadoc)
@@ -239,11 +240,12 @@ public class RemoteSocketClient implements ClientBase, Runnable {
             socket.close();
             executor.shutdown();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e::getMessage);
         } finally {
             try {
                 socket.close();
             } catch (IOException ex) {
-
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex::getMessage);
             }
         }
     }

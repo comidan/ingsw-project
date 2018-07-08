@@ -269,9 +269,9 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      */
     private void startRound() {
         if(stateIterator.next() == StateGameEnum.TURN) {
-            System.out.println(stateIterator.getRoundNumber() + " turn started");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->stateIterator.getRoundNumber() + " turn started");
             diceManager.bagToDraft();
-            System.out.println("Sending round number : " + stateIterator.getRoundNumber());
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Sending round number : " + stateIterator.getRoundNumber());
             sendMessage(new NewTurnResponse(stateIterator.getRoundNumber()));
             notifyNextPlayer();
         }
@@ -290,12 +290,12 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         if(playerIterator.hasNext()) {
             BeginTurnEvent beginTurnEvent = new BeginTurnEvent(playerIterator.next());
             sendMessage(beginTurnEvent);
-            System.out.println("Begin turn sent to " + beginTurnEvent.getIdPlayer());
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Begin turn sent to " + beginTurnEvent.getIdPlayer());
             playTime = new Timer();
             playTime.scheduleAtFixedRate(new GameTimer(beginTurnEvent.getIdPlayer()), 0, 1000L);
         }
         else {
-            System.out.println("Ending round...");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Ending round...");
             List<Dice> diceToRoundTrack = diceManager.putDiceRoundTrack();
             roundTrack.addDice(diceToRoundTrack, stateIterator.getRoundNumber());
             sendMessage(new DiceResponse(CommandKeyword.ROUND_TRACK, diceToRoundTrack));
@@ -486,7 +486,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             players.forEach(p -> sides.add(p.getWindow().getSide()));
             players.forEach(p -> usernames.add(p.getId()));
             OpponentWindowResponse opponentWindowResponse = new OpponentWindowResponse(usernames, windowsId, sides);
-            opponentWindowResponse.getPlayers().forEach(player -> System.out.println(opponentWindowResponse.getPlayerWindowId(player)));
+            opponentWindowResponse.getPlayers().forEach(player -> Logger.getLogger(getClass().getName()).log(Level.INFO, () ->opponentWindowResponse.getPlayerWindowId(player) + ""));
             fastRecoveryDispatch.accept(new OpponentWindowResponse(usernames, windowsId, sides), username);
 
             fastRecoveryDispatch.accept(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(diceManager.getDraft())), username);
@@ -524,7 +524,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     @Override
     public void dispatch(Message message) {
         BaseGameVisitor baseGameVisitor = (BaseGameVisitor) message;
-        System.out.println("Received baseGameVisitor");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Received baseGameVisitor");
         baseGameVisitor.accept(this);
     }
 
@@ -644,7 +644,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             window.setCell(dice, nextPos.getRow(), nextPos.getCol());
             window.resetCell(prevPos.getRow(), prevPos.getCol());
             ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
-            System.out.println(errorType);
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->errorType + "");
             if(errorType == ErrorType.NO_ERROR) {
                 sendMessage(new OpponentDiceMoveResponse(player.getId(), dice, nextPos));
                 sendMessage(new OpponentDiceMoveResponse( //remove dice from window

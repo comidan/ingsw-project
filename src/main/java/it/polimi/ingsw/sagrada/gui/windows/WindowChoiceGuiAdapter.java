@@ -52,7 +52,7 @@ public class WindowChoiceGuiAdapter {
                     client.sendRemoteMessage(new WindowEvent(client.getId(), windowImage.getWindowId(), windowImage.getSide()));
                     windowId = windowImage.getWindowId();
                     windowSide = windowImage.getSide();
-                    System.out.println("Window player " + client.getId() + " : " + windowImage.getSide() + " " + windowImage.getWindowId());
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, "Window player " + client.getId() + " : " + windowImage.getSide() + " " + windowImage.getWindowId());
                 } catch (RemoteException e) {
                     LOGGER.log(Level.SEVERE, "error sending windows event to server");
                 }

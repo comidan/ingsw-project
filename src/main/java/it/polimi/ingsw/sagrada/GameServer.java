@@ -109,7 +109,7 @@ public class GameServer {
                 JarEntry file = (JarEntry) classEnum.nextElement();
                 if(file.getName().startsWith("it")) {
                     File f = new File(CLASS_DIR + file.getName());
-                    System.out.println("Extracting " + file.getName());
+                    Logger.getLogger(GameServer.class.getName()).log(Level.INFO, () ->"Extracting " + file.getName());
                     f.getParentFile().mkdirs();
                     if (file.isDirectory()) {
                         f.mkdir();
@@ -142,7 +142,7 @@ public class GameServer {
                 JarEntry file = (JarEntry) classEnum.nextElement();
                 if(file.getName().startsWith("database") || file.getName().startsWith("json/config")) {
                     File f = new File(RES_DIR + file.getName());
-                    System.out.println("Extracting " + file.getName());
+                    Logger.getLogger(GameServer.class.getName()).log(Level.INFO, () ->"Extracting " + file.getName());
                     f.getParentFile().mkdirs();
                     if (file.isDirectory()) {
                         f.mkdir();

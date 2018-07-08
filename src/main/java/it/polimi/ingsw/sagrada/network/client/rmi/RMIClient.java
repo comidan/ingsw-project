@@ -137,7 +137,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     private void establishServerConnection() {
         while (!connect())
             try {
-                System.out.println("RMI server at " + ADDRESS + " not responding, retrying in 3 seconds...");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"RMI server at " + ADDRESS + " not responding, retrying in 3 seconds...");
                 Thread.sleep(SERVER_WAITING_RESPONSE_TIME);
             } catch (InterruptedException exc) {
                 Thread.currentThread().interrupt();
@@ -154,21 +154,22 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         while (loginState != LoginState.AUTH_OK) {
             try {
                 username = LoginGuiAdapter.getUsername();
-                System.out.println("Logging in");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Logging in");
                 loginState = server.login(this, username, LoginGuiAdapter.getPassword());
-                System.out.println(loginState);
+                final LoginState state = loginState;
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () -> state+"");
                 if (loginState == LoginState.AUTH_OK) {
                     sendMessage(loginState);
                     try {
-                        System.out.println("Acquiring lobby");
+                        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Acquiring lobby");
                         lobbyId = server.getMatchLobbyId();
                         lobby = (AbstractMatchLobbyRMI) Naming.lookup(PROTOCOL + ADDRESS + "/" + lobbyId);
-                        System.out.println("Lobby acquired");
+                        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Lobby acquired");
                         if (lobby.joinLobby(username, this)) {
                             CommandExecutor.setClientData(username, this);
-                            System.out.println("Lobby joined");
+                            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Lobby joined");
                         } else
-                            System.out.println("Error");
+                            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Error");
                     } catch (NotBoundException | MalformedURLException exc) {
                         LOGGER.log(Level.SEVERE, exc::getMessage);
                     }
@@ -233,7 +234,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         try {
             while (!new DiscoverLan().isHostReachable(InetAddress.getByName(ADDRESS)))
                 try {
-                    System.out.println("Waiting for available connection...");
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Waiting for available connection...");
                     sleep(1000);
                 } catch (InterruptedException exc) {
                     Thread.currentThread().interrupt();
@@ -242,15 +243,15 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         catch (UnknownHostException exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
         }
-        System.out.println("Restoring connection...");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Restoring connection...");
         try {
-            System.out.println(PROTOCOL + ADDRESS + "/" + lobbyId);
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->PROTOCOL + ADDRESS + "/" + lobbyId);
             lobby = (AbstractMatchLobbyRMI) Naming.lookup(PROTOCOL + ADDRESS + "/" + lobbyId);
-            System.out.println("Lobby acquired");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Lobby acquired");
             if (lobby.joinLobby(username, this)) {
-                System.out.println("Lobby joined");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Lobby joined");
             } else
-                System.out.println("Error");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Error");
         } catch (NotBoundException | MalformedURLException | RemoteException exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
         }
@@ -262,15 +263,15 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     @Override
     public void notifyLobby(String lobbyId) throws RemoteException {
         try {
-            System.out.println("Acquiring lobby");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Acquiring lobby");
             lobby = (AbstractMatchLobbyRMI) Naming.lookup(URL + "/" + lobbyId);
-            System.out.println("Lobby acquired");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Lobby acquired");
             if (lobby.joinLobby(username, this)) {
-                System.out.println("Lobby joined");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Lobby joined");
             } else
-                System.out.println("Error");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Error");
         } catch (NotBoundException | MalformedURLException exc) {
-            System.out.println("RMI Error");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"RMI Error");
         }
     }
 
@@ -279,7 +280,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      */
     @Override
     public void signUp() {
-        System.out.println("Signing up");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Signing up");
     }
 
     /* (non-Javadoc)
@@ -303,7 +304,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
     public void notifyHeartbeatPort(Integer port) {
         try {
             heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, username);
-            System.out.println("Heartbeat started");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Heartbeat started");
         } catch (IOException exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
         }
@@ -314,7 +315,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      */
     @Override
     public void sendMessage(String message) {
-        System.out.println(message);
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->message);
     }
 
     /* (non-Javadoc)
@@ -430,7 +431,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         while(true) {
             try {
                 if(!new DiscoverLan().isHostReachable(InetAddress.getByName(ADDRESS))) {
-                    System.out.println("Fast recovery");
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Fast recovery");
                     fastRecovery();
                     return;
                 }

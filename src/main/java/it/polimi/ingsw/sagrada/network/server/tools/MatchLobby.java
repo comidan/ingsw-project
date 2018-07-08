@@ -244,7 +244,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
             clientPool.remove(username);
             heartbeatProtocolManager.removeFromMonitoredHost(username);
         }
-        System.out.println(username + " disconnected");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->username + " disconnected");
         return true;
     }
 
@@ -261,7 +261,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      */
     @Override
     public void onDeath(HeartbeatEvent event) {
-        System.out.println(event.getSource() + " is offline");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->event.getSource() + " is offline");
         try {
             if (clientIds.contains(event.getSource()) || clientPool.get(event.getSource()).isInFastRecovery())
                 removePlayer(event.getSource(), false);
@@ -288,7 +288,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         synchronized (clientTCPLinkEstablished) {
             clientTCPLinkEstablished.put(event.getSource(), false);
         }
-        System.out.println(event.getSource() + " maybe offline");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->event.getSource() + " maybe offline");
     }
 
     /* (non-Javadoc)
@@ -306,7 +306,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         catch (IOException|NullPointerException exc) {
             LOGGER.log(Level.INFO, () -> "TCP not ready yet");
         }
-        System.out.println(event.getSource() + " came back");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->event.getSource() + " came back");
 
     }
 
@@ -414,7 +414,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         for(String id : clientIdTokens)
             synchronized (clientTCPLinkEstablished) {
                 if (new Date().getTime() - clientLinkState.get(id) > 2000 || !clientTCPLinkEstablished.get(id)) {
-                    System.out.println(clientTCPLinkEstablished.get(id));
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () ->clientTCPLinkEstablished.get(id) + "");
                     return false;
                 }
             }
@@ -428,7 +428,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         while(!checkValidClientLinkState()) {
             try {
                 Thread.sleep(500);
-                System.out.println("Waiting clients stable link...");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Waiting clients stable link...");
             }
             catch (InterruptedException exc) {
                 LOGGER.log(Level.SEVERE, exc::getMessage);

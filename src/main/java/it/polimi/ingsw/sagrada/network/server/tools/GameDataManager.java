@@ -82,7 +82,7 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
     @Override
     public void dispatch(Message message) {
         if(!(message instanceof TimeRemainingResponse))
-            System.out.println("I received : " + message);
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"I received : " + message);
         message.accept(this);
     }
 
@@ -126,7 +126,7 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
             Map.Entry pair = (Map.Entry)itr.next();
             try {
                 if(filter.apply((Client)pair.getValue())) {
-                    System.out.println("Sending to " + ((Client) pair.getValue()).getId());
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, "Sending to " + ((Client) pair.getValue()).getId());
                     ((Client) pair.getValue()).sendResponse(message);
                 }
             } catch (RemoteException e) {
@@ -212,7 +212,7 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
      */
     @Override
     public void visit(DiceResponse diceResponse) {
-        System.out.println("Sending " + diceResponse.getDst());
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Sending " + diceResponse.getDst());
         sendRemoteMessage(diceResponse, filter -> anyone());
     }
 

@@ -53,7 +53,7 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
      */
     private void initializeCoreFunction() {
         dataManager = DataManager.getDataManager();
-        System.out.println("Server RMI correctly initialized and running");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Server RMI correctly initialized and running");
     }
 
     /* (non-Javadoc)
@@ -67,22 +67,22 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
                 switch (loginState) {
                     case AUTH_OK:
                         lobby = joinUserLobby(username);
-                        System.out.println(username + " correctly logged, migrating client to lobby server");
+                        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->username + " correctly logged, migrating client to lobby server");
                         return loginState;
                     case AUTH_FAILED_USER_ALREADY_LOGGED:
-                        System.out.println(loginState);
+                        Logger.getLogger(getClass().getName()).log(Level.INFO, () -> loginState +"");
                         return loginState;
                     case AUTH_FAILED_USER_NOT_EXIST:
                         if (dataManager.signUp(username, hashedPassword)) {
                             lobby = joinUserLobby(username);
-                            System.out.println(username + " correctly signed up, migrating client to lobby server");
+                            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->username + " correctly signed up, migrating client to lobby server");
                             return LoginState.AUTH_OK;
                         }
                         else {
-                            System.out.println("Sign up failed");
+                            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Sign up failed");
                             return LoginState.AUTH_FATAL_ERROR;
                         }
-                    default: System.out.println("No correct command was found"); return LoginState.AUTH_FATAL_ERROR;
+                    default: Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"No correct command was found"); return LoginState.AUTH_FATAL_ERROR;
                 }
         }
         catch (IOException exc) {

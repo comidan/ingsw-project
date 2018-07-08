@@ -35,7 +35,8 @@ import org.json.simple.parser.ParseException;
 import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
 
 import java.util.*;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -306,7 +307,7 @@ public class JsonMessageBidirectionalConverter implements ActionMessageVisitor {
         try {
             JSONObject jsonMsg = (JSONObject)parser.parse(json);
             JSONObject data;
-            System.out.println("Type : " + jsonMsg.get(COMMAND_TYPE));
+            Logger.getLogger(JsonMessageBidirectionalConverter.class.getName()).log(Level.INFO, () ->"Type : " + jsonMsg.get(COMMAND_TYPE));
             switch ((String)jsonMsg.get(COMMAND_TYPE)) {
                 case LOBBY_TIME:
                     data = (JSONObject) jsonMsg.get(TIME);
@@ -368,7 +369,7 @@ public class JsonMessageBidirectionalConverter implements ActionMessageVisitor {
                         windowSides.add(WindowSide.stringToWindowSide((String) windowJson.get(WINDOW_SIDE)));
                     });
                     OpponentWindowResponse opponentWindowResponse = new OpponentWindowResponse(players, windowIds, windowSides);
-                    opponentWindowResponse.getPlayers().forEach(player -> System.out.println(opponentWindowResponse.getPlayerWindowId(player)));
+                    opponentWindowResponse.getPlayers().forEach(player -> Logger.getLogger(JsonMessageBidirectionalConverter.class.getName()).log(Level.INFO, () ->opponentWindowResponse.getPlayerWindowId(player) + ""));
                     return new OpponentWindowResponse(players, windowIds, windowSides);
                 case OPPONENT_DICE_RESPONSE:
                     JSONObject dice = (JSONObject) jsonMsg.get(DICE);
@@ -383,7 +384,7 @@ public class JsonMessageBidirectionalConverter implements ActionMessageVisitor {
                     return new RuleResponse((String) ruleResponse.get(PLAYER_ID), Boolean.parseBoolean((String) ruleResponse.get(VALID_MOVE)));
                 case NEW_ROUND:
                     JSONObject newRoundResponse = (JSONObject) jsonMsg.get(NEW_ROUND);
-                    System.out.println("Round received and parsed from json : " + Integer.parseInt((String) newRoundResponse.get(NEW_ROUND)));
+                    Logger.getLogger(JsonMessageBidirectionalConverter.class.getName()).log(Level.INFO, () ->"Round received and parsed from json : " + Integer.parseInt((String) newRoundResponse.get(NEW_ROUND)));
                     return new NewTurnResponse(Integer.parseInt((String) newRoundResponse.get(NEW_ROUND)));
                 case PUBLIC_OBJECTIVES:
                     JSONArray publicObjectives = (JSONArray) jsonMsg.get(PUBLIC_OBJECTIVES);

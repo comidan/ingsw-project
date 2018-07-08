@@ -1,6 +1,8 @@
 package it.polimi.ingsw.sagrada.game.base.state;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 
@@ -120,7 +122,7 @@ public class PlayerIterator implements Iterator<String> {
                 turnIteration.add(currentP2);
             }
         });
-        turnIteration.forEach(elem -> System.out.println(elem));
+        turnIteration.forEach(elem -> Logger.getLogger(getClass().getName()).log(Level.INFO, () ->elem));
     }
 
     /**

@@ -9,6 +9,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The Class RemoteRMIClient.
@@ -19,7 +21,7 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
     private String identifier;
     
     /** The disconnect. */
-    private BiFunction disconnect;
+    private BiFunction<String, Boolean, Boolean> disconnect;
     
     /** The client RMI. */
     private ClientRMI clientRMI;
@@ -64,7 +66,7 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
      */
     @Override
     public void sendMessage(String message) throws RemoteException {
-        System.out.println(message);
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->message);
     }
 
     /* (non-Javadoc)

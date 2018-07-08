@@ -235,27 +235,27 @@ Tutto questo verrà notificato come sopra citato attraverso una gestione ad even
  
     @Override
      public void onHeartbeat(HeartbeatEvent event) {
-         System.out.println("Received heartbet from " + event.getSource() + " in " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
+         Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Received heartbet from " + event.getSource() + " in " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
      }
  
      @Override
      public void onDeath(HeartbeatEvent event) {
-         System.out.println(event.getSource() + " died after " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
+         Logger.getLogger(getClass().getName()).log(Level.INFO, () ->event.getSource() + " died after " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
      }
  
      @Override
      public void onLossCommunication(HeartbeatEvent event) {
-         System.out.println("Communication lost of " + event.getSource() + " in " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
+         Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Communication lost of " + event.getSource() + " in " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
      }
  
      @Override
      public void onReacquiredCommunication(HeartbeatEvent event) {
-         System.out.println("Communication reacquired of " + event.getSource() + " in " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
+         Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Communication reacquired of " + event.getSource() + " in " + event.getTimeFromPreviousBeat() + " at " + event.getBeatTimeStamp());
      }
  
      @Override
      public void onAcquiredCommunication(HeartbeatEvent event) {
-         System.out.println(event.getSource() + " connected at " + event.getBeatTimeStamp());
+         Logger.getLogger(getClass().getName()).log(Level.INFO, () ->event.getSource() + " connected at " + event.getBeatTimeStamp());
      }
      
   Il codice d'esempio sopra mostra la cattura dei vari eventi sugli stati di un client, sarà poi compito di chi implementa il listener

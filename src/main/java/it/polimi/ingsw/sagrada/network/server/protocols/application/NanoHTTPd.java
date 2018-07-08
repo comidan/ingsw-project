@@ -5,7 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLEncoder;
 import java.util.*;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -66,24 +67,24 @@ public class NanoHTTPd {
      * @return HTTP response, see class Response for details
      */
     public Response serve(String uri, String method, Properties header, Properties parms, Properties files) {
-        System.out.println(method + " '" + uri + "' ");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->method + " '" + uri + "' ");
 
         Enumeration e = header.propertyNames();
         while (e.hasMoreElements()) {
             String value = (String) e.nextElement();
-            System.out.println("  HDR: '" + value + "' = '" +
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"  HDR: '" + value + "' = '" +
                     header.getProperty(value) + "'");
         }
         e = parms.propertyNames();
         while (e.hasMoreElements()) {
             String value = (String) e.nextElement();
-            System.out.println("  PRM: '" + value + "' = '" +
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"  PRM: '" + value + "' = '" +
                     parms.getProperty(value) + "'");
         }
         e = files.propertyNames();
         while (e.hasMoreElements()) {
             String value = (String) e.nextElement();
-            System.out.println("  UPLOADED: '" + value + "' = '" +
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"  UPLOADED: '" + value + "' = '" +
                     files.getProperty(value) + "'");
         }
 
@@ -234,7 +235,7 @@ public class NanoHTTPd {
      * @param path the path
      */
     public static void init(String[] args, String path) {
-        System.out.println("NanoHTTPd 1.22 (C) 2001,2005-2011 Jarno Elonen and (C) 2010 Konstantinos Togias\n" +
+        Logger.getLogger(NanoHTTPd.class.getName()).log(Level.INFO, () ->"NanoHTTPd 1.22 (C) 2001,2005-2011 Jarno Elonen and (C) 2010 Konstantinos Togias\n" +
                 "(Command line options: [port] [--licence])\n");
         NanoHTTPd.PATH = path;
         // Show licence if requested
@@ -242,14 +243,12 @@ public class NanoHTTPd {
         for (int i = 0; i < args.length; ++i)
             if (args[i].toLowerCase().endsWith("licence")) {
                 lopt = i;
-                System.out.println(LICENCE + "\n");
+                Logger.getLogger(NanoHTTPd.class.getName()).log(Level.INFO, () ->LICENCE + "\n");
                 break;
             }
 
         // Change port if requested
-        int port = 8080;
-        if (args.length > 0 && lopt != 0)
-            port = Integer.parseInt(args[0]);
+        final int port = 8080;
 
         try {
             new NanoHTTPd(port);
@@ -258,7 +257,7 @@ public class NanoHTTPd {
             System.exit(-1);
         }
 
-        System.out.println("Now serving files in port " + port + " from \"" + PATH + "\"");
+        Logger.getLogger(NanoHTTPd.class.getName()).log(Level.INFO, () ->"Now serving files in port " + port + " from \"" + PATH + "\"");
         while (true) {
             try {
                 Thread.sleep(500);

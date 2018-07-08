@@ -7,7 +7,6 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.dice.*;
 import it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.DisconnectEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
-import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorConstraintToolMessage;
 import it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.util.MessageEvent;
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEvent;
@@ -16,12 +15,12 @@ import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 
 import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.stream.IntStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -54,7 +53,7 @@ public class JsonToMessageConverter {
                     return new MessageEvent((String)data.get(MESSAGE));
                 case WINDOW_CHOICE :
                     data = (JSONObject) jsonMsg.get(WINDOW);
-                    System.out.println(message);
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () ->message);
                     String idPlayerW = (String)data.get(PLAYER_ID);
                     int idWindow = Integer.parseInt((String)data.get(WINDOW_ID));
                     WindowSide side = WindowSide.stringToWindowSide((String)data.get(WINDOW_SIDE));

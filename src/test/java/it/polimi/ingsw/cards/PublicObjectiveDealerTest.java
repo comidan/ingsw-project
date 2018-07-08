@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -115,7 +117,7 @@ public class PublicObjectiveDealerTest {
 
         for(ObjectiveCard card:publicObjective) {
             int score = card.getRule().checkRule(cells);
-            System.out.println(card.getName());
+            Logger.getLogger(getClass().getName()).log(Level.INFO, card::getName);
             switch(card.getId()) {
                 case 0: assertEquals(6, score); break;
                 case 1: assertEquals(5, score); break;

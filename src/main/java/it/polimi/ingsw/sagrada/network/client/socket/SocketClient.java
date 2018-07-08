@@ -65,9 +65,6 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     /** The out socket. */
     private PrintWriter outSocket;
 
-    /** The out video. */
-    private PrintWriter outVideo;
-
     /** The executor. */
     private ExecutorService executor;
 
@@ -99,7 +96,6 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     public SocketClient() {
         isInFastRecovery = false;
         active = true;
-        outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
         dynamicRouter = LoginGuiAdapter.getDynamicRouter();
         recoverying = new Semaphore(1);
         establishServerConnection();
@@ -111,7 +107,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     private void establishServerConnection() {
         while (!connect())
             try {
-                System.out.println(ADDRESS + ":" + PORT + " not responding, retrying in 3 seconds...");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->ADDRESS + ":" + PORT + " not responding, retrying in 3 seconds...");
                 sleep(SERVER_WAITING_RESPONSE_TIME);
             } catch (InterruptedException exc) {
                 Thread.currentThread().interrupt();
@@ -135,7 +131,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     public void startHeartbeat(int port) {
         try {
             heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, username);
-            System.out.println("Heartbeat port : " + port);
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Heartbeat port : " + port);
         }
         catch (IOException exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
@@ -165,7 +161,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             outSocket = new PrintWriter(socket.getOutputStream(), true);
             return true;
         } catch (IOException exc) {
-            LOGGER.log(Level.SEVERE, exc.getMessage());
+            LOGGER.log(Level.INFO, exc.getMessage());
             return false;
         }
     }
@@ -175,7 +171,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
      */
     @Override
     public void sendMessage(String message) {
-        System.out.println(message);
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->message);
     }
 
     /* (non-Javadoc)
@@ -239,7 +235,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
      */
     @Override
     public void sendResponse(Message message) {
-        //outSocket.println(commandManager.createPayload(message));
+        
     }
 
     /**
@@ -250,7 +246,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             boolean loginSuccessful = false;
 
             while (!loginSuccessful) {
-                outVideo.println("Connected to " + ADDRESS + ":" + PORT + "\nThis is the first login firewall : \n");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () -> "Connected to " + ADDRESS + ":" + PORT + "\nThis is the first login firewall : \n");
                 username = LoginGuiAdapter.getUsername();
                 JSONObject message = createMessage(username, LoginGuiAdapter.getPassword());
                 initializeConnectionStream();
@@ -269,22 +265,22 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                     jsonResponse = Security.getDecryptedData(inSocket.readLine());
                     response = JsonMessageBidirectionalConverter.parseJsonData(jsonResponse);
                     if (response instanceof LobbyLoginEvent) {
-                        outVideo.println("Registering...");
-                        outVideo.println("Connecting to lobby");
+                        Logger.getLogger(getClass().getName()).log(Level.INFO, () -> "Registering...");
+                        Logger.getLogger(getClass().getName()).log(Level.INFO, () -> "Connecting to lobby");
                         lobbyPort = ((LobbyLoginEvent)response).getLobbyPort();
                         socket.close();
                         sendMessage(LoginState.AUTH_OK);
-                        outVideo.println("Login successful");
+                        Logger.getLogger(getClass().getName()).log(Level.INFO, () -> "Login successful");
                         loginSuccessful = true;
                         CommandExecutor.setClientData(username, this);
                         initializeLobbyLink(username);
                     }
                     else {
-                        outVideo.println("Wrong password");
+                        Logger.getLogger(getClass().getName()).log(Level.INFO, () -> "Wrong password");
                         sendMessage(LoginState.AUTH_WRONG_PASSWORD);
                     }
                 } else if (response instanceof ErrorEvent) {
-                    outVideo.println("User already logged on");
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () -> "User already logged on");
                     sendMessage(LoginState.AUTH_FAILED_USER_ALREADY_LOGGED);
                 }
             }
@@ -305,7 +301,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         initializeConnectionStream();
         outSocket.println(Security.getEncryptedData(JsonMessageBidirectionalConverter.createTokenMessage(identifier).toJSONString()));
         isInFastRecovery = false;
-        System.out.println("Waiting lobby response");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Waiting lobby response");
         executor = Executors.newCachedThreadPool();
         executor.submit(this);
         executor.submit(() -> {
@@ -336,15 +332,15 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     private void fastRecovery() {
         DiscoverLan discoverLan = new DiscoverLan();
         try {
-            while (!discoverLan.isHostReachable(Inet4Address.getByName(ADDRESS)))// || (!DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !DiscoverInternet.checkInternetConnection()))
+            while (!discoverLan.isHostReachable(Inet4Address.getByName(ADDRESS)))
                 try {
-                    System.out.println("Waiting for available connection...");
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Waiting for available connection...");
                     sleep(1000);
                 }
                 catch (InterruptedException exc) {
                     Thread.currentThread().interrupt();
                 }
-            System.out.println("Restoring connection...");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Restoring connection...");
             initializeLobbyLink(username);
         } catch (IOException exc) {
             LOGGER.log(Level.SEVERE, exc.getMessage());

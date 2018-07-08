@@ -90,11 +90,11 @@ public class MainGameGuiTest {
 
                 @Override
                 public void sendRemoteMessage(Message message) {
-                    System.out.println(message);
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () -> message+"");
                     DiceEvent diceEvent = (DiceEvent) message;
                     window.setCell(diceList.get(diceEvent.getIdDice() - 1), diceEvent.getPosition().getRow(), diceEvent.getPosition().getCol());
                     ErrorType errorType = new RuleManager().validateWindow(window.getCellMatrix());
-                    System.out.println(errorType);
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () ->errorType + "");
                     if(errorType != ErrorType.NO_ERROR) {
                         gameGuiAdapter.notifyMoveResponse(new RuleResponse("daniele", false));
                         window.resetCell(diceEvent.getPosition().getRow(), diceEvent.getPosition().getCol());
@@ -108,7 +108,7 @@ public class MainGameGuiTest {
 
                 @Override
                 public void sendResponse(Message message) {
-                    System.out.println(message);
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () ->message + "");
                 }
 
                 @Override

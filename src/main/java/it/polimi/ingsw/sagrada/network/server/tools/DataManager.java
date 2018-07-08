@@ -69,7 +69,7 @@ public class DataManager {
                                                 DBMS_AUTH,
                                                 100,
                                                 DB_NAME);
-            System.out.println("SQLite database connection initialized");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"SQLite database connection initialized");
         }
         catch (SQLException exc) {
             LOGGER.log(Level.SEVERE, () -> "Fatal error while initializing MySQL database connection " + exc.getMessage());

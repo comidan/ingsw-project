@@ -20,30 +20,12 @@ public class DiscoverInternet {
      * @return true, if successful
      */
     public static boolean checkInternetConnection() {
-        /*try {
-            int timeout = 2000;
-            InetAddress[] addresses = InetAddress.getAllByName("www.google.com");
-            for (InetAddress address : addresses)
-            {
-                System.out.println(address.getCanonicalHostName());
-                if (address.isReachable(timeout))
-                    return true;
-            }
-            return false;
-        }
-        catch (IOException exc) {
-            return false;
-        }*/
-
         try {
             final URL url = new URL("http://www.google.com");
             final URLConnection conn = url.openConnection();
             conn.connect();
             conn.getInputStream().close();
             return true;
-        }
-        catch (MalformedURLException e) {
-            return false;
         }
         catch (IOException e) {
             return false;

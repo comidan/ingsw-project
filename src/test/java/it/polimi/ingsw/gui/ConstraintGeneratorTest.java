@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ConstraintGeneratorTest {
-    Constraint[][] c = {
+    private Constraint[][] c = {
             {Constraint.ONE, Constraint.WHITE, Constraint.THREE, Constraint.BLUE, Constraint.WHITE},
             {Constraint.WHITE, Constraint.TWO, Constraint.BLUE, Constraint.WHITE, Constraint.WHITE},
             {Constraint.SIX, Constraint.BLUE, Constraint.WHITE, Constraint.FOUR, Constraint.WHITE},
@@ -25,7 +25,6 @@ public class ConstraintGeneratorTest {
                 System.out.print(constraints[j][i].toString());
                 System.out.print("|");
             }
-            System.out.println();
         }
     }
 }

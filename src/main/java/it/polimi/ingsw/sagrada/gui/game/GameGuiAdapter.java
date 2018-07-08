@@ -95,7 +95,7 @@ public class GameGuiAdapter {
                     client.sendRemoteMessage(endTurnEvent);
                     client.setActive(false);
                     gameView.notifyEndTurn();
-                    System.out.println("Notified end turn");
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Notified end turn");
                 } catch (RemoteException e) {
                     LOGGER.log(Level.SEVERE, e::getMessage);
                 }
@@ -128,11 +128,8 @@ public class GameGuiAdapter {
 
             GameGuiAdapter self = this;
             Platform.runLater(() -> {
-                this.gameView.setCellClickListener(new EventHandler<DragEvent>() {
-                    public void handle(DragEvent event) {
-                        event.acceptTransferModes(TransferMode.COPY);}
-                }, new EventHandler<DragEvent>() {
-                    public void handle(DragEvent event) {
+                this.gameView.setCellClickListener(event ->
+                        event.acceptTransferModes(TransferMode.COPY), event ->  {
                         DiceView diceView = clickedObject.getClickedDice();
                         if (diceView != null) {
                             CellView cellView = (CellView) event.getSource();
@@ -162,7 +159,6 @@ public class GameGuiAdapter {
                                 event.consume();
                             }
                         }
-                    }
 
                 });
 
@@ -184,7 +180,7 @@ public class GameGuiAdapter {
                     db.setContent(content);
                     event.consume();
                     diceSource = CommandKeyword.DRAFT;
-                    System.out.println("Selected dice " + diceView.getValue() + " " + diceView.getColor());
+                    Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Selected dice " + diceView.getValue() + " " + diceView.getColor());
 
                 });
             });
@@ -197,7 +193,7 @@ public class GameGuiAdapter {
      * @param client the new handler
      */
     public void setToolHandler(Client client) {
-        Platform.runLater(() -> {
+        Platform.runLater(() ->
             this.gameView.setToolClickHandler(event -> {
                 ToolCardView toolCardView = (ToolCardView) event.getSource();
                 ToolEvent toolEvent = new ToolEvent(gameView.getUsername(), toolCardView.getToolId());
@@ -207,8 +203,7 @@ public class GameGuiAdapter {
                     LOGGER.log(Level.SEVERE, e::getMessage);
                 }
                 gameView.disableToolClickHandler();
-            });
-        });
+            }));
     }
 
     /**
@@ -352,9 +347,7 @@ public class GameGuiAdapter {
                 disableDraftClick();
             });
 
-            this.gameView.setRoundtrackClickHandler(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
+            this.gameView.setRoundtrackClickHandler(event ->  {
                     DiceView diceView = (DiceView) event.getSource();
                     DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent = new DiceRoundTrackSelectionEvent(
                             gameView.getUsername(),
@@ -366,7 +359,6 @@ public class GameGuiAdapter {
                         LOGGER.log(Level.SEVERE, e::getMessage);
                     }
                     disableRoundTrackClick();
-                }
             });
         });
     }
@@ -394,7 +386,7 @@ public class GameGuiAdapter {
     /**
      * Disable round track click.
      */
-    public void disableRoundTrackClick(){
+    private void disableRoundTrackClick(){
         gameView.disableRoundTrackClick();
     }
 
@@ -416,7 +408,7 @@ public class GameGuiAdapter {
     /**
      * Disable draft click.
      */
-    public void disableDraftClick(){
+    private void disableDraftClick(){
         gameView.disableDraftClick();
     }
 
@@ -451,9 +443,7 @@ public class GameGuiAdapter {
      * @param tokenNumber the token number
      */
     public void setToken(int tokenNumber){
-        Platform.runLater(() -> {
-            this.gameView.setToken(tokenNumber);
-        });
+        Platform.runLater(() -> this.gameView.setToken(tokenNumber));
     }
 
     /**
@@ -463,9 +453,7 @@ public class GameGuiAdapter {
      * @param col the col
      */
     public void removeMistakenDice(int row, int col){
-        Platform.runLater(() -> {
-            this.gameView.removeMistakenDice(row, col);
-        });
+        Platform.runLater(() -> this.gameView.removeMistakenDice(row, col));
     }
 
     /**
@@ -583,7 +571,7 @@ public class GameGuiAdapter {
     public void notifyMoveResponse(RuleResponse ruleResponse) {
         Platform.runLater(() -> {
             if(!ruleResponse.isMoveValid()) {
-                System.out.println("Invalid move removing dice");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"Invalid move removing dice");
                 lastMove.removeMistakenDice();
             }
         });
@@ -644,7 +632,7 @@ public class GameGuiAdapter {
      */
     public void setRound(int round) {
         currentRound = round;
-        System.out.println("New round: "+currentRound);
+        Logger.getLogger(getClass().getName()).log(Level.INFO, () ->"New round: "+currentRound);
     }
 
     /**
@@ -691,7 +679,7 @@ public class GameGuiAdapter {
     /**
      * Disable gui element on toolcard used.
      */
-    public void disableGuiElement() {
+    private void disableGuiElement() {
         disableDraftClick();
         disableWindowDiceDrag();
         disableRoundTrackClick();
