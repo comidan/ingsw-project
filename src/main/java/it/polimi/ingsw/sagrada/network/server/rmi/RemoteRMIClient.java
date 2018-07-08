@@ -98,6 +98,11 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
         return false;
     }
 
+    @Override
+    public void setActive(boolean active) throws RemoteException {
+
+    }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.network.client.Client#sendResponse(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */

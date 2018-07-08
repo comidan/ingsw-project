@@ -2,7 +2,9 @@ package it.polimi.ingsw.sagrada.network.client.protocols.datalink.discoverlan;
 
 import org.apache.commons.lang3.SystemUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.NetworkInterface;
 import java.net.InterfaceAddress;
 import java.net.InetAddress;
@@ -143,8 +145,17 @@ public class DiscoverLan {
     public boolean isHostReachable(InetAddress address) {
         try {
             Process p;
-            if(SystemUtils.IS_OS_WINDOWS)
+            if(SystemUtils.IS_OS_WINDOWS) {
                 p = Runtime.getRuntime().exec("ping -n 1 " + address.getHostAddress());
+                BufferedReader stdInput = new BufferedReader(new
+                        InputStreamReader(p.getInputStream()));
+                String s;
+                StringBuilder output = new StringBuilder();
+                while ((s = stdInput.readLine()) != null) {
+                    output.append(s);
+                }
+                return output.toString().contains("TTL");
+            }
             else
                 p = Runtime.getRuntime().exec("ping -c 1 " + address.getHostAddress());
             return p.waitFor() == 0;

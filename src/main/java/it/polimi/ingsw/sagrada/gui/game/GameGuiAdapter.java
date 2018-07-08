@@ -90,6 +90,7 @@ public class GameGuiAdapter {
                 EndTurnEvent endTurnEvent = new EndTurnEvent(this.gameView.getUsername());
                 try {
                     client.sendRemoteMessage(endTurnEvent);
+                    client.setActive(false);
                     gameView.notifyEndTurn();
                     System.out.println("Notified end turn");
                 } catch (RemoteException e) {

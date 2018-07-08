@@ -54,6 +54,7 @@ public class HeartbeatProtocolManager {
      * @apiNote kill protocol execution
      */
     public void kill() {
+        System.out.println("Someone called me");
         executor.shutdownNow();
     }
 

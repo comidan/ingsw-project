@@ -22,9 +22,11 @@ import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +40,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
 
     /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getName());
-    
+
     /** The Constant PORT. */
     private static final int PORT = getConfigPort();
 
@@ -47,41 +49,45 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
 
     /** The Constant ADDRESS. */
     private static final String ADDRESS = getConfigAddress();
-    
+
     /** The Constant SERVER_WAITING_RESPONSE_TIME. */
     private static final int SERVER_WAITING_RESPONSE_TIME = 3000;
-    
+
     /** The Constant NETWORK_CONFIG_PATH. */
     private static final String NETWORK_CONFIG_PATH = "/json/config/network_config.json";
 
     /** The socket. */
     private Socket socket;
-    
+
     /** The in socket. */
     private BufferedReader inSocket;
-    
+
     /** The out socket. */
     private PrintWriter outSocket;
-    
+
     /** The out video. */
     private PrintWriter outVideo;
-    
+
     /** The executor. */
     private ExecutorService executor;
-    
+
     /** The username. */
     private String username;
-    
+
     /** The lobby port. */
     private int lobbyPort;
-    
+
     /** The heartbeat protocol manager. */
     private HeartbeatProtocolManager heartbeatProtocolManager;
-    
+
     /** The dynamic router. */
     private DynamicRouter dynamicRouter;
 
     private boolean isInFastRecovery;
+
+    private boolean active;
+
+    private Semaphore recoverying;
 
 
     /**
@@ -89,8 +95,10 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
      */
     public SocketClient() {
         isInFastRecovery = false;
+        active = true;
         outVideo = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
         dynamicRouter = LoginGuiAdapter.getDynamicRouter();
+        recoverying = new Semaphore(1);
         establishServerConnection();
     }
 
@@ -124,6 +132,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     public void startHeartbeat(int port) {
         try {
             heartbeatProtocolManager = new HeartbeatProtocolManager(ADDRESS, port, username);
+            System.out.println("Heartbeat port : " + port);
         }
         catch (IOException exc) {
             LOGGER.log(Level.SEVERE, exc::getMessage);
@@ -211,6 +220,11 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         return isInFastRecovery;
     }
 
+    @Override
+    public void setActive(boolean active) throws RemoteException {
+        this.active = active;
+    }
+
     /* (non-Javadoc)
      * @see it.polimi.ingsw.sagrada.network.client.Client#sendResponse(it.polimi.ingsw.sagrada.game.intercomm.Message)
      */
@@ -281,9 +295,31 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         socket = new Socket(ADDRESS, lobbyPort);
         initializeConnectionStream();
         outSocket.println(Security.getEncryptedData(JsonMessage.createTokenMessage(identifier).toJSONString()));
+        isInFastRecovery = false;
         System.out.println("Waiting lobby response");
-        executor = Executors.newSingleThreadExecutor();
+        executor = Executors.newCachedThreadPool();
         executor.submit(this);
+        executor.submit(() -> {
+            while(true) {
+                try {
+                    if (active && !new DiscoverLan().isHostReachable(InetAddress.getByName(ADDRESS))) {
+                        if(recoverying.tryAcquire()) {
+                            System.out.println("Recovering from 2nd thread");
+                            close();
+                            isInFastRecovery = true;
+                            active = false;
+                            heartbeatProtocolManager.kill();
+                            executor.shutdown();
+                            fastRecovery();
+                            recoverying.release();
+                        }
+                    }
+                    Thread.sleep(1000);
+                } catch (UnknownHostException exc) {
+                    LOGGER.log(Level.SEVERE, exc::getMessage);
+                }
+            }
+        });
     }
 
     /**
@@ -292,11 +328,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     private void fastRecovery() {
         DiscoverLan discoverLan = new DiscoverLan();
         try {
-            //DiscoverLan.isDirectlyAttacchedAndReachable to be fixed to check non-directly connected host
-            System.out.println((DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !discoverLan.isHostReachable(Inet4Address.getByName(ADDRESS))));
-            System.out.println((!DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !DiscoverInternet.checkInternetConnection()));
-            while ((DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !discoverLan.isHostReachable(Inet4Address.getByName(ADDRESS)))
-                    || (!DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !DiscoverInternet.checkInternetConnection()))
+            while (!discoverLan.isHostReachable(Inet4Address.getByName(ADDRESS)))// || (!DiscoverInternet.isPrivateIP(Inet4Address.getByName(ADDRESS)) && !DiscoverInternet.checkInternetConnection()))
                 try {
                     System.out.println("Waiting for available connection...");
                     sleep(1000);
@@ -308,6 +340,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             initializeLobbyLink(username);
         } catch (IOException exc) {
             LOGGER.log(Level.SEVERE, exc.getMessage());
+            exc.printStackTrace();
         }
     }
 
@@ -365,10 +398,18 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 String json = Security.getDecryptedData(inSocket.readLine());
                 CommandManager.executePayload(json);
             } catch (IOException exc) {
-                isInFastRecovery = true;
-                LOGGER.log(Level.SEVERE, exc::getMessage);
-                executor.shutdown();
-                fastRecovery();
+                exc.printStackTrace();
+                if (recoverying.tryAcquire()) {
+                    System.out.println("Recovering from 1st thread");
+                    close();
+                    isInFastRecovery = true;
+                    active = false;
+                    LOGGER.log(Level.SEVERE, exc::getMessage);
+                    executor.shutdown();
+                    heartbeatProtocolManager.kill();
+                    fastRecovery();
+                    recoverying.release();
+                }
             }
         }
     }

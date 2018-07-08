@@ -54,7 +54,7 @@ public class WindowGameManager {
 
     public int getToken(String username) {
         Pair<Integer, WindowSide> pair = windowInfo.get(username);
-        int playerWindowId = pair.getFirstEntry();;
+        int playerWindowId = pair.getFirstEntry();
         WindowSide playerWindowSide = pair.getSecondEntry();
 
         return constraintGenerator.getToken(playerWindowId, playerWindowSide);

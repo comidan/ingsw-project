@@ -120,6 +120,11 @@ public class MainGameGuiTest {
                 public boolean isInFastRecovery() throws RemoteException {
                     return false;
                 }
+
+                @Override
+                public void setActive(boolean active) throws RemoteException {
+
+                }
             });
             gameGuiAdapter.setDiceList(diceResponse);
             gameGuiAdapter.setPrivateObjective(1);

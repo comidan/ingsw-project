@@ -151,8 +151,6 @@ public class LoginGuiView extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.window = primaryStage;
-
-        //Login GUI
         FXMLLoader loaderLogin = new FXMLLoader(getClass().getResource("/templates/LoginGui.fxml"));
         Parent root = loaderLogin.load();
         LoginGuiView loginGuiView = loaderLogin.getController();
@@ -181,6 +179,7 @@ public class LoginGuiView extends Application {
         rmiRadiobutton = (RadioButton) scene.lookup("#rmiRadiobutton");
         AnchorPane.setBottomAnchor(rmiRadiobutton, getHeightPixel(31));
         window.show();
+        primaryStage.setOnCloseRequest(event -> System.exit(0));
         new LoginGuiAdapter(loginGuiView);
     }
 
@@ -223,11 +222,9 @@ public class LoginGuiView extends Application {
             Label timerLabel = (Label) scene.lookup("#timer");
             AnchorPane.setBottomAnchor(timerLabel, getHeightPixel(10));
             window.setScene(scene);
-
-
             return loaderLobby.getController();
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, () -> e.getMessage());
+            LOGGER.log(Level.SEVERE, e::getMessage);
             return null;
         }
     }

@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,52 +50,56 @@ public class CommandManager implements MessageVisitor {
 
     /** The Constant commandManager. */
     private static final CommandManager commandManager = new CommandManager();
-    
+
     /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(CommandManager.class.getName());
 
     /** The client. */
     private static Client client;
-    
+
     /** The window choice gui controller. */
     private static WindowChoiceGuiAdapter windowChoiceGuiAdapter;
-    
+
     /** The game gui adapter. */
     private static GameGuiAdapter gameGuiAdapter;
-    
+
     /** The window game manager. */
     private static WindowGameManager windowGameManager;
-    
+
     /** The lobby gui view. */
     private static LobbyGuiView lobbyGuiView;
 
     /** The score view. */
     private static ScoreLobbyView scoreLobbyView;
-    
+
     /** The player list. */
     private static List<String> playerList = new ArrayList<>();
-    
+
     /** The player lobby list backup. */
     private static List<String> playerLobbyListBackup = new ArrayList<>();
-    
+
     /** The username. */
     private static String username;
 
     private static Stage stage;
-    
+
     /** The private objective response. */
     private PrivateObjectiveResponse privateObjectiveResponse;
-    
+
     /** The public objective response. */
     private PublicObjectiveResponse publicObjectiveResponse;
-    
+
     /** The tool card response. */
     private ToolCardResponse toolCardResponse;
+
+    private Semaphore waiting;
 
     /**
      * Instantiates a new command manager.
      */
-    private CommandManager() {}
+    private CommandManager() {
+        waiting = new Semaphore(1);
+    }
 
     /**
      * Sets the lobby gui view.
@@ -217,17 +222,31 @@ public class CommandManager implements MessageVisitor {
     @Override
     public void visit(BeginTurnEvent beginTurnEvent) {
         if (gameGuiAdapter == null) {
-            if(lobbyGuiView != null)
-                playerList = new ArrayList<>(lobbyGuiView.getPlayerShown());
-            gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
-                                                                    stage,
-                                                                    playerList,
-                                                                    windowGameManager.getWindows()), client);
-            gameGuiAdapter.setToolCards(toolCardResponse.getIds(), client);
-            gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
-            gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
+            try {
+                waiting.acquire();
+                if (lobbyGuiView != null)
+                    playerList = new ArrayList<>(lobbyGuiView.getPlayerShown());
+                gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(
+                        username,
+                        stage,
+                        playerList,
+                        windowGameManager.getWindows()), client);
+                gameGuiAdapter.setToolCards(toolCardResponse.getIds(), client);
+                gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
+                gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
+                waiting.release();
+            }
+            catch (InterruptedException exc) {
+                System.exit(-1);
+            }
         }
         gameGuiAdapter.notifyTurn();
+        try {
+            client.setActive(true);
+        }
+        catch (RemoteException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+        }
     }
 
     /* (non-Javadoc)
@@ -264,6 +283,12 @@ public class CommandManager implements MessageVisitor {
      */
     @Override
     public void visit(WindowResponse windowResponse) {
+        try {
+            client.setActive(false);
+        }
+        catch (RemoteException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+        }
         windowChoiceGuiAdapter = new WindowChoiceGuiAdapter(GUIManager.initWindowChoiceGuiView(windowResponse, lobbyGuiView.getStage()), client);
         stage = windowChoiceGuiAdapter.getStage();
     }
@@ -273,15 +298,22 @@ public class CommandManager implements MessageVisitor {
      */
     @Override
     public void visit(OpponentWindowResponse opponentWindowResponse) {
-        if(windowGameManager == null)
-            windowGameManager = new WindowGameManager();
-        windowGameManager.getWindows().clear();
-        List<String> players = opponentWindowResponse.getPlayers();
-        Map<String, Pair<Integer, WindowSide>> windows = new HashMap<>();
-        for(String player : players) {
-            windows.put(player, new Pair<>(opponentWindowResponse.getPlayerWindowId(player), opponentWindowResponse.getPlayerWindowSide(player)));
+        try {
+            waiting.acquire();
+            if (windowGameManager == null)
+                windowGameManager = new WindowGameManager();
+            windowGameManager.getWindows().clear();
+            List<String> players = opponentWindowResponse.getPlayers();
+            Map<String, Pair<Integer, WindowSide>> windows = new HashMap<>();
+            for (String player : players) {
+                windows.put(player, new Pair<>(opponentWindowResponse.getPlayerWindowId(player), opponentWindowResponse.getPlayerWindowSide(player)));
+            }
+            windowGameManager.setWindows(windows, players);
+            waiting.release();
         }
-        windowGameManager.setWindows(windows, players);
+        catch (InterruptedException exc) {
+            System.exit(-1);
+        }
     }
 
     /* (non-Javadoc)
@@ -290,18 +322,25 @@ public class CommandManager implements MessageVisitor {
     @Override
     public void visit(DiceResponse diceResponse) {
         if (gameGuiAdapter == null) {
-            if(lobbyGuiView != null)
-                playerList = new ArrayList<>(lobbyGuiView.getPlayerShown());
-            gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
-                                                                    stage,
-                                                                    playerList,
-                                                                    windowGameManager.getWindows()), client);
-            System.out.println("Token dati: " + windowGameManager.getToken(username));
-            gameGuiAdapter.setToken(windowGameManager.getToken(username));
-            gameGuiAdapter.setToolCards(toolCardResponse.getIds(), client);
-            gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
-            gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
-            gameGuiAdapter.notifyEndTurn();
+            try {
+                waiting.acquire();
+                if (lobbyGuiView != null)
+                    playerList = new ArrayList<>(lobbyGuiView.getPlayerShown());
+                gameGuiAdapter = new GameGuiAdapter(GameView.getInstance(username,
+                        stage,
+                        playerList,
+                        windowGameManager.getWindows()), client);
+                System.out.println("Token dati: " + windowGameManager.getToken(username));
+                gameGuiAdapter.setToken(windowGameManager.getToken(username));
+                gameGuiAdapter.setToolCards(toolCardResponse.getIds(), client);
+                gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
+                gameGuiAdapter.setPrivateObjective(privateObjectiveResponse.getIdObjective());
+                gameGuiAdapter.notifyEndTurn();
+                waiting.release();
+            }
+            catch (InterruptedException exc) {
+                System.exit(-1);
+            }
         }
         gameGuiAdapter.setDiceList(diceResponse);
     }
@@ -391,6 +430,12 @@ public class CommandManager implements MessageVisitor {
 
     @Override
     public void visit(EndTurnResponse endTurnResponse) {
+        try {
+            client.setActive(false);
+        }
+        catch (RemoteException exc) {
+            LOGGER.log(Level.SEVERE, exc::getMessage);
+        }
         gameGuiAdapter.notifyEndTurn();
     }
 

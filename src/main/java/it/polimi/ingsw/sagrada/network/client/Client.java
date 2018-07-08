@@ -66,4 +66,6 @@ public interface Client extends Remote {
     String getId() throws RemoteException;
 
     boolean isInFastRecovery() throws RemoteException;
+
+    void setActive(boolean active) throws RemoteException;
 }

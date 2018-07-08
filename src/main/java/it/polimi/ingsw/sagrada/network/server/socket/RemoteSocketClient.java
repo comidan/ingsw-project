@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiFunction;
@@ -217,6 +218,11 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     @Override
     public boolean isInFastRecovery() {
         return isInFastRecovery;
+    }
+
+    @Override
+    public void setActive(boolean active) throws RemoteException {
+
     }
 
     /* (non-Javadoc)
