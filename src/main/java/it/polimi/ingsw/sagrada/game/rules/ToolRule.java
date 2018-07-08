@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.base.utility.DTO;
 import java.util.function.Function;
 
 
+
 /**
  * The Class ToolRule.
  */

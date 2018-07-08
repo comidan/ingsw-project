@@ -11,10 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 
+
 /**
  * The Class GUIManager.
  */
 public class GUIManager {
+    
+    /**
+     * Instantiates a new GUI manager.
+     */
     private GUIManager() {
         throw new IllegalStateException("Utility class");
     }
@@ -22,6 +27,7 @@ public class GUIManager {
     /** The Constant RATIO. */
     private static final double RATIO = 0.76;
 
+    /** The Constant GAME_RATIO. */
     private static final double GAME_RATIO = 1.778;
     
     /** The Constant RELATIVE_DIMENSION. */
@@ -88,8 +94,18 @@ public class GUIManager {
         return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION * RATIO;
     }
 
+    /**
+     * Gets the game window width.
+     *
+     * @return the game window width
+     */
     public static double getGameWindowWidth() { return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION * GAME_RATIO; }
 
+    /**
+     * Gets the game window height.
+     *
+     * @return the game window height
+     */
     public static double getGameWindowHeight() { return gd.getDisplayMode().getHeight() * RELATIVE_DIMENSION; }
 
     /**
@@ -130,10 +146,22 @@ public class GUIManager {
             return perc * getWindowWidth() / 100;
     }
 
+    /**
+     * Gets the game height pixel.
+     *
+     * @param perc the perc
+     * @return the game height pixel
+     */
     public static double getGameHeightPixel(double perc) {
         return perc * getGameWindowHeight() / 100;
     }
 
+    /**
+     * Gets the game width pixel.
+     *
+     * @param perc the perc
+     * @return the game width pixel
+     */
     public static double getGameWidthPixel(double perc) {
         return perc * getGameWindowWidth() / 100;
     }

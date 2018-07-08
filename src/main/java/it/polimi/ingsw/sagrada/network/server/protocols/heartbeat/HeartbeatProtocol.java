@@ -8,22 +8,56 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+
+/**
+ * The Class HeartbeatProtocol.
+ */
 class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, HeartbeatEvent> {
 
+    /** The Constant TIME_INTERVAL. */
     private static final int TIME_INTERVAL = 1000;
+    
+    /** The Constant TIME_LIFE_FRAMES. */
     private static final int TIME_LIFE_FRAMES = 5;
+    
+    /** The Constant TIME_LOSS_COMMUNICATION_FRAME. */
     private static final int TIME_LOSS_COMMUNICATION_FRAME = 3;
+    
+    /** The Constant UDP_VALID_PACKET_SIZE. */
     private static final int UDP_VALID_PACKET_SIZE  = 1024;
 
+    /** The datagram socket. */
     private DatagramSocket datagramSocket;
+    
+    /** The port. */
     private int port;
+    
+    /** The executor. */
     private ExecutorService executor;
+    
+    /** The data. */
     private String data;
+    
+    /** The expected payload. */
     private String expectedPayload;
+    
+    /** The observer. */
     private Observer<HeartbeatState, HeartbeatEvent> observer;
+    
+    /** The runnable worker thread. */
     private Thread runnableWorkerThread;
+    
+    /** The is dead. */
     private boolean isDead = false;
 
+    /**
+     * Instantiates a new heartbeat protocol.
+     *
+     * @param port the port
+     * @param observer the observer
+     * @param expectedPayload the expected payload
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     HeartbeatProtocol(int port, Observer observer, String expectedPayload) throws IOException{
         executor = Executors.newSingleThreadExecutor();
         this.port = port;
@@ -33,18 +67,29 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
         runnableWorkerThread = null;
     }
 
+    /**
+     * Kill.
+     */
     void kill() {
         executor.shutdownNow();
         isDead = true;
         runnableWorkerThread.interrupt();
     }
 
+    /**
+     * Gets the port.
+     *
+     * @return the port
+     */
     public int getPort() {
         return port;
     }
 
     /**
+     * Receive heartbeat.
+     *
      * @return received heartbeat
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     private byte[] receiveHeartbeat() throws IOException{
         byte[] payload = receiveData(datagramSocket);
@@ -53,6 +98,8 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
     }
 
     /**
+     * Run.
+     *
      * @apiNote listen for one host heartbeat and monitor it, launching events
      */
     @Override
@@ -93,18 +140,36 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
         asynchronousHeartbeat.cancel(true);
     }
 
+    /**
+     * Notify lost comm.
+     *
+     * @param timeElapsed the time elapsed
+     * @return true, if successful
+     */
     private boolean notifyLostComm(int timeElapsed) {
         HeartbeatEvent event = new HeartbeatEvent(expectedPayload, timeElapsed, new Date().getTime());
         notify(HeartbeatState.COMMUNICATION_LOST, event);
         return true;
     }
 
+    /**
+     * Notify death.
+     *
+     * @param timeElapsed the time elapsed
+     * @return true, if successful
+     */
     private boolean notifyDeath(int timeElapsed) {
         HeartbeatEvent event = new HeartbeatEvent(expectedPayload, timeElapsed, new Date().getTime());
         notify(HeartbeatState.HOST_OFFLINE, event);
         return true;
     }
 
+    /**
+     * Notify heartbeat.
+     *
+     * @param lossCommsAlreadyNotified the loss comms already notified
+     * @param timeElapsed the time elapsed
+     */
     private void notifyHeartbeat(boolean lossCommsAlreadyNotified, int timeElapsed) {
         HeartbeatEvent event = new HeartbeatEvent(data, timeElapsed, new Date().getTime());
         if (lossCommsAlreadyNotified)
@@ -113,14 +178,20 @@ class HeartbeatProtocol implements Runnable, Observable<HeartbeatState, Heartbea
             notify(HeartbeatState.HEARTBEAT_RECEIVED, event);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.Observable#notify(java.lang.Object, java.lang.Object)
+     */
     @Override
     public void notify(HeartbeatState heartbeatState, HeartbeatEvent event) {
         observer.update(heartbeatState, event);
     }
 
     /**
+     * Receive data.
+     *
      * @param datagramSocket socket used to receive from sent data
      * @return received data
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     private byte[] receiveData(DatagramSocket datagramSocket) throws IOException {
         byte[] receiveData = new byte[UDP_VALID_PACKET_SIZE];

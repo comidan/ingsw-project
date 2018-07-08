@@ -7,16 +7,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
- * MSAccessDatabase moduele/library class
+ * MSAccessDatabase moduele/library class.
  *
  * @author daniele
  */
 class MSAccessDatabase extends Database {
     
-    /** The Constant DATABASE_DRIVER package*/
+    /**  The Constant DATABASE_DRIVER package. */
     private static final String DATABASE_DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(MSAccessDatabase.class.getName());
     
     /**
@@ -41,7 +43,7 @@ class MSAccessDatabase extends Database {
     }
     
     /**
-     * Instantiates a new MS access database using default port
+     * Instantiates a new MS access database using default port.
      *
      * @param username DB access username
      * @param password DB access password

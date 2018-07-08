@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.window.ByteStreamWindowEve
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowEvent;
 
 
+
 /**
  * The Interface ActionMessageVisitor.
  */
@@ -29,10 +30,28 @@ public interface ActionMessageVisitor {
      */
     String visit(DiceDraftSelectionEvent diceDraftSelectionEvent);
 
+    /**
+     * Visit.
+     *
+     * @param diceRoundTrackSelectionEvent the dice round track selection event
+     * @return the string
+     */
     String visit(DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent);
 
+    /**
+     * Visit.
+     *
+     * @param diceRoundTrackColorSelectionEvent the dice round track color selection event
+     * @return the string
+     */
     String visit(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent);
 
+    /**
+     * Visit.
+     *
+     * @param diceValueEvent the dice value event
+     * @return the string
+     */
     String visit(DiceValueEvent diceValueEvent);
 
     /**
@@ -67,5 +86,11 @@ public interface ActionMessageVisitor {
      */
     String visit(Message message);
 
+    /**
+     * Visit.
+     *
+     * @param toolEvent the tool event
+     * @return the string
+     */
     String visit(ToolEvent toolEvent);
 }

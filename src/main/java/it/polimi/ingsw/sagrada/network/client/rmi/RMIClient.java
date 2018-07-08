@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import static java.lang.Thread.sleep;
 
 
+
 /**
  * The Class RMIClient.
  */
@@ -63,14 +64,10 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      */
     private static final String PROTOCOL = "rmi://";
 
-    /**
-     * THe Constant RMI_PORT
-     */
+    /** THe Constant RMI_PORT. */
     private static final int RMI_PORT = getConfigRMIPort();
 
-    /**
-     * THe Constant DEFAULT_RMI_PORT
-     */
+    /** THe Constant DEFAULT_RMI_PORT. */
     private static final int DEFAULT_RMI_PORT = 1099;
 
     /**
@@ -98,12 +95,16 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
      */
     private AbstractServerRMI server;
 
+    /** The url. */
     private final String URL = PROTOCOL + ADDRESS + ":" + 1099;
 
+    /** The active. */
     private boolean active;
 
+    /** The lobby id. */
     private String lobbyId;
 
+    /** The executor. */
     private ExecutorService executor;
 
     /**
@@ -226,6 +227,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         }
     }
 
+    /**
+     * Fast recovery.
+     */
     private void fastRecovery() {
         try {
             while (!new DiscoverLan().isHostReachable(InetAddress.getByName(ADDRESS)))
@@ -379,11 +383,17 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         return username;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#isInFastRecovery()
+     */
     @Override
     public boolean isInFastRecovery() throws RemoteException {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#setActive(boolean)
+     */
     @Override
     public void setActive(boolean active) throws RemoteException {
         this.active = active;
@@ -413,6 +423,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
         LoginGuiAdapter.getDynamicRouter().dispatch(message);
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
     @Override
     public void run() {
         while(true) {
@@ -422,7 +435,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                     fastRecovery();
                     return;
                 }
-                System.out.println("Checking RMI Server");
                 Thread.sleep(2000);
             } catch (UnknownHostException | InterruptedException exc) {
                 LOGGER.log(Level.SEVERE, exc::getMessage);

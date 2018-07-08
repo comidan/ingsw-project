@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
+
 /**
  * The Class EndTurn.
  *
@@ -16,7 +17,7 @@ import javafx.scene.layout.StackPane;
 public class EndTurn extends StackPane {
 
     /**
-     * instantiates a new endTurn
+     * instantiates a new endTurn.
      */
     public EndTurn(){
         ImageView buttonBackground = new ImageView(new Image(EndTurn.class.getResourceAsStream("/images/gameGuiImages/button5.png")));
@@ -31,7 +32,8 @@ public class EndTurn extends StackPane {
 
 
     /**
-     * sets the handler to handle click on the end turn button
+     * sets the handler to handle click on the end turn button.
+     *
      * @param endTurnEventHandler the handler
      */
     public void setEndTurnHandler(EventHandler<MouseEvent> endTurnEventHandler){

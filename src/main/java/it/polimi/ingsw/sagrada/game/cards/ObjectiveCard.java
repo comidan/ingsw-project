@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.game.cards;
 import it.polimi.ingsw.sagrada.game.rules.ObjectiveRule;
 
 
+
 /**
  * The Class ObjectiveCard.
  */

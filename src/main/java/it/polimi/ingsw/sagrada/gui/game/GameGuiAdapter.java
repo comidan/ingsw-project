@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class GameGuiAdapter.
  */
@@ -55,6 +56,7 @@ public class GameGuiAdapter {
      */
     private CellView lastMove;
 
+    /** The dice source. */
     private String diceSource;
 
 
@@ -102,6 +104,9 @@ public class GameGuiAdapter {
         });
     }
 
+    /**
+     * Sets the window button handler.
+     */
     private void setWindowButtonHandler() {
         gameView.setWindowButtonHandler(event -> {
             gameView.showOtherWindows();
@@ -128,7 +133,6 @@ public class GameGuiAdapter {
                         event.acceptTransferModes(TransferMode.COPY);}
                 }, new EventHandler<DragEvent>() {
                     public void handle(DragEvent event) {
-                        System.out.println("---CellClickEvent---");
                         DiceView diceView = clickedObject.getClickedDice();
                         if (diceView != null) {
                             CellView cellView = (CellView) event.getSource();
@@ -156,7 +160,6 @@ public class GameGuiAdapter {
                                 }
 
                                 event.consume();
-                                System.out.println("---"+diceView.getDiceID()+"---");
                             }
                         }
                     }
@@ -190,6 +193,8 @@ public class GameGuiAdapter {
 
     /**
      * Sets the tool handler.
+     *
+     * @param client the new tool handler
      */
     private void setToolHandler(Client client) {
         Platform.runLater(() -> {
@@ -205,12 +210,20 @@ public class GameGuiAdapter {
         });
     }
 
+    /**
+     * Sets the token window.
+     *
+     * @param tokenNumber the new token window
+     */
     private void setTokenWindow(int tokenNumber){
         setToken(tokenNumber);
     }
 
 
 
+    /**
+     * Sets the tool card prev listener.
+     */
     private void setToolCardPrevListener(){
             gameView.setToolPreviewListener(event -> {
                 gameView.showToolCard();
@@ -222,6 +235,9 @@ public class GameGuiAdapter {
 
     }
 
+    /**
+     * Sets the private prev listener.
+     */
     private void setPrivatePrevListener(){
             gameView.setPrivatePreviewListener(event -> {
                 gameView.showPrivateCard();
@@ -233,6 +249,9 @@ public class GameGuiAdapter {
 
     }
 
+    /**
+     * Sets the public prev listener.
+     */
     private void setPublicPrevListener(){
             gameView.setPublicPreviewListener(event -> {
                 gameView.showPublicCard();
@@ -245,6 +264,9 @@ public class GameGuiAdapter {
 
 
 
+    /**
+     * Sets the card preview listener.
+     */
     private void setCardPreviewListener(){
         Platform.runLater(() -> {
             setToolCardPrevListener();
@@ -256,12 +278,16 @@ public class GameGuiAdapter {
     // Tool effect: change dice value in draft adding one OR rolls again dice, according to value it gets
     // can be used for toolcards: 1, 6, 10
 
+    /**
+     * Enable draft click.
+     *
+     * @param client the client
+     */
     private void enableDraftClick(Client client){
         this.gameView.enableDraftChangeValue(event ->
         {
             DiceView diceView = (DiceView) event.getSource();
             DiceDraftSelectionEvent diceDraftSelectionEvent = new DiceDraftSelectionEvent(gameView.getUsername(), diceView.getDiceID());
-            System.out.println("click");
             try {
                 client.sendRemoteMessage(diceDraftSelectionEvent);
             } catch (RemoteException e) {
@@ -272,6 +298,9 @@ public class GameGuiAdapter {
         });
     }
 
+    /**
+     * Disable draft change value.
+     */
     public void disableDraftChangeValue(){
         this.gameView.disableDraftClick();
     }
@@ -279,10 +308,11 @@ public class GameGuiAdapter {
     // Tool effect: enable moving dice on your own window
     // can be used for toolcards: 2, 3, 4, 12
 
+    /**
+     * Enable window dice drag.
+     */
     private void enableWindowDiceDrag() {
-        System.out.println("---EnableDrag---");
         this.gameView.enableWindowDiceDrag(event -> {
-            System.out.println("---Window click---");
             DiceView diceView = (DiceView) event.getSource();
             clickedObject.setClickedDice(diceView);
             Dragboard db = diceView.startDragAndDrop(TransferMode.ANY);
@@ -295,13 +325,18 @@ public class GameGuiAdapter {
         });
     }
 
+    /**
+     * Disable window dice drag.
+     */
     private void disableWindowDiceDrag(){
             gameView.disableWindowDiceDrag();
         }
 
      /**
-     * Sets the round track click.
-     */
+      * Sets the round track click.
+      *
+      * @param client the client
+      */
 
 
      // Tool effect: enable drag on dice in roundtrack
@@ -311,9 +346,7 @@ public class GameGuiAdapter {
         Platform.runLater(() -> {
             this.gameView.enableDraftChangeValue(event ->
             {
-                System.out.println("---DraftClicked---");
                 DiceView diceView = (DiceView) event.getSource();
-                System.out.print("id dado draft" + diceView.getDiceID());
                 DiceDraftSelectionEvent diceDraftSelectionEvent = new DiceDraftSelectionEvent(gameView.getUsername(), diceView.getDiceID());
                 try {
                     client.sendRemoteMessage(diceDraftSelectionEvent);
@@ -326,14 +359,11 @@ public class GameGuiAdapter {
             this.gameView.setRoundtrackClickHandler(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    System.out.println("---RoundTrackClicked---");
                     DiceView diceView = (DiceView) event.getSource();
-                    System.out.println("id dado round" + diceView.getDiceID());
                     DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent = new DiceRoundTrackSelectionEvent(
                             gameView.getUsername(),
                             diceView.getDiceID(),
-                            diceView.getRoundNumber()); //FIX
-                    System.out.println("------------"+diceView.getRoundNumber()+"--------------");
+                            diceView.getRoundNumber());
                     try {
                         client.sendRemoteMessage(diceRoundTrackSelectionEvent);
                     } catch (RemoteException e) {
@@ -345,6 +375,11 @@ public class GameGuiAdapter {
         });
     }
 
+    /**
+     * Enable round track.
+     *
+     * @param client the client
+     */
     private void enableRoundTrack(Client client) {
         this.gameView.setRoundtrackClickHandler(event -> {
             DiceView diceView = (DiceView) event.getSource();
@@ -360,10 +395,18 @@ public class GameGuiAdapter {
         });
     }
 
+    /**
+     * Disable round track click.
+     */
     public void disableRoundTrackClick(){
         gameView.disableRoundTrackClick();
     }
 
+    /**
+     * Sets the round track reconnection.
+     *
+     * @param roundTrack the new round track reconnection
+     */
     public void setRoundTrackReconnection(List<List<Dice>> roundTrack) {
         List<List<DiceView>> roundTrackView = new ArrayList<>();
         roundTrack.forEach(round -> {
@@ -374,10 +417,19 @@ public class GameGuiAdapter {
         Platform.runLater(() -> gameView.setRoundTrackReconnection(roundTrackView));
     }
 
+    /**
+     * Disable draft click.
+     */
     public void disableDraftClick(){
         gameView.disableDraftClick();
     }
 
+    /**
+     * Enable choose value.
+     *
+     * @param color the color
+     * @param diceId the dice id
+     */
     public void enableChooseValue(Colors color, int diceId){
     Platform.runLater(() -> {
         gameView.showDicePrevContainer(color, diceId);
@@ -507,6 +559,7 @@ public class GameGuiAdapter {
      * Sets the tool cards.
      *
      * @param toolCards the new tool cards
+     * @param client the client
      */
     public void setToolCards(List<Integer> toolCards, Client client) {
         Platform.runLater(() -> gameView.setToolCards(toolCards));
@@ -564,14 +617,30 @@ public class GameGuiAdapter {
 
     }
 
+    /**
+     * Sets the notification.
+     *
+     * @param message the new notification
+     */
     public void setNotification(String message) {
         Platform.runLater(() -> gameView.setNotification(message));
     }
 
+    /**
+     * Removes the token.
+     *
+     * @param num the num
+     */
     public void removeToken(int num) {
         Platform.runLater(()-> gameView.removeToken(num));
     }
 
+    /**
+     * Adds the token tool.
+     *
+     * @param num the num
+     * @param toolCardView the tool card view
+     */
     public void addTokenTool(int num, ToolCardView toolCardView){
         Platform.runLater(()-> gameView.addTokenTool(num, toolCardView));
     }
@@ -586,20 +655,40 @@ public class GameGuiAdapter {
         System.out.println("New round: "+currentRound);
     }
 
+    /**
+     * Sets the time remaining.
+     *
+     * @param time the new time remaining
+     */
     public void setTimeRemaining(int time) {
         Platform.runLater(() -> gameView.setTimeRemaining(time));
     }
 
+    /**
+     * Gets the stage.
+     *
+     * @return the stage
+     */
     public Stage getStage() {
         return gameView.getStage();
     }
 
+    /**
+     * Gets the window as byte array.
+     *
+     * @return the window as byte array
+     */
     public byte[] getWindowAsByteArray() {
         return gameView.getWindowAsByteArray();
     }
 
+    /**
+     * Enable gui element.
+     *
+     * @param toolId the tool id
+     * @param client the client
+     */
     public void enableGuiElement(int toolId, Client client) {
-        System.out.println("---GameGuiAdapter enable GUI element---" + toolId);
         if(toolId==0 || toolId==5 || toolId==6 || toolId==9) enableDraftClick(client);
         if(toolId==1 || toolId==2 || toolId == 3 || toolId == 11) enableWindowDiceDrag();
         if(toolId==4) enableRoundTrackClick(client);
@@ -607,6 +696,9 @@ public class GameGuiAdapter {
         if(toolId==11) enableRoundTrack(client);
     }
 
+    /**
+     * Disable gui element.
+     */
     public void disableGuiElement() {
         disableDraftClick();
         disableWindowDiceDrag();

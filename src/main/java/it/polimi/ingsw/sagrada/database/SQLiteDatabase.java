@@ -14,9 +14,10 @@ import java.util.logging.Logger;
  */
 class SQLiteDatabase extends Database {
 
-    /** The Constant DATABASE_DRIVER package */
+    /** The Constant DATABASE_DRIVER package. */
     private static final String DATABASE_DRIVER = "org.sqlite.JDBC";
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(SQLiteDatabase.class.getName());
 
     /**

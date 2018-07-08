@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 
+
 /**
  * The Class RemoteSocketClient.
  */
@@ -57,6 +58,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     /** The identifier. */
     private String identifier;
 
+    /** The is in fast recovery. */
     private boolean isInFastRecovery;
 
     /**
@@ -144,9 +146,7 @@ public class RemoteSocketClient implements ClientBase, Runnable {
     @Override
     public void setPlayer(String playerName, int position) {
         String payload = commandParser.createJSONAddLobbyPlayer(playerName, position);
-        System.out.println("Sending player data...");
         output.println(Security.getEncryptedData(payload));
-        System.out.println("Sent");
     }
 
     /* (non-Javadoc)
@@ -191,7 +191,6 @@ public class RemoteSocketClient implements ClientBase, Runnable {
             notifyMessage(((MessageEvent) parsedMessage).getMessage());
         }
         else {
-            System.out.println("Sending to model...");
             System.out.println(parsedMessage);
             sendToModel(parsedMessage);
         }
@@ -215,11 +214,17 @@ public class RemoteSocketClient implements ClientBase, Runnable {
         System.out.println(message);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#isInFastRecovery()
+     */
     @Override
     public boolean isInFastRecovery() {
         return isInFastRecovery;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#setActive(boolean)
+     */
     @Override
     public void setActive(boolean active) throws RemoteException {
 

@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class GameServer.
  */
@@ -29,6 +30,7 @@ public class GameServer {
     /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(GameServer.class.getName());
 
+    /** The rmi port. */
     private static int rmiPort = 1099;
 
     /** The Constant registry. */

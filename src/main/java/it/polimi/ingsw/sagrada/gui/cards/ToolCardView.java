@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
+
 /**
  * The Class ToolCardView.
  */
@@ -43,7 +44,7 @@ public class ToolCardView extends StackPane {
     }
 
     /**
-     * Sets the tool click handler to handle the possibility to buy the toolcard
+     * Sets the tool click handler to handle the possibility to buy the toolcard.
      *
      * @param toolClickHandler the new tool click handler
      */
@@ -61,7 +62,9 @@ public class ToolCardView extends StackPane {
     }
 
     /**
-     * Adds the token on the toolcard when it's used
+     * Adds the token on the toolcard when it's used.
+     *
+     * @param tokenNumber the token number
      */
     public void addToken(int tokenNumber){
         for(int i = 0; i<tokenNumber; i++){

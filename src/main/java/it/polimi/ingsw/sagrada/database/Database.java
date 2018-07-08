@@ -8,47 +8,56 @@ import java.sql.Statement;
 import java.util.Properties;
 
 
+
 /**
- * Main database class describing its main properties and leaving specific ones as abstractions
+ * Main database class describing its main properties and leaving specific ones as abstractions.
  *
  * @author daniele
  */
 public abstract class Database
 {
     
-    /** The Constant MYSQL_STANDARD_REGISTERED_PORT as default port in case of missing json config*/
+    /**  The Constant MYSQL_STANDARD_REGISTERED_PORT as default port in case of missing json config. */
     public static final int MYSQL_STANDARD_REGISTERED_PORT = 3306;
     
-    /** The Constant MYSQL_STANDARD_USERNAME as default username in case of missing json config*/
+    /**  The Constant MYSQL_STANDARD_USERNAME as default username in case of missing json config. */
     public static final String MYSQL_STANDARD_USERNAME = "root";
     
-    /** The Constant MYSQL_STANDARD_AUTH as default password in case of missing json config*/
+    /**  The Constant MYSQL_STANDARD_AUTH as default password in case of missing json config. */
     public static final String MYSQL_STANDARD_AUTH = "";
     
-    /** The Constant MYSQL_STANDARD_DB_NAME as default db name in case of missing json config */
+    /**  The Constant MYSQL_STANDARD_DB_NAME as default db name in case of missing json config. */
     public static final String MYSQL_STANDARD_DB_NAME = "sagrada";
 
+    /** The database URL. */
     String databaseURL;
 
+    /** The username. */
     protected String username;
 
+    /** The password. */
     protected String password;
 
+    /** The max pool. */
     String maxPool;
 
+    /** The connection. */
     protected Connection connection;
 
+    /** The properties. */
     private Properties properties;
 
+    /** The statement. */
     Statement statement;
 
+    /** The result set. */
     protected ResultSet resultSet;
     
-    /** Describing multi thread status by allowing multiple queries on the same connection by disallowing auto commit */
+    /**  Describing multi thread status by allowing multiple queries on the same connection by disallowing auto commit. */
     boolean multiThread = false;
     
     /**
-     * Init the SQL database connection using personalized port
+     * Init the SQL database connection using personalized port.
      *
      * @param username DB access username
      * @param password DB access password
@@ -65,7 +74,7 @@ public abstract class Database
     }
     
     /**
-     * Init the SQL database connection using the default registered SQL port 3306, defined above as constant
+     * Init the SQL database connection using the default registered SQL port 3306, defined above as constant.
      *
      * @param username DB access username
      * @param password DB access password
@@ -98,7 +107,7 @@ public abstract class Database
     }
     
     /**
-     * Init the MS Access database connection using the default registered SQL port 3306, defined above as constant
+     * Init the MS Access database connection using the default registered SQL port 3306, defined above as constant.
      *
      * @param username DB access username
      * @param password DB access password
@@ -114,7 +123,7 @@ public abstract class Database
     }
 
     /**
-     * Init the SQLite database connection using personalized port
+     * Init the SQLite database connection using personalized port.
      *
      * @param username DB access username
      * @param password DB access password
@@ -129,7 +138,7 @@ public abstract class Database
     }
     
     /**
-     * Gets the properties for database connection : internal use only
+     * Gets the properties for database connection : internal use only.
      *
      * @return database connection properties
      */
@@ -144,7 +153,7 @@ public abstract class Database
     }
 
     /**
-     * Connect to specified database
+     * Connect to specified database.
      *
      * @return DB connection
      * @throws ClassNotFoundException probably mis configured JDBC library
@@ -153,7 +162,7 @@ public abstract class Database
     protected abstract Connection connect() throws ClassNotFoundException, SQLException;
     
     /**
-     * Gets query statement
+     * Gets query statement.
      *
      * @return statement
      * @throws SQLException SQL exception on connection
@@ -175,7 +184,7 @@ public abstract class Database
     }
     
     /**
-     * Execute raw query on database
+     * Execute raw query on database.
      *
      * @param query query
      * @return result set to iterate over results
@@ -189,7 +198,7 @@ public abstract class Database
     }
     
     /**
-     * Execute update query
+     * Execute update query.
      *
      * @param queryUpdate update query
      * @return return statement of Statement.executeUpdate(String query)
@@ -203,7 +212,7 @@ public abstract class Database
     }
     
     /**
-     * Prepare query using statement
+     * Prepare query using statement.
      *
      * @param initQuery initial generic query
      * @return prepared statement to insert values
@@ -215,7 +224,7 @@ public abstract class Database
     }
     
     /**
-     * Disconnect from database
+     * Disconnect from database.
      *
      * @throws SQLException SQL exception on connection fault
      */

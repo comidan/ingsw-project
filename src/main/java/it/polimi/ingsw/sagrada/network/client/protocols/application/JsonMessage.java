@@ -37,6 +37,7 @@ import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
 import java.util.*;
 
 
+
 /**
  * The Class JsonMessage.
  */
@@ -183,6 +184,12 @@ public class JsonMessage implements ActionMessageVisitor {
         return content;
     }
 
+    /**
+     * Creates the tool choice event.
+     *
+     * @param toolEvent the tool event
+     * @return the JSON object
+     */
     private JSONObject createToolChoiceEvent(ToolEvent toolEvent) {
         JSONObject data = new JSONObject();
         data.put(TOOL_ID, toolEvent.getToolId()+"");
@@ -194,6 +201,12 @@ public class JsonMessage implements ActionMessageVisitor {
         return content;
     }
 
+    /**
+     * Creates the dice draft selection event.
+     *
+     * @param diceDraftSelectionEvent the dice draft selection event
+     * @return the JSON object
+     */
     private JSONObject createDiceDraftSelectionEvent(DiceDraftSelectionEvent diceDraftSelectionEvent) {
         JSONObject data = new JSONObject();
         data.put(PLAYER_ID, diceDraftSelectionEvent.getIdPlayer());
@@ -205,6 +218,12 @@ public class JsonMessage implements ActionMessageVisitor {
         return content;
     }
 
+    /**
+     * Creates the dice round track selection event.
+     *
+     * @param diceRoundTrackSelectionEvent the dice round track selection event
+     * @return the JSON object
+     */
     private JSONObject createDiceRoundTrackSelectionEvent(DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent) {
         JSONObject data = new JSONObject();
         data.put(PLAYER_ID, diceRoundTrackSelectionEvent.getPlayerId());
@@ -217,6 +236,12 @@ public class JsonMessage implements ActionMessageVisitor {
         return content;
     }
 
+    /**
+     * Creates the dice round track color selection event.
+     *
+     * @param diceRoundTrackColorSelectionEvent the dice round track color selection event
+     * @return the JSON object
+     */
     private JSONObject createDiceRoundTrackColorSelectionEvent(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent) {
         JSONObject data = new JSONObject();
         data.put(PLAYER_ID, diceRoundTrackColorSelectionEvent.getPlayerId());
@@ -228,6 +253,12 @@ public class JsonMessage implements ActionMessageVisitor {
         return content;
     }
 
+    /**
+     * Creates the dice value event.
+     *
+     * @param diceValueEvent the dice value event
+     * @return the JSON object
+     */
     private JSONObject createDiceValueEvent(DiceValueEvent diceValueEvent) {
         DiceEvent diceEvent = diceValueEvent.getDiceEvent();
         JSONObject content = new JSONObject();
@@ -246,6 +277,12 @@ public class JsonMessage implements ActionMessageVisitor {
         return container;
     }
 
+    /**
+     * Creates the byte stream window response.
+     *
+     * @param byteStreamWindowEvent the byte stream window event
+     * @return the JSON object
+     */
     private JSONObject createByteStreamWindowResponse(ByteStreamWindowEvent byteStreamWindowEvent) {
         JSONObject content = new JSONObject();
         content.put(USERNAME, playerId);
@@ -445,17 +482,29 @@ public class JsonMessage implements ActionMessageVisitor {
         return createDiceEvent(diceEvent).toJSONString();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent)
+     */
     @Override
     public String visit(DiceDraftSelectionEvent diceDraftSelectionEvent) { return createDiceDraftSelectionEvent(diceDraftSelectionEvent).toJSONString(); }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackSelectionEvent)
+     */
     @Override
     public String visit(DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent) { return createDiceRoundTrackSelectionEvent(diceRoundTrackSelectionEvent).toJSONString(); }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackColorSelectionEvent)
+     */
     @Override
     public String visit(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent) {
         return createDiceRoundTrackColorSelectionEvent(diceRoundTrackColorSelectionEvent).toJSONString();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceValueEvent)
+     */
     @Override
     public String visit(DiceValueEvent diceValueEvent) {
         return createDiceValueEvent(diceValueEvent).toJSONString();
@@ -496,6 +545,9 @@ public class JsonMessage implements ActionMessageVisitor {
         return CommandKeyword.ERROR;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ActionMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent)
+     */
     @Override
     public String visit(ToolEvent toolEvent) { return createToolChoiceEvent(toolEvent).toJSONString();}
 

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class DiscoverLan.
  */
@@ -44,6 +45,7 @@ public class DiscoverLan {
         }
     };
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(DiscoverLan.class.getName());
 
     /** The m directly attached networks. */

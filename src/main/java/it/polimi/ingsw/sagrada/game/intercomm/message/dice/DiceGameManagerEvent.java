@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameVisitor;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 
+
 /**
  * The Class DiceGameManagerEvent.
  */

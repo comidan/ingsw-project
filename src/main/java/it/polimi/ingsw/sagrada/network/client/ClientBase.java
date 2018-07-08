@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.network.client;
 import java.rmi.RemoteException;
 
 
+
 /**
  * The Interface ClientBase.
  */

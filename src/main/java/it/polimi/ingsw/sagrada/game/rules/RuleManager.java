@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 
+
 /**
  * The Class RuleManager.
  */
@@ -16,8 +17,10 @@ public class RuleManager {
     /** The Constant mainGameRule. */
     private final MainGameRule mainGameRule = new MainGameRule();
 
+    /** The set index. */
     private Boolean[] setIndex;
 
+    /** The map index. */
     private List<Integer> mapIndex;
 
     /**
@@ -75,46 +78,75 @@ public class RuleManager {
     }
 
     /**
-     * Set new dice to be value ignored
+     * Set new dice to be value ignored.
+     *
+     * @param diceId the dice id
      */
     public void addIgnoreValue(int diceId) {
         mainGameRule.addIgnoreValue(diceId);
     }
 
     /**
-     * Remove dice from being color ignored
+     * Remove dice from being color ignored.
+     *
+     * @param diceId the dice id
      */
     public void removeIgnoreValue(int diceId) {
         mainGameRule.removeIgnoreValue(diceId);
     }
 
     /**
-     * Remove dice from being value ignored
+     * Remove dice from being value ignored.
+     *
+     * @param diceId the dice id
      */
     public void removeIgnoreColor(int diceId) {
         mainGameRule.removeIgnoreColor(diceId);
     }
 
     /**
-     * Set new dice to be color ignored
+     * Set new dice to be color ignored.
+     *
+     * @param diceId the dice id
      */
     public void addIgnoreColor(int diceId) {
         mainGameRule.addIgnoreColor(diceId);
     }
 
+    /**
+     * Adds the ignore sequence dice.
+     *
+     * @param diceId the dice id
+     */
     public void addIgnoreSequenceDice(int diceId) {
         mainGameRule.addIgnoreSequenceDice(diceId);
     }
 
+    /**
+     * Exchange ignore sequence dice.
+     *
+     * @param oldDice the old dice
+     * @param newDice the new dice
+     */
     public void exchangeIgnoreSequenceDice(int oldDice, int newDice) {
         mainGameRule.exchangeIgnoreSequenceDice(oldDice, newDice);
     }
 
+    /**
+     * Removes the dice from set.
+     *
+     * @param id the id
+     */
     public void removeDiceFromSet(int id) {
         setIndex = mainGameRule.removeDiceFromSet(id);
         mapIndex = mainGameRule.removeDiceFromMap(id);
     }
 
+    /**
+     * Revert.
+     *
+     * @param id the id
+     */
     public void revert(int id) {
         IntStream.range(0, setIndex.length).filter(index -> setIndex[index]).forEach(index -> {
             switch (index) {

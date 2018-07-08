@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.network;
 
 
+
 /**
  * The Class CommandKeyword.
  */
@@ -21,6 +22,7 @@ public final class CommandKeyword {
   /** The Constant WINDOW. */
   public static final String WINDOW = "windows";
 
+  /** The Constant VALUE_CHOOSER. */
   public static final String VALUE_CHOOSER = "value_chooser";
   
   /** The Constant WINDOW_ID. */
@@ -56,6 +58,7 @@ public final class CommandKeyword {
   /** The Constant MOVE_DICE_CHOICE. */
   public static final String MOVE_DICE_CHOICE = "choice_move_dice";
 
+  /** The Constant MOVE_DICE_VALUE. */
   public static final String MOVE_DICE_VALUE = "move_dice_value";
   
   /** The Constant MOVE_DICE. */
@@ -133,12 +136,16 @@ public final class CommandKeyword {
   /** The Constant WINDOW_OPTION_TWO. */
   public static final String WINDOW_OPTION_TWO = "window_id_2";
 
+  /** The Constant TOKEN_ONE_FRONT. */
   public static final String TOKEN_ONE_FRONT = "token_one_front";
 
+  /** The Constant TOKEN_ONE_BACK. */
   public static final String TOKEN_ONE_BACK = "token_one_back";
 
+  /** The Constant TOKEN_TWO_FRONT. */
   public static final String TOKEN_TWO_FRONT = "token_two_front";
 
+  /** The Constant TOKEN_TWO_BACK. */
   public static final String TOKEN_TWO_BACK = "token_two_back";
   
   /** The Constant FRONT. */
@@ -165,8 +172,10 @@ public final class CommandKeyword {
   /** The Constant OPPONENT_DICE_RESPONSE. */
   public static final String OPPONENT_DICE_RESPONSE = "opponent_dice_response";
 
+  /** The Constant DICE_DRAFT. */
   public static final String DICE_DRAFT = "dice_draft";
 
+  /** The Constant COLOR_SELECTION. */
   public static final String COLOR_SELECTION = "color_selection";
   
   /** The Constant DRAFT. */
@@ -175,12 +184,16 @@ public final class CommandKeyword {
   /** The Constant ROUND_TRACK. */
   public static final String ROUND_TRACK = "roundtrack";
 
+  /** The Constant ROUND_TRACK_RECONNECT. */
   public static final String ROUND_TRACK_RECONNECT = "round_track_reconnect";
 
+  /** The Constant ROUND_NUMBER. */
   public static final String ROUND_NUMBER = "round_number";
 
+  /** The Constant ROUND_TRACK_SELECTION. */
   public static final String ROUND_TRACK_SELECTION = "round_track_selection";
 
+  /** The Constant ROUND_COLOR_SELECTION. */
   public static final String ROUND_COLOR_SELECTION = "round_color_selection";
   
   /** The Constant NEW_ROUND. */
@@ -195,20 +208,28 @@ public final class CommandKeyword {
   /** The Constant TOOL_CARDS. */
   public static final String TOOL_CARDS = "tool_cards";
 
+  /** The Constant TOOL_CHOICE. */
   public static final String TOOL_CHOICE = "tool_choice";
 
+  /** The Constant TOOL_RESPONSE. */
   public static final String TOOL_RESPONSE = "tool_response";
 
+  /** The Constant TOOL. */
   public static final String TOOL = "tool";
 
+  /** The Constant TOOL_ID. */
   public static final String TOOL_ID = "tool_id";
 
+  /** The Constant ROUND_TRACK_RESPONSE. */
   public static final String ROUND_TRACK_RESPONSE = "round_track_response";
 
+  /** The Constant CAN_BUY. */
   public static final String CAN_BUY = "can_buy";
 
+  /** The Constant COST. */
   public static final String COST = "cost";
 
+  /** The Constant WINDOW_ENABLE. */
   public static final String WINDOW_ENABLE = "window_enable";
 
   /** The Constant SCORE. */

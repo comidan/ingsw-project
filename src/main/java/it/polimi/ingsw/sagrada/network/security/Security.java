@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.network.security;
 
 
+
 /**
  * The Class Security.
  */

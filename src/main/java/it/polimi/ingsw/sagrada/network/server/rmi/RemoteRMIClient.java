@@ -9,8 +9,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
-
 
 /**
  * The Class RemoteRMIClient.
@@ -93,11 +91,17 @@ public class RemoteRMIClient extends UnicastRemoteObject implements Client, Seri
         return identifier;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#isInFastRecovery()
+     */
     @Override
     public boolean isInFastRecovery() throws RemoteException {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#setActive(boolean)
+     */
     @Override
     public void setActive(boolean active) throws RemoteException {
 

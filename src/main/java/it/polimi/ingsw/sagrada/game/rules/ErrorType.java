@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
 
+
 /**
  * The Enum ErrorType.
  */
@@ -27,6 +28,6 @@ public enum ErrorType {
     /** The error. */
     ERROR,
 
-    /** Player already placed a dice*/
+    /**  Player already placed a dice. */
     ALREADY_PLAYED;
 }

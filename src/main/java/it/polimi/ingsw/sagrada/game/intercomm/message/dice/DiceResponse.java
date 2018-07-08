@@ -9,6 +9,7 @@ import it.polimi.ingsw.sagrada.game.playables.Dice;
 import java.util.List;
 
 
+
 /**
  * The Class DiceResponse.
  */

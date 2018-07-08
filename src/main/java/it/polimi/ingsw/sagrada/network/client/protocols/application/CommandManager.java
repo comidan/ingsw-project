@@ -44,6 +44,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class CommandManager.
  */
@@ -82,6 +83,7 @@ public class CommandManager implements MessageVisitor {
     /** The username. */
     private static String username;
 
+    /** The stage. */
     private static Stage stage;
 
     /** The private objective response. */
@@ -93,6 +95,7 @@ public class CommandManager implements MessageVisitor {
     /** The tool card response. */
     private ToolCardResponse toolCardResponse;
 
+    /** The waiting. */
     private Semaphore waiting;
 
     /**
@@ -112,6 +115,11 @@ public class CommandManager implements MessageVisitor {
         stage = lobbyGuiView.getStage();
     }
 
+    /**
+     * Sets the future stage.
+     *
+     * @param stage the new future stage
+     */
     public static void setFutureStage(Stage stage) {
         CommandManager.stage = stage;
     }
@@ -161,6 +169,7 @@ public class CommandManager implements MessageVisitor {
      * Sets the player.
      *
      * @param playerName the new player
+     * @param position the position
      */
     public static void setPlayer(String playerName, int position) {
         Platform.runLater(() -> {
@@ -331,7 +340,6 @@ public class CommandManager implements MessageVisitor {
                         stage,
                         playerList,
                         windowGameManager.getWindows()), client);
-                System.out.println("Token dati: " + windowGameManager.getToken(username));
                 gameGuiAdapter.setToken(windowGameManager.getToken(username));
                 gameGuiAdapter.setToolCards(toolCardResponse.getIds(), client);
                 gameGuiAdapter.setPublicObjectives(publicObjectiveResponse.getIdObjective());
@@ -419,6 +427,9 @@ public class CommandManager implements MessageVisitor {
         scoreLobbyView = ScoreLobbyView.getInstance(ranking, gameGuiAdapter.getStage());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse)
+     */
     @Override
     public void visit(ToolResponse toolResponse) {
         if(toolResponse.isCanBuy()) {
@@ -429,6 +440,9 @@ public class CommandManager implements MessageVisitor {
         else gameGuiAdapter.setNotification("Non hai abbastanza token!");
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnResponse)
+     */
     @Override
     public void visit(EndTurnResponse endTurnResponse) {
         try {
@@ -440,26 +454,41 @@ public class CommandManager implements MessageVisitor {
         gameGuiAdapter.notifyEndTurn();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.TimeRemainingResponse)
+     */
     @Override
     public void visit(TimeRemainingResponse timeRemainingResponse) {
         gameGuiAdapter.setTimeRemaining(timeRemainingResponse.getRemainingTime());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse)
+     */
     @Override
     public void visit(EnableWindowToolResponse enableWindowToolResponse) {
         gameGuiAdapter.enableGuiElement(enableWindowToolResponse.getToolId(), client);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse)
+     */
     @Override
     public void visit(RoundTrackToolResponse roundTrackToolResponse) {
         gameGuiAdapter.setRoundTrack(roundTrackToolResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorBagToolResponse)
+     */
     @Override
     public void visit(ColorBagToolResponse colorBagToolResponse) {
         gameGuiAdapter.enableChooseValue(colorBagToolResponse.getColor(), colorBagToolResponse.getDiceId());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackReconnectionEvent)
+     */
     @Override
     public void visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
         gameGuiAdapter.setRoundTrackReconnection(diceRoundTrackReconnectionEvent.getRoundTrack());

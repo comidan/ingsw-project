@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class LobbyGuiView.
  */
@@ -59,18 +60,26 @@ public class LobbyGuiView {
     /** The stage. */
     private static Stage stage;
 
-    /** Animation timelines */
+    /**  Animation timelines. */
     private static Timeline firstPlayerTimeline;
+    
+    /** The second player timeline. */
     private static Timeline secondPlayerTimeline;
+    
+    /** The third player timeline. */
     private static Timeline thirdPlayerTimeline;
+    
+    /** The fourth player timeline. */
     private static Timeline fourthPlayerTimeline;
 
+    /** The has been removal. */
     private boolean hasBeenRemoval = false;
 
     /**
      * Sets the player.
      *
      * @param username the new player
+     * @param position the position
      */
     public void setPlayer(String username, int position) {
         if(playerShown.contains(username)) {
@@ -238,6 +247,11 @@ public class LobbyGuiView {
         return stage;
     }
 
+    /**
+     * Gets the player shown.
+     *
+     * @return the player shown
+     */
     public List<String> getPlayerShown() {
         return playerShown;
     }

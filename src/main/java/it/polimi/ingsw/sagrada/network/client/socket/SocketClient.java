@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import static java.lang.Thread.sleep;
 
 
+
 /**
  * The Class SocketClient.
  */
@@ -44,7 +45,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     /** The Constant PORT. */
     private static final int PORT = getConfigPort();
 
-    /** The Constant DEFAULT_PORT */
+    /**  The Constant DEFAULT_PORT. */
     private static final int DEFAULT_PORT = 49152;
 
     /** The Constant ADDRESS. */
@@ -83,10 +84,13 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
     /** The dynamic router. */
     private DynamicRouter dynamicRouter;
 
+    /** The is in fast recovery. */
     private boolean isInFastRecovery;
 
+    /** The active. */
     private boolean active;
 
+    /** The recoverying. */
     private Semaphore recoverying;
 
 
@@ -215,11 +219,17 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         return username;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#isInFastRecovery()
+     */
     @Override
     public boolean isInFastRecovery() throws RemoteException {
         return isInFastRecovery;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.client.Client#setActive(boolean)
+     */
     @Override
     public void setActive(boolean active) throws RemoteException {
         this.active = active;
@@ -369,6 +379,11 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
         }
     }
 
+    /**
+     * Gets the config port.
+     *
+     * @return the config port
+     */
     private static int getConfigPort() {
         JSONParser parser = new JSONParser();
         try {

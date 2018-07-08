@@ -6,15 +6,25 @@ import it.polimi.ingsw.sagrada.game.base.utility.Position;
 
 import java.util.List;
 
+
 /**
- *  Window model class representing a certain window including its cell/dice matrix
+ *  Window model class representing a certain window including its cell/dice matrix.
  */
 public class Window {
 
+    /** The name. */
     private String name;
+    
+    /** The cell matrix. */
     private Cell[][] cellMatrix;
+    
+    /** The tokens. */
     private int tokens;
+    
+    /** The id. */
     private int id;
+    
+    /** The side. */
     private WindowSide side;
 
     /**
@@ -67,6 +77,12 @@ public class Window {
         cellMatrix[y][x].removeCurrentDice();
     }
 
+    /**
+     * Gets the position from id.
+     *
+     * @param diceId the dice id
+     * @return the position from id
+     */
     public Position getPositionFromId(int diceId) {
         for(int y=0; y<4; y++) {
             for(int x=0; x<5; x++) {
@@ -81,6 +97,12 @@ public class Window {
         return null;
     }
 
+    /**
+     * Gets the dicefrom id.
+     *
+     * @param diceId the dice id
+     * @return the dicefrom id
+     */
     public Dice getDicefromId(int diceId) {
         for(int y=0; y<4; y++) {
             for(int x=0; x<5; x++) {

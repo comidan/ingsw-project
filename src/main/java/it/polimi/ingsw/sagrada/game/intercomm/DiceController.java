@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.game.intercomm;
 import it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceResponse;
 
 
+
 /**
  * The Class DiceController.
  */

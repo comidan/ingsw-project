@@ -4,29 +4,40 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 
+
 /**
- * PlayerIterator class, its job is to iterate over players and decide who's up next in a turn during the game
+ * PlayerIterator class, its job is to iterate over players and decide who's up next in a turn during the game.
  */
 public class PlayerIterator implements Iterator<String> {
 
+    /** The Constant MAX_ROUND. */
     private static final int MAX_ROUND = 10;
 
+    /** The current player. */
     private String currentPlayer;
 
+    /** The players. */
     private List<String> players;
 
+    /** The removed players. */
     private List<String> removedPlayers;
 
+    /** The momentary removed player. */
     private List<String> momentaryRemovedPlayer;
 
+    /** The turn iteration. */
     private List<String> turnIteration;
 
+    /** The num player. */
     private int numPlayer;
 
+    /** The num P. */
     private int numP;
 
+    /** The itr. */
     private int itr;
 
+    /** The turn num. */
     private int turnNum;
 
     /**
@@ -84,10 +95,11 @@ public class PlayerIterator implements Iterator<String> {
     }
 
     /**
-     * Gets the round sequence, internal use only
+     * Gets the round sequence, internal use only.
+     *
+     * @return the round sequence
      */
     private void getRoundSequence() {
-        System.out.println("--------NewTurn--------");
         turnIteration.clear();
 
         List<String> currentPlayer = new ArrayList<>();
@@ -111,6 +123,12 @@ public class PlayerIterator implements Iterator<String> {
         turnIteration.forEach(elem -> System.out.println(elem));
     }
 
+    /**
+     * Check player left.
+     *
+     * @param index the index
+     * @return true, if successful
+     */
     private boolean checkPlayerLeft(int index) {
         for(int i=index; i<turnIteration.size(); i++) {
             if(!removedPlayers.contains(turnIteration.get(i)) && !momentaryRemovedPlayer.contains(turnIteration.get(i)))
@@ -119,10 +137,20 @@ public class PlayerIterator implements Iterator<String> {
         return false;
     }
 
+    /**
+     * Gets the current player number.
+     *
+     * @return the current player number
+     */
     public int getCurrentPlayerNumber() {
         return numPlayer-removedPlayers.size();
     }
 
+    /**
+     * Gets the current player.
+     *
+     * @return the current player
+     */
     public String getCurrentPlayer() { return currentPlayer; }
 
     /**
@@ -148,6 +176,12 @@ public class PlayerIterator implements Iterator<String> {
         }
     }
 
+    /**
+     * Can apply tool change.
+     *
+     * @param idPlayer the id player
+     * @return true, if successful
+     */
     public boolean canApplyToolChange(String idPlayer) {
         if(itr<=turnIteration.size()/2) {
             momentaryRemovedPlayer.add(idPlayer);

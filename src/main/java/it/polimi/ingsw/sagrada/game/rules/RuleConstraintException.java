@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.game.rules;
 
 
+
 /**
  * The Class RuleConstraintException.
  */

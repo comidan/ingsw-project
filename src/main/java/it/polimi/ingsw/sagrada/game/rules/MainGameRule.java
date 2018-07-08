@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.game.playables.Dice;
 import java.util.*;
 
 
+
 /**
  * The Class MainGameRule.
  */
@@ -19,11 +20,13 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	/** The ignore value set. */
 	private Set<Integer> ignoreValueSet;
 
-	/** The ignore position set**/
+	/**  The ignore position set*. */
 	private Set<Integer> ignoreFirstRoundDice;
 
+	/** The ignore current orthogonal dice. */
 	private Map<Integer, List<Integer>> ignoreCurrentOrthogonalDice;
 
+	/** The computing work to do. */
 	private List<Integer> computingWorkToDo;
 
 	/**
@@ -84,15 +87,34 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return ignoreValueSet.contains(dice.getId());
 	}
 
+	/**
+	 * Checks for indirect dice clearance.
+	 *
+	 * @param orthogonalDice the orthogonal dice
+	 * @param ignoredDice the ignored dice
+	 * @return true, if successful
+	 */
 	private boolean hasIndirectDiceClearance(Dice orthogonalDice, Dice ignoredDice) {
 		List<Integer> canBeIgnored = ignoreCurrentOrthogonalDice.get(ignoredDice.getId());
 		return canBeIgnored != null && canBeIgnored.contains(orthogonalDice.getId());
 	}
 
+	/**
+	 * Checks for value dice clearance.
+	 *
+	 * @param dice the dice
+	 * @return true, if successful
+	 */
 	private boolean hasValueDiceClearance(Dice dice) {
 		return ignoreValueSet.contains(dice.getId());
 	}
 
+	/**
+	 * Checks for color dice clearance.
+	 *
+	 * @param dice the dice
+	 * @return true, if successful
+	 */
 	private boolean hasColorDiceClearance(Dice dice) {
 		return ignoreColorSet.contains(dice.getId());
 	}
@@ -241,32 +263,49 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 	}
 
 	/**
-	 * Set new dice to be color ignored
+	 * Set new dice to be color ignored.
+	 *
+	 * @param diceId the dice id
 	 */
 	void addIgnoreColor(int diceId) {
 		ignoreColorSet.add(diceId);
 		computingWorkToDo.add(diceId);
 	}
 
+	/**
+	 * Adds the ignore value.
+	 *
+	 * @param diceId the dice id
+	 */
 	void addIgnoreValue(int diceId) {
 		ignoreValueSet.add(diceId);
 		computingWorkToDo.add(diceId);
 	}
 
 	/**
-	 * Remove dice from being color ignored
+	 * Remove dice from being color ignored.
+	 *
+	 * @param diceId the dice id
 	 */
 	void removeIgnoreValue(int diceId) {
 		ignoreValueSet.remove(diceId);
 	}
 
 	/**
-	 * Remove dice from being value ignored
+	 * Remove dice from being value ignored.
+	 *
+	 * @param diceId the dice id
 	 */
 	void removeIgnoreColor(int diceId) {
 		ignoreColorSet.remove(diceId);
 	}
 
+	/**
+	 * Compute work.
+	 *
+	 * @param cells the cells
+	 * @param toDo the to do
+	 */
 	private void computeWork(Cell[][] cells, int toDo) {
 		int x = 0;
 		int y = 0;
@@ -291,23 +330,52 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		ignoreCurrentOrthogonalDice.put(toDo, toIgnore);
 	}
 
+	/**
+	 * Checks if is empty.
+	 *
+	 * @param cells the cells
+	 * @return true, if is empty
+	 */
 	private boolean isEmpty(Cell[][] cells) {
 		return Arrays.stream(cells).flatMap(Arrays::stream).filter(Cell::isOccupied).count() - 1 == 0;
 	}
 
+	/**
+	 * Adds the ignore sequence dice.
+	 *
+	 * @param diceId the dice id
+	 */
 	void addIgnoreSequenceDice(int diceId) {
 		ignoreFirstRoundDice.add(diceId);
 	}
 
+	/**
+	 * Exchange ignore sequence dice.
+	 *
+	 * @param oldDice the old dice
+	 * @param newDice the new dice
+	 */
 	void exchangeIgnoreSequenceDice(int oldDice, int newDice) {
 		if(ignoreFirstRoundDice.remove(oldDice))
 			ignoreFirstRoundDice.add(newDice);
 	}
 
+	/**
+	 * Addignore current orthogonal dice.
+	 *
+	 * @param id the id
+	 * @param list the list
+	 */
 	void addignoreCurrentOrthogonalDice(int id, List<Integer> list) {
 		ignoreCurrentOrthogonalDice.put(id, list);
 	}
 
+	/**
+	 * Removes the dice from set.
+	 *
+	 * @param id the id
+	 * @return the boolean[]
+	 */
 	Boolean[] removeDiceFromSet(int id) {
 		Boolean[] setIndex = new Boolean[3];
 		setIndex[0] = ignoreValueSet.remove(id);
@@ -316,6 +384,12 @@ public class MainGameRule extends Rule<Cell[][], ErrorType> {
 		return setIndex;
 	}
 
+	/**
+	 * Removes the dice from map.
+	 *
+	 * @param id the id
+	 * @return the list
+	 */
 	List<Integer> removeDiceFromMap(int id) {
 		return ignoreCurrentOrthogonalDice.remove(id);
 	}

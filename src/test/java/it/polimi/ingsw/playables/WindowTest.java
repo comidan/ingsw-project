@@ -34,34 +34,6 @@ public class WindowTest {
         Dice dice = new Dice(3, Colors.RED);
         assertTrue(window.setCell(dice, 1, 1));
         assertFalse(window.setCell(dice, 1, 1));
-        System.out.println(window.toString());
 
     }
-
-    /*@Test //dubbia utilità, se ne deve discutere
-    public void testAllWindowsJSON() {
-        List<Player> player = new ArrayList<>();
-        player.add(new Player(0));
-        player.add(new Player(1));
-        player.add(new Player(2));
-        DynamicRouter dynamicRouter = new MessageDispatcher();
-        GameManager gameManager = new GameManager(player, dynamicRouter);
-
-        WindowManager windowManager = new WindowManager(gameManager.getDispatchReference(), dynamicRouter);
-        Window windows;
-        int counter = 0;
-
-        while (windowManager.isWindowsLeft()) {
-            List<Integer> id = windowManager.dealWindowId(0);
-            for (int i : id) {
-                windows = windowManager.generateWindow(i, WindowSide.FRONT);
-                System.out.println(windows.toString());
-                counter++;
-                windows = windowManager.generateWindow(i, WindowSide.REAR);
-                System.out.println(windows.toString());
-                counter++;
-            }
-        }
-        assertEquals(24, counter);
-    }*/
 }

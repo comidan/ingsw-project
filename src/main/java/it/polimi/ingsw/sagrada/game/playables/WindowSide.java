@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.game.playables;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 
 
+
 /**
  * The Enum WindowSide.
  */

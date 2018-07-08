@@ -32,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class GameDataManager.
  */
@@ -93,6 +94,12 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         dynamicRouter.dispatch(message);
     }
 
+    /**
+     * Fast recovery dispatch.
+     *
+     * @param message the message
+     * @param username the username
+     */
     public void fastRecoveryDispatch(Message message, String username) {
         sendRemoteMessage(message, filter -> filter.equals(getClient(username)));
     }
@@ -276,6 +283,9 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         sendRemoteMessage(scoreResponse, filter -> anyone());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse)
+     */
     @Override
     public void visit(ToolResponse toolResponse) {
         try {
@@ -285,31 +295,49 @@ public class GameDataManager implements Channel<Message, Message>, MessageVisito
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnResponse)
+     */
     @Override
     public void visit(EndTurnResponse endTurnResponse) {
         sendRemoteMessage(endTurnResponse, filter -> filter.equals(getClient(endTurnResponse.getUsername())));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.TimeRemainingResponse)
+     */
     @Override
     public void visit(TimeRemainingResponse timeRemainingResponse) {
         sendRemoteMessage(timeRemainingResponse, filter -> filter.equals(getClient(timeRemainingResponse.getUsername())));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse)
+     */
     @Override
     public void visit(EnableWindowToolResponse enableWindowToolResponse) {
         sendRemoteMessage(enableWindowToolResponse, filter -> filter.equals(getClient(enableWindowToolResponse.getPlayerId())));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse)
+     */
     @Override
     public void visit(RoundTrackToolResponse roundTrackToolResponse) {
         sendRemoteMessage(roundTrackToolResponse, filter -> anyone());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorBagToolResponse)
+     */
     @Override
     public void visit(ColorBagToolResponse colorBagToolResponse) {
         sendRemoteMessage(colorBagToolResponse, filter -> filter.equals(getClient(colorBagToolResponse.getPlayerId())));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackReconnectionEvent)
+     */
     @Override
     public void visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
         sendRemoteMessage(diceRoundTrackReconnectionEvent, filter -> filter.equals((getClient(diceRoundTrackReconnectionEvent.getPlayerId()))));

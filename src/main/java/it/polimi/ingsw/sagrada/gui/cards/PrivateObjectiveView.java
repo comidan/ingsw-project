@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import java.io.File;
 
 
+
 /**
  * The Class PrivateObjectiveView.
  * @author Valentina

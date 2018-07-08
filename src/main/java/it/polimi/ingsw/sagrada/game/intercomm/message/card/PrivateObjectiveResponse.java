@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 
 
+
 /**
  * The Class PrivateObjectiveResponse.
  */

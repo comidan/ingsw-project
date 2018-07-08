@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 
+
 /**
  * The Class WindowGameManager.
  */
@@ -20,6 +21,7 @@ public class WindowGameManager {
     /** The constraints. */
     private Map<String, Constraint[][]> constraints;
 
+    /** The window info. */
     private Map<String, Pair<Integer, WindowSide>> windowInfo;
     
     /** The constraint generator. */
@@ -36,6 +38,7 @@ public class WindowGameManager {
     /**
      * Adds the window.
      *
+     * @param username the username
      * @param id the id
      * @param side the side
      */
@@ -52,6 +55,12 @@ public class WindowGameManager {
         return constraints;
     }
 
+    /**
+     * Gets the token.
+     *
+     * @param username the username
+     * @return the token
+     */
     public int getToken(String username) {
         Pair<Integer, WindowSide> pair = windowInfo.get(username);
         int playerWindowId = pair.getFirstEntry();
@@ -60,6 +69,12 @@ public class WindowGameManager {
         return constraintGenerator.getToken(playerWindowId, playerWindowSide);
     }
 
+    /**
+     * Sets the windows.
+     *
+     * @param windows the windows
+     * @param players the players
+     */
     public void setWindows(Map<String, Pair<Integer, WindowSide>> windows, List<String> players) {
         players.forEach(player -> addWindow(player, windows.get(player).getFirstEntry(), windows.get(player).getSecondEntry()));
         windowInfo = windows;

@@ -11,10 +11,21 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * The Class DicePrevContainer.
+ */
 public class DicePrevContainer extends VBox{
 
+    /** The dice prev list. */
     List<DiceView> dicePrevList;
 
+    /**
+     * Instantiates a new dice prev container.
+     *
+     * @param color the color
+     * @param diceId the dice id
+     */
     public DicePrevContainer(Colors color, int diceId){
         dicePrevList = new ArrayList<>();
         for(int i = 0; i<6; i++){
@@ -25,6 +36,11 @@ public class DicePrevContainer extends VBox{
     }
 
 
+    /**
+     * Sets the dice prev handler.
+     *
+     * @param dicePrevHandler the new dice prev handler
+     */
     public void setDicePrevHandler(EventHandler<MouseEvent> dicePrevHandler){
         for(int i = 0; i<6; i++){
             dicePrevList.get(i).setDisable(false);

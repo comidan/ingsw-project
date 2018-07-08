@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+
 /**
  * The Class TokenView.
  */

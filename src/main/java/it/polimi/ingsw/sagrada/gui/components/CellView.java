@@ -9,6 +9,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.layout.StackPane;
 
 
+
 /**
  * The Class CellView.
  * @author Valentina, Daniele
@@ -25,19 +26,19 @@ public class CellView extends StackPane {
     /** The column the cell is on. */
     private int col;
 
-    /** The id of the dice contained in the cell */
+    /**  The id of the dice contained in the cell. */
     private int diceId;
 
-    /** The flag to show if the cell is occupied */
+    /**  The flag to show if the cell is occupied. */
     private boolean occupied;
 
     /** The cell constraint (value or color or blank). */
     private Image cellConstraint;
 
-    /** The cell image */
+    /**  The cell image. */
     private ImageView imageView;
 
-    /** the diceview corresponding to the dice in the cell (if present) */
+    /**  the diceview corresponding to the dice in the cell (if present). */
     private DiceView diceView;
 
     /**
@@ -59,9 +60,10 @@ public class CellView extends StackPane {
 
 
     /**
-     * Sets the cell listener to handle dice dropped on cell
+     * Sets the cell listener to handle dice dropped on cell.
      *
-     * @param cellDragOver, cellDragDone the new cell listener
+     * @param cellDragOver the cell drag over
+     * @param cellDragDone the cell drag done
      */
     public void setCellListener(EventHandler<DragEvent> cellDragOver,EventHandler<DragEvent>  cellDragDone){
         setOnDragOver(cellDragOver);
@@ -91,7 +93,7 @@ public class CellView extends StackPane {
     }
 
     /**
-     * Gets the diceview contained in the cell
+     * Gets the diceview contained in the cell.
      *
      * @return the diceView
      */
@@ -135,7 +137,7 @@ public class CellView extends StackPane {
     }
 
     /**
-     * Sets the id of the dice in the cell
+     * Sets the id of the dice in the cell.
      *
      * @param diceId the new dice id
      */

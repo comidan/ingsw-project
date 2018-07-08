@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.game.base.state;
 
 
+
 /**
  * The Enum State.
  */

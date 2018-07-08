@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.game.cards;
 import it.polimi.ingsw.sagrada.game.rules.ToolRule;
 
 
+
 /**
  * The Class ToolCard.
  */
@@ -36,8 +37,16 @@ public class ToolCard extends Card {
 		return usage;
 	}
 
+	/**
+	 * Sets the usage.
+	 *
+	 * @param u the new usage
+	 */
 	public void setUsage(Usage u) { usage=u; }
 
+	/* (non-Javadoc)
+	 * @see it.polimi.ingsw.sagrada.game.cards.Card#getRule()
+	 */
 	@Override
 	public ToolRule getRule() {
 		return (ToolRule) super.getRule();

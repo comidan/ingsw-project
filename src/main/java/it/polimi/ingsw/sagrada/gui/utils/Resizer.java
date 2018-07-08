@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.gui.utils;
 import java.awt.*;
 
 
+
 /**
  * The Class Resizer.
  */

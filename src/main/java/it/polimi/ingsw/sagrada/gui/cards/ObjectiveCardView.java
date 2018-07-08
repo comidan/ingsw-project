@@ -6,13 +6,14 @@ import javafx.scene.image.ImageView;
 
 
 
+
 /**
  * The Class ObjectiveCardView.
  * @author Valentina
  */
 class ObjectiveCardView extends ImageView {
 
-    /** The path constant */
+    /**  The path constant. */
     private static final String OBJECTIVE_IMAGE_ROOT_PATH = "/images/ObjectiveImages/";
     
     /** The id. */

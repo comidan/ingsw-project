@@ -24,6 +24,7 @@ import org.json.simple.parser.ParseException;
 import java.util.stream.IntStream;
 
 
+
 /**
  * The Class CommandParser.
  */
@@ -139,6 +140,7 @@ public class CommandParser {
      * Creates the JSON add lobby player.
      *
      * @param username the username
+     * @param position the position
      * @return the string
      */
     public String createJSONAddLobbyPlayer(String username, int position) {

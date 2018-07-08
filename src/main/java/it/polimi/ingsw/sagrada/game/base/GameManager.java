@@ -30,7 +30,6 @@ import it.polimi.ingsw.sagrada.game.rules.ErrorType;
 import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import it.polimi.ingsw.sagrada.network.server.tools.DataManager;
-import it.polimi.ingsw.sagrada.network.server.tools.MatchLobby;
 import it.polimi.ingsw.sagrada.network.server.tools.MatchLobbyPool;
 
 import java.sql.Date;
@@ -41,62 +40,89 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
+
 /**
- * Main game class, core class for the model of the main MVC design pattern, manage main and core functions
+ * Main game class, core class for the model of the main MVC design pattern, manage main and core functions.
  */
 
 public class GameManager implements Channel<Message, Message>, BaseGameMessageVisitor {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(GameManager.class.getName());
 
+    /** The start time. */
     private final long START_TIME = new java.util.Date().getTime();
 
+    /** The players. */
     private List<Player> players;
 
+    /** The players id. */
     private List<String> playersId;
 
+    /** The private objective. */
     private List<ObjectiveCard> privateObjective;
 
+    /** The tools. */
     private List<ToolCard> tools;
 
+    /** The public objective. */
     private List<ObjectiveCard> publicObjective;
 
+    /** The dice manager. */
     private DiceManager diceManager;
 
+    /** The score track. */
     private ScoreTrack scoreTrack;
 
+    /** The card manager. */
     private CardManager cardManager;
 
+    /** The tool manager. */
     private ToolManager toolManager;
 
+    /** The round track. */
     private RoundTrack roundTrack;
 
+    /** The state iterator. */
     private StateIterator stateIterator = StateIteratorSingletonPool.getStateIteratorInstance(hashCode());
 
+    /** The player iterator. */
     private PlayerIterator playerIterator;
 
+    /** The window manager. */
     private WindowManager windowManager;
 
+    /** The rule manager. */
     private RuleManager ruleManager;
 
+    /** The dynamic router. */
     private DynamicRouter dynamicRouter;
 
+    /** The scores. */
     private List<Integer> scores = new ArrayList<>();
 
+    /** The final game result. */
     private ScoreResponse finalGameResult = null;
 
+    /** The game ID. */
     private int gameID;
 
+    /** The play time. */
     private Timer playTime;
 
+    /** The fast recovery dispatch. */
     private BiConsumer<Message, String> fastRecoveryDispatch;
 
+    /** The tool double turn. */
     private boolean toolDoubleTurn;
 
+    /** The tool move alone. */
     private boolean toolMoveAlone;
 
+    /** The dice placed. */
     private int dicePlaced;
 
+    /** The lobby id. */
     private String lobbyId;
 
     /**
@@ -104,6 +130,8 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
      *
      * @param players the players
      * @param dynamicRouter the dynamic router dispatching message
+     * @param fastRecoveryDispatch the fast recovery dispatch
+     * @param lobbyId the lobby id
      */
     public GameManager(List<Player> players, DynamicRouter dynamicRouter, BiConsumer<Message, String> fastRecoveryDispatch, String lobbyId) {
         Consumer<Message> function = this::dispatch;
@@ -169,7 +197,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Distribute private objectives
+     * Distribute private objectives.
      */
     private void dealPrivateObjectiveState() {
         privateObjective = cardManager.dealPrivateObjective(players.size());
@@ -180,7 +208,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Distribute tools
+     * Distribute tools.
      */
     private void dealToolState() {
         tools = cardManager.dealTool();
@@ -191,7 +219,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Distribute public objectives
+     * Distribute public objectives.
      */
     private void dealPublicObjectiveState() {
         publicObjective = cardManager.dealPublicObjective();
@@ -202,7 +230,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Distribute windows
+     * Distribute windows.
      */
     private void dealWindowState() {
         for (Player p : players) {
@@ -211,7 +239,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Assign windows to player model
+     * Assign windows to player model.
      *
      * @param player the player
      * @param window the window
@@ -237,7 +265,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Start next round or if previous round was the last, init ending game procedures
+     * Start next round or if previous round was the last, init ending game procedures.
      */
     private void startRound() {
         if(stateIterator.next() == StateGameEnum.TURN) {
@@ -254,7 +282,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Notify next player about his current state in this turn
+     * Notify next player about his current state in this turn.
      */
     private void notifyNextPlayer() {
         if(playTime != null)
@@ -276,7 +304,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Sets a dice in a player's window
+     * Sets a dice in a player's window.
      *
      * @param idPlayer the id player
      * @param dice the dice
@@ -324,9 +352,10 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     *  Computer final scores and set them on the score board
+     *  Computer final scores and set them on the score board.
      */
     private void scoreState() {
+        playTime.cancel();
         players.forEach(player -> scores.add(scoreTrack.calculateScore(player)));  //look out for possible sorting issue
         List<String> usernames = new ArrayList<>();
         players.forEach(player -> usernames.add(player.getId()));
@@ -337,6 +366,11 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         sendMessage(finalGameResult);
     }
 
+    /**
+     * Save stats.
+     *
+     * @param byteStreamWindowEvent the byte stream window event
+     */
     private void saveStats(ByteStreamWindowEvent byteStreamWindowEvent) {
         DataManager dataManager = DataManager.getDataManager();
         Optional<Player> optionalPlayer = players.stream().filter(user -> user.getId().equals(byteStreamWindowEvent.getUsername())).findFirst();
@@ -348,7 +382,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Gets the scores
+     * Gets the scores.
      *
      * @return the scores
      */
@@ -357,7 +391,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Gets the current game state
+     * Gets the current game state.
      *
      * @return the current state
      */
@@ -366,7 +400,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Gets the current players number
+     * Gets the current players number.
      *
      * @return the player number
      */
@@ -375,7 +409,7 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
     }
 
     /**
-     * Get player by its username
+     * Get player by its username.
      *
      * @param id username
      * @return the player
@@ -387,13 +421,18 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         return null;
     }
 
+    /**
+     * Gets the current player.
+     *
+     * @return the current player
+     */
     public String getCurrentPlayer() {
         return playerIterator.getCurrentPlayer();
     }
 
     /**
      * Removes the player from the current game by its username
-     * Warning : this is not a retroactive operation, canNOT be undone
+     * Warning : this is not a retroactive operation, canNOT be undone.
      *
      * @param playerId username
      */
@@ -409,6 +448,12 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         }
     }
 
+    /**
+     * List to map.
+     *
+     * @param players the players
+     * @return the map
+     */
     private Map<String, Player> listToMap(List<Player> players) {
         Map<String, Player> map = new HashMap<>();
         for(Player player:players) {
@@ -417,6 +462,11 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         return map;
     }
 
+    /**
+     * Update client state.
+     *
+     * @param username the username
+     */
     public void updateClientState(String username) {
         int index = playersId.indexOf(username);
         sendMessage(new PrivateObjectiveResponse(privateObjective.get(index).getId(), username));
@@ -453,6 +503,11 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         }
     }
 
+    /**
+     * Send windows state.
+     *
+     * @param username the username
+     */
     private void sendWindowsState(String username) {
         players.forEach(player -> {
             Cell[][] matrix = player.getWindow().getCellMatrix();
@@ -534,9 +589,11 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         notifyNextPlayer();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceWindowToolMessage)
+     */
     @Override
     public void visit(MoveDiceWindowToolMessage moveDiceWindowToolMessage) {
-        System.out.println("---GameManager Tool---");
         int id = moveDiceWindowToolMessage.getIdDice();
         ruleManager.removeDiceFromSet(id);
         DTO dto = new DTO();
@@ -549,11 +606,8 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
             dto.setIgnoreColorSet(ruleManager::addIgnoreColor);
         else
             dto.setIgnoreValueSet(ruleManager::addIgnoreValue);
-        System.out.println("----------"+dto.getDice()+"------------");
-        ErrorType errorTypeRule = moveDiceWindowToolMessage.getToolCard().getRule().checkRule(dto);
-        System.out.println("---"+errorTypeRule+"---");
+        moveDiceWindowToolMessage.getToolCard().getRule().checkRule(dto);
         ErrorType errorType = ruleManager.validateWindow(window.getCellMatrix());
-        System.out.println("---"+errorType+"---");
         if(errorType == ErrorType.NO_ERROR) {
             Position pos = dto.getNewPosition();
             Dice dice = window.getCellMatrix()[pos.getRow()][pos.getCol()].getCurrentDice();
@@ -575,6 +629,9 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         sendMessage(new RuleResponse(moveDiceWindowToolMessage.getIdPlayer(), errorType == ErrorType.NO_ERROR));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveDiceToolMessage)
+     */
     @Override
     public void visit(MoveDiceToolMessage moveDiceToolMessage) {
         Player player = idToPlayer(moveDiceToolMessage.getPlayerId());
@@ -603,16 +660,25 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableDoubleTurnToolMessage)
+     */
     @Override
     public void visit(EnableDoubleTurnToolMessage enableDoubleTurnToolMessage) {
         toolDoubleTurn = playerIterator.canApplyToolChange(enableDoubleTurnToolMessage.getPlayerId());
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.MoveAloneDiceToolMessage)
+     */
     @Override
     public void visit(MoveAloneDiceToolMessage moveAloneDiceToolMessage) {
         toolMoveAlone = true;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorConstraintToolMessage)
+     */
     @Override
     public void visit(ColorConstraintToolMessage colorConstraintToolMessage) {
         DTO dto = new DTO();
@@ -644,6 +710,9 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
 
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.BaseGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.DraftToBagToolMessage)
+     */
     @Override
     public void visit(DraftToBagToolMessage draftToBagToolMessage) {
         DTO dto = new DTO();
@@ -653,17 +722,32 @@ public class GameManager implements Channel<Message, Message>, BaseGameMessageVi
         draftToBagToolMessage.getToolCard().getRule().checkRule(dto);
     }
 
+    /**
+     * The Class GameTimer.
+     */
     public class GameTimer extends TimerTask {
 
+        /** The Constant MAX_WAITING_TIME. */
         private static final int MAX_WAITING_TIME = 40;
 
+        /** The elapsed time. */
         private int elapsedTime = 0;
+        
+        /** The username. */
         private String username;
 
+        /**
+         * Instantiates a new game timer.
+         *
+         * @param username the username
+         */
         GameTimer(String username) {
             this.username = username;
         }
 
+        /* (non-Javadoc)
+         * @see java.util.TimerTask#run()
+         */
         @Override
         public void run() {
             if(elapsedTime > MAX_WAITING_TIME) {

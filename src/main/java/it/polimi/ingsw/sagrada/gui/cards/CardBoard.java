@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 /**
  * The Class CardBoard.
  * It contains the GUI elements of the three types of cards existing in the game
@@ -19,16 +20,16 @@ import java.util.List;
  */
 public class CardBoard extends AnchorPane {
     
-    /** The list of toolcards drawn for the current game */
+    /**  The list of toolcards drawn for the current game. */
     private List<ToolCardView> toolCardViewList;
 
-    /** The VBox containing private objective cards */
+    /**  The VBox containing private objective cards. */
     private VBox privateCardBox;
 
-    /** The VBox containing public objective cards */
+    /**  The VBox containing public objective cards. */
     private VBox publicCardBox;
 
-    /** The VBox containing toolcards */
+    /**  The VBox containing toolcards. */
     private VBox toolBox;
 
     /**
@@ -49,7 +50,7 @@ public class CardBoard extends AnchorPane {
     }
 
     /**
-     * Sets the tool click handler to make it possible to "buy" toolcards
+     * Sets the tool click handler to make it possible to "buy" toolcards.
      *
      * @param toolClickHandler the event handler passed from the adapter
      */
@@ -99,42 +100,42 @@ public class CardBoard extends AnchorPane {
     }
 
     /**
-     * shows private objective cards on gui
+     * shows private objective cards on gui.
      */
     public void showPrivateCards(){
         this.getChildren().add(privateCardBox);
     }
 
     /**
-     * shows public objective cards on gui
+     * shows public objective cards on gui.
      */
     public void showPublicCards(){
         this.getChildren().add(publicCardBox);
     }
 
     /**
-     * shows toolcards cards on gui
+     * shows toolcards cards on gui.
      */
     public void showToolCards(){
         this.getChildren().add(toolBox);
     }
 
     /**
-     * hides private objective cards on gui
+     * hides private objective cards on gui.
      */
     public void hidePrivateCards(){
         this.getChildren().remove(privateCardBox);
     }
 
     /**
-     * hides public objective cards on gui
+     * hides public objective cards on gui.
      */
     public void hidePublicCards(){
         this.getChildren().remove(publicCardBox);
     }
 
     /**
-     * hides toolcards cards on gui
+     * hides toolcards cards on gui.
      */
     public void hideToolCards(){
         this.getChildren().remove(toolBox);
@@ -142,7 +143,7 @@ public class CardBoard extends AnchorPane {
 
 
     /**
-     * disables the possibility to uy toolcard (used when it's not one's turn)
+     * disables the possibility to uy toolcard (used when it's not one's turn).
      */
     public void disableToolBuy(){
         for( ToolCardView toolCardView : toolCardViewList)
@@ -152,7 +153,7 @@ public class CardBoard extends AnchorPane {
     }
 
     /**
-     * enables the possibility to uy toolcard (used when it's one's turn)
+     * enables the possibility to uy toolcard (used when it's one's turn).
      */
     public void enableToolBuy(){
         for( ToolCardView toolCardView : toolCardViewList)

@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 import it.polimi.ingsw.sagrada.game.playables.Dice;
 
 
+
 /**
  * The Class OpponentDiceMoveResponse.
  */

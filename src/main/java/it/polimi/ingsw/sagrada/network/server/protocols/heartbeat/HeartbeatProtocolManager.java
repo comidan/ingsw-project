@@ -9,24 +9,50 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * The Class HeartbeatProtocolManager.
+ */
 public class HeartbeatProtocolManager implements Observer<HeartbeatState, HeartbeatEvent> {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(HeartbeatProtocolManager.class.getName());
 
+    /** The listener. */
     private HeartbeatListener listener;
+    
+    /** The executor. */
     private ExecutorService executor;
+    
+    /** The monitored hosts. */
     private Map<String, HeartbeatProtocol> monitoredHosts;
 
+    /**
+     * Instantiates a new heartbeat protocol manager.
+     *
+     * @param listener the listener
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public HeartbeatProtocolManager(HeartbeatListener listener) throws IOException {
         this.listener = listener;
         monitoredHosts = new HashMap<>();
         executor = Executors.newCachedThreadPool();
     }
 
+    /**
+     * Kill.
+     */
     public void kill() {
         executor.shutdown();
     }
 
+    /**
+     * Adds the host.
+     *
+     * @param hostId the host id
+     * @param port the port
+     * @return true, if successful
+     */
     public boolean addHost(String hostId, int port) {
         try {
             if (monitoredHosts.get(hostId) == null) {
@@ -44,6 +70,12 @@ public class HeartbeatProtocolManager implements Observer<HeartbeatState, Heartb
         }
     }
 
+    /**
+     * Removes the from monitored host.
+     *
+     * @param identifier the identifier
+     * @return true, if successful
+     */
     public boolean removeFromMonitoredHost(String identifier) {
         HeartbeatProtocol monitor = monitoredHosts.remove(identifier);
         if(monitor != null) {
@@ -53,6 +85,9 @@ public class HeartbeatProtocolManager implements Observer<HeartbeatState, Heartb
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.network.server.protocols.heartbeat.Observer#update(java.lang.Object, java.lang.Object)
+     */
     @Override
     public synchronized void update(HeartbeatState heartbeatState, HeartbeatEvent event) {
         switch (heartbeatState) {

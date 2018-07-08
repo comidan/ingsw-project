@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 
+
 /**
  * The Class ToolManager.
  */
@@ -27,33 +28,49 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 	/** The tool cards. */
 	private List<ToolCard> toolCards;
 
+	/** The current toolbuyer. */
 	private String currentToolbuyer;
 
+	/** The current selected tool. */
 	private ToolCard currentSelectedTool;
 
+	/** The players. */
 	private Map<String, Player> players;
 
+	/** The dynamic router. */
 	private DynamicRouter dynamicRouter;
 
+	/** The ignore value set. */
 	private Consumer<Integer> ignoreValueSet;
 
+	/** The ignore color set. */
 	private Consumer<Integer> ignoreColorSet;
 
+	/** The cost. */
 	private int cost;
 
 
 
+	/** The dice counter. */
 	private int diceCounter;
 
+	/** The color constraint. */
 	private Colors colorConstraint;
 
+	/** The round track selection event. */
 	private DiceRoundTrackSelectionEvent roundTrackSelectionEvent;
+	
+	/** The draft selection event. */
 	private DiceDraftSelectionEvent draftSelectionEvent;
 
 	/**
 	 * Default constructor.
 	 *
 	 * @param toolCards the tool cards
+	 * @param players the players
+	 * @param ignoreValueSet the ignore value set
+	 * @param ignoreColorSet the ignore color set
+	 * @param dynamicRouter the dynamic router
 	 */
 	public ToolManager(List<ToolCard> toolCards, Map<String, Player> players, Consumer<Integer> ignoreValueSet, Consumer<Integer> ignoreColorSet, DynamicRouter dynamicRouter) {
 		this.toolCards = toolCards;
@@ -70,6 +87,11 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		this.dynamicRouter.subscribeChannel(DiceRoundTrackColorSelectionEvent.class, this);
 	}
 
+	/**
+	 * Gets the current selected tool.
+	 *
+	 * @return the current selected tool
+	 */
 	public ToolCard getCurrentSelectedTool() {
 		return currentSelectedTool;
 	}
@@ -104,6 +126,9 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		return false;
 	}
 
+	/**
+	 * Reset tool.
+	 */
 	private void resetTool() {
 		currentToolbuyer = "";
 		currentToolbuyer = null;
@@ -113,11 +138,11 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		draftSelectionEvent = null;
 	}
 
+	/**
+	 * Swap dice draft round track.
+	 */
 	private void swapDiceDraftRoundTrack() {
-		System.out.println("///////////////ToolManager///////////////////"+draftSelectionEvent);
-		System.out.println("///////////////ToolManager///////////////////"+roundTrackSelectionEvent);
 		if(draftSelectionEvent!=null && roundTrackSelectionEvent!=null) {
-			System.out.println("///////////////ToolManager ha inviato il messaggio///////////////////");
 			sendMessage(new SwapDiceToolMessage(
 					currentSelectedTool,
 					draftSelectionEvent.getIdDice(),
@@ -127,23 +152,34 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+	 */
 	@Override
 	public void dispatch(Message message) {
 		ToolGameVisitor toolGameVisitor = (ToolGameVisitor) message;
-		System.out.println("Received toolGameVisitor");
 		toolGameVisitor.accept(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+	 */
 	@Override
 	public void sendMessage(Message message) {
 		dynamicRouter.dispatch(message);
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnEvent)
+	 */
 	@Override
 	public void visit(EndTurnEvent endTurnEvent) {
 		resetTool();
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolEvent)
+	 */
 	@Override
 	public void visit(ToolEvent toolEvent) {
 		boolean result = canBuyTool(toolEvent.getToolId(), players.get(toolEvent.getPlayerId()));
@@ -154,9 +190,11 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		}
 	}
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceDraftSelectionEvent)
+     */
     @Override
     public void visit(DiceDraftSelectionEvent diceDraftSelectionEvent) {
-		System.out.println("---ToolManager current tool--- "+currentSelectedTool.getId());
 		int id = currentSelectedTool.getId();
 		if(id==0 || id==5 || id==9) {
 			sendMessage(new ChangeDiceValueToolMessage(currentSelectedTool, diceDraftSelectionEvent.getIdDice()));
@@ -176,16 +214,21 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		}
     }
 
+	/* (non-Javadoc)
+	 * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackSelectionEvent)
+	 */
 	@Override
 	public void visit(DiceRoundTrackSelectionEvent diceRoundTrackSelectionEvent) {
 		int id = currentSelectedTool.getId();
-		System.out.println("---ToolManager current tool--- "+currentSelectedTool.getId());
 		if(id==4) {
 			roundTrackSelectionEvent = diceRoundTrackSelectionEvent;
 			swapDiceDraftRoundTrack();
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent)
+	 */
 	@Override
 	public void visit(DiceEvent diceEvent) {
 		if(diceEvent.getSrc().equals(CommandKeyword.WINDOW)) {
@@ -238,6 +281,9 @@ public class ToolManager implements Channel<Message, Message>, ToolGameMessageVi
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackColorSelectionEvent)
+	 */
 	@Override
 	public void visit(DiceRoundTrackColorSelectionEvent diceRoundTrackColorSelectionEvent) {
 		int id = currentSelectedTool.getId();

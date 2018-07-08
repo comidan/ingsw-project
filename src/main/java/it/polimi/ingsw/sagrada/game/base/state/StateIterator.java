@@ -6,12 +6,14 @@ import java.util.NoSuchElementException;
 import static it.polimi.ingsw.sagrada.game.base.state.StateGameEnum.*;
 
 
+
 /**
- * This Iterator manages various phase of the game
+ * This Iterator manages various phase of the game.
  */
 
 public class StateIterator implements Iterator<StateGameEnum> {
 
+    /** The Constant MAX_ROUNDS. */
     private static final int MAX_ROUNDS = 10;
 
     /** The current state. */
@@ -42,7 +44,7 @@ public class StateIterator implements Iterator<StateGameEnum> {
     }
 
     /**
-     * Gets the current state
+     * Gets the current state.
      *
      * @return the current state
      */
@@ -51,7 +53,7 @@ public class StateIterator implements Iterator<StateGameEnum> {
     }
 
     /**
-     * Gets the round number
+     * Gets the round number.
      *
      * @return the round number
      */

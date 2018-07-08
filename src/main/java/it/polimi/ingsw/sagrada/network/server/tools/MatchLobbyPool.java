@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class MatchLobbyPool.
  */
@@ -18,6 +19,7 @@ public class MatchLobbyPool {
     /** The Constant lobbyPool. */
     private static final List<MatchLobby> lobbyPool = new ArrayList<>();
 
+    /** The Constant lobbyPoolMap. */
     private static final Map<String, MatchLobby> lobbyPoolMap = new HashMap<>();
     
     /** The Constant LOGGER. */
@@ -26,6 +28,7 @@ public class MatchLobbyPool {
     /**
      * Gets the available lobby.
      *
+     * @param username the username
      * @return the available lobby
      * @throws IOException Signals that an I/O exception has occurred.
      */

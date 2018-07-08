@@ -7,6 +7,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 import it.polimi.ingsw.sagrada.game.playables.Window;
 
 
+
 /**
  * The Class WindowGameManagerEvent.
  */

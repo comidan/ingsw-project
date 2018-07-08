@@ -6,28 +6,35 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
- * Colors enum making possible to distinguish between various colors
+ * Colors enum making possible to distinguish between various colors.
  */
 public enum Colors {
 
+    /** The yellow. */
     YELLOW,
 
+    /** The red. */
     RED,
 
+    /** The green. */
     GREEN,
 
+    /** The blue. */
     BLUE,
 
+    /** The purple. */
     PURPLE,
 
-    /** Error color for some computational work */
+    /**  Error color for some computational work. */
     BLACK;
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(Colors.class.getName());
 
     /**
-     * Gets allowed colors as list
+     * Gets allowed colors as list.
      *
      * @return the color list
      */
@@ -42,7 +49,7 @@ public enum Colors {
     }
 
     /**
-     * Cast color string equivalent to color
+     * Cast color string equivalent to color.
      *
      * @param color the color
      * @return the colors
@@ -75,7 +82,7 @@ public enum Colors {
     }
 
     /**
-     * Get initial of the current color
+     * Get initial of the current color.
      *
      * @return the color's initial letter
      */
@@ -90,6 +97,11 @@ public enum Colors {
         }
     }
 
+    /**
+     * To int.
+     *
+     * @return the int
+     */
     public int toInt() {
         switch(this) {
             case RED: return 0;

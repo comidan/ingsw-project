@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class DataManager.
  */
@@ -137,6 +138,14 @@ public class DataManager {
         }
     }
 
+    /**
+     * Save game record.
+     *
+     * @param date the date
+     * @param duration the duration
+     * @param playersNumber the players number
+     * @return the int
+     */
     public synchronized int saveGameRecord(Date date, int duration, int playersNumber) {
         try {
             PreparedStatement query = database.prepareQuery("INSERT INTO play (Date, Duration, PlayersNumber) VALUES (?, ?, ?)");
@@ -153,6 +162,16 @@ public class DataManager {
         }
     }
 
+    /**
+     * Save player record.
+     *
+     * @param username the username
+     * @param gameID the game ID
+     * @param score the score
+     * @param joinDate the join date
+     * @param chosenWindowID the chosen window ID
+     * @param windowEndgameImage the window endgame image
+     */
     public synchronized void savePlayerRecord(String username, int gameID, int score, Date joinDate, int chosenWindowID, byte[] windowEndgameImage) {
         try {
             PreparedStatement query = database.prepareQuery("INSERT INTO playrecord (Username, PlayID, Score, PlayJoiningDate, ChoseWinowID, WindowMatrixState) VALUES (?, ?, ?, ?, ?, ?)");
@@ -169,6 +188,14 @@ public class DataManager {
         }
     }
 
+    /**
+     * Save assigned object cards.
+     *
+     * @param username the username
+     * @param gameID the game ID
+     * @param objectiveID the objective ID
+     * @param score the score
+     */
     public synchronized void saveAssignedObjectCards(String username, int gameID, int objectiveID, int score) {
         try {
             PreparedStatement query = database.prepareQuery("INSERT INTO assignedobjectives (Username, PlayID, ObjectiveID, Score) VALUES (?, ?, ?, ?)");
@@ -183,6 +210,14 @@ public class DataManager {
         }
     }
 
+    /**
+     * Save assigned tool cards.
+     *
+     * @param username the username
+     * @param gameID the game ID
+     * @param toolCardID the tool card ID
+     * @param timesUsed the times used
+     */
     public synchronized void saveAssignedToolCards(String username, int gameID, int toolCardID, int timesUsed) {
         try {
             PreparedStatement query = database.prepareQuery("INSERT INTO assignedtools (Username, PlayID, ToolID, Used) VALUES (?, ?, ?, ?)");

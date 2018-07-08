@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 
 
+
 /**
  * The Class LobbyLoginEvent.
  */

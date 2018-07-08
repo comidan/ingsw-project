@@ -4,17 +4,20 @@ import java.io.Serializable;
 import java.util.Objects;
 
 
+
 /**
- * Position class containing coordinates data based on the window matrix coordinate system
+ * Position class containing coordinates data based on the window matrix coordinate system.
  */
 public class Position implements Serializable {
 
+    /** The row. */
     private int row;
 
+    /** The col. */
     private int col;
 
     /**
-     * Instantiates a new position
+     * Instantiates a new position.
      *
      * @param row the row
      * @param col the col
@@ -25,7 +28,7 @@ public class Position implements Serializable {
     }
 
     /**
-     * Gets the row
+     * Gets the row.
      *
      * @return the row
      */
@@ -34,7 +37,7 @@ public class Position implements Serializable {
     }
 
     /**
-     * Gets the col
+     * Gets the col.
      *
      * @return the col
      */

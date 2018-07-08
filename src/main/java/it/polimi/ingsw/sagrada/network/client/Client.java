@@ -6,6 +6,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 
+
 /**
  * The Interface Client.
  */
@@ -65,7 +66,19 @@ public interface Client extends Remote {
      */
     String getId() throws RemoteException;
 
+    /**
+     * Checks if is in fast recovery.
+     *
+     * @return true, if is in fast recovery
+     * @throws RemoteException the remote exception
+     */
     boolean isInFastRecovery() throws RemoteException;
 
+    /**
+     * Sets the active.
+     *
+     * @param active the new active
+     * @throws RemoteException the remote exception
+     */
     void setActive(boolean active) throws RemoteException;
 }

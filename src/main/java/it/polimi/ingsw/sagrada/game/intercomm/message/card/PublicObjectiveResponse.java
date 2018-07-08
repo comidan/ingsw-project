@@ -8,6 +8,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseVisitor;
 import java.util.List;
 
 
+
 /**
  * The Class PublicObjectiveResponse.
  */

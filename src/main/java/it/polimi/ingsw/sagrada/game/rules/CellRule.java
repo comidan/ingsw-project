@@ -6,6 +6,7 @@ import it.polimi.ingsw.sagrada.game.playables.Dice;
 import java.util.function.Function;
 
 
+
 /**
  * The Class CellRule.
  */

@@ -3,20 +3,43 @@ package it.polimi.ingsw.sagrada.game.intercomm.message.window;
 import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.*;
 
+
+/**
+ * The Class ByteStreamWindowEvent.
+ */
 public class ByteStreamWindowEvent implements Message, ActionVisitor, BaseGameVisitor {
 
+    /** The image. */
     private byte[] image;
+    
+    /** The username. */
     private String username;
 
+    /**
+     * Instantiates a new byte stream window event.
+     *
+     * @param username the username
+     * @param image the image
+     */
     public ByteStreamWindowEvent(String username, byte[] image) {
         this.image = image;
         this.username = username;
     }
 
+    /**
+     * Gets the image.
+     *
+     * @return the image
+     */
     public byte[] getImage() {
         return image;
     }
 
+    /**
+     * Gets the username.
+     *
+     * @return the username
+     */
     public String getUsername() {
         return username;
     }

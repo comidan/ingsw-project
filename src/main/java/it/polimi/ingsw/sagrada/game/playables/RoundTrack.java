@@ -19,20 +19,25 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 
+
 /**
  * The Class RoundTrack.
  */
 public class RoundTrack implements Channel<Message, Message>, RoundTrackMessageVisitor {
 
+    /** The Constant MAX_ROUND. */
     private static final int MAX_ROUND = 10;
 
     /** The round dice. */
     private List<List<Dice>> roundDice;
 
+    /** The dynamic router. */
     private DynamicRouter dynamicRouter;
 
     /**
      * Instantiates a new round track.
+     *
+     * @param dynamicRouter the dynamic router
      */
     public RoundTrack(DynamicRouter dynamicRouter) {
         roundDice = new ArrayList<>(MAX_ROUND);
@@ -52,6 +57,11 @@ public class RoundTrack implements Channel<Message, Message>, RoundTrackMessageV
         return colorList;
     }
 
+    /**
+     * Gets the round dice.
+     *
+     * @return the round dice
+     */
     public List<List<Dice>> getRoundDice() {
         return roundDice;
     }
@@ -71,14 +81,18 @@ public class RoundTrack implements Channel<Message, Message>, RoundTrackMessageV
         return null;
     }
 
+    /**
+     * Gets the dice.
+     *
+     * @param diceId the dice id
+     * @return the dice
+     */
     private Dice getDice(int diceId) {
         Optional<List<Dice>> diceList = roundDice.stream().filter(list -> list.stream().anyMatch(dice -> dice.getId() == diceId)).findFirst();
         if(diceList.isPresent()) {
             Optional<Dice> dice = diceList.get().stream().filter(d -> d.getId()==diceId).findFirst();
-            if(dice.isPresent()) {
-                System.out.println("///////////////Dado trovato///////////////////"+dice.get().getId());
+            if(dice.isPresent())
                 return dice.get();
-            }
         }
 
         return null;
@@ -95,7 +109,7 @@ public class RoundTrack implements Channel<Message, Message>, RoundTrackMessageV
     }
 
     /**
-     * Exchange one dice for an external one
+     * Exchange one dice for an external one.
      *
      * @param oldDice - Dice to be removed
      * @param newDice - Dice to be added
@@ -103,7 +117,6 @@ public class RoundTrack implements Channel<Message, Message>, RoundTrackMessageV
     public void exchangeDice(Dice oldDice, Dice newDice) {
         Optional<List<Dice>> diceList = roundDice.stream().filter(list -> list.contains(oldDice)).findFirst();
         if(diceList.isPresent()) {
-            System.out.println("///////////////Sto per inviare il roundTrack///////////////////");
             diceList.get().remove(oldDice);
             diceList.get().add(newDice);
 
@@ -111,26 +124,36 @@ public class RoundTrack implements Channel<Message, Message>, RoundTrackMessageV
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void dispatch(Message message) {
         RoundTrackVisitor roundTrackVisitor = (RoundTrackVisitor) message;
-        System.out.println("Received roundTrackVisitor");
         roundTrackVisitor.accept(this);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.Channel#sendMessage(it.polimi.ingsw.sagrada.game.intercomm.Message)
+     */
     @Override
     public void sendMessage(Message message) {
         dynamicRouter.dispatch(message);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.RoundTrackMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent)
+     */
     @Override
     public void visit(DiceEvent diceEvent) {
         throw new UnsupportedOperationException();
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.RoundTrackMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.CompleteSwapDiceToolMessage)
+     */
     @Override
     public void visit(CompleteSwapDiceToolMessage completeSwapDiceToolMessage) {
-        System.out.println("///////////////RoundTrack ha ricevuto il messaggio///////////////////");
         DTO dto = new DTO();
         dto.setDice(completeSwapDiceToolMessage.getDraftDice());
         dto.setSecondDice(

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 
+
 /**
  * The Class MessageParser.
  */
@@ -152,7 +153,6 @@ public class MessageParser implements ResponseMessageVisitor {
         JSONObject content = new JSONObject();
         content.put(PLAYER_ID, opponentDiceMoveResponse.getIdPlayer());
         content.put(DICE_ID, opponentDiceMoveResponse.getDice().getId()+"");
-        System.out.println("Dice pre message: "+opponentDiceMoveResponse.getDice().getValue());
         content.put(VALUE, opponentDiceMoveResponse.getDice().getValue()+"");
         content.put(COLOR, opponentDiceMoveResponse.getDice().getColor().toString());
         JSONObject position = new JSONObject();
@@ -241,6 +241,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the json score response.
+     *
+     * @param scoreResponse the score response
+     * @return the string
+     */
     private String createJsonScoreResponse(ScoreResponse scoreResponse) {
         JSONArray ids = new JSONArray();
         Set<String> usernames = scoreResponse.getUsernames();
@@ -257,6 +263,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the json tool response.
+     *
+     * @param toolResponse the tool response
+     * @return the string
+     */
     private String createJsonToolResponse(ToolResponse toolResponse) {
         JSONObject data = new JSONObject();
         data.put(PLAYER_ID, toolResponse.getIdPlayer());
@@ -270,6 +282,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the json end turn response.
+     *
+     * @param endTurnResponse the end turn response
+     * @return the string
+     */
     private String createJsonEndTurnResponse(EndTurnResponse endTurnResponse) {
         JSONObject data = new JSONObject();
         data.put(USERNAME, endTurnResponse.getUsername());
@@ -280,6 +298,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the json time remaining response.
+     *
+     * @param timeRemainingResponse the time remaining response
+     * @return the string
+     */
     private String createJsonTimeRemainingResponse(TimeRemainingResponse timeRemainingResponse) {
         JSONObject data = new JSONObject();
         data.put(USERNAME, timeRemainingResponse.getUsername());
@@ -291,6 +315,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the json enable window response.
+     *
+     * @param enableWindowToolResponse the enable window tool response
+     * @return the string
+     */
     private String createJsonEnableWindowResponse(EnableWindowToolResponse enableWindowToolResponse) {
         JSONObject data = new JSONObject();
         data.put(USERNAME, enableWindowToolResponse.getPlayerId());
@@ -302,6 +332,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return container.toJSONString();
     }
 
+    /**
+     * Creates the json round track tool response.
+     *
+     * @param roundTrackToolResponse the round track tool response
+     * @return the string
+     */
     private String createJsonRoundTrackToolResponse(RoundTrackToolResponse roundTrackToolResponse) {
         DiceResponse diceResponse = roundTrackToolResponse.getDiceResponse();
         JSONObject message = new JSONObject();
@@ -323,6 +359,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return message.toJSONString();
     }
 
+    /**
+     * Creates the json color bag tool response.
+     *
+     * @param colorBagToolResponse the color bag tool response
+     * @return the string
+     */
     private String createJsonColorBagToolResponse(ColorBagToolResponse colorBagToolResponse) {
         JSONObject data = new JSONObject();
         data.put(USERNAME, colorBagToolResponse.getPlayerId());
@@ -335,6 +377,12 @@ public class MessageParser implements ResponseMessageVisitor {
         return message.toJSONString();
     }
 
+    /**
+     * Creates the json dice round track reconnection event.
+     *
+     * @param diceRoundTrackReconnectionEvent the dice round track reconnection event
+     * @return the string
+     */
     private String createJsonDiceRoundTrackReconnectionEvent(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
         JSONObject message = new JSONObject();
         message.put(MESSAGE_TYPE, RESPONSE);
@@ -456,34 +504,55 @@ public class MessageParser implements ResponseMessageVisitor {
     @Override
     public String visit(ScoreResponse scoreResponse) { return createJsonScoreResponse(scoreResponse); }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.ToolResponse)
+     */
     @Override
     public String visit(ToolResponse toolResponse) { return createJsonToolResponse(toolResponse);}
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.EndTurnResponse)
+     */
     @Override
     public String visit(EndTurnResponse endTurnResponse) {
         return createJsonEndTurnResponse(endTurnResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.game.TimeRemainingResponse)
+     */
     @Override
     public String visit(TimeRemainingResponse timeRemainingResponse) {
         return createJsonTimeRemainingResponse(timeRemainingResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.EnableWindowToolResponse)
+     */
     @Override
     public String visit(EnableWindowToolResponse enableWindowToolResponse) {
         return createJsonEnableWindowResponse(enableWindowToolResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.RoundTrackToolResponse)
+     */
     @Override
     public String visit(RoundTrackToolResponse roundTrackToolResponse) {
         return createJsonRoundTrackToolResponse(roundTrackToolResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.ColorBagToolResponse)
+     */
     @Override
     public String visit(ColorBagToolResponse colorBagToolResponse) {
         return createJsonColorBagToolResponse(colorBagToolResponse);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ResponseMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceRoundTrackReconnectionEvent)
+     */
     @Override
     public String visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
         return createJsonDiceRoundTrackReconnectionEvent(diceRoundTrackReconnectionEvent);

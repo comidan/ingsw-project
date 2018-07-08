@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class ServerRMI.
  */
@@ -66,19 +67,15 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
                 switch (loginState) {
                     case AUTH_OK:
                         lobby = joinUserLobby(username);
-                        //clientRMI.notifyLobby(lobby.getLobbyIdentifier());
                         System.out.println(username + " correctly logged, migrating client to lobby server");
                         return loginState;
                     case AUTH_FAILED_USER_ALREADY_LOGGED:
                         System.out.println(loginState);
                         return loginState;
                     case AUTH_FAILED_USER_NOT_EXIST:
-                        //clientRMI.signUp();
                         if (dataManager.signUp(username, hashedPassword)) {
-                            //clientRMI.signUp();
                             lobby = joinUserLobby(username);
                             System.out.println(username + " correctly signed up, migrating client to lobby server");
-                            //clientRMI.notifyLobby(lobby.getLobbyIdentifier());
                             return LoginState.AUTH_OK;
                         }
                         else {
@@ -99,7 +96,6 @@ public class ServerRMI extends UnicastRemoteObject implements AbstractServerRMI,
      */
     @Override
     public String getMatchLobbyId() throws RemoteException {
-        System.out.println("Sending matchLobby");
         return availableLobby.getLobbyIdentifier();
     }
 

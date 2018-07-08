@@ -48,13 +48,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class GameView.
  */
 public class GameView extends Application {
+    
+    /** The Constant NOTIFICATION_TIME. */
     private static final int NOTIFICATION_TIME = 3000;
+    
+    /** The notifying. */
     private boolean notifying = false;
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(GameView.class.getName());
 
     /** The windows. */
@@ -109,12 +115,16 @@ public class GameView extends Application {
     /** The preview of private objective cards which are to be shown on click. */
     private ImageView privateObjPrev;
 
+    /** The window prev. */
     private ImageView windowPrev;
 
+    /** The notification. */
     private Label notification;
 
+    /** The timer. */
     private Label timer;
 
+    /** The dice prev container. */
     private DicePrevContainer dicePrevContainer;
 
     /**
@@ -129,7 +139,8 @@ public class GameView extends Application {
     /**
      * Sets the cell click listener.
      *
-     * @param cellDragOver, cellDragDone, the new cell click listener
+     * @param cellDragOver the cell drag over
+     * @param cellDragDone the cell drag done
      */
     void setCellClickListener(EventHandler<DragEvent> cellDragOver,EventHandler<DragEvent> cellDragDone) {
         windows.get(username).setWindowDiceListener(cellDragOver, cellDragDone);
@@ -197,16 +208,28 @@ public class GameView extends Application {
      *
      * @param diceViews the dice views
      * @param currentRound the current round
+     * @param isTool the is tool
      */
     public void setRoundTrackImage(List<DiceView> diceViews, int currentRound, boolean isTool) {
         if(isTool) this.roundTrackView.setDiceTool(diceViews, currentRound);
         else this.roundTrackView.setRoundTrackEndTurn(diceViews);
     }
 
+    /**
+     * Sets the round track reconnection.
+     *
+     * @param roundTrack the new round track reconnection
+     */
     void setRoundTrackReconnection(List<List<DiceView>> roundTrack) {
         roundTrackView.setDiceReconnection(roundTrack);
     }
 
+    /**
+     * Show dice prev container.
+     *
+     * @param color the color
+     * @param diceId the dice id
+     */
     public void showDicePrevContainer(Colors color, int diceId){
         dicePrevContainer = new DicePrevContainer(color, diceId);
         AnchorPane.setRightAnchor(dicePrevContainer, GUIManager.getGameWidthPixel(50));
@@ -214,10 +237,18 @@ public class GameView extends Application {
         anchorPane.getChildren().add(dicePrevContainer);
     }
 
+    /**
+     * Removes the dice prev container.
+     */
     public void removeDicePrevContainer() {
         anchorPane.getChildren().remove(dicePrevContainer);
     }
 
+    /**
+     * Sets the choose value.
+     *
+     * @param chooseValueHandler the new choose value
+     */
     public void setChooseValue(EventHandler<MouseEvent> chooseValueHandler){
         dicePrevContainer.setDicePrevHandler(chooseValueHandler);
     }
@@ -281,6 +312,9 @@ public class GameView extends Application {
         windows.get(username).removeMistakenDice(row, col);
     }
 
+    /**
+     * Show value chioce.
+     */
     void showValueChioce(){
 
     }
@@ -294,6 +328,12 @@ public class GameView extends Application {
 
     }
 
+    /**
+     * Adds the token tool.
+     *
+     * @param num the num
+     * @param toolCardView the tool card view
+     */
     void addTokenTool(int num, ToolCardView toolCardView){
         toolCardView.addToken(num);
     }
@@ -481,7 +521,7 @@ public class GameView extends Application {
     }
 
     /**
-     * Notify player is offline
+     * Notify player is offline.
      *
      * @param playerId the player id
      */
@@ -505,6 +545,11 @@ public class GameView extends Application {
         removeDicePrevContainer();
     }
 
+    /**
+     * Sets the dice window.
+     *
+     * @param position the new dice window
+     */
     void setDiceWindow(Position position) {
         windows.get(getUsername()).removeMistakenDice(position.getRow(), position.getCol());
     }
@@ -520,16 +565,27 @@ public class GameView extends Application {
         windows.get(username).setDice(dice, position);
     }
 
+    /**
+     * Sets the window button handler.
+     *
+     * @param windowButtonHandler the new window button handler
+     */
     void setWindowButtonHandler(EventHandler<MouseEvent> windowButtonHandler){
       windowPrev.setOnMouseClicked(windowButtonHandler);
     }
 
 
+    /**
+     * Sets the H box.
+     */
     private void setHBox(){
         AnchorPane.setBottomAnchor(hBox, GUIManager.getGameHeightPixel(30));
         AnchorPane.setRightAnchor(hBox, GUIManager.getGameWidthPixel(6));
     }
 
+    /**
+     * Sets the window.
+     */
     private void setWindow(){
         frame.addWindowToFrame(windows.get(username));
         AnchorPane.setBottomAnchor(frame, GUIManager.getGameHeightPixel(8));
@@ -537,6 +593,9 @@ public class GameView extends Application {
         anchorPane.getChildren().addAll(frame);
     }
 
+    /**
+     * Sets the roundtrack.
+     */
     private void setRoundtrack(){
         ImageView roundImage = new ImageView();
         roundImage.setImage(new Image(RoundTrackView.class.getResourceAsStream("/images/gameGuiImages/roundtrack.png"), GUIManager.getGameWidthPixel(45), GUIManager.getGameHeightPixel(13), true, false));
@@ -549,6 +608,9 @@ public class GameView extends Application {
 
     }
 
+    /**
+     * Sets the window button.
+     */
     private void setWindowButton() {
         windowPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/gameGuiImages/windowPrev.png")));
         windowPrev.setPreserveRatio(true);
@@ -558,6 +620,9 @@ public class GameView extends Application {
         anchorPane.getChildren().add(windowPrev);
     }
 
+    /**
+     * Sets the card board.
+     */
     private void setCardBoard(){
         AnchorPane.setBottomAnchor(cardBoard, GUIManager.getGameHeightPixel(0));
         AnchorPane.setRightAnchor(cardBoard, GUIManager.getGameWidthPixel(0));
@@ -566,14 +631,23 @@ public class GameView extends Application {
 
 
 
+    /**
+     * Show other windows.
+     */
     void showOtherWindows(){
         anchorPane.getChildren().addAll(hBox);
     }
 
+    /**
+     * Hide other windows.
+     */
     void hideOtherWindows(){
         anchorPane.getChildren().remove(hBox);
     }
 
+    /**
+     * Sets the card preview buttons.
+     */
     private void setCardPreviewButtons(){
         toolcardPrev = new ImageView(new Image(GameView.class.getResourceAsStream("/images/gameGuiImages/toolCard.png")));
         toolcardPrev.setPreserveRatio(true);
@@ -591,6 +665,9 @@ public class GameView extends Application {
 
     }
 
+    /**
+     * Sets the notification.
+     */
     private void setNotification() {
         notification = new Label();
         notification.setAlignment(Pos.CENTER);
@@ -603,6 +680,9 @@ public class GameView extends Application {
         anchorPane.getChildren().add(notification);
     }
 
+    /**
+     * Sets the timer.
+     */
     private void setTimer() {
         timer = new Label();
         timer.setAlignment(Pos.CENTER);
@@ -614,11 +694,21 @@ public class GameView extends Application {
         anchorPane.getChildren().add(timer);
     }
 
+    /**
+     * Sets the time remaining.
+     *
+     * @param time the new time remaining
+     */
     void setTimeRemaining(int time) {
         if(timer != null)
             timer.setText("Remaining time : " + time);
     }
 
+    /**
+     * Sets the notification.
+     *
+     * @param message the new notification
+     */
     void setNotification(String message) {
         notification.setText(message);
         if(!notifying) {
@@ -631,77 +721,146 @@ public class GameView extends Application {
         else notifying=false;
     }
 
+    /**
+     * Sets the tool preview listener.
+     *
+     * @param cardHandler the new tool preview listener
+     */
     void setToolPreviewListener(EventHandler<MouseEvent> cardHandler) {
         toolcardPrev.setOnMouseClicked(cardHandler);
     }
 
+    /**
+     * Sets the private preview listener.
+     *
+     * @param cardHandler the new private preview listener
+     */
     void setPrivatePreviewListener(EventHandler<MouseEvent> cardHandler){
         privateObjPrev.setOnMouseClicked(cardHandler);
 
     }
+    
+    /**
+     * Sets the public preview listener.
+     *
+     * @param cardHandler the new public preview listener
+     */
     void setPublicPreviewListener(EventHandler<MouseEvent> cardHandler){
         publicObjPrev.setOnMouseClicked(cardHandler);
 
     }
 
+    /**
+     * Show public card.
+     */
     void showPublicCard(){
         cardBoard.showPublicCards();
     }
 
+    /**
+     * Show private card.
+     */
     void showPrivateCard(){
         cardBoard.showPrivateCards();
     }
 
+    /**
+     * Show tool card.
+     */
     void showToolCard(){
         cardBoard.showToolCards();
     }
 
+    /**
+     * Hide public card.
+     */
     void hidePublicCard(){
         cardBoard.hidePublicCards();
     }
 
+    /**
+     * Hide private card.
+     */
     void hidePrivateCard(){
         cardBoard.hidePrivateCards();
     }
 
+    /**
+     * Hide tool card.
+     */
     void hideToolCard(){
         cardBoard.hideToolCards();
     }
 
+    /**
+     * Gets the stage.
+     *
+     * @return the stage
+     */
     public Stage getStage() {
         return (Stage) anchorPane.getScene().getWindow();
     }
 
+    /**
+     * Enable draft change value.
+     *
+     * @param changeValueHandler the change value handler
+     */
     void enableDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
         draftView.enableDraftChangeValue(changeValueHandler);
     }
 
+    /**
+     * Disable draft click.
+     */
     public void disableDraftClick(){
         draftView.disableDraftClick();
     }
 
+    /**
+     * Enable window dice drag.
+     *
+     * @param enableWindowDragHandler the enable window drag handler
+     */
     void enableWindowDiceDrag(EventHandler<MouseEvent> enableWindowDragHandler){
         windows.get(username).enableWindowDiceDrag(enableWindowDragHandler);
     }
 
+    /**
+     * Disable round track click.
+     */
     void disableRoundTrackClick(){
         roundTrackView.disableClick();
     }
 
+    /**
+     * Disable window dice drag.
+     */
     void disableWindowDiceDrag(){
          windows.get(username).disableDiceDrag();
     }
 
+    /**
+     * Disable tool buy.
+     */
     void disableToolBuy(){
         this.cardBoard.disableToolBuy();
     }
 
+    /**
+     * Sets the end turn button.
+     */
     private void setEndTurnButton(){
         AnchorPane.setLeftAnchor(endTurn, GUIManager.getGameWidthPixel(35));
         AnchorPane.setBottomAnchor(endTurn, GUIManager.getGameHeightPixel(7));
         anchorPane.getChildren().add(endTurn);
     }
 
+    /**
+     * Gets the window as byte array.
+     *
+     * @return the window as byte array
+     */
     byte[] getWindowAsByteArray() {
         File file = new File("window_temp.png");
         if (!file.exists())

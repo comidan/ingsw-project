@@ -5,20 +5,24 @@ import it.polimi.ingsw.sagrada.game.rules.CellRule;
 
 
 
+
 /**
- * Cell class contained inside window matrix indicating which rule a cell must follow to have a legitimate dice inside
+ * Cell class contained inside window matrix indicating which rule a cell must follow to have a legitimate dice inside.
  */
 public class Cell {
 
+	/** The occupied. */
 	private boolean occupied;
 
+	/** The cell rule. */
 	private CellRule cellRule;
 
+	/** The dice. */
 	private Dice dice;
 
 
 	/**
-	 * Instantiates a new cell
+	 * Instantiates a new cell.
 	 *
 	 * @param cellRule cell rule to be followed
 	 */
@@ -28,7 +32,7 @@ public class Cell {
 	}
 
 	/**
-	 * Instantiates a new cell
+	 * Instantiates a new cell.
 	 */
 	public Cell(){
 		cellRule = CellRule.builder().build();
@@ -36,7 +40,7 @@ public class Cell {
 	}
 
 	/**
-	 * Gets the cell rule
+	 * Gets the cell rule.
 	 *
 	 * @return this cell's rule
 	 */
@@ -63,7 +67,7 @@ public class Cell {
 	}
 
 	/**
-	 * Sets the dice
+	 * Sets the dice.
 	 *
 	 * @param dice new positioned dice
 	 */

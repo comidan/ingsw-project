@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 
+
 /**
  * Utility class that allows you to pick an element without repetitions from a list of elements.
  *
@@ -38,7 +39,7 @@ public class Picker<T> {
     }
 
     /**
-     * Inner class to iterate over listed elements
+     * Inner class to iterate over listed elements.
      */
     private class PickIterator implements Iterator<T> {
         

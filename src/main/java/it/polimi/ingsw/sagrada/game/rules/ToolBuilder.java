@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 
+
 /**
  * The Class ToolBuilder.
  *
@@ -199,7 +200,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 	}
 
 	/**
-	 * Sets two dices feature
+	 * Sets two dices feature.
 	 *
 	 * @return the tool builder
 	 */
@@ -232,7 +233,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 	}
 
 	/**
-	 * Sets exchange draft - round track dice feature
+	 * Sets exchange draft - round track dice feature.
 	 *
 	 * @return the tool builder
 	 */
@@ -250,7 +251,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 	}
 
 	/**
-	 * Sets roll every dice in draft feature
+	 * Sets roll every dice in draft feature.
 	 *
 	 * @return the tool builder
 	 */
@@ -263,7 +264,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 			}
 
 			/**
-			 * Sets move from draft to bag and set new dice feature
+			 * Sets move from draft to bag and set new dice feature.
 			 *
 			 * @return the tool builder
 			 */
@@ -276,7 +277,7 @@ public class ToolBuilder<T extends ToolRule> implements Builder<ToolRule> {
 			}
 
 	/**
-	 * Sets move up to two dice of the same color of one Round Track's dice to new positions
+	 * Sets move up to two dice of the same color of one Round Track's dice to new positions.
 	 *
 	 * @return the tool builder
 	 */

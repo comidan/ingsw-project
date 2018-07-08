@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.gui.utils;
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 
 
+
 /**
  * The Enum Constraint.
  */
@@ -108,6 +109,12 @@ public enum Constraint {
         }
     }
 
+    /**
+     * Gets the value from constraint.
+     *
+     * @param constraint the constraint
+     * @return the value from constraint
+     */
     public static int getValueFromConstraint(Constraint constraint) {
         switch (constraint) {
             case ONE:
@@ -148,6 +155,12 @@ public enum Constraint {
             return Constraint.WHITE;
     }
 
+    /**
+     * Gets the color from constraint.
+     *
+     * @param constraint the constraint
+     * @return the color from constraint
+     */
     public static Colors getColorFromConstraint(Constraint constraint) {
         switch (constraint) {
             case GREEN:

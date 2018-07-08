@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 /**
  * The Class DraftView.
  * @author Valentina, Daniele
@@ -23,7 +24,7 @@ public class DraftView extends GridPane {
     /** The event handler to handle the drag on the draft dice. */
     private EventHandler<MouseEvent> draftClickHandler;
 
-    /** The event handler to handle the click on the draft dice used for some toolcards */
+    /**  The event handler to handle the click on the draft dice used for some toolcards. */
     EventHandler<MouseEvent> changeValueHandler;
 
     /**
@@ -65,7 +66,9 @@ public class DraftView extends GridPane {
         }
 
     /**
-     * enable the listener used to handle some toolcard effects regarding the draftwiew
+     * enable the listener used to handle some toolcard effects regarding the draftwiew.
+     *
+     * @param changeValueHandler the change value handler
      */
 
     public void enableDraftChangeValue(EventHandler<MouseEvent> changeValueHandler){
@@ -76,7 +79,7 @@ public class DraftView extends GridPane {
     }
 
     /**
-     * disable the listener used to handle some toolcard effects regarding the draftwiew
+     * disable the listener used to handle some toolcard effects regarding the draftwiew.
      */
     public void disableDraftClick(){
         if(changeValueHandler!= null)

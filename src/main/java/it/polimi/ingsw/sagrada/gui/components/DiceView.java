@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 
+
 /**
  * The Class DiceView.
  *
@@ -29,6 +30,7 @@ public class DiceView extends ImageView{
     /** The id. */
     private int id;
 
+    /** The round number. */
     private int roundNumber;
 
     /**

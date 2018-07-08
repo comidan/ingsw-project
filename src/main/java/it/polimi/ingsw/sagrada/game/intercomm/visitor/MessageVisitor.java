@@ -17,6 +17,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.message.window.OpponentWindowRespo
 import it.polimi.ingsw.sagrada.game.intercomm.message.window.WindowResponse;
 
 
+
 /**
  * The Interface MessageVisitor.
  */
@@ -155,11 +156,31 @@ public interface MessageVisitor {
      */
     void visit(TimeRemainingResponse timeRemainingResponse);
 
+    /**
+     * Visit.
+     *
+     * @param enableWindowToolResponse the enable window tool response
+     */
     void visit(EnableWindowToolResponse enableWindowToolResponse);
 
+    /**
+     * Visit.
+     *
+     * @param roundTrackToolResponse the round track tool response
+     */
     void visit(RoundTrackToolResponse roundTrackToolResponse);
 
+    /**
+     * Visit.
+     *
+     * @param colorBagToolResponse the color bag tool response
+     */
     void visit(ColorBagToolResponse colorBagToolResponse);
 
+    /**
+     * Visit.
+     *
+     * @param diceRoundTrackReconnectionEvent the dice round track reconnection event
+     */
     void visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent);
 }

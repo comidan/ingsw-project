@@ -3,6 +3,7 @@ package it.polimi.ingsw.sagrada.gui.utils;
 import it.polimi.ingsw.sagrada.gui.components.DiceView;
 
 
+
 /**
  * The Class ClickedObject.
  */

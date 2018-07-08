@@ -18,30 +18,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * The Class ScoreLobbyView.
+ */
 public class ScoreLobbyView extends Application{
 
+    /** The score lobby view. */
     private static ScoreLobbyView scoreLobbyView = null;
 
+    /** The ranking. */
     private Map<String, Integer> ranking;
+    
+    /** The anchor pane. */
     private AnchorPane anchorPane;
+    
+    /** The primary stage. */
     private Stage primaryStage;
+    
+    /** The first player. */
     private Label firstPlayer;
+    
+    /** The second player. */
     private Label secondPlayer;
+    
+    /** The third player. */
     private Label thirdPlayer;
+    
+    /** The fourth player. */
     private Label fourthPlayer;
     /** The window height. */
     private double windowHeight;
+    
+    /** The title. */
     private Label title;
 
     /** The window width. */
     private double windowWidth;
 
+    /** The player shown. */
     private final List<String> playerShown = new ArrayList<>();
 
+    /**
+     * Instantiates a new score lobby view.
+     *
+     * @param ranking the ranking
+     */
     private ScoreLobbyView(Map<String, Integer> ranking) {
         this.ranking = ranking;
     }
 
+    /**
+     * Initialize.
+     */
     public void initialize(){
 
         this.anchorPane = new AnchorPane();
@@ -96,6 +125,9 @@ public class ScoreLobbyView extends Application{
 
     }
 
+    /* (non-Javadoc)
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     public void start(Stage stage){
         initialize();
         Scene scene = new Scene(anchorPane, windowWidth, windowHeight);
@@ -108,6 +140,9 @@ public class ScoreLobbyView extends Application{
         scoreLobbyView = this;
     }
 
+    /**
+     * Sets the scores.
+     */
     private void setScores(){
         ranking.entrySet().forEach(entry -> {
             String username = entry.getKey();
@@ -116,6 +151,12 @@ public class ScoreLobbyView extends Application{
         });
     }
 
+    /**
+     * Sets the player.
+     *
+     * @param username the username
+     * @param score the score
+     */
     private void setPlayer(String username, int score) {
         playerShown.add(username);
         int position = playerShown.indexOf(username);
@@ -128,6 +169,9 @@ public class ScoreLobbyView extends Application{
         }
     }
 
+    /**
+     * Sets the title.
+     */
     private void setTitle(){
         title = new Label("Rankings");
         title.setAlignment(Pos.CENTER);
@@ -141,22 +185,52 @@ public class ScoreLobbyView extends Application{
         AnchorPane.setRightAnchor(title, GUIManager.getWidthPixel(20));
     }
 
+    /**
+     * Sets the first player.
+     *
+     * @param message the message
+     * @param score the score
+     */
     private void setFirstPlayer(String message, int score) {
         Platform.runLater(() -> firstPlayer.setText(message + " did " + score + " points"));
     }
 
+    /**
+     * Sets the second player.
+     *
+     * @param message the message
+     * @param score the score
+     */
     private void setSecondPlayer(String message, int score) {
         Platform.runLater(() -> secondPlayer.setText(message + " did " + score + " points"));
     }
 
+    /**
+     * Sets the third player.
+     *
+     * @param message the message
+     * @param score the score
+     */
     private void setThirdPlayer(String message, int score) {
         Platform.runLater(() -> thirdPlayer.setText(message + " did " + score + " points"));
     }
 
+    /**
+     * Sets the fourth player.
+     *
+     * @param message the message
+     * @param score the score
+     */
     private void setFourthPlayer(String message, int score) {
         Platform.runLater(() -> fourthPlayer.setText(message + " did " + score + " points"));
     }
 
+    /**
+     * Start score view.
+     *
+     * @param ranking the ranking
+     * @param stage the stage
+     */
     private static void startScoreView(Map<String, Integer> ranking, Stage stage) {
         new ScoreLobbyView(ranking).start(stage);
     }

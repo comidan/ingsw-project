@@ -1,11 +1,10 @@
 package it.polimi.ingsw.sagrada.network.client.protocols.heartbeat;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
 
 
 /**
@@ -54,7 +53,6 @@ public class HeartbeatProtocolManager {
      * @apiNote kill protocol execution
      */
     public void kill() {
-        System.out.println("Someone called me");
         executor.shutdownNow();
     }
 

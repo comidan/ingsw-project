@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 
+
 /**
  * The Class DiscoverInternet.
  */

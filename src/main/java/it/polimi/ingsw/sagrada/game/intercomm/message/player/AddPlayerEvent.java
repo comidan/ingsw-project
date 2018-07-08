@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 
 
+
 /**
  * The Class AddPlayerEvent.
  */
@@ -12,12 +13,14 @@ public class AddPlayerEvent implements Message {
     /** The username. */
     private String username;
 
+    /** The position. */
     private int position;
 
     /**
      * Instantiates a new adds the player event.
      *
      * @param username the username
+     * @param position the position
      */
     public AddPlayerEvent(String username, int position) {
         this.username = username;
@@ -33,6 +36,11 @@ public class AddPlayerEvent implements Message {
         return username;
     }
 
+    /**
+     * Gets the position.
+     *
+     * @return the position
+     */
     public int getPosition() {
         return position;
     }

@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 
+
 /**
  * The Class DiceManager.
  */
@@ -88,6 +89,11 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }
 
+    /**
+     * Gets the dice from bag.
+     *
+     * @return the dice from bag
+     */
     private Dice getDiceFromBag() {
         return bagPool.remove(new Random().nextInt(bagPool.size()));
     }
@@ -109,6 +115,12 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
         return null;
     }
 
+    /**
+     * Gets the dice draft no backup.
+     *
+     * @param idDice the id dice
+     * @return the dice draft no backup
+     */
     private Dice getDiceDraftNoBackup(int idDice) {
         for (Dice dice : draftPool) {
             if (dice.getId() == idDice) {
@@ -178,7 +190,6 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
     @Override
     public void dispatch(Message message) {
         DiceManagerVisitor diceManagerVisitor = (DiceManagerVisitor)message;
-        System.out.println("Received diceManagerVisitor");
         diceManagerVisitor.accept(this);
     }
 
@@ -191,6 +202,9 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
     }
 
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceEvent)
+     */
     @Override
     public void visit(DiceEvent diceEvent) {
         if(diceEvent.getSrc().equals(CommandKeyword.DRAFT)) {
@@ -200,34 +214,43 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
         }
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.ChangeDiceValueToolMessage)
+     */
     @Override
     public void visit(ChangeDiceValueToolMessage changeDiceValueToolMessage) {
         DTO dto = new DTO();
         dto.setDice(getDiceDraft(changeDiceValueToolMessage.getDiceId()));
         changeDiceValueToolMessage.getToolCard().getRule().checkRule(dto);
         putDiceDraft(dto.getDice());
-        System.out.println("---DiceManager, sending new draft---");
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.RollAllDiceToolMessage)
+     */
     @Override
     public void visit(RollAllDiceToolMessage rollAllDiceToolMessage) {
         DTO dto = new DTO();
         dto.setRollDraft(this::rollDraft);
         rollAllDiceToolMessage.getToolCard().getRule().checkRule(dto);
-        System.out.println("---DiceManager, sending new draft---");
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.tool.SwapDiceToolMessage)
+     */
     @Override
     public void visit(SwapDiceToolMessage swapDiceToolMessage) {
-        System.out.println("///////////////DiceManager ha ricevuto il messaggio///////////////////");
         sendMessage(new CompleteSwapDiceToolMessage(
                 this::exchangeDice,
                 getDiceDraftNoDeletion(swapDiceToolMessage.getDraftDiceId()),
                 swapDiceToolMessage));
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor#visit(it.polimi.ingsw.sagrada.game.intercomm.message.dice.DiceValueEvent)
+     */
     @Override
     public void visit(DiceValueEvent diceValueEvent) {
         DiceEvent diceEvent = diceValueEvent.getDiceEvent();
@@ -237,12 +260,17 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
         dispatchGameManager.accept(diceGameManagerEvent);
     }
 
+    /**
+     * Put dice draft.
+     *
+     * @param dice the dice
+     */
     private void putDiceDraft(Dice dice) {
         draftPool.add(dice);
     }
 
     /**
-     * Exchange one dice for an external one
+     * Exchange one dice for an external one.
      *
      * @param oldDice - Dice to be removed
      * @param newDice - Dice to be added
@@ -254,6 +282,12 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
         }
     }
 
+    /**
+     * Move dice from draft to bag.
+     *
+     * @param playerId the player id
+     * @param diceId the dice id
+     */
     public void moveDiceFromDraftToBag(String playerId, int diceId) {
         Dice dice = getDiceDraftNoBackup(diceId);
         if(dice!= null){
@@ -265,6 +299,9 @@ public class DiceManager implements Channel<Message, Message>, DiceManagerMessag
         }
     }
 
+    /**
+     * Roll draft.
+     */
     private void rollDraft() {
         draftPool.forEach(Dice::roll);
         sendMessage(new DiceResponse(CommandKeyword.DRAFT, new ArrayList<>(draftPool)));

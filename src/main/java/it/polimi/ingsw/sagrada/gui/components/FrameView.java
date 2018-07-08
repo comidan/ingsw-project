@@ -8,11 +8,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
+
+/**
+ * The Class FrameView.
+ */
 public class FrameView extends StackPane {
 
 
     /**
-     * Instantiates a new frame view
+     * Instantiates a new frame view.
      */
     public FrameView(){
         ImageView imageView = new ImageView(new Image(FrameView.class.getResourceAsStream("/images/gameGuiImages/frame.png")));
@@ -23,7 +27,8 @@ public class FrameView extends StackPane {
     }
 
     /**
-     * sets the window view inside the frame image
+     * sets the window view inside the frame image.
+     *
      * @param windowView the window view
      */
     public void addWindowToFrame(WindowView windowView){

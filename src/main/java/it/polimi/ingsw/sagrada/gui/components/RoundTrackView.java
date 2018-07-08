@@ -4,12 +4,12 @@ import it.polimi.ingsw.sagrada.gui.utils.Constraint;
 import it.polimi.ingsw.sagrada.gui.utils.GUIManager;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 /**
@@ -26,7 +26,7 @@ public class RoundTrackView extends GridPane {
     /** The list of dice view lists. */
     private ArrayList<ArrayList<DiceView>> diceViewList;
 
-    /** the list of round boxes*/
+    /**  the list of round boxes. */
     private List<RoundCellView> roundCellViewList;
 
 
@@ -49,14 +49,12 @@ public class RoundTrackView extends GridPane {
 
 
     /**
-     * Sets the dice on the roundtrack at the end of the turn
+     * Sets the dice on the roundtrack at the end of the turn.
      *
      * @param diceViews the dice view to be added
-     * @param currentRound the round to add the dices on
      */
 
     public void setRoundTrackEndTurn(List<DiceView> diceViews) {
-        System.out.println("Setting round dices at round number : " + roundCellViewList.size());
         RoundCellView roundCellView = new RoundCellView(diceViews);
         roundCellView.setRoundNumber(roundCellViewList.size());
         for (int i = 0; i < diceViews.size(); i++) {
@@ -66,18 +64,23 @@ public class RoundTrackView extends GridPane {
         }
         roundCellViewList.add(roundCellView);
         this.add(roundCellView, roundCellViewList.size(), 1);
-        System.out.println("metto:" + roundCellView.getRoundNumber());
-
     }
 
     /**
-     * sets the dice on toolcard usage
+     * sets the dice on toolcard usage.
+     *
      * @param diceViews the list of dice views to be added, roundNum the number of the round to add dice views on
+     * @param roundNum the round num
      */
     public void setDiceTool(List<DiceView> diceViews, int roundNum) {
         substituteDice(diceViews, roundNum);
     }
 
+    /**
+     * Sets the dice reconnection.
+     *
+     * @param roundTrack the new dice reconnection
+     */
     public void setDiceReconnection(List<List<DiceView>> roundTrack) {
         roundTrack.forEach(list->{
             int index = roundTrack.indexOf(list);
@@ -86,7 +89,12 @@ public class RoundTrackView extends GridPane {
         });
     }
 
-    /** the private methos to set dice views on toolcard usage */
+    /**
+     *  the private methos to set dice views on toolcard usage.
+     *
+     * @param diceViews the dice views
+     * @param roundNum the round num
+     */
     private void substituteDice(List<DiceView> diceViews, int roundNum){
         RoundCellView choseRound = roundCellViewList.get(roundNum - 1);
         choseRound.addDicePerRound(diceViews);
@@ -94,7 +102,7 @@ public class RoundTrackView extends GridPane {
 
 
     /**
-     * Sets the handler to handle click on dice on the roundtrack
+     * Sets the handler to handle click on dice on the roundtrack.
      *
      * @param clickHandler the new click handler
      */
@@ -109,7 +117,7 @@ public class RoundTrackView extends GridPane {
     }
 
     /**
-     * disables the handler to handle click on the round track dice
+     * disables the handler to handle click on the round track dice.
      */
     public void disableClick() {
         for(int i = 0; i< diceViewList.size(); i++){

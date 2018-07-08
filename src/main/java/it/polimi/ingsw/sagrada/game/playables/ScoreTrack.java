@@ -10,6 +10,7 @@ import it.polimi.ingsw.sagrada.game.rules.RuleManager;
 import java.util.*;
 
 
+
 /**
  * The Class ScoreTrack.
  */

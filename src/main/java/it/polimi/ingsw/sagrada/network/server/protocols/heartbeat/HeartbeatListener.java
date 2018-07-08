@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.heartbeat;
 
 
+
 /**
  * The listener interface for receiving heartbeat events.
  * The class that is interested in processing a heartbeat

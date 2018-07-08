@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
 
+
 /**
  * The Class WindowView.
  */
@@ -27,6 +28,7 @@ public class WindowView extends GridPane {
     private final CellView[][] windowDices;
 
 
+    /** The enable window drag handler. */
     private EventHandler<MouseEvent> enableWindowDragHandler;
 
     /**
@@ -68,7 +70,8 @@ public class WindowView extends GridPane {
     /**
      * Sets the window dice listener.
      *
-     * @param cellDragOver, cellDragOver, the new window dice listener
+     * @param cellDragOver the cell drag over
+     * @param cellDragDone the cell drag done
      */
     public void setWindowDiceListener(EventHandler<DragEvent> cellDragOver, EventHandler <DragEvent> cellDragDone) {
         for (int i = 0; i < windowDices.length; i++)
@@ -105,10 +108,8 @@ public class WindowView extends GridPane {
      * @param position the position
      */
     public void setDice(Dice dice, Position position) {
-        if(dice.getId()==(-1)) {
-            System.out.println("Sto per rimuovere il dado");
+        if(dice.getId()==(-1))
             windowDices[position.getRow()][position.getCol()].removeMistakenDice();
-        }
         else {
             windowDices[position.getRow()][position.getCol()].setImageCell(
                     new DiceView(Constraint.getColorConstraint(dice.getColor()),
@@ -118,6 +119,11 @@ public class WindowView extends GridPane {
     }
 
 
+    /**
+     * Enable window dice drag.
+     *
+     * @param enableWindowDragHandler the enable window drag handler
+     */
     public void enableWindowDiceDrag(EventHandler<MouseEvent> enableWindowDragHandler){
         this.enableWindowDragHandler = enableWindowDragHandler;
         for (int i = 0; i < windowDices.length; i++)
@@ -128,6 +134,9 @@ public class WindowView extends GridPane {
                 }
     }
 
+    /**
+     * Disable dice drag.
+     */
     public void disableDiceDrag(){
         for (int i = 0; i < windowDices.length; i++)
         for (int j = 0; j < windowDices[0].length; j++)
@@ -138,6 +147,9 @@ public class WindowView extends GridPane {
 
     }
 
+    /**
+     * Window resize.
+     */
     public void windowResize(){
         for (int i = 0; i < windowDices.length; i++)
             for (int j = 0; j < windowDices[0].length; j++)

@@ -4,21 +4,22 @@ import javafx.scene.layout.VBox;
 
 import java.util.List;
 
+
+/**
+ * The Class RoundCellView.
+ */
 public class RoundCellView extends VBox{
 
 
-    /**
-     * the number of the round corresponding to the dice in this box
-     */
+    /** the number of the round corresponding to the dice in this box. */
     private int roundNumber;
 
-    /**
-     * the list of dice existing in this box
-     */
+    /** the list of dice existing in this box. */
     private List<DiceView> diceViewList;
 
     /**
-     * Instantiates a new Round Cell View
+     * Instantiates a new Round Cell View.
+     *
      * @param diceViewList the list of dice to be added to this box
      */
     RoundCellView(List<DiceView> diceViewList) {
@@ -27,7 +28,8 @@ public class RoundCellView extends VBox{
     }
 
     /**
-     * gets the number of the round corresponding to this box
+     * gets the number of the round corresponding to this box.
+     *
      * @return the round number
      */
     public int getRoundNumber() {
@@ -35,7 +37,8 @@ public class RoundCellView extends VBox{
     }
 
     /**
-     * sets the number of the round corresponding to this box
+     * sets the number of the round corresponding to this box.
+     *
      * @param roundNumber the round number
      */
     void setRoundNumber(int roundNumber) {
@@ -43,7 +46,9 @@ public class RoundCellView extends VBox{
     }
 
     /**
-     * removes old dice and call method to add new ones
+     * removes old dice and call method to add new ones.
+     *
+     * @param diceViews the dice views
      */
     void addDicePerRound(List<DiceView> diceViews) {
         diceViewList.forEach(diceView -> getChildren().remove(diceView));
@@ -52,7 +57,7 @@ public class RoundCellView extends VBox{
     }
 
     /**
-     * adds dices for the round corresponding to the box
+     * adds dices for the round corresponding to the box.
      */
     private void addDicePerRound() {
         for(int i = 0; i<diceViewList.size(); i++ ){
@@ -62,7 +67,7 @@ public class RoundCellView extends VBox{
     }
 
     /**
-     * removes a dice from the list and from the box
+     * removes a dice from the list and from the box.
      */
     public void removeDice(){
         for(int i = 0; i< diceViewList.size(); i++){

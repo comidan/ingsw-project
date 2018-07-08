@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.visitor.MessageVisitor;
 import java.io.Serializable;
 
 
+
 /**
  * The Interface Message.
  */

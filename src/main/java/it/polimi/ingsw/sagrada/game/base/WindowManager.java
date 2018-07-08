@@ -27,25 +27,34 @@ import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 
+
 /**
- * Window manager class, bridge from json window representation to the dynamic model one
+ * Window manager class, bridge from json window representation to the dynamic model one.
  */
 public class WindowManager implements Channel<WindowEvent, WindowResponse> {
 
+    /** The Constant BASE_PATH. */
     private static final String BASE_PATH = "/json/window/Windows.json";
 
+    /** The Constant WINDOWS_PER_CARD. */
     private static final int WINDOWS_PER_CARD = 2;
 
+    /** The Constant NUM_OF_WINDOWS. */
     private static final int NUM_OF_WINDOWS = 12;
 
+    /** The picker. */
     private Iterator<Integer> picker;
 
+    /** The Constant logger. */
     private static final Logger logger = Logger.getAnonymousLogger();
 
+    /** The windows array. */
     private JSONArray windowsArray;
 
+    /** The dispatch game manager. */
     private Consumer<Message> dispatchGameManager;
 
+    /** The dynamic router. */
     private DynamicRouter dynamicRouter;
 
     /**

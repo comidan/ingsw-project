@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.rules.Rule;
 
 
 
+
 /**
  * The Class Card.
  */

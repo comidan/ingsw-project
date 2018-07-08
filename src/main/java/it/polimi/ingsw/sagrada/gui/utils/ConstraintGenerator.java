@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class ConstraintGenerator.
  */
@@ -113,6 +114,13 @@ public class ConstraintGenerator {
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }
 
+    /**
+     * Gets the token.
+     *
+     * @param id the id
+     * @param side the side
+     * @return the token
+     */
     public int getToken(int id, WindowSide side) {
         JSONObject card = (JSONObject) windowsArray.get(id);
         JSONArray windows = (JSONArray) card.get("windows");

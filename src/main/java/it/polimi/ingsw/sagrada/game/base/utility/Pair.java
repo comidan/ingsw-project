@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.game.base.utility;
 
 import java.io.Serializable;
 
+
 /**
  * The Class Pair.
  *

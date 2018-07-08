@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.network.client.ClientBase;
 import java.rmi.RemoteException;
 
 
+
 /**
  * The Interface ClientRMI.
  */

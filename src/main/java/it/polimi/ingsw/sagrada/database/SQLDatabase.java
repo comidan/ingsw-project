@@ -7,16 +7,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
- * SQLDatabase module/library class
+ * SQLDatabase module/library class.
  *
  * @author daniele
  */
 class SQLDatabase extends Database {
     
-    /** The Constant DATABASE_DRIVER package */
+    /**  The Constant DATABASE_DRIVER package. */
     private static final String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = Logger.getLogger(SQLDatabase.class.getName());
     
     /**
@@ -41,7 +43,7 @@ class SQLDatabase extends Database {
     }
     
     /**
-     * Instantiates a new SQL database using default port
+     * Instantiates a new SQL database using default port.
      *
      * @param username DB access username
      * @param password DB access password

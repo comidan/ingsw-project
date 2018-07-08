@@ -1,6 +1,7 @@
 package it.polimi.ingsw.sagrada.network.server.protocols.heartbeat;
 
 
+
 /**
  * The Interface Observer.
  *

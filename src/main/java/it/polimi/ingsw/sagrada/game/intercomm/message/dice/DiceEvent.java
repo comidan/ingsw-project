@@ -5,6 +5,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.*;
 
 
+
 /**
  * The Class DiceEvent.
  */
@@ -97,14 +98,23 @@ public class DiceEvent implements Message, ActionVisitor, DiceManagerVisitor, To
         return actionMessageVisitor.visit(this);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerVisitor#accept(it.polimi.ingsw.sagrada.game.intercomm.visitor.DiceManagerMessageVisitor)
+     */
     @Override
     public void accept(DiceManagerMessageVisitor diceManagerMessageVisitor) {
         diceManagerMessageVisitor.visit(this);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameVisitor#accept(it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor)
+     */
     @Override
     public void accept(ToolGameMessageVisitor toolGameMessageVisitor) { toolGameMessageVisitor.visit(this); }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.RoundTrackVisitor#accept(it.polimi.ingsw.sagrada.game.intercomm.visitor.RoundTrackMessageVisitor)
+     */
     @Override
     public void accept(RoundTrackMessageVisitor roundTrackMessageVisitor) { roundTrackMessageVisitor.visit(this); }
 }

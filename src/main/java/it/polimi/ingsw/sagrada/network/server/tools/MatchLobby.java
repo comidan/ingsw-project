@@ -36,6 +36,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  * The Class MatchLobby.
  */
@@ -53,9 +54,10 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     /** The client pool. */
     private Map<String, ClientBase> clientPool;
 
-    /** The client state*/
+    /**  The client state. */
     private Map<String, Long> clientLinkState;
 
+    /** The client TCP link established. */
     private Map<String, Boolean> clientTCPLinkEstablished;
 
     /** The client ids. */
@@ -91,6 +93,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
     /** The identifier. */
     private String identifier;
 
+    /** The internal identifier. */
     private String internalIdentifier;
 
     /** The port. */
@@ -153,6 +156,12 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         return clientPool.size() == MAX_POOL_SIZE;
     }
 
+    /**
+     * Was here.
+     *
+     * @param username the username
+     * @return true, if successful
+     */
     boolean wasHere(String username) {
         return clientIdTokens.contains(username);
     }
@@ -205,6 +214,7 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
      * Removes the player.
      *
      * @param username the username
+     * @param hashBeenRequested the hash been requested
      * @return true, if successful
      */
     private synchronized boolean removePlayer(String username, boolean hashBeenRequested) {
@@ -395,6 +405,11 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         }
     }
 
+    /**
+     * Check valid client link state.
+     *
+     * @return true, if successful
+     */
     private boolean checkValidClientLinkState() {
         for(String id : clientIdTokens)
             synchronized (clientTCPLinkEstablished) {
@@ -443,6 +458,11 @@ public class MatchLobby extends UnicastRemoteObject implements HeartbeatListener
         dynamicRouter.dispatch(message);
     }
 
+    /**
+     * Send payload.
+     *
+     * @param payload the payload
+     */
     private void sendPayload(String payload) {
         clientIds.forEach(username -> new Thread(() -> {
             try {

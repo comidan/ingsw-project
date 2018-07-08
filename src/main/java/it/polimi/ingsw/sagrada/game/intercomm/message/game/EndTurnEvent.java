@@ -4,6 +4,7 @@ import it.polimi.ingsw.sagrada.game.intercomm.Message;
 import it.polimi.ingsw.sagrada.game.intercomm.visitor.*;
 
 
+
 /**
  * The Class EndTurnEvent.
  */
@@ -64,6 +65,9 @@ public class EndTurnEvent implements Message, ActionVisitor, BaseGameVisitor, To
         baseGameMessageVisitor.visit(this);
     }
 
+    /* (non-Javadoc)
+     * @see it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameVisitor#accept(it.polimi.ingsw.sagrada.game.intercomm.visitor.ToolGameMessageVisitor)
+     */
     @Override
     public void accept(ToolGameMessageVisitor toolGameMessageVisitor) { toolGameMessageVisitor.visit(this); }
 }
