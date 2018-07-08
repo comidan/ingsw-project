@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -45,6 +46,7 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
     private static String idPlayer = "test";
     private static int id = 0;
     private static int round = 1;
+    private static int sampleValue = 3;
     private static int port = 49152;
     private static String time = "3";
     private static WindowSide side = WindowSide.FRONT;
@@ -77,7 +79,14 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
                                                             new RuleResponse(idPlayer, valid),
                                                             new PublicObjectiveResponse(ids),
                                                             new PrivateObjectiveResponse(id, idPlayer),
-                                                            new ToolCardResponse(ids)};
+                                                            new ToolCardResponse(ids),
+                                                            new ToolResponse(true, idPlayer, 0, sampleValue),
+                                                            new EndTurnResponse(idPlayer),
+                                                            new TimeRemainingResponse(idPlayer, sampleValue),
+                                                            new EnableWindowToolResponse(idPlayer, sampleValue),
+                                                            new RoundTrackToolResponse(new DiceResponse(CommandKeyword.DRAFT, diceList), round),
+                                                            new ColorBagToolResponse(idPlayer, Colors.RED, id),
+                                                            new DiceRoundTrackReconnectionEvent(Arrays.asList(diceList), idPlayer)};
         List<ResponseVisitor> messageList = Arrays.asList(messages);
         messageList.forEach(message -> message.accept(this));
         CommandParser commandParser = new CommandParser();
@@ -197,36 +206,69 @@ public class NetworkCommunicationProtocolTest implements ResponseMessageVisitor 
 
     @Override
     public String visit(ToolResponse toolResponse) {
+        String json = messageParser.createJsonResponse(toolResponse);
+        ToolResponse toolResponseMessage = (ToolResponse) JsonMessage.parseJsonData(json);
+        assertEquals(toolResponse.getIdPlayer(), toolResponseMessage.getIdPlayer());
+        assertEquals(toolResponse.getTokenSpent(), toolResponseMessage.getTokenSpent());
+        assertEquals(toolResponse.getToolId(), toolResponseMessage.getToolId());
+        assertEquals(toolResponse.isCanBuy(), toolResponseMessage.isCanBuy());
         return null;
     }
 
     @Override
     public String visit(EndTurnResponse endTurnResponse) {
+        String json = messageParser.createJsonResponse(endTurnResponse);
+        EndTurnResponse endTurnResponseMessage = (EndTurnResponse) JsonMessage.parseJsonData(json);
+        assertEquals(endTurnResponse.getUsername(), endTurnResponseMessage.getUsername());
         return null;
     }
 
     @Override
     public String visit(TimeRemainingResponse timeRemainingResponse) {
+        String json = messageParser.createJsonResponse(timeRemainingResponse);
+        TimeRemainingResponse timeRemainingResponseMessage = (TimeRemainingResponse) JsonMessage.parseJsonData(json);
+        assertEquals(timeRemainingResponse.getRemainingTime(), timeRemainingResponseMessage.getRemainingTime());
+        assertEquals(timeRemainingResponse.getUsername(), timeRemainingResponseMessage.getUsername());
         return null;
     }
 
     @Override
     public String visit(EnableWindowToolResponse enableWindowToolResponse) {
+        String json = messageParser.createJsonResponse(enableWindowToolResponse);
+        EnableWindowToolResponse enableWindowToolResponseMessage = (EnableWindowToolResponse) JsonMessage.parseJsonData(json);
+        assertEquals(enableWindowToolResponse.getPlayerId(), enableWindowToolResponseMessage.getPlayerId());
+        assertEquals(enableWindowToolResponse.getToolId(), enableWindowToolResponseMessage.getToolId());
         return null;
     }
 
     @Override
     public String visit(RoundTrackToolResponse roundTrackToolResponse) {
+        String json = messageParser.createJsonResponse(roundTrackToolResponse);
+        RoundTrackToolResponse roundTrackToolResponseMessage = (RoundTrackToolResponse) JsonMessage.parseJsonData(json);
+        IntStream.range(0, roundTrackToolResponse.getDiceResponse().getDiceList().size()).forEach(index -> roundTrackToolResponse.getDiceResponse().getDiceList()
+                                                                                                            .get(index).equals(roundTrackToolResponseMessage
+                                                                                                            .getDiceResponse().getDiceList().get(index)));
+        assertEquals(roundTrackToolResponse.getRoundNumber(), roundTrackToolResponseMessage.getRoundNumber());
         return null;
     }
 
     @Override
     public String visit(ColorBagToolResponse colorBagToolResponse) {
+        String json = messageParser.createJsonResponse(colorBagToolResponse);
+        ColorBagToolResponse colorBagToolResponseMessage = (ColorBagToolResponse) JsonMessage.parseJsonData(json);
+        assertEquals(colorBagToolResponse.getColor(), colorBagToolResponseMessage.getColor());
+        assertEquals(colorBagToolResponse.getDiceId(), colorBagToolResponseMessage.getDiceId());
+        assertEquals(colorBagToolResponse.getPlayerId(), colorBagToolResponseMessage.getPlayerId());
         return null;
     }
 
     @Override
     public String visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
+        String json = messageParser.createJsonResponse(diceRoundTrackReconnectionEvent);
+        DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEventMessage = (DiceRoundTrackReconnectionEvent) JsonMessage.parseJsonData(json);
+        diceRoundTrackReconnectionEvent.getRoundTrack().get(0).
+                forEach(dice -> assertEquals(dice, diceRoundTrackReconnectionEventMessage.getRoundTrack().get(0).get(diceRoundTrackReconnectionEvent.getRoundTrack().get(0).indexOf(dice))));
+        assertEquals(diceRoundTrackReconnectionEventMessage.getPlayerId(), diceRoundTrackReconnectionEvent.getPlayerId());
         return null;
     }
 }

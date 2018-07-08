@@ -444,7 +444,7 @@ public class JsonMessage implements ActionMessageVisitor {
                     return new RoundTrackToolResponse(new DiceResponse((String) (data.get(DESTINATION)), diceResponse), Integer.parseInt((String) data.get(ROUND_NUMBER)));
                 case COLOR_SELECTION:
                     data = (JSONObject) jsonMsg.get(COLOR_SELECTION);
-                    player = (String) data.get(PLAYER_ID);
+                    player = (String) data.get(USERNAME);
                     Colors color = Colors.stringToColor((String) data.get(COLOR));
                     int diceId = Integer.parseInt((String) data.get(DICE_ID));
                     return new ColorBagToolResponse(player, color, diceId);

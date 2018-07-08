@@ -35,6 +35,7 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
     private static int id = 0;
     private static int score = 1;
     private static int round = 1;
+    private static int sampleValue = 3;
     private static WindowSide side = WindowSide.FRONT;
     private static String source = CommandKeyword.DRAFT;
     private static boolean valid = new Random().nextInt() % 2 == 0;
@@ -85,6 +86,20 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
         toolCardResponse.accept(this);
         ScoreResponse scoreResponse = new ScoreResponse(players, Arrays.asList(score, score + 1));
         scoreResponse.accept(this);
+        ToolResponse toolResponse = new ToolResponse(true, idPlayer, 0, sampleValue);
+        toolResponse.accept(this);
+        EndTurnResponse endTurnResponse = new EndTurnResponse(idPlayer);
+        endTurnResponse.accept(this);
+        TimeRemainingResponse timeRemainingResponse = new TimeRemainingResponse(idPlayer, sampleValue);
+        timeRemainingResponse.accept(this);
+        EnableWindowToolResponse enableWindowToolResponse = new EnableWindowToolResponse(idPlayer, sampleValue);
+        enableWindowToolResponse.accept(this);
+        RoundTrackToolResponse roundTrackToolResponse = new RoundTrackToolResponse(new DiceResponse(CommandKeyword.DRAFT, diceList), round);
+        roundTrackToolResponse.accept(this);
+        ColorBagToolResponse colorBagToolResponse = new ColorBagToolResponse(idPlayer, Colors.RED, id);
+        colorBagToolResponse.accept(this);
+        DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent = new DiceRoundTrackReconnectionEvent(Arrays.asList(diceList), idPlayer);
+        diceRoundTrackReconnectionEvent.accept(this);
     }
 
     @Override
@@ -234,36 +249,52 @@ public class IntercommunicationActionResponseVisitorTest implements ActionMessag
 
     @Override
     public String visit(ToolResponse toolResponse) {
+        assertEquals(idPlayer, toolResponse.getIdPlayer());
+        assertEquals(sampleValue, toolResponse.getToolId());
+        assertEquals(0, toolResponse.getTokenSpent());
         return null;
     }
 
     @Override
     public String visit(EndTurnResponse endTurnResponse) {
+        assertEquals(idPlayer, endTurnResponse.getUsername());
         return null;
     }
 
     @Override
     public String visit(TimeRemainingResponse timeRemainingResponse) {
+        assertEquals(idPlayer, timeRemainingResponse.getUsername());
+        assertEquals(sampleValue, timeRemainingResponse.getRemainingTime());
         return null;
     }
 
     @Override
     public String visit(EnableWindowToolResponse enableWindowToolResponse) {
+        assertEquals(idPlayer, enableWindowToolResponse.getPlayerId());
+        assertEquals(sampleValue, enableWindowToolResponse.getToolId());
         return null;
     }
 
     @Override
     public String visit(RoundTrackToolResponse roundTrackToolResponse) {
+        assertEquals(diceList, roundTrackToolResponse.getDiceResponse().getDiceList());
+        assertEquals(CommandKeyword.DRAFT, roundTrackToolResponse.getDiceResponse().getDst());
+        assertEquals(round, roundTrackToolResponse.getRoundNumber());
         return null;
     }
 
     @Override
     public String visit(ColorBagToolResponse colorBagToolResponse) {
+        assertEquals(id, colorBagToolResponse.getDiceId());
+        assertEquals(Colors.RED, colorBagToolResponse.getColor());
+        assertEquals(idPlayer, colorBagToolResponse.getPlayerId());
         return null;
     }
 
     @Override
     public String visit(DiceRoundTrackReconnectionEvent diceRoundTrackReconnectionEvent) {
+        diceList.forEach(dice -> assertEquals(dice, diceRoundTrackReconnectionEvent.getRoundTrack().get(0).get(diceList.indexOf(dice))));
+        assertEquals(idPlayer, diceRoundTrackReconnectionEvent.getPlayerId());
         return null;
     }
 }
