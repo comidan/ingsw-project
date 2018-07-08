@@ -87,17 +87,17 @@ public class CardManager {
 		actions.forEach(json -> {
 			String action = (String) json;
 			switch (action) {
-				case "setIncrementDiceFeature": toolBuilder.setIncrementDiceFeature(); break;
-				case "setMoveIgnoringColorRuleFeature": toolBuilder.setMoveIgnoringColorRuleFeature(); break;
-				case "setMoveIgnoringValueRuleFeature": toolBuilder.setMoveIgnoringValueRuleFeature(); break;
-				case "setAddTwoDiceFeature": toolBuilder.setAddTwoDiceFeature(); break;
-				case "setExchangeDraftRoundTrackDiceFeature": toolBuilder.setExchangeDraftRoundTrackDiceFeature(); break;
-				case "setRollDiceFeature": toolBuilder.setRollDiceFeature(); break;
-				case "setRollEveryDraftDice": toolBuilder.setRollEveryDraftDice(); break;
-				case "setMoveOppositeSideDiceFeature": toolBuilder.setMoveOppositeSideDiceFeature(); break;
-				case "setAddNewDiceFeature": toolBuilder.setAddNewDiceFeature(); break;
-				case "setMoveSameRoundTrackDiceColorFeature": toolBuilder.setMoveSameRoundTrackDiceColorFeature(); break;
-				case "setFromDraftToBagFeature": toolBuilder.setFromDraftToBagFeature(); break;
+				case ToolActionKeyWord.INCREMENT_DICE: toolBuilder.setIncrementDiceFeature(); break;
+				case ToolActionKeyWord.MOVE_IGNORING_COLOR: toolBuilder.setMoveIgnoringColorRuleFeature(); break;
+				case ToolActionKeyWord.MOVE_IGNORING_VALUE: toolBuilder.setMoveIgnoringValueRuleFeature(); break;
+				case ToolActionKeyWord.ADD_TWO_DICE: toolBuilder.setAddTwoDiceFeature(); break;
+				case ToolActionKeyWord.EXCHANGE_DRAFT_ROUND_TRACK: toolBuilder.setExchangeDraftRoundTrackDiceFeature(); break;
+				case ToolActionKeyWord.ROLL_DICE: toolBuilder.setRollDiceFeature(); break;
+				case ToolActionKeyWord.ROLL_EVERY_DRAFT: toolBuilder.setRollEveryDraftDice(); break;
+				case ToolActionKeyWord.MOVE_OPPOSITE_SIDE: toolBuilder.setMoveOppositeSideDiceFeature(); break;
+				case ToolActionKeyWord.ADD_NEW_DICE: toolBuilder.setAddNewDiceFeature(); break;
+				case ToolActionKeyWord.MOVE_SAME_ROUND_TRACK_DICE: toolBuilder.setMoveSameRoundTrackDiceColorFeature(); break;
+				case ToolActionKeyWord.FROM_DRAFT_TO_BAG: toolBuilder.setFromDraftToBagFeature(); break;
 				default: LOGGER.log(Level.SEVERE, () -> "JSON is not correct. Check ToolCard.json Action Array");
 			}
 		});

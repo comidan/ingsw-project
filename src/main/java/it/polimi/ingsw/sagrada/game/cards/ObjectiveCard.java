@@ -31,7 +31,8 @@ public class ObjectiveCard extends Card {
 	/* (non-Javadoc)
 	 * @see it.polimi.ingsw.sagrada.game.cards.Card#getRule()
 	 */
-	public  ObjectiveRule getRule() {
+	@Override
+	public ObjectiveRule getRule() {
 		return (ObjectiveRule) super.getRule();
 	}
 

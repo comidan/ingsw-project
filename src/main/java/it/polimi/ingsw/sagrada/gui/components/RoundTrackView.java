@@ -24,7 +24,7 @@ public class RoundTrackView extends GridPane {
     private static final String DICE_IMAGE_ROOT_PATH = "/images/DiceImages/";
 
     /** The list of dice view lists. */
-    private ArrayList<ArrayList<DiceView>> diceViewList;
+    private List<List<DiceView>> diceViewList;
 
     /**  the list of round boxes. */
     private List<RoundCellView> roundCellViewList;

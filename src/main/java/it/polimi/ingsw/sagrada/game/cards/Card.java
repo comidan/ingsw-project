@@ -2,9 +2,6 @@ package it.polimi.ingsw.sagrada.game.cards;
 
 import it.polimi.ingsw.sagrada.game.rules.Rule;
 
-
-
-
 /**
  * The Class Card.
  */

@@ -10,11 +10,11 @@ import java.util.logging.Logger;
 
 
 /**
- * The Class MessageDispatcher.
+ * The Class MessageDispatcher is an implementation of DynamicRouter
  */
 public class MessageDispatcher implements DynamicRouter<Message> {
 
-    /** The handlers. */
+    /** The handlers. Links a message type to all the Channel that have registered. */
     private Map<Class<? extends Message>, List<Channel>> handlers;
 
     /** The logger. */
@@ -27,8 +27,11 @@ public class MessageDispatcher implements DynamicRouter<Message> {
         handlers = new HashMap<>();
     }
 
-    /* (non-Javadoc)
-     * @see it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter#subscribeChannel(java.lang.Class, it.polimi.ingsw.sagrada.game.intercomm.Channel)
+    /**
+     * Subscribe Channel for receiving a message
+     *
+     * @param contentType the type o the message
+     * @param channel the channel that subscribes to contentType
      */
     @Override
     public void subscribeChannel(Class<? extends Message> contentType, Channel<? extends Message, ? extends Message> channel) {
@@ -40,8 +43,10 @@ public class MessageDispatcher implements DynamicRouter<Message> {
         }
     }
 
-    /* (non-Javadoc)
-     * @see it.polimi.ingsw.sagrada.game.intercomm.DynamicRouter#dispatch(it.polimi.ingsw.sagrada.game.intercomm.Message)
+    /**
+     * Dispatch the message to all Channel that put a subscription on that type of message.
+     *
+     * @param content the message to be sent
      */
     @Override
     public void dispatch(Message content) {
