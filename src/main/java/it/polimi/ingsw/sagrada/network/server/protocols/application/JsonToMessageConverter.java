@@ -15,6 +15,7 @@ import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 
 import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
 
+import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -64,8 +65,8 @@ public class JsonToMessageConverter {
                     int idDice = Integer.parseInt((String)data.get(DICE_ID));
                     String source = (String)data.get("source");
                     JSONObject pos = (JSONObject)data.get(POSITION);
-                    int row = Integer.parseInt((String)pos.get("y"));
-                    int col = Integer.parseInt((String)pos.get("x"));
+                    int row = Integer.parseInt((String)pos.get(CommandKeyword.Y));
+                    int col = Integer.parseInt((String)pos.get(CommandKeyword.X));
                     Position position = new Position(row, col);
                     return new DiceEvent(idPlayerD, idDice, position, source);
                 case END_TURN:
@@ -105,8 +106,8 @@ public class JsonToMessageConverter {
                     idDice = Integer.parseInt((String)data.get(DICE_ID));
                     source = (String)data.get("source");
                     pos = (JSONObject)data.get(POSITION);
-                    row = Integer.parseInt((String)pos.get("y"));
-                    col = Integer.parseInt((String)pos.get("x"));
+                    row = Integer.parseInt((String)pos.get(CommandKeyword.Y));
+                    col = Integer.parseInt((String)pos.get(CommandKeyword.X));
                     position = new Position(row, col);
                     DiceEvent diceEvent = new DiceEvent(idPlayerD, idDice, position, source);
                     return new DiceValueEvent(diceEvent, value);

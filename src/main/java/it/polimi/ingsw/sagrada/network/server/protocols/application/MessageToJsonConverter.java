@@ -20,6 +20,7 @@ import it.polimi.ingsw.sagrada.game.playables.WindowSide;
 
 import static it.polimi.ingsw.sagrada.network.CommandKeyword.*;
 
+import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -155,8 +156,8 @@ public class MessageToJsonConverter implements ResponseMessageVisitor {
         content.put(VALUE, opponentDiceMoveResponse.getDice().getValue()+"");
         content.put(COLOR, opponentDiceMoveResponse.getDice().getColor().toString());
         JSONObject position = new JSONObject();
-        position.put("x", opponentDiceMoveResponse.getPosition().getCol()+"");
-        position.put("y", opponentDiceMoveResponse.getPosition().getRow()+"");
+        position.put(CommandKeyword.X, opponentDiceMoveResponse.getPosition().getCol()+"");
+        position.put(CommandKeyword.Y, opponentDiceMoveResponse.getPosition().getRow()+"");
         content.put(POSITION, position);
         JSONObject container = new JSONObject();
         container.put(COMMAND_TYPE, OPPONENT_DICE_RESPONSE);

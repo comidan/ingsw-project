@@ -2,6 +2,7 @@ package it.polimi.ingsw.sagrada.gui.utils;
 
 import it.polimi.ingsw.sagrada.game.base.utility.Colors;
 import it.polimi.ingsw.sagrada.game.playables.WindowSide;
+import it.polimi.ingsw.sagrada.network.CommandKeyword;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -77,8 +78,8 @@ public class ConstraintGenerator {
 
         if (numCellWithConstraint != 0) {
             singleCell = (JSONObject) cells.get(index++);
-            nextX = ((Long) singleCell.get("x")).intValue();
-            nextY = ((Long) singleCell.get("y")).intValue();
+            nextX = ((Long) singleCell.get(CommandKeyword.X)).intValue();
+            nextY = ((Long) singleCell.get(CommandKeyword.Y)).intValue();
             constraint = (String) singleCell.get("constraint");
         } else constraintLeft = false;
 
@@ -92,8 +93,8 @@ public class ConstraintGenerator {
                     }
                     if (index < numCellWithConstraint) {
                         singleCell = (JSONObject) cells.get(index++);
-                        nextX = ((Long) singleCell.get("x")).intValue();
-                        nextY = ((Long) singleCell.get("y")).intValue();
+                        nextX = ((Long) singleCell.get(CommandKeyword.X)).intValue();
+                        nextY = ((Long) singleCell.get(CommandKeyword.Y)).intValue();
                         constraint = (String) singleCell.get("constraint");
                     } else constraintLeft = false;
                 } else {

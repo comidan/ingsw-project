@@ -161,8 +161,8 @@ public class JsonMessageBidirectionalConverter implements ActionMessageVisitor {
         content.put(DICE_ID, diceEvent.getIdDice()+"");
         content.put("source", diceEvent.getSrc());
         JSONObject position = new JSONObject();
-        position.put("y", diceEvent.getPosition().getRow()+"");
-        position.put("x", diceEvent.getPosition().getCol()+"");
+        position.put(CommandKeyword.Y, diceEvent.getPosition().getRow()+"");
+        position.put(CommandKeyword.X, diceEvent.getPosition().getCol()+"");
         content.put(POSITION, position);
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, ACTION);
@@ -268,8 +268,8 @@ public class JsonMessageBidirectionalConverter implements ActionMessageVisitor {
         content.put("source", diceEvent.getSrc());
         content.put(VALUE, diceValueEvent.getValue()+"");
         JSONObject position = new JSONObject();
-        position.put("y", diceEvent.getPosition().getRow()+"");
-        position.put("x", diceEvent.getPosition().getCol()+"");
+        position.put(CommandKeyword.Y, diceEvent.getPosition().getRow()+"");
+        position.put(CommandKeyword.X, diceEvent.getPosition().getCol()+"");
         content.put(POSITION, position);
         JSONObject container = new JSONObject();
         container.put(MESSAGE_TYPE, ACTION);
@@ -377,7 +377,7 @@ public class JsonMessageBidirectionalConverter implements ActionMessageVisitor {
                     Dice diceOpponent = new Dice(Integer.parseInt((String) dice.get(DICE_ID)), Colors.stringToColor((String) dice.get(COLOR)));
                     diceOpponent.setValue(Integer.parseInt((String) dice.get(VALUE)));
                     JSONObject pos = (JSONObject) dice.get(POSITION);
-                    Position position = new Position(Integer.parseInt((String) pos.get("y")), Integer.parseInt((String) pos.get("x")));
+                    Position position = new Position(Integer.parseInt((String) pos.get(CommandKeyword.Y)), Integer.parseInt((String) pos.get(CommandKeyword.X)));
                     return new OpponentDiceMoveResponse(idPlayer, diceOpponent, position);
                 case RULE_RESPONSE:
                     JSONObject ruleResponse = (JSONObject) jsonMsg.get(RULE_RESPONSE);

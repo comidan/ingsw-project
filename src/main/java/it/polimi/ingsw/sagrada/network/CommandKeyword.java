@@ -249,4 +249,10 @@ public final class CommandKeyword {
 
   /** The Constant LENGTH. */
   public static final String LENGTH = "length";
+
+  /** x coordinate. */
+  public static final String X = "x";
+
+  /** y coordinate. */
+  public static final String Y = "y";
 }
