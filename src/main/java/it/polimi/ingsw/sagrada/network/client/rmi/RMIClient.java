@@ -158,7 +158,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
                 loginState = server.login(this, username, LoginGuiAdapter.getPassword());
                 System.out.println(loginState);
                 if (loginState == LoginState.AUTH_OK) {
-                    sendMessage(loginState); //sendMessage(LoginState.AUTH_OK);
+                    sendMessage(loginState);
                     try {
                         System.out.println("Acquiring lobby");
                         lobbyId = server.getMatchLobbyId();
@@ -252,7 +252,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientRMI, Channel
             } else
                 System.out.println("Error");
         } catch (NotBoundException | MalformedURLException | RemoteException exc) {
-            exc.printStackTrace();
+            LOGGER.log(Level.SEVERE, exc::getMessage);
         }
     }
 

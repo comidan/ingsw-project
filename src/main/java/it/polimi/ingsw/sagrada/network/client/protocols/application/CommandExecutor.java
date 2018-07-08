@@ -247,6 +247,7 @@ public class CommandExecutor implements MessageVisitor {
                 waiting.release();
             }
             catch (InterruptedException exc) {
+                Thread.currentThread().interrupt();
                 System.exit(-1);
             }
         }
@@ -322,6 +323,7 @@ public class CommandExecutor implements MessageVisitor {
             waiting.release();
         }
         catch (InterruptedException exc) {
+            Thread.currentThread().interrupt();
             System.exit(-1);
         }
     }
@@ -348,6 +350,7 @@ public class CommandExecutor implements MessageVisitor {
                 waiting.release();
             }
             catch (InterruptedException exc) {
+                Thread.currentThread().interrupt();
                 System.exit(-1);
             }
         }

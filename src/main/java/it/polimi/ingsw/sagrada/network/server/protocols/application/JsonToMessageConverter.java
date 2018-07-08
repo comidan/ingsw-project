@@ -31,7 +31,7 @@ import java.util.stream.IntStream;
 public class JsonToMessageConverter {
 
     /**
-     * Parses the.
+     * Parses json to message objects
      *
      * @param message the message
      * @return the message

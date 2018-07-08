@@ -313,7 +313,6 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 try {
                     if (active && !new DiscoverLan().isHostReachable(InetAddress.getByName(ADDRESS))) {
                         if(recoverying.tryAcquire()) {
-                            System.out.println("Recovering from 2nd thread");
                             close();
                             isInFastRecovery = true;
                             active = false;
@@ -349,7 +348,6 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
             initializeLobbyLink(username);
         } catch (IOException exc) {
             LOGGER.log(Level.SEVERE, exc.getMessage());
-            exc.printStackTrace();
         }
     }
 
@@ -412,9 +410,7 @@ public class SocketClient implements Runnable, Client, Channel<Message, LoginSta
                 String json = Security.getDecryptedData(inSocket.readLine());
                 CommandExecutor.executePayload(json);
             } catch (IOException exc) {
-                exc.printStackTrace();
                 if (recoverying.tryAcquire()) {
-                    System.out.println("Recovering from 1st thread");
                     close();
                     isInFastRecovery = true;
                     active = false;
