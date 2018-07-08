@@ -59,7 +59,14 @@ public class CardBoard extends AnchorPane {
         for(Node toolCardView : toolBox.getChildren())
         {
             ToolCardView toolCard = (ToolCardView) toolCardView;
-            toolCard.setToolClickHandler(toolClickHandler);
+            toolCard.enableToolClickHandler(toolClickHandler);
+        }
+    }
+
+    public void disableToolClickHandler() {
+        for(Node toolCardView : toolBox.getChildren()) {
+            ToolCardView toolCard = (ToolCardView) toolCardView;
+            toolCard.disableToolClickHandler();
         }
     }
 

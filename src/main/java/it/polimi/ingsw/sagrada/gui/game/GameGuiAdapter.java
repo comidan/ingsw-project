@@ -196,7 +196,7 @@ public class GameGuiAdapter {
      *
      * @param client the new tool handler
      */
-    private void setToolHandler(Client client) {
+    public void setToolHandler(Client client) {
         Platform.runLater(() -> {
             this.gameView.setToolClickHandler(event -> {
                 ToolCardView toolCardView = (ToolCardView) event.getSource();
@@ -206,6 +206,7 @@ public class GameGuiAdapter {
                 } catch (RemoteException e) {
                     LOGGER.log(Level.SEVERE, e::getMessage);
                 }
+                gameView.disableToolClickHandler();
             });
         });
     }
@@ -565,9 +566,6 @@ public class GameGuiAdapter {
         Platform.runLater(() -> gameView.setToolCards(toolCards));
         setToolHandler(client);
     }
-
-
-
 
     /**
      * Notify turn.

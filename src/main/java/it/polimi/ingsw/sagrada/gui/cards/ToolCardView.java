@@ -48,8 +48,13 @@ public class ToolCardView extends StackPane {
      *
      * @param toolClickHandler the new tool click handler
      */
-    public void setToolClickHandler(EventHandler<MouseEvent> toolClickHandler){
+    void enableToolClickHandler(EventHandler<MouseEvent> toolClickHandler){
+        setDisable(false);
         setOnMouseClicked(toolClickHandler);
+    }
+
+    void disableToolClickHandler() {
+        setDisable(true);
     }
 
     /**

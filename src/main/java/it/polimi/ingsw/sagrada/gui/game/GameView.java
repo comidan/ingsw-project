@@ -167,6 +167,14 @@ public class GameView extends Application {
     }
 
     /**
+     * Disable the tool click handler.
+     */
+
+    void disableToolClickHandler() {
+        cardBoard.disableToolClickHandler();
+    }
+
+    /**
      * Sets the draft click handler.
      *
      * @param draftClickHandler the new draft click handler
