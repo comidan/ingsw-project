@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.client;
+package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.sagrada.game.intercomm.message.player.LoginEvent;
 import it.polimi.ingsw.sagrada.network.server.protocols.application.JsonToMessageConverter;
