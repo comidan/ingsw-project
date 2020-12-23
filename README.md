@@ -20,9 +20,9 @@ Project [wiki](https://github.com/Daniele-Comi/ingsw-project/wiki) containing de
 
 
 # Powered by 
-  [![N|Java 8](http://www.winpenpack.com/en/e107_files/downloadthumbs/java_logo.png)](http://www.oracle.com/technetwork/java/index.html) [![N|Java FX](https://mk0echouaawhk9ls0i7l.kinstacdn.com/wp-content/themes/inceptio/images/icon-boxes/128x128/javafx.png)](http://www.oracle.com/technetwork/java/javase/overview/javafx-overview-2158620.html) [![N|IntelliJ IDEA](https://wakatime.com/static/img/editor-icons/intellij-idea-128.png)](https://www.jetbrains.com/idea/)
+  [![N|Java 8](http://www.winpenpack.com/en/e107_files/downloadthumbs/java_logo.png)](http://www.oracle.com/technetwork/java/index.html) [![N|Java FX](https://asset-0.netbeans.org/attachments/images/project/javafx.png?20160708.bf2ac18)](http://www.oracle.com/technetwork/java/javase/overview/javafx-overview-2158620.html) [![N|IntelliJ IDEA](https://wakatime.com/static/img/editor-icons/intellij-idea-128.png)](https://www.jetbrains.com/idea/)
 # Testing tools 
-[![N|Sonarqube](http://oomusou.io/images/feature/sonar.png)](https://www.sonarqube.org)[![N|Travis CI](https://cdn.iconscout.com/public/images/icon/free/png-128/travis-ci-company-brand-logo-3ea4b6108b6d19db-128x128.png)](https://travis-ci.com) [![N|Maven](https://www.myget.org/Content/images/packageDefaultIcon_maven.png)](http://maven.apache.org/download.cgi) [![N|JUnit](https://res.cloudinary.com/codetrace/raw/upload/v1518632546/java:junit:junit.png)](https://junit.org/junit5/)
+[![N|Sonarqube](https://university.itametis.com/website/files/images/logos/sonarqube.png)](https://www.sonarqube.org)[![N|Travis CI](https://ih1.redbubble.net/image.854734222.3175/flat,128x128,075,f-pad,128x128,f8f8f8.u2.jpg)](https://travis-ci.com) [![N|Maven](https://www.myget.org/Content/images/packageDefaultIcon_maven.png)](http://maven.apache.org/download.cgi) [![N|JUnit](https://res.cloudinary.com/codetrace/raw/upload/v1518632546/java:junit:junit.png)](https://junit.org/junit5/)
 
 # Features
  - coming soon
