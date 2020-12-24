@@ -15,7 +15,9 @@
 Project [wiki](https://github.com/Daniele-Comi/ingsw-project/wiki) containing development details, project design and technology used is available.
 
 # Project status
- - in development
+ - Completed
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/1653a270f84252f44179/maintainability)](https://codeclimate.com/github/Daniele-Comi/HeartbeatProtocol/maintainability) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/954a0d9afcda4fa08e90bd5de0336b8e)](https://app.codacy.com/app/Daniele-Comi/HeartbeatProtocol?utm_source=github.com&utm_medium=referral&utm_content=Daniele-Comi/HeartbeatProtocol&utm_campaign=Badge_Grade_Settings)
 
 
 
@@ -30,7 +32,7 @@ Project [wiki](https://github.com/Daniele-Comi/ingsw-project/wiki) containing de
 # Game description 
 As a skilled artisan, you will use tools-of-the-trade and careful planning to construct a stained glass window masterpiece in the Sagrada Familia. Players will take turns drafting glass pieces, represented by dice; carefully choosing where to place each one in their window. Windows have unique color and shade requirements, and similar dice may never be adjacent so placing each die is more challenging than the last. Fortunately, you'll have just the right tools to help you through. Gain prestige by adapting to the preferences of your fickle admirers, and of course, by adding your own artistic flair while completing your glass masterpiece in Sagrada. Sagrada - a game of dice drafting and window crafting for 1 to 4 players that plays in about 30 minutes.
 
-# Development goals 
+# Development goals and improvements
  - Building a modularized and independent set of different packages, classes and interfaces linked through different and powerful Java design patterns.
  - Building a strong modularized graphic interface shaped for a video game, so including various features available in JavaFX, while the game will probably be essentially in a 2D perspective, we will be including 3D objects and animations (rendered platform dependently on OpenGL 4 or DirectX 10/11), texture mesh mapping and so on...
  - Building a strong modularized multi player network, using both sockets and RMIs. (Note : easily interchangeable thanks to design patterns)
